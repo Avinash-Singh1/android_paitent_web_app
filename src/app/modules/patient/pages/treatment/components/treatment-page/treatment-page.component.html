@@ -1,0 +1,238 @@
+<!-- ══════════ HERO SECTION ══════════ -->
+<app-treatment-hero
+  [treatment]="treatment"
+  [city]="city"
+  [slug]="slug"
+  [department]="department"
+  [whatsappLink]="whatsappLink"
+  (enquirySubmit)="onEnquirySubmit($event)">
+</app-treatment-hero>
+
+<!-- ══════════ TABLE OF CONTENTS ══════════ -->
+<app-treatment-toc
+  [sections]="visibleTocSections"
+  [activeSection]="activeSection"
+  (sectionClick)="scrollTo($event)">
+</app-treatment-toc>
+
+<!-- ══════════ CONTENT SECTIONS ══════════ -->
+<!-- Skeleton placeholder while treatment loads (CLS prevention) -->
+<div class="tp-content tp-content--skeleton" *ngIf="!treatment" aria-hidden="true">
+  <div class="tp-content__main">
+    <div class="tp-skeleton-block" style="height:300px"></div>
+    <div class="tp-skeleton-block" style="height:200px"></div>
+    <div class="tp-skeleton-block" style="height:200px"></div>
+  </div>
+  <aside class="tp-content__sidebar">
+    <div class="tp-skeleton-block" style="height:280px"></div>
+  </aside>
+</div>
+
+<div class="tp-content" *ngIf="treatment">
+  <div class="tp-content__main">
+
+    <!-- City-Specific Content (unique per city for SEO differentiation) -->
+    <section class="tp-city-content" *ngIf="cityCustomContent" [innerHTML]="sanitize(cityCustomContent)"></section>
+
+    <!-- Overview (Quick Facts + Description + Components + When Needed) -->
+    <app-treatment-overview [treatment]="treatment"></app-treatment-overview>
+
+    <!-- Symptoms (Interactive Checker + Causes + Diagnosis) -->
+    <app-treatment-symptoms [treatment]="treatment"></app-treatment-symptoms>
+
+    <!-- Types of Surgery -->
+    <app-treatment-types [treatment]="treatment"></app-treatment-types>
+
+    <!-- Procedure (Step-by-Step Flow) -->
+    <app-treatment-procedure [treatment]="treatment"></app-treatment-procedure>
+
+    <!-- Benefits (Icon Cards + Risks) -->
+    <div class="tp-cv-section">
+    <app-treatment-benefits-section [treatment]="treatment"></app-treatment-benefits-section>
+    </div>
+
+    <!-- Recovery (Timeline UI + Success Rate) -->
+    <div class="tp-cv-section">
+    <app-treatment-recovery [treatment]="treatment"></app-treatment-recovery>
+    </div>
+
+    <!-- Cost (Calculator + Factors + Insurance) -->
+    <div class="tp-cv-section">
+    <app-treatment-cost [treatment]="treatment" [city]="city" [slug]="slug" [department]="department"></app-treatment-cost>
+    </div>
+
+    <!-- Patient Benefits (Why Choose Us) -->
+    <div class="tp-cv-section">
+    <app-treatment-patient-benefits
+      [treatmentTitle]="treatment?.title"
+      [whatsappLink]="whatsappLink">
+    </app-treatment-patient-benefits>
+    </div>
+
+    <!-- Doctors Section (Enhanced Cards) -->
+    <div class="tp-cv-section">
+    <app-treatment-doctors-section
+      [doctors]="doctors"
+      [treatmentTitle]="treatment?.title"
+      [city]="city">
+    </app-treatment-doctors-section>
+    </div>
+
+    <!-- Hospitals Section (Enhanced Cards) -->
+    <div class="tp-cv-section">
+    <app-treatment-hospitals-section
+      [hospitals]="hospitals"
+      [treatmentTitle]="treatment?.title"
+      [city]="city">
+    </app-treatment-hospitals-section>
+    </div>
+
+    <!-- FAQ Section (Schema-marked Accordion) -->
+    <div class="tp-cv-section">
+    <app-treatment-faq-section
+      [faqArray]="faqArray"
+      [faqOverviewArray]="faqOverviewArray"
+      [treatmentTitle]="treatment?.title">
+    </app-treatment-faq-section>
+    </div>
+
+    <!-- Patient Reviews -->
+    <div class="tp-cv-section" *ngIf="reviews?.length">
+    <app-treatment-reviews
+      [reviews]="reviews"
+      [treatmentTitle]="treatment?.title"
+      [city]="city">
+    </app-treatment-reviews>
+    </div>
+
+    <!-- Related Treatments + Subtopics -->
+    <div class="tp-cv-section">
+    <app-treatment-related
+      [relatedTreatments]="relatedTreatments"
+      [subtopics]="treatment?.subtopics"
+      [city]="city"
+      [slug]="slug"
+      [department]="department"
+      [treatmentTitle]="treatment?.title">
+    </app-treatment-related>
+    </div>
+
+    <!-- EEAT: Reviewer + Author + References + Disclaimer -->
+    <app-treatment-eeat [treatment]="treatment"></app-treatment-eeat>
+
+  </div>
+
+  <!-- Sticky Sidebar — Lead Capture Form -->
+  <aside class="tp-content__sidebar">
+    <div class="tp-sidebar-card">
+      <div class="tp-sidebar-card__header">
+        <h3>Book Free Consultation</h3>
+        <p>Get expert advice for {{ treatment?.title }}</p>
+      </div>
+
+      <!-- Form -->
+      <form *ngIf="!sidebarFormSubmitted" class="tp-sidebar-form" (ngSubmit)="submitSidebarForm()">
+        <div class="tp-sidebar-form__field">
+          <label for="sidebar-name">Patient Name <span>*</span></label>
+          <input id="sidebar-name" type="text" [(ngModel)]="sidebarForm.name" name="name"
+                 placeholder="Enter full name" required autocomplete="name" />
+        </div>
+        <div class="tp-sidebar-form__field">
+          <label for="sidebar-phone">Mobile Number <span>*</span></label>
+          <div class="tp-sidebar-form__phone">
+            <span class="tp-sidebar-form__code">+91</span>
+            <input id="sidebar-phone" type="tel" [(ngModel)]="sidebarForm.phone" name="phone"
+                   placeholder="10 digit number" required pattern="[0-9]{10}" maxlength="10"
+                   autocomplete="tel" />
+          </div>
+        </div>
+        <div class="tp-sidebar-form__field">
+          <label for="sidebar-city">City</label>
+          <input id="sidebar-city" type="text" [(ngModel)]="sidebarForm.city" name="city"
+                 [placeholder]="city || 'Enter city'" autocomplete="address-level2" />
+        </div>
+        <button type="submit" class="tp-sidebar-form__btn">
+          Book Now — It's Free
+        </button>
+      </form>
+
+      <!-- Success State -->
+      <div *ngIf="sidebarFormSubmitted" class="tp-sidebar-form__success">
+        <div class="tp-sidebar-form__check">&#10003;</div>
+        <h4>Thank You!</h4>
+        <p>Our team will contact you shortly.</p>
+        <a [href]="whatsappLink" target="_blank" rel="noopener" class="tp-sidebar-form__wa">
+          <img src="assets/images/svg/whatsapp.svg" alt="" width="20" height="20" />
+          Chat on WhatsApp
+        </a>
+      </div>
+
+      <div class="tp-sidebar-card__trust">
+        <span>&#10003; Free</span>
+        <span>&#10003; Confidential</span>
+        <span>&#10003; No obligation</span>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- ══════════ MOBILE STICKY BOTTOM BAR ══════════ -->
+<div class="tp-mobile-bar" *ngIf="treatment && !showMobileForm">
+  <button class="tp-mobile-bar__btn" *ngIf="!mobileFormSubmitted" (click)="showMobileForm = true">
+    Book Free Consultation
+  </button>
+  <div class="tp-mobile-bar__success" *ngIf="mobileFormSubmitted">
+    <span class="tp-mobile-bar__check">&#10003;</span>
+    <span>Submitted! We'll call you shortly.</span>
+  </div>
+</div>
+
+<!-- ══════════ MOBILE LEAD FORM OVERLAY ══════════ -->
+<div class="tp-mobile-overlay" *ngIf="showMobileForm" (click)="showMobileForm = false">
+  <div class="tp-mobile-form-card" (click)="$event.stopPropagation()">
+    <button class="tp-mobile-form-card__close" (click)="showMobileForm = false" aria-label="Close">&#10005;</button>
+    <h3>Book Free Consultation</h3>
+    <p>Get expert advice for {{ treatment?.title }}</p>
+
+    <form *ngIf="!mobileFormSubmitted" class="tp-sidebar-form" (ngSubmit)="submitMobileForm()">
+      <div class="tp-sidebar-form__field">
+        <label for="mobile-name">Patient Name <span>*</span></label>
+        <input id="mobile-name" type="text" [(ngModel)]="mobileForm.name" name="mname"
+               placeholder="Enter full name" required autocomplete="name" />
+      </div>
+      <div class="tp-sidebar-form__field">
+        <label for="mobile-phone">Mobile Number <span>*</span></label>
+        <div class="tp-sidebar-form__phone">
+          <span class="tp-sidebar-form__code">+91</span>
+          <input id="mobile-phone" type="tel" [(ngModel)]="mobileForm.phone" name="mphone"
+                 placeholder="10 digit number" required pattern="[0-9]{10}" maxlength="10"
+                 autocomplete="tel" />
+        </div>
+      </div>
+      <div class="tp-sidebar-form__field">
+        <label for="mobile-city">City</label>
+        <input id="mobile-city" type="text" [(ngModel)]="mobileForm.city" name="mcity"
+               [placeholder]="city || 'Enter city'" autocomplete="address-level2" />
+      </div>
+      <button type="submit" class="tp-sidebar-form__btn">
+        Book Now — It's Free
+      </button>
+    </form>
+
+    <div *ngIf="mobileFormSubmitted" class="tp-sidebar-form__success">
+      <div class="tp-sidebar-form__check">&#10003;</div>
+      <h4>Thank You!</h4>
+      <p>Our team will contact you shortly.</p>
+      <a [href]="whatsappLink" target="_blank" rel="noopener" class="tp-sidebar-form__wa">
+        <img src="assets/images/svg/whatsapp.svg" alt="" width="20" height="20" />
+        Chat on WhatsApp
+      </a>
+    </div>
+
+    <div class="tp-sidebar-card__trust">
+      <span>&#10003; Free</span>
+      <span>&#10003; Confidential</span>
+      <span>&#10003; No obligation</span>
+    </div>
+  </div>
+</div>

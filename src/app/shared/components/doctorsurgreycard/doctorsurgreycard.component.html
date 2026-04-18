@@ -1,0 +1,72 @@
+<!-- <div class="row">
+    <h2 class="text-center">Select Your City</h2>
+</div> 
+<div class="search-filter d-flex align-items-center justify-content-center ">
+    <input type="text" placeholder="Search by City" [(ngModel)]="filterCity" class="form-control" />
+    <button class="btn btn-primary ml-2" (click)="filterDoctorsByCity()">
+        Search
+    </button>
+</div> -->
+<!---------- add by gurmeet  this component------------->
+<div class="container-fluid">
+    <div class="row mt-4">
+        <!-- Doctor Cards Section -->
+        <div class="cards d-flex flex-column" *ngFor="let doctor of (city === 'india' ? getDoctors : newDoctorsData | slice:0:5); trackBy: trackByIndex">
+            <div class="cards__image">
+                <div class="profile-icon" (click)="viewDoctor(doctor)" *ngIf="!doctor?.doctorProfilePicture">
+                    {{ doctor?.doctorName | nameInitial | uppercase }}
+                </div>
+                <img loading="lazy" [src]="doctor?.doctorProfilePicture" (click)="viewDoctor(doctor)"
+                    *ngIf="doctor?.doctorProfilePicture" [alt]="doctor?.doctorName" />
+            </div>
+            <div class="cards__details">
+                <h2 class="cursor-pointer line-clamp-1" (click)="viewDoctor(doctor)">
+                    {{ doctor?.doctorName || "N/A" }}
+                </h2>
+                <h3 class="line-clamp-1">
+                    {{ specailization || "N/A" }}
+                </h3>
+                <p *ngIf="doctor?.address?.locality && doctor?.address?.city">
+                    {{ formatName(doctor?.address?.locality + "," + doctor?.address?.city, 60) }}
+                </p>
+                <p *ngIf="!doctor?.address?.locality && doctor?.address?.city">
+                    {{ doctor?.address?.city || "N/A" }}
+                </p>
+                <p *ngIf="doctor?.address?.locality && !doctor?.address?.city">
+                    {{ doctor?.address?.locality || "N/A" }}
+                </p>
+                <p *ngIf="!doctor?.address?.locality && !doctor?.address?.city">
+                    {{ doctor?.address?.locality || "N/A" }}
+                </p>
+                <div class="ratings">
+                    <img loading="lazy" src="assets/images/svg/stars.svg" alt="" style="position: relative; top: 3px" />
+                    &nbsp;&nbsp;
+                    <span class="star">
+                        {{ (doctor?.rating | number : "1.1-1") || "0.0" }}
+                    </span>
+                    <span class="total"> &nbsp;/5 </span>
+                    <span class="review" *ngIf="doctor?.totalReview <= 1">({{ doctor?.totalReview || 0 }} review)</span>
+                    <span class="review" *ngIf="doctor?.totalReview > 1">({{ doctor?.totalReview }} reviews)</span>
+                </div>
+                <div class="price-box" *ngIf="doctor?.consultationFees | validFee">
+                    <img loading="lazy" src="assets/images/inclinickblue.png" alt="consultation" class="me-1">
+                    ₹ {{ doctor?.consultationFees }}(In-clinic)
+                </div>
+                <div class="price-box" *ngIf="doctor?.videoConsultationFees | validFee">
+                    <img loading="lazy" src="assets/images/videogrey.png" alt="video consultation" class="me-1">
+                    ₹ {{doctor?.videoConsultationFees}}(video)
+                </div>
+            </div>
+            <div class="cards__button">
+                <button class="" (click)="bookAppointment(doctor)">Book Appointment</button>
+            </div>
+            <div class="cards__wait-time" *ngIf="type == 1 && doctor?.timeTaken">
+                <img loading="lazy" src="assets/images/svg/clock.svg" alt="" />
+            </div>
+            <div class="cards__top-doctors" *ngIf="type == 0">
+                <img loading="lazy" src="assets/images/homepage/thumbs-up.svg" alt="" />
+                <p>{{ (doctor?.recommended | number : ".0-2") || 0 }}%</p>
+            </div>
+        </div>
+    </div>
+</div>

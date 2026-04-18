@@ -1,0 +1,169 @@
+@use "src/styles/scss/variable.scss" as *;
+@use "src/styles/elements/_elements.svg.scss" as *;
+
+.button-wrapper {
+  border: 1px solid rgba($color: #000000, $alpha: 0.3);
+  border-radius: 4px;
+  .toggole-button {
+    border: none;
+    font-size: 14px;
+    padding: 8px 1.25rem;
+    margin: 0;
+  }
+  .toggole-button.day {
+    border-radius: 4px 0 0 4px;
+  }
+  .toggole-button.month {
+    border-radius: 0 4px 4px 0;
+  }
+  .toggole-button.active {
+    color: $white !important;
+    background: $purple !important;
+  }
+}
+
+
+// blocked screen style end
+.badge {
+  font-size: inherit;
+  // line-height: 2;
+  // padding: 4px 15px;
+  &.badge-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(70, 25, 124, 0.15);
+    color: #45197c;
+  }
+  &.badge-success {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 128, 128, 0.15);
+    color: #008080;
+  }
+  &.badge-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(229, 34, 99, 0.15);
+    color: #e52264;
+  }
+}
+.header-pad {
+  padding: 4px 24px;
+}
+.py-24 {
+  padding: 24px;
+}
+
+.day-content {
+  height: 100%;
+  overflow: auto;
+}
+.content {
+  .calendar {
+    max-width: calc(100% - 360px);
+  }
+  .appointment-details {
+    min-width: 360px;
+    .appointment-content {
+      max-height: calc(100vh - 110px);
+      height: calc(100vh - 110px);
+      overflow: auto;
+    }
+  }
+}
+.booked {
+  background-color: rgba($color: $pending, $alpha: 0.2);
+  border-bottom: 1px solid rgba($color: $pending, $alpha: 0.3);
+  .status {
+    color: $pending;
+  }
+}
+.completed {
+  background-color: rgba($color: $green, $alpha: 0.2);
+  border-bottom: 1px solid rgba($color: $green, $alpha: 0.3);
+  .status {
+    color: $green;
+  }
+}
+.cancelled {
+  background-color: rgba($color: $red, $alpha: 0.2);
+  border-bottom: 1px solid rgba($color: $red, $alpha: 0.3);
+  .status {
+    color: $red;
+  }
+}
+.border-pending {
+  border-bottom: 1px solid rgba($color: $pending, $alpha: 0.3);
+}
+.border-completed {
+  border-bottom: 1px solid rgba($color: $green, $alpha: 0.3);
+}
+.border-cancelled {
+  border-bottom: 1px solid rgba($color: $red, $alpha: 0.3);
+}
+@media (max-width: 768px) {
+  .sub-heading-label {
+    font-size: 16px; // Adjust font size for subheadings
+  }
+  .text-18 {
+    font-size: 16px; // Adjust font size for text-18 class
+  }
+  .calendar{
+    display: contents;
+  }
+  .content{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap !important;
+  }
+  .button-wrapper{
+    display: none !important;
+  }
+  .Today_section{
+    display: none !important;
+  }
+  .appointment-details{
+    width: 100% !important;
+  }
+}
+
+
+// blocked screen style start
+.screen-blocked {
+  min-height: 80vh;
+  min-height: 80dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  &-inner {
+    padding: 0;
+    svg {
+      width: 45px;
+      height: 45px;
+    }
+
+    h2 {
+      margin-bottom: 0;
+      font-weight: 600;
+      font-size: 1.5em;
+      line-height: 1.4;
+    }
+    p {
+      margin-bottom: 1.2em;
+      font-size: 1.1em;
+      line-height: 1.4;
+    }
+    .btn-primary {
+      border-color: #45197c;
+      background-color: #45197c;
+      padding-left: 25px;
+      padding-right: 25px;
+      // font-weight: 600;
+    }
+  }
+}

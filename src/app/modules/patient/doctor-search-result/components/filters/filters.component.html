@@ -1,0 +1,164 @@
+<section class="search-filter">
+  <div class="search-filter__data">
+
+    <!----locality---->
+    <div class="search-filter__data__chips">
+
+      <p [matMenuTriggerFor]="locality" class="cursor-pointer" (menuOpened)="openMatMenu('locality')"
+        #moreTrigger="matMenuTrigger">
+        Locality
+      </p>
+      <mat-menu #locality="matMenu" class="specilatyFilter filter-menus" (closed)="closeMatMenu('locality')">
+        <ng-template matMenuContent>
+          <div (click)="stopClosing($event)" class="m-4 specialityMenu">
+            <p class="mb-4">Common Locality for illness</p>
+            <div class="main_container_search">
+              <img loading="lazy" src="assets/images/svg/searchfilter.svg" />
+              <input type="text" class="input_search_locality" placeholder="Search locality">
+
+            </div>
+            <div class="wrap mt-2" *ngFor="let item of specialityArray" (click)="selectSpeciality($event)">
+              <input type="checkbox" [id]="item" [value]="item?._id" class="custom-checkbox green"
+                [checked]="checkingSpecilaity(item._id)" />
+              <label for="item"> {{ item?.name | titlecase }}</label>
+            </div>
+          </div>
+          <div class="text-end mt-4">
+            <button class="apply" (click)="applySpecialityFilter()">
+              Apply
+            </button>
+          </div>
+        </ng-template>
+      </mat-menu>
+    </div>
+
+    <!-------conualtation type--------->
+    <div class="search-filter__data__chips">
+      <p [matMenuTriggerFor]="conualtationtype" class="cursor-pointer" (menuOpened)="openMatMenu('conualtationtype')"
+        #moreTrigger="matMenuTrigger">
+        Consultation type
+      </p>
+      <mat-menu #conualtationtype="matMenu" class="specilatyFilter filter-menus"
+        (closed)="closeMatMenu('conualtationtype')">
+        <ng-template matMenuContent>
+          <div (click)="stopClosing($event)" class="m-4 specialityMenu">
+            <p class="mb-4">Common Conualtation type for illness</p>
+            <div class="wrap mt-2" *ngFor="let item of CounsltationType" (click)="selectSpeciality($event)">
+              <input type="checkbox" [id]="item" [value]="item?.id" class="custom-checkbox green"
+                [checked]="checkingSpecilaity(item.id)" />
+              <label for="item"> {{ item?.name | titlecase }}</label>
+            </div>
+          </div>
+          <div class="text-end mt-4">
+            <button class="apply" (click)="applySpecialityFilter()">
+              Apply
+            </button>
+          </div>
+        </ng-template>
+      </mat-menu>
+    </div>
+
+    <!-------conualtation type--------->
+
+
+    <div class="search-filter__data__chips">
+      <p [matMenuTriggerFor]="Specialty" class="cursor-pointer" (menuOpened)="openMatMenu('speciality')"
+        #moreTrigger="matMenuTrigger">
+        Specialty
+      </p>
+      <mat-menu #Specialty="matMenu" class="specilatyFilter filter-menus" (closed)="closeMatMenu('speciality')">
+        <ng-template matMenuContent>
+          <div (click)="stopClosing($event)" class="m-4 specialityMenu">
+            <p class="mb-4">Common specialties for illness</p>
+            <div class="wrap mt-2" *ngFor="let item of specialityArray" (click)="selectSpeciality($event)">
+              <input type="checkbox" [id]="item" [value]="item?._id" class="custom-checkbox green"
+                [checked]="checkingSpecilaity(item._id)" />
+              <label for="item"> {{ item?.name | titlecase }}</label>
+            </div>
+          </div>
+          <div class="text-end mt-4">
+            <button class="apply" (click)="applySpecialityFilter()">
+              Apply
+            </button>
+          </div>
+        </ng-template>
+      </mat-menu>
+    </div>
+    <div class="search-filter__data__chips">
+      <p [matMenuTriggerFor]="Availability" class="cursor-pointer" #moreTrigger="matMenuTrigger">
+        Availability
+      </p>
+      <mat-menu #Availability="matMenu" class="filter-menus" (closed)="closeMatMenu('availability')">
+        <div (click)="stopClosing($event)" class="m-4 availableMenu">
+          <div class="available-wrap mt-2" *ngFor="let item of availabilityArray" (click)="availabilityFilter(item.id)">
+            <input type="radio" name="avaliable" [id]="item" [value]="item.id" [checked]="item.checked"
+              class="currentNum" /><label [for]="item" class="cursor-pointer">{{ item.name }}</label>
+          </div>
+          <div class="clear mt-3 text-end">
+            <button (click)="clearAvailability()">Clear All</button>
+          </div>
+        </div>
+      </mat-menu>
+    </div>
+    <div class="search-filter__data__chips">
+      <p [matMenuTriggerFor]="Consultation" class="cursor-pointer" #moreTrigger="matMenuTrigger"
+        (menuOpened)="openMatMenu('consultFee')">
+        Consultation Fee
+      </p>
+      <mat-menu #Consultation="matMenu" class="consultFilter filter-menus" (closed)="closeMatMenu('consultFee')">
+        <ng-template matMenuContent>
+          <div (click)="stopClosing($event)" class="consultMenu">
+            <div class="mt-2 d-flex align-items-center gap-2" *ngFor="let item of consultArray"
+              (click)="selectConsultancy(item)">
+              <input type="checkbox" [id]="item" [value]="item" class="custom-checkbox green"
+                [checked]="checkingConsultFee(item)" /><label>{{ item }}</label>
+            </div>
+          </div>
+          <div class="text-end mt-4">
+            <button class="apply" (click)="applyConsultFilter()">Apply</button>
+          </div>
+        </ng-template>
+      </mat-menu>
+    </div>
+    <div class="search-filter__data__chips">
+      <p [matMenuTriggerFor]="moreFilter" class="cursor-pointer" #moreTriggers="matMenuTrigger"
+        (menuOpened)="openMatMenu('moreFilter')">
+        More Filters
+      </p>
+      <mat-menu #moreFilter="matMenu" class="moreFilter filter-menus" (closed)="closeMatMenu('moreFilter')"
+        [overlapTrigger]="false">
+        <ng-template matMenuContent>
+          <div (click)="stopClosing($event)" class="moreMenu">
+            <div class="section-one">
+              <div class="d-flex justify-content-between">
+                <p>Time of Day</p>
+
+                <img loading="lazy" src="assets/images/svg/cross.svg" alt="" (click)="moreTriggers.closeMenu()" class="cursor-pointer"
+                  style="position: relative; top: -10px" />
+              </div>
+              <div class="time-wrap mt-3 d-flex gap-2 align-items-center" *ngFor="let item of timeArray"
+                (click)="selectTime(item)">
+                <input type="checkbox" [id]="item" [value]="item" [checked]="checkingTime(item)"
+                  class="custom-checkbox green" />
+                <label>{{ item }}</label>
+              </div>
+            </div>
+            <div class="border"></div>
+            <div class="section-two">
+              <p>Sort by</p>
+              <div class="time-wrap mt-3 d-flex gap-2 align-items-center" *ngFor="let item of sortArray"
+                (click)="selectSorting(item.id)">
+                <input type="checkbox" [id]="item.id" name="option" [value]="item.id" [checked]="item.checked"
+                  class="custom-checkbox green" />
+                <label>{{ item.name }}</label>
+              </div>
+            </div>
+          </div>
+          <div class="text-end mt-4">
+            <button class="apply" (click)="applyMoreFilter()">Apply</button>
+          </div>
+        </ng-template>
+      </mat-menu>
+    </div>
+  </div>
+</section>

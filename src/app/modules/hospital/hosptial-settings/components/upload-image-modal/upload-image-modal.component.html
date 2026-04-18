@@ -1,0 +1,22 @@
+<main class="upload-wrapper text-18">
+  <header class="text-center mb-4">
+    <p class="text-32 font-600">Upload Hospital Images</p>
+    <p>PNG and JPG Files are allowed</p>
+  </header>
+  <section
+    nectarDragDrop
+    (filesDropped)="onFileUpload($event)"
+    (click)="hospitalImage.click()"
+    class="drop-zone w-100 d-flex justify-content-center align-items-center flex-column"
+  >
+    <svg-icon src="assets/images/svg/cloudupload.svg"></svg-icon>
+    <p class="text-center">Drag and drop or browse to choose a file</p>
+    <input
+      accept="image/png,image/jpeg,image/jpg"
+      type="file"
+      style="display: none"
+      #hospitalImage
+      (change)="onFileUpload($event)"
+    />
+  </section>
+</main>

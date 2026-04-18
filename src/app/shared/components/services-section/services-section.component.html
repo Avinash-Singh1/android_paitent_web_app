@@ -1,0 +1,89 @@
+<!-- <section class="services" *ngIf="!(tab == 0 && !combinedList.length)" 
+  [ngClass]="{ 'border-bottom-style': tab == 0, 'pt-6': tab == 0 }" >
+  
+  <h2 *ngIf="combinedList.length">Services</h2>
+
+  <div class="services__container" *ngIf="deviceWidth > 767">
+    <div *ngFor="let item of combinedList.slice(0, showAll ? combinedList.length : 10)" class="list">
+      <div class="d-flex gap-1 my-2">
+        <div>
+          <img loading="lazy" src="assets/images/serviceCheck.svg" alt="" />
+          &nbsp;
+        </div>
+        <div class="service">
+
+          <a class="service_link" 
+          [routerLink]="['/', formatName(city), 'doctors-for-' + formatName(item.name)]" 
+          [routerLinkActive]="'active'">
+          {{ item.name }}
+        </a>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button *ngIf="combinedList.length > 10" class="btn btn-link text-decoration-none" (click)="viewMoreServices()">
+    {{ showAll ? 'Read Less' : 'Read More' }}
+  </button>
+
+  <div *ngIf="!combinedList.length">
+    <h2 class="text-danger text-center">No Service Found</h2>
+  </div>
+</section> -->
+
+<section class="services border-bottom-style pt-6">
+
+  <h2>Services</h2>
+
+  <!-- ✅ Actual data rendering (when JS is enabled) -->
+  <div class="services__container" *ngIf="combinedList.length">
+    <div
+      *ngFor="let item of combinedList.slice(0, showAll ? combinedList.length : 10)"
+      class="list"
+    >
+      <div class="d-flex gap-1 my-2">
+        <div>
+          <img loading="lazy" src="assets/images/serviceCheck.svg" alt="check" />
+        </div>
+        <div class="service">
+           <a
+            *ngIf="isServiceValid(item.name)"
+            class="service_link"
+            [routerLink]="['/', formatName(city), 'doctors-for-' + formatName(item.name)]"
+            (click)="scrollToTop()"
+          >
+            {{ item.name }}
+          </a>
+          <span *ngIf="!isServiceValid(item.name)">
+            {{ item.name }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ Placeholder for initial render/No JS/Desktop layout -->
+  <!-- <noscript>
+    <div class="services__container placeholder">
+      <div class="list" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]">
+        <div class="placeholder-block"></div>
+      </div>
+    </div>
+  </noscript> -->
+
+  <!-- ✅ Button for JS-enabled Read More -->
+  <button
+    *ngIf="combinedList.length > 10"
+    class="btn btn-link text-decoration-none"
+    (click)="viewMoreServices()"
+  >
+    {{ showAll ? 'Read Less' : 'Read More' }}
+  </button>
+
+  <!-- ✅ No service fallback -->
+  <div *ngIf="!combinedList.length && deviceWidth > 767">
+    <h2 class="text-danger text-center">No Service Found</h2>
+  </div>
+</section>

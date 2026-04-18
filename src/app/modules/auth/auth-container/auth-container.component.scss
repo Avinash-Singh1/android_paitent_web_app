@@ -1,0 +1,142 @@
+@use "variable.scss" as *;
+
+/* ===== Auth Landing ===== */
+.auth-landing {
+  background: linear-gradient(135deg, #f0f4ff 0%, #e8f5e9 50%, #f3e8ff 100%);
+  min-height: calc(100vh - 108px);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+
+  @media (max-width: 576px) {
+    min-height: calc(100vh - 65px);
+    background: #fff;
+  }
+
+  &--doctor {
+    background: linear-gradient(135deg, #ede7f6 0%, #e8eaf6 100%);
+
+    @media (max-width: 767px) {
+      background: #fff;
+    }
+  }
+
+  &--hospital {
+    background: linear-gradient(135deg, #e0f7fa 0%, #e8f5e9 100%);
+
+    @media (max-width: 767px) {
+      background: #fff;
+    }
+  }
+
+  /* ── Wrapper ── */
+  &__wrapper {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 36px 20px 60px;
+
+    @media (max-width: 576px) {
+      padding: 16px 0 24px;
+    }
+  }
+
+  /* ── Container Grid ── */
+  &__container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+
+    @media (max-width: 767px) {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+
+  /* ── Hero (left side) ── */
+  &__hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 480px;
+
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
+
+  &__hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &__logo {
+    width: 180px;
+    height: auto;
+    margin-bottom: 8px;
+  }
+
+  &__tagline {
+    font-size: 32px;
+    font-weight: 800;
+    color: #1a1a2e;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    margin: 0;
+  }
+
+  &__desc {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+    max-width: 380px;
+  }
+
+  &__badges {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  &__badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+    font-weight: 500;
+    color: #444;
+
+    svg {
+      color: $purple;
+      flex-shrink: 0;
+    }
+  }
+
+  &__bg-image {
+    width: 100%;
+    max-height: 500px;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* ── Form Card (right side) ── */
+  &__card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow:
+      0 4px 24px rgba(0, 0, 0, 0.06),
+      0 1px 4px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+
+    @media (max-width: 767px) {
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
+}

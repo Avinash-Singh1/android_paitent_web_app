@@ -1,0 +1,317 @@
+<div class="w-100 week-table" [ngClass]="{ 'adjust-width': doctorList }">
+  <table class="">
+    <caption></caption>
+    <thead>
+      <tr class="heading">
+        <th class="timing header" (click)="showDoctorList()">
+          <svg-icon
+            src="assets/images/svg/next.svg"
+            *ngIf="!doctorList"
+          ></svg-icon>
+          <svg-icon
+            src="assets/images/svg/previous.svg"
+            *ngIf="doctorList"
+          ></svg-icon>
+        </th>
+        <th
+          *ngFor="let column of weakdays; let i = index"
+          [ngClass]="{ 'current-day': i == 0 }"
+        >
+          {{ column | date : "EEE d MMM" }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of rows; let i = index">
+        <td
+          class="timing position-relative"
+          [ngClass]="{ currentSlot: i == (currentSlot | async) }"
+        >
+          <span>
+            {{ row.timing }}
+          </span>
+          <svg-icon
+            class="position-absolute timepointer svg-icon-purple"
+            src="assets/images/svg/timepointer.svg"
+            *ngIf="i == (currentSlot | async)"
+          ></svg-icon>
+        </td>
+        <td class="position-relative current-day">
+          <div
+            class="d-flex flex-column gap-1"
+            *ngIf="row.firstday.details?.length <= 2"
+          >
+            <ng-container
+              *ngFor="let patient of row.firstday?.details; let j = index"
+            >
+              <div
+                [attr.data.details]="patient | stringify | async"
+                class="day-data rounded-0 event"
+                [ngClass]="[
+                  patient.status | appointmentStatus,
+                  row.firstday.details?.length == 2 ? 'multiple' : ''
+                ]"
+              >
+                <span>
+                  {{ patient.patient.patientName | appendDot : 12 | titlecase }}
+                </span>
+              </div>
+            </ng-container>
+          </div>
+          <div class="d-flex w-100" *ngIf="row.firstday.details.length > 2">
+            <div
+              class="day-data w-100 rounded-0 single multi-event multiple-appointment"
+              [attr.data-patient-list]="
+                row.firstday.details | stringify | async
+              "
+            >
+              <span>
+                {{ row.firstday.details.length - 1 + "+ Patients" | titlecase }}
+              </span>
+            </div>
+          </div>
+          <div
+            class="dotted-border"
+            *ngIf="!row.firstday?.details.length && i == (currentSlot | async)"
+          ></div>
+        </td>
+        <td class="position-relative">
+          <div
+            class="d-flex flex-column gap-1"
+            *ngIf="row.secondday.details?.length <= 2"
+          >
+            <ng-container
+              *ngFor="let patient of row.secondday?.details; let j = index"
+            >
+              <div
+                [attr.data.details]="patient | stringify | async"
+                class="day-data rounded-0 event"
+                [ngClass]="[
+                  patient.status | appointmentStatus,
+                  row.secondday.details?.length == 2 ? 'multiple' : ''
+                ]"
+              >
+                <span>
+                  {{ patient.patient.patientName | appendDot : 12 | titlecase }}
+                </span>
+              </div>
+            </ng-container>
+          </div>
+          <div class="d-flex w-100" *ngIf="row.secondday.details.length > 2">
+            <div
+              class="day-data w-100 rounded-0 single multi-event multiple-appointment"
+              [attr.data-patient-list]="
+                row.secondday.details | stringify | async
+              "
+            >
+              <span>
+                {{ row.secondday.details.length + "+ Patients" | titlecase }}
+              </span>
+            </div>
+          </div>
+          <div
+            class="dotted-border"
+            *ngIf="!row.secondday?.details.length && i == (currentSlot | async)"
+          ></div>
+        </td>
+        <td class="position-relative">
+          <div
+            class="d-flex flex-column gap-1"
+            *ngIf="row.thirdday.details?.length <= 2"
+          >
+            <ng-container
+              *ngFor="let patient of row.thirdday?.details; let j = index"
+            >
+              <div
+                [attr.data.details]="patient | stringify | async"
+                class="day-data rounded-0 event"
+                [ngClass]="[
+                  patient.status | appointmentStatus,
+                  row.thirdday.details?.length == 2 ? 'multiple' : ''
+                ]"
+              >
+                <span>
+                  {{ patient.patient.patientName | appendDot : 12 | titlecase }}
+                </span>
+              </div>
+            </ng-container>
+          </div>
+          <div class="d-flex w-100" *ngIf="row.thirdday.details.length > 2">
+            <div
+              class="day-data w-100 rounded-0 single multi-event multiple-appointment"
+              [attr.data-patient-list]="
+                row.thirdday.details | stringify | async
+              "
+            >
+              <span>
+                {{ row.thirdday.details.length + "+ Patients" | titlecase }}
+              </span>
+            </div>
+          </div>
+          <div
+            class="dotted-border"
+            *ngIf="!row.thirdday?.details.length && i == (currentSlot | async)"
+          ></div>
+        </td>
+        <td class="position-relative">
+          <div
+            class="d-flex flex-column gap-1"
+            *ngIf="row.forthday.details?.length <= 2"
+          >
+            <ng-container
+              *ngFor="let patient of row.forthday?.details; let j = index"
+            >
+              <div
+                [attr.data.details]="patient | stringify | async"
+                class="day-data rounded-0 event"
+                [ngClass]="[
+                  patient.status | appointmentStatus,
+                  row.forthday.details?.length == 2 ? 'multiple' : ''
+                ]"
+              >
+                <span>
+                  {{ patient.patient.patientName | appendDot : 12 | titlecase }}
+                </span>
+              </div>
+            </ng-container>
+          </div>
+          <div class="d-flex w-100" *ngIf="row.forthday.details.length > 2">
+            <div
+              class="day-data w-100 rounded-0 single multi-event multiple-appointment"
+              [attr.data-patient-list]="
+                row.forthday.details | stringify | async
+              "
+            >
+              <span>
+                {{ row.forthday.details.length + "+ Patients" | titlecase }}
+              </span>
+            </div>
+          </div>
+          <div
+            class="dotted-border"
+            *ngIf="!row.forthday?.details.length && i == (currentSlot | async)"
+          ></div>
+        </td>
+        <td class="position-relative">
+          <div
+            class="d-flex flex-column gap-1"
+            *ngIf="row.fifthday.details?.length <= 2"
+          >
+            <ng-container
+              *ngFor="let patient of row.fifthday?.details; let j = index"
+            >
+              <div
+                [attr.data.details]="patient | stringify | async"
+                class="day-data rounded-0 event"
+                [ngClass]="[
+                  patient.status | appointmentStatus,
+                  row.fifthday.details?.length == 2 ? 'multiple' : ''
+                ]"
+              >
+                <span>
+                  {{ patient.patient.patientName | appendDot : 12 | titlecase }}
+                </span>
+              </div>
+            </ng-container>
+          </div>
+          <div class="d-flex w-100" *ngIf="row.fifthday.details.length > 2">
+            <div
+              class="day-data w-100 rounded-0 single multi-event multiple-appointment"
+              [attr.data-patient-list]="
+                row.fifthday.details | stringify | async
+              "
+            >
+              <span>
+                {{ row.fifthday.details.length + "+ Patients" | titlecase }}
+              </span>
+            </div>
+          </div>
+          <div
+            class="dotted-border"
+            *ngIf="!row.fifthday?.details.length && i == (currentSlot | async)"
+          ></div>
+        </td>
+        <td class="position-relative">
+          <div
+            class="d-flex flex-column gap-1"
+            *ngIf="row.sixthday.details?.length <= 2"
+          >
+            <ng-container
+              *ngFor="let patient of row.sixthday?.details; let j = index"
+            >
+              <div
+                [attr.data.details]="patient | stringify | async"
+                class="day-data rounded-0 event"
+                [ngClass]="{
+                  multiple: row.sixthday.details.length == 2
+                }"
+                [ngClass]="[patient.status | appointmentStatus]"
+              >
+                <span>
+                  {{ patient.patient.patientName | appendDot : 12 | titlecase }}
+                </span>
+              </div>
+            </ng-container>
+          </div>
+          <div class="d-flex w-100" *ngIf="row.sixthday.details.length > 2">
+            <div
+              class="day-data w-100 rounded-0 single multi-event multiple-appointment"
+              [attr.data-patient-list]="
+                row.sixthday.details | stringify | async
+              "
+            >
+              <span>
+                {{ row.sixthday.details.length + "+ Patients" | titlecase }}
+              </span>
+            </div>
+          </div>
+          <div
+            class="dotted-border"
+            *ngIf="!row.sixthday?.details.length && i == (currentSlot | async)"
+          ></div>
+        </td>
+        <td class="position-relative">
+          <div
+            class="d-flex flex-column gap-1"
+            *ngIf="row.seventhday.details?.length <= 2"
+          >
+            <ng-container
+              *ngFor="let patient of row.seventhday?.details; let j = index"
+            >
+              <div
+                [attr.data.details]="patient | stringify | async"
+                class="day-data rounded-0 event"
+                [ngClass]="{
+                  multiple: row.seventhday.details.length == 2
+                }"
+                [ngClass]="patient.status | appointmentStatus"
+              >
+                <span>
+                  {{ patient.patient.patientName | appendDot : 12 | titlecase }}
+                </span>
+              </div>
+            </ng-container>
+          </div>
+          <div class="d-flex w-100" *ngIf="row.seventhday.details.length > 2">
+            <div
+              class="day-data w-100 rounded-0 single multi-event multiple-appointment"
+              [attr.data-patient-list]="
+                row.seventhday.details | stringify | async
+              "
+            >
+              <span>
+                {{ row.seventhday.details.length + "+ Patients" | titlecase }}
+              </span>
+            </div>
+          </div>
+          <div
+            class="dotted-border"
+            *ngIf="
+              !row.seventhday?.details.length && i == (currentSlot | async)
+            "
+          ></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,49 @@
+<div class="w-100 week-table">
+  <table class="">
+    <caption></caption>
+    <thead>
+      <tr class="heading">
+        <th class="timing header">{{ "TIME" | translate }}</th>
+        <th
+          *ngFor="let column of weakdays; let i = index"
+          [ngClass]="{ 'current-day': i == 0 }"
+        >
+          {{ column | date : "EEE d MMM" }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of rows; let i = index">
+        <td
+          class="timing position-relative"
+          [ngClass]="{ currentSlot: i == (currentSlot | async) }"
+        >
+          <svg-icon
+            class="position-absolute timepointer svg-icon-purple"
+            src="assets/images/svg/timepointer.svg"
+            *ngIf="i == (currentSlot | async)"
+          ></svg-icon>
+          <span>
+            {{ row.timing }}
+          </span>
+        </td>
+        <ng-container *ngFor="let day of daycount">
+          <td class="">
+            <div
+              class="week-data"
+              *ngIf="row?.[day]?.details"
+              [attr.data.details]="row?.[day].details | stringify | async"
+              [ngClass]="row?.[day]?.details?.status | appointmentStatus"
+            >
+              {{ row?.[day].details?.fullName | appendDot : 12 | titlecase }}
+            </div>
+            <div
+              class="dotted-border"
+              *ngIf="!row?.[day]?.details && i == (currentSlot | async)"
+            ></div>
+          </td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+</div>

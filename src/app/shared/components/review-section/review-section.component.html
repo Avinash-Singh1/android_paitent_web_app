@@ -1,0 +1,175 @@
+<section class="rv">
+  <div class="rv__inner">
+
+    <!-- ── Section Header ── -->
+    <div class="rv__header">
+      <h2 class="rv__title">Patient Reviews</h2>
+      <p class="rv__subtitle">Verified reviews from real patients</p>
+    </div>
+
+    <!-- ── Rating Summary ── -->
+    <div class="rv__summary">
+      <!-- Big score -->
+      <div class="rv__score">
+        <span class="rv__score-num">{{ (reviewDetail?.averagePoints | number : "1.1-1") || "0.0" }}</span>
+        <div class="rv__score-stars">
+          <star-rating
+            [rating]="reviewDetail?.averagePoints || 0"
+            [step]="0.1"
+            [showHalfStars]="true"
+            [readOnly]="true"
+          ></star-rating>
+          <span class="rv__score-count">{{ totalReview || 0 }} reviews</span>
+        </div>
+      </div>
+
+      <!-- Metric pills -->
+      <div class="rv__metrics">
+        <div class="rv__metric">
+          <div class="rv__metric-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+          </div>
+          <div class="rv__metric-info">
+            <span class="rv__metric-val">{{ (reviewDetail?.averagePoints | number : "1.1-1") || "0.0" }}</span>
+            <span class="rv__metric-label">Overall</span>
+          </div>
+        </div>
+        <div class="rv__metric">
+          <div class="rv__metric-icon rv__metric-icon--wait">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" fill="currentColor"/></svg>
+          </div>
+          <div class="rv__metric-info">
+            <span class="rv__metric-val">{{ (reviewDetail?.averageWaitTime | number : "1.1-1") || "0.0" }}</span>
+            <span class="rv__metric-label">Wait Time</span>
+          </div>
+        </div>
+        <div class="rv__metric">
+          <div class="rv__metric-icon rv__metric-icon--value">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.94s4.18 1.36 4.18 3.85c0 1.89-1.44 2.98-3.12 3.19z" fill="currentColor"/></svg>
+          </div>
+          <div class="rv__metric-info">
+            <span class="rv__metric-val">{{ (reviewDetail?.valueForMoney | number : "1.1-1") || "0.0" }}</span>
+            <span class="rv__metric-label">Value</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Reviews toolbar ── -->
+    <div class="rv__toolbar" *ngIf="reviewList?.length">
+      <span class="rv__toolbar-count">
+        <strong>{{ totalReview || 0 }}</strong> Reviews
+      </span>
+      <div class="rv__toolbar-sort">
+        <div class="dropdown">
+          <button
+            class="btn dropdown-toggle"
+            type="button"
+            id="dropdownMenuButton"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="16" y2="12"/><line x1="4" y1="18" x2="12" y2="18"/>
+            </svg>
+            {{ sort }}
+            <svg class="chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item cursor-pointer" (click)="getSort({ name: 'Most Recent', key: 2 })">Most Recent</a>
+            <a class="dropdown-item cursor-pointer" (click)="getSort({ name: 'Older to newest', key: 1 })">Oldest To Newest</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Review Cards ── -->
+    <div class="rv__list">
+      <div
+        class="rv__card"
+        *ngFor="let item of reviewList | paginate: {
+          itemsPerPage: payload.size,
+          currentPage: payload.page,
+          totalItems: totalReview
+        }"
+      >
+        <!-- Card header: avatar + name + date + stars -->
+        <div class="rv__card-head">
+          <div class="rv__card-avatar">
+            {{ getInitial(item?.patientName) }}
+          </div>
+          <div class="rv__card-who">
+            <span class="rv__card-name">{{ item?.patientName || 'Anonymous' }}</span>
+            <span class="rv__card-date">{{ item?.createdAt | date : 'mediumDate' }}</span>
+          </div>
+          <div class="rv__card-rating">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            <span>{{ (item?.totalPoint | number : "1.1-1") || "0.0" }}</span>
+          </div>
+        </div>
+
+        <!-- Hospital visit context -->
+        <div class="rv__card-context" *ngIf="type == 'hospital'">
+          Visited <strong>{{ item?.doctorDetails?.name[0] | titlecase }}</strong>
+          ({{ item?.doctorDetails?.specialization }}) for {{ item?.treatment }}
+        </div>
+
+        <!-- Review body -->
+        <p class="rv__card-body" *ngIf="item?.feedback">{{ item?.feedback }}</p>
+
+        <!-- Treatment tags -->
+        <div class="rv__card-tags" *ngIf="type == 'doctor' && item?.treatment?.length">
+          <span class="rv__card-tag" *ngFor="let i of item?.treatment">{{ i }}</span>
+        </div>
+
+        <!-- Liked badge -->
+        <div class="rv__card-liked" *ngIf="item?.feedbackLike">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" fill="currentColor"/></svg>
+          Recommended
+        </div>
+
+        <!-- Doctor reply -->
+        <div class="rv__card-reply" *ngIf="item?.doctorReply">
+          <div class="rv__card-reply-head">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M10 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z" fill="currentColor"/></svg>
+            <span>Doctor's Reply</span>
+          </div>
+          <p>{{ item?.doctorReply }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- "View All" (About tab preview) -->
+    <div class="rv__view-all" *ngIf="tab == 0 && reviewList?.length">
+      <button (click)="allStories()">
+        View All {{ totalReview || '' }} Reviews
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Pagination (Review tab) -->
+    <div class="rv__pagination" *ngIf="tab != 0 && reviewList?.length > 10">
+      <pagination-controls
+        class="text-center"
+        [previousLabel]="' '"
+        [nextLabel]="' '"
+        (pageChange)="changingPage($event)"
+      ></pagination-controls>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="!reviewList?.length" class="rv__empty">
+      <div class="rv__empty-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" fill="currentColor"/><path d="M7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z" fill="currentColor"/></svg>
+      </div>
+      <h3>No Reviews Yet</h3>
+      <p>Be the first to share your experience with this doctor.</p>
+    </div>
+
+  </div>
+</section>

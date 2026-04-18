@@ -1,0 +1,51 @@
+@use 'src/styles/settings/settings.colors' as *;
+
+@use 'src/styles/settings/settings.animations' as *;
+
+@mixin theme-color-root() {
+	// TEXT
+	--color-text-primary: #{$color-grey-medium};
+	--color-text-primary-inverted: #{$color-white};
+
+	--color-border-primary: #{$color-grey-light};
+
+	--color-fill-dark: #{$color-black};
+	--color-fill-light: #{$color-white};
+
+	--background-menu: #{$color-black};
+	--background-accordion: #{$color-black};
+
+	// CAROUSEL
+	--carousel-bullet-border-color: #{$color-white};
+
+	// BUTTONS
+	--button-background-primary: #{$color-black};
+	--button-background-primary-active: #{$color-black};
+	--button-border-primary-color: #{$color-black};
+	--button-border-primary-color-active: #{$color-black};
+	--button-text-primary-color: #{$color-white};
+
+	--button-background-secondary: #{$color-white};
+	--button-background-secondary-hover: #{$color-white};
+	--button-background-secondary-active: #{$color-white};
+	--button-border-secondary-color: #{$color-black};
+	--button-border-color-secondary-active: #{$color-black};
+}
+
+@mixin theme-sizes-root() {
+	// CAROUSEL
+	--carousel-bullet-size-small: 14px;
+	--carousel-bullet-size-large: 18px;
+	--carousel-bullet-border-size: 2px;
+}
+
+@mixin theme-animation-root() {
+	--transition-duration: #{$transition-duration};
+	--transition-duration-slow: #{$transition-duration-slow};
+	--transition-duration-fast: #{$transition-duration-fast};
+}
+
+@mixin theme-layout-root() {
+	--component-margin-bottom: 25px;
+	--compound-margin-top: 10px;
+}

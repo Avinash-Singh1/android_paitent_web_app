@@ -1,0 +1,197 @@
+@use "variable.scss" as *;
+@use "_settings.colors.scss" as *;
+
+.add-establishment-main {
+  height: 100%;
+  position: relative;
+  font-size: 14px;
+
+  .heading {
+    background: $white;
+    top: 0;
+    position: -webkit-sticky;
+  }
+
+  .content {
+    .profile-pic {
+      width: 96px;
+      height: 96px;
+
+      img {
+        margin: auto;
+        width: 95px;
+        height: 95px;
+        object-fit: cover;
+        border-radius: 5px;
+      }
+    }
+
+    .form-input {
+      height: 48px;
+      outline: none;
+      padding: 0 24px;
+    }
+
+    label {
+      color: $faded-text;
+    }
+
+    .map-img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .establishment-timing {
+      .weekname {
+        padding: 12px 24px;
+        border-radius: 18px;
+        background: $bright-gray;
+        color: $black;
+        -webkit-transition: all 500ms ease;
+        -moz-transition: all 500ms ease;
+        -o-transition: all 500ms ease;
+        -ms-transition: all 500ms ease;
+        transition: all 500ms ease;
+
+        &.selected {
+          background: $purple;
+          color: $white;
+        }
+      }
+
+      .week-timing {
+        padding: 24px 24px;
+
+        .week-day-timing {
+          background: $bright-gray;
+          border-radius: 12px;
+          padding: 12px 24px;
+          //   gap: 40px;
+          min-height: 96px;
+        }
+      }
+    }
+  }
+
+  .footer-button {
+    background: $white;
+    position: sticky;
+    bottom: 0;
+  }
+}
+
+:host::ng-deep {
+  .from.ng-select .ng-select-container {
+    min-width: 123px !important;
+    border: none !important;
+    border-radius: 5px 0 0 5px !important;
+    // height: 34px !important;
+    // padding: 0 2px !important;
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+
+    .ng-value-container .ng-input>input {
+      padding: 6px 2px !important;
+    }
+  }
+
+  .to.ng-select .ng-select-container {
+    min-width: 123px !important;
+    border: none !important;
+    border-radius: 0 5px 5px 0 !important;
+    // height: 34px !important;
+    // padding: 0 2px !important;
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+
+    .ng-value-container .ng-input>input {
+      padding: 6px 2px !important;
+    }
+  }
+
+  .mdc-dialog__actions {
+    padding: 0 !important;
+  }
+
+  .establishment-type.ng-select .ng-select-container {
+    height: 48px !important;
+    padding: 0 10px !important;
+
+    .ng-value-container .ng-input>input {
+      padding: 6px 10px !important;
+    }
+  }
+
+  .ng-select .ng-select-container {
+    height: 48px !important;
+    padding: 0 10px !important;
+    border: 1px solid $border-color;
+
+    .ng-value-container .ng-input>input {
+      padding: 7px 10px !important;
+    }
+  }
+}
+
+.mdc-dialog__content.add-establishment ::ng-deep {
+  font-family: "Source Sans Pro", sans-serif !important;
+  font-size: 14px !important;
+  color: $black !important;
+}
+
+.toggle-back {
+  width: 70px;
+  min-height: 36px !important;
+  border-radius: 49px;
+  background: rgba($color: $black, $alpha: 0.25);
+  display: flex;
+  align-items: center;
+  // padding: 8px;
+
+  -webkit-transition: all 200ms ease;
+  -moz-transition: all 200ms ease;
+  -o-transition: all 200ms ease;
+  -ms-transition: all 200ms ease;
+  transition: all 200ms ease;
+  position: relative;
+
+  &.bg-black {
+    background: $purple !important;
+  }
+
+  .rounde-div {
+    position: absolute;
+    top: 4px;
+    width: 28px;
+    min-height: 28px;
+    border-radius: 14px;
+    background: white;
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    transition: all 500ms ease;
+    left: 5px;
+
+    &.opened {
+      left: 37px !important;
+    }
+  }
+}
+
+.visibility-hidden {
+  visibility: hidden !important;
+}
+
+.display-none {
+  display: none !important;
+}
+
+.error-div {
+  margin-top: -8px !important;
+}
+
+.google-maps {
+  display: flex;
+  min-height: 334px;
+}

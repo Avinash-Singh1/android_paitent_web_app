@@ -1,0 +1,192 @@
+<div class="main">
+  <div class="wrapper">
+    <div class="heading d-flex justify-content-between align-items-center">
+      <h2>My Feedback</h2>
+      <div class="cursor-pointer" [ngClass]="{ disabled: !totalCount }">
+        <svg-icon
+          *ngIf="totalCount"
+          src="assets/images/svg/filter.svg"
+          [mat-menu-trigger-for]="appointmentfilter"
+        ></svg-icon>
+        <svg-icon
+          *ngIf="!totalCount"
+          src="assets/images/svg/filter.svg"
+        ></svg-icon>
+      </div>
+    </div>
+    <ng-container *ngIf="totalCount">
+      <div
+        class="content"
+        id="content"
+        #content
+        *ngFor="
+          let item of yearWiseData
+            | paginate
+              : {
+                  itemsPerPage: payload.size,
+                  currentPage: payload.page,
+                  totalItems: totalCount
+                }
+        "
+      >
+        <p>{{ item?._id }}</p>
+        <div class="tab" *ngFor="let i of item?.data">
+          <div class="box">
+            <div class="first-section d-flex justify-content-between">
+              <div class="feed d-flex gap-3">
+                <div class="date">
+                  <div class="num">{{ i?.date | date : "dd" }}</div>
+                  <div class="text-14">{{ i?.date | date : "MMM" }}</div>
+                </div>
+                <div>
+                  <div class="text-14 font-600">
+                    Feedback for {{ (i?.doctorName | titlecase) || "" }}
+                  </div>
+                  <div class="text-14 mt-2" *ngIf="i?.status == 1">
+                    UNDER MODERATION
+                  </div>
+                  <div class="text-14 mt-2 text-green" *ngIf="i?.status == 2">
+                    APPROVED
+                  </div>
+                  <div class="text-14 mt-2 text-red" *ngIf="i?.status == 3">
+                    REJECTED
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="deviceWidth > 767">
+                <button (click)="deleteFeedback(i)">Delete</button>
+              </div>
+              <div *ngIf="deviceWidth < 767">
+                <div class="text-danger" (click)="deleteFeedback(i)">
+                  <mat-icon>delete</mat-icon>
+                </div>
+              </div>
+            </div>
+            <div class="second-section">
+              <div
+                class="d-flex flex-wrap align-items-baseline px-3"
+                [ngClass]="i?.status == 3 ? 'red-star-section' : 'star-section'"
+              >
+                <div class="rate">
+                  {{ (i?.totalPoint | number : "1.1-2") || 0 }}
+                </div>
+                <div class="text-14 font-600">/5</div>
+
+                <star-rating
+                  style="height: 24px"
+                  [rating]="i?.totalPoint || 0"
+                  [step]="0.1"
+                  [showHalfStars]="true"
+                  [readOnly]="true"
+                ></star-rating>
+                <div class="text-14 font-400" *ngIf="i?.doctorRecommend">
+                  I recommend the doctor
+                </div>
+              </div>
+              <div class="text-14 font-400 px-3 text-wrap">
+                {{ i?.feedback }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <div
+      *ngIf="!totalCount"
+      class="d-flex justify-content-center align-items-center"
+      style="min-height: calc(100vh - 355px)"
+    >
+      <div class="text-center">
+        <img loading="lazy" src="assets/images/svg/FeedbackNot.svg" alt="" />
+        <p class="text-14 font-600">You haven't submitted any feedback yet.</p>
+      </div>
+    </div>
+
+    <div
+      class="pagination-section"
+      *ngIf="totalCount && totalCount > payload.size"
+    >
+      <pagination-controls
+        class="text-center"
+        [previousLabel]="' '"
+        [nextLabel]="' '"
+        (pageChange)="changingPage($event)"
+      ></pagination-controls>
+    </div>
+  </div>
+</div>
+
+<mat-menu #appointmentfilter class="appointment-filter">
+  <div
+    class="d-flex justify-content-between align-items-center w-100 px-24 py-2 text-14 border-bottom-style"
+  >
+    <span class="opacity-50 cursor-pointer" (click)="onResetForm()">{{
+      "CLEAR_FILTER" | translate
+    }}</span>
+    <button class="save-button" (click)="onFiltering()">
+      {{ "SAVE" | translate }}
+    </button>
+  </div>
+  <form [formGroup]="filterForm" class="">
+    <mat-accordion>
+      <mat-expansion-panel (click)="$event.stopPropagation()" *ngIf="upcoming">
+        <mat-expansion-panel-header class="border-bottom-style">
+          <mat-panel-title>
+            <div class="d-flex align-items-center gap-3">
+              <svg-icon src="assets/images/svg/calendar-filter.svg"></svg-icon>
+              <span class="text-14 font-400">
+                {{ "FILTER_BY_DATE" | translate }}</span
+              >
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="d-flex gap-2 w-100">
+          <div class="d-flex flex-column gap-2 w-50">
+            <label class="text-14">{{ "FROM" | translate }}</label>
+
+            <div class="matdate-input d-flex">
+              <input
+                matInput
+                class="w-90"
+                type="text"
+                [matDatepicker]="pickerfrom"
+                placeholder="DD/MM/YYYY"
+                formControlName="fromDate"
+                [max]="filterForm.get('toDate').value"
+              />
+
+              <mat-datepicker-toggle
+                class="toggle"
+                matIconSuffix
+                [for]="pickerfrom"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #pickerfrom></mat-datepicker>
+            </div>
+          </div>
+          <div class="d-flex flex-column gap-2 w-50">
+            <label class="text-14">{{ "TO" | translate }}</label>
+            <div class="matdate-input d-flex">
+              <input
+                matInput
+                class="w-90"
+                type="text"
+                [matDatepicker]="pickerto"
+                placeholder="DD/MM/YYYY"
+                formControlName="toDate"
+                [min]="filterForm.get('fromDate').value"
+              />
+
+              <mat-datepicker-toggle
+                class="toggle"
+                matIconSuffix
+                [for]="pickerto"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #pickerto></mat-datepicker>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </form>
+</mat-menu>

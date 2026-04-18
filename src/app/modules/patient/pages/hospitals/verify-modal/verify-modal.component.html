@@ -1,0 +1,76 @@
+<section class="main">
+  <div class="modal-header">
+    <div class="modal-header__icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1ZM10 17L6 13L7.41 11.59L10 14.17L16.59 7.58L18 9L10 17Z" fill="#45197c"/>
+      </svg>
+    </div>
+    <h2>Verify Your Number</h2>
+    <p class="modal-header__subtitle">Secure verification for your appointment</p>
+  </div>
+  <div class="wrapper">
+    <div class="phone-display">
+      <div class="phone-display__number">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6.62 10.79C8.06 13.62 10.38 15.94 13.21 17.38L15.41 15.18C15.69 14.9 16.08 14.82 16.43 14.93C17.55 15.3 18.75 15.5 20 15.5C20.55 15.5 21 15.95 21 16.5V20C21 20.55 20.55 21 20 21C10.61 21 3 13.39 3 4C3 3.45 3.45 3 4 3H7.5C8.05 3 8.5 3.45 8.5 4C8.5 5.25 8.7 6.45 9.07 7.57C9.18 7.92 9.1 8.31 8.82 8.59L6.62 10.79Z" fill="#45197c"/>
+        </svg>
+        <span>+91 {{ data?.phone }}</span>
+      </div>
+      <button class="phone-display__edit" (click)="edit()">Change</button>
+    </div>
+    <div class="otp-info">
+      <p>We have sent a 6-digit verification code to your mobile number</p>
+    </div>
+    <form [formGroup]="otpForm" class="otp-form">
+      <label class="otp-form__label">Enter Verification Code</label>
+      <input
+        class="otp-input"
+        type="text"
+        placeholder="------"
+        maxlength="6"
+        formControlName="otp"
+        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+        autocomplete="one-time-code"
+      />
+      <div
+        class="form-error"
+        *ngIf="(controls['otp'].touched || submitted) && controls['otp'].errors?.['required']"
+      >
+        Please enter the verification code
+      </div>
+      <div
+        class="form-error"
+        *ngIf="(controls['otp'].touched || submitted) && controls['otp'].errors?.['minlength']
+      && (!controls['otp'].errors?.['required'])"
+      >
+        Please enter a valid 6-digit code
+      </div>
+    </form>
+    <div class="resend-section">
+      <span *ngIf="resendOtpVlaue" class="resend-section__timer">
+        Resend code in <b>{{ resendTime }}</b>
+      </span>
+      <button
+        *ngIf="!resendOtpVlaue"
+        class="resend-section__btn"
+        (click)="resendOTP()"
+      >
+        Resend Code
+      </button>
+    </div>
+    <div class="verify-action">
+      <button class="verify-btn" (click)="login()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" fill="white"/>
+        </svg>
+        Verify &amp; Continue
+      </button>
+    </div>
+    <div class="secure-note">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 8H17V6C17 3.24 14.76 1 12 1C9.24 1 7 3.24 7 6V8H6C4.9 8 4 8.9 4 10V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V10C20 8.9 19.1 8 18 8ZM12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17ZM15.1 8H8.9V6C8.9 4.29 10.29 2.9 12 2.9C13.71 2.9 15.1 4.29 15.1 6V8Z" fill="#888"/>
+      </svg>
+      <span>Your information is secure and encrypted</span>
+    </div>
+  </div>
+</section>

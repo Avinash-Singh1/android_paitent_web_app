@@ -1,0 +1,81 @@
+@use "src/styles/scss/variable.scss" as *;
+
+.calendar-table {
+  border-collapse: collapse;
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-top: none !important;
+  background-color: #fff;
+}
+
+.calendar-table thead th {
+  vertical-align: middle;
+  font-weight: 400;
+  text-align: center;
+}
+
+.calendar-table td {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  // padding: 1rem;
+  vertical-align: top;
+}
+
+th {
+  background: $white;
+  white-space: nowrap;
+  position: sticky;
+  z-index: 1;
+  top: 0;
+}
+
+th::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0.5px solid $border-color;
+  display: block;
+  top: 0px;
+}
+
+th::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.calendar-day {
+  min-height: 120px;
+  height: 100%;
+  cursor: pointer;
+
+  &.event-appointment {
+    background-color: rgba($color: $purple, $alpha: 0.1);
+  }
+
+  &.today {
+    background-color: $purple;
+    color: $white !important;
+  }
+}
+
+.calendar-day.past-date {
+  opacity: 0.5 !important;
+}
+
+.extra-div {
+  width: 100px;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.fs-10 {
+  font-size: 10px;
+}

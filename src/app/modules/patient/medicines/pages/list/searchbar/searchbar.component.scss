@@ -1,0 +1,243 @@
+.search {
+    height: auto;
+    margin-top: 30px;
+}
+
+
+.serchicon {
+    position: absolute;
+    right: 20px;
+    top: 13px;
+    width: 17px;
+    height: 24px;
+    flex-shrink: 0;
+    border: none;
+    background: none !important;
+}
+
+.search-parent {
+    border-radius: 8px;
+    background-color: #fff;
+    border: 2px solid #45197c;
+    overflow: hidden;
+    padding: 5px;
+}
+
+.action_button {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: none !important;
+    background: none !important;
+    color: #000;
+    font-family: "Source Sans Pro";
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    padding: 0.5rem 1rem;
+    /* Adjust padding for responsiveness */
+}
+
+.suggestions ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+    height: 400px;
+    overflow-y: scroll; /* Ensures vertical scrolling */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+.suggestions ul::-webkit-scrollbar { /* WebKit browsers (Chrome, Safari) */
+    display: none;
+}
+
+
+.suggestions {
+    position: absolute;
+    background: white;
+    border: 1px solid grey;
+    border-radius: 0px 0px 10px 10px;
+    z-index: 99;
+
+    overflow: hidden;
+}
+
+.suggestions ul li {
+    width: calc(100%);
+    max-width: calc(100%);
+    display: flex;
+    border-bottom: 1px solid grey;
+    padding: 15px;
+    justify-content: space-between;
+    align-items: center;
+   
+}
+ul li img{
+    height: 100px;
+}
+
+.button_container {
+    width: calc(100%);
+    max-width: calc(100%);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.search_container {
+    width: calc(100%);
+    max-width: calc(100%);
+    display: flex;
+    justify-content:center;
+    gap: 70px
+}
+
+.search_container .serch_section {
+    width: calc(70%);
+    max-width: calc(70%);
+    margin-left: 30px;
+
+}
+
+.search_container .button_containers {
+    width: calc(25%);
+    max-width: calc(25%);
+}
+
+.button_section {
+    border-radius: 2.8125rem;
+    background: rgba(238, 238, 238, 0.50);
+    border: none !important;
+
+}
+
+.action_button {
+    font-size: 1rem;
+    /* Adjusts with screen size */
+    padding: 0.5rem 1rem;
+    /* Adjusts with screen size */
+}
+
+
+
+
+
+
+.search-icon,
+.keyboard-arrow-down,
+.love-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.love-icon,
+.shopping-cart-icon {
+    width: 36px;
+    height: 36px;
+    object-fit: cover;
+}
+
+.wishlist,
+.cart {
+    font-size: 18px;
+    color: #000;
+    font-family: 'Source Sans Pro';
+}
+
+.frame-child {
+    border-right: 1px solid rgba(0, 0, 0, 0.3);
+    height: 39px;
+}
+
+
+@media (max-width: 576px) {
+    .search {
+        height: auto;
+        margin-top: 30px;
+    }
+
+    .search_container .serch_section {
+        margin: 0 !important;
+        width: 100%;
+        max-width: 100%;
+    }
+    ul li img{
+        display: none;
+    }
+
+    .suggestions {
+        position: fixed;
+        background: white;
+        border: 1px solid;
+        border-top: none;
+        border-radius: 0px 0px 10px 10px;
+        top: 120px !important;
+        z-index: 99;
+    }
+
+
+}
+
+@media (min-width: 776px) {
+    form {
+        position: relative !important;
+        right: 40px;
+        /* Adjust position as needed */
+    }
+
+    select {
+        width: 100% !important;
+    }
+
+}
+
+// Search button styles
+.search-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+
+    &:hover:not(:disabled) {
+        background: rgba(69, 25, 124, 0.08);
+    }
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    svg {
+        pointer-events: none;
+    }
+
+    @media (max-width: 576px) {
+        right: 5px;
+        padding: 6px 8px;
+
+        svg {
+            width: 18px;
+            height: 18px;
+        }
+    }
+}
+
+// Adjust input padding to accommodate button
+.search-parent input[type="search"] {
+    padding-right: 50px;
+
+    @media (max-width: 576px) {
+        padding-right: 45px;
+    }
+}

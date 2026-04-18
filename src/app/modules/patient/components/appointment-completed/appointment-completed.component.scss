@@ -1,0 +1,202 @@
+@use "tools.mediaquery" as *;
+
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+
+@use "variable.scss" as *;
+
+
+.confirm-booking {
+  background-color: #e2e2e2;
+
+  &__wrapper {
+    background-color: $white;
+    min-height: calc(100vh - 140px);
+    max-width: 486px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: auto;
+    padding: 31px 0px;
+
+    @media screen and (max-width: 767px) {
+      padding: 80px 0px;
+    }
+
+    &__name {
+      padding: 0 31px;
+      display: flex;
+      gap: 9px;
+      align-items: center;
+      margin-bottom: 17px;
+
+      &.hospital {
+        align-items: start;
+      }
+
+      img {
+        border-radius: 50%;
+        height: 72px;
+        width: 72px;
+        object-fit: cover;
+      }
+
+      h2 {
+        @include font-sans_pro-semibold($size: $font_14);
+        margin: 0;
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-semibold($size: $font_16);
+        }
+      }
+
+      p {
+        @include font-sans_pro-regular($size: $font_14);
+        margin: 0;
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-regular($size: $font_16);
+        }
+      }
+
+      h4 {
+        @include font-sans_pro-semibold($size: $font_14);
+        margin: 0;
+        cursor: pointer;
+        color: $purple;
+        margin-top: 6px;
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-semibold($size: $font_16);
+        }
+      }
+    }
+
+    .light-line {
+      margin: 30px 0 16px;
+      opacity: 0.1;
+    }
+
+    .line-sec {
+      padding: 0 31px;
+    }
+
+    .confirm {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 20px;
+      margin-top: 20px;
+
+      h4 {
+        @include font-sans_pro-semibold($size: $font_24);
+        margin: 0;
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-semibold($size: $font_20);
+        }
+      }
+    }
+
+    .main-data {
+      padding: 0 31px;
+
+      .data {
+        h5 {
+          @include font-sans_pro-regular($size: $font_14);
+          margin: 0;
+          margin-bottom: 6px;
+
+          @media screen and (max-width: 767px) {
+            @include font-sans_pro-semibold($size: $font_16);
+          }
+        }
+      }
+
+      .box {
+        margin-top: 24px;
+        padding: 24px;
+        border: 1.52778px solid $border-color;
+
+        h2 {
+          @include font-sans_pro-semibold($size: $font_24);
+          margin: 0;
+          margin-bottom: 3px;
+
+          @media screen and (max-width: 767px) {
+            @include font-sans_pro-semibold($size: $font_20);
+          }
+        }
+
+        p {
+          margin: 0;
+          @include font-sans_pro-regular($size: $font_14);
+          color: rgba(0, 0, 0, 0.7);
+          margin-bottom: 6px;
+
+          @media screen and (max-width: 767px) {
+            @include font-sans_pro-regular($size: $font_16);
+          }
+        }
+
+        .details {
+          margin-bottom: 24px;
+
+          h3 {
+            @include font-sans_pro-regular($size: $font_14);
+            color: rgba(0, 0, 0, 0.7);
+            margin: 0;
+
+            @media screen and (max-width: 767px) {
+              @include font-sans_pro-regular($size: $font_16);
+            }
+          }
+
+          h5 {
+            @include font-sans_pro-semibold($size: $font_14);
+            margin: 0;
+
+            @media screen and (max-width: 767px) {
+              @include font-sans_pro-semibold($size: $font_16);
+            }
+          }
+        }
+      }
+    }
+
+    .button {
+      button {
+        background: transparent;
+        width: fit-content;
+        height: 48px;
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        @include font-sans_pro-regular($size: $font_14);
+        border: 1px solid $border-color;
+        border-radius: 8px;
+        //   display: block;
+        align-items: center;
+        padding: 0 10px;
+        margin-top: 20px;
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-regular($size: $font_16);
+        }
+      }
+    }
+  }
+}
+
+.share {
+  background: $white;
+  padding: 12px 25px;
+  border: 1px solid $border-color;
+  border-radius: 5px;
+  @include font-sans_pro-regular($size: $font_14);
+
+  @media screen and (max-width: 767px) {
+    @include font-sans_pro-regular($size: $font_16);
+  }
+}

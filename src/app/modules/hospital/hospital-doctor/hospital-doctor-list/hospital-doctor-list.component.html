@@ -1,0 +1,205 @@
+<div class="hospital-patient">
+  <div
+    class="subheader-wrapper d-flex justify-content-between align-items-center gap-5 w-100 border-bottom-style"
+  >
+    <div class="heading d-flex align-items-center h-100">
+      <div class="hamber">
+        <div class="svg-icon-button">
+          <svg-icon
+            src="assets/images/svg/hamber.svg"
+            class="cursor-pointer"
+            (click)="openSidenav()"
+          ></svg-icon>
+        </div>
+      </div>
+      <div class="d-flex align-items-center gap-40">
+        <span class="text-24 font-600">{{ "Our Doctors" }}</span>
+        <div class="search-wrapper">
+          <svg-icon src="assets/images/svg/search.svg"></svg-icon>
+          <input
+            type="text"
+            placeholder="Search by Name, Numbers "
+            (input)="onSearch($event)"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="buttongroup d-flex gap-6">
+      <button class="export-button" (click)="onRequestList()">
+        <svg-icon src="assets/images/svg/info.svg"></svg-icon>
+
+        <span> Request </span>
+        <span class="request-number" *ngIf="totalRequest">
+          {{ totalRequest > 9 ? 9 + "+" : totalRequest }}
+        </span>
+      </button>
+      <button class="export-button" [mat-menu-trigger-for]="importExport">
+        <svg-icon src="assets/images/svg/file.svg"></svg-icon>
+        <span> Files </span>
+      </button>
+      <button class="export-button" (click)="onAdd()">
+        <svg-icon src="assets/images/svg/add.svg"></svg-icon>
+        <span> Add </span>
+      </button>
+    </div>
+  </div>
+  <div class="patient-list">
+    <table>
+      <caption></caption>
+      <thead>
+        <tr>
+          <th></th>
+          <th>#</th>
+          <th>
+            <div class="d-flex gap-3 align-items-center">
+              {{ "DOCTOR_NAME" | translate }}
+              <div class="d-flex flex-column">
+                <svg-icon
+                  src="assets/images/svg/whitedropup.svg"
+                  class="cursor-pointer"
+                  (click)="onSorting('fullName', 'ASC')"
+                ></svg-icon>
+                <svg-icon
+                  src="assets/images/svg/whitedropdown.svg"
+                  class="cursor-pointer"
+                  (click)="onSorting('fullName', 'DESC')"
+                ></svg-icon>
+              </div>
+            </div>
+          </th>
+          <th>{{ "MOBILE" | translate }}</th>
+          <th>{{ "EMAIL" | translate }}</th>
+          <th>{{ "SPECIALITY" | translate }}</th>
+          <th>{{ "PROCEDURE" | translate }}</th>
+          <th class="text-center">{{ "VIEW_PROFILE" | translate }}</th>
+          <th class="text-center"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let doctor of doctorList
+              | paginate
+                : {
+                    itemsPerPage: payload.size,
+                    currentPage: payload.page,
+                    totalItems: totalItems
+                  };
+            let i = index
+          "
+        >
+          <td class="profile-image">
+            <div class="profile-icon" *ngIf="!doctor.doctorDetails?.profilePic">
+              {{
+                doctor.doctorDetails?.doctorName
+                  | nameInitial
+                  | uppercase
+              }}
+            </div>
+            <img
+              [src]="doctor.doctorDetails?.profilePic"
+              *ngIf="doctor.doctorDetails?.profilePic"
+              alt=""
+            />
+          </td>
+          <td>{{ (payload.page - 1) * payload.size + i + 1 }}</td>
+
+          <td>{{ doctor.doctorDetails?.doctorName | titlecase }}</td>
+          <td>
+            {{ doctor.doctorDetails?.phone }}
+          </td>
+          <td>
+            {{ doctor.doctorDetails?.email ?? "Not Avaliable" }}
+          </td>
+
+          <td>
+            {{ (doctor.specility | formatarray : "name") ?? "N/A" }}
+          </td>
+          <td>
+            {{ (doctor.procedure | formatarray : "name") ?? "N/A" }}
+          </td>
+          <td class="text-center">
+            <button
+              class="px-24 view py-2 border-style rounded-5px m-auto"
+              (click)="showHistory(doctor.doctorDetails?.userId)"
+            >
+              View
+            </button>
+          </td>
+          <td class="text-center">
+            <div class="d-flex align-items-center justify-content-center gap-2">
+              <button
+                class="px-24 py-2 border-style rounded-5px bg-white"
+                (click)="onEdit(doctor)"
+              >
+                <svg-icon src="assets/images/svg/edit.svg"></svg-icon>
+                &nbsp;&nbsp;&nbsp;
+                <span>
+                  {{ "EDIT" | translate }}
+                </span>
+              </button>
+              <button
+                class="px-24 py-12 delete-btn bg-white"
+                (click)="onDelete(doctor.doctorId)"
+              >
+                <svg-icon src="assets/images/svg/trash.svg"></svg-icon
+                >&nbsp;&nbsp;&nbsp;
+                <span>
+                  {{ "REMOVE" | translate }}
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="text-center py-24 text-18 font-600" *ngIf="!totalItems">
+      No Doctor Found
+    </div>
+  </div>
+  <div
+    class="pagination-section"
+    *ngIf="doctorList.length && totalItems > payload.size"
+  >
+    <pagination-controls
+      class="text-center"
+      [previousLabel]="' '"
+      [nextLabel]="' '"
+      (pageChange)="onPageChange($event)"
+    ></pagination-controls>
+  </div>
+</div>
+<mat-menu #importExport="matMenu" class="importexport-menu">
+  <button
+    mat-menu-item
+    class="d-flex align-items-center justify-content-center"
+    (click)="importFile.click()"
+  >
+    <input
+      type="file"
+      #importFile
+      accept="text/csv"
+      style="display: none"
+      (change)="onImportFile($event)"
+    />
+    <mat-icon>
+      <img loading="lazy" src="assets/images/svg/import.svg" alt="" />
+    </mat-icon>
+    Import
+  </button>
+  <button
+    mat-menu-item
+    class="d-flex align-items-center justify-content-center"
+    (click)="onExport()"
+  >
+    <mat-icon>
+      <img
+        loading="lazy"
+        class="export"
+        src="assets/images/svg/export.svg"
+        alt=""
+      />
+    </mat-icon>
+    Export
+  </button>
+</mat-menu>

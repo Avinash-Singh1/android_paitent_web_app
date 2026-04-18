@@ -1,0 +1,152 @@
+@use "sass:color";
+@use "tools.mediaquery" as *;
+@use "tools.typography" as *;
+@use "settings.containers" as *;
+@use "variable.scss" as *;
+
+/* ===================================================================
+   About Us – Container: Hero + Tab Navigation
+   =================================================================== */
+$_purple: #45197c;
+$_purple-light: #f4f0fa;
+$_gray-50: #f9fafb;
+$_gray-100: #f3f4f6;
+$_gray-200: #e5e7eb;
+$_gray-400: #9ca3af;
+$_gray-500: #6b7280;
+$_gray-700: #374151;
+$_gray-900: #111827;
+$_transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+/* ---------- Hero Banner ---------- */
+.ab__hero {
+  background: linear-gradient(135deg, $_purple 0%, color.adjust($_purple, $lightness: -8%) 60%, color.adjust($_purple, $lightness: -14%) 100%);
+  color: #fff;
+  padding: 72px 7.5% 64px;
+  position: relative;
+  overflow: hidden;
+
+  // Subtle dot pattern overlay
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+
+  @media (max-width: 767px) {
+    padding: 56px 5% 48px;
+  }
+
+  &-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  &-badge {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    @include font-sans_pro-semibold(11px);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    backdrop-filter: blur(4px);
+  }
+
+  &-title {
+    @include font-sans_pro-bold(40px);
+    line-height: 1.2;
+    margin: 0 0 16px;
+    letter-spacing: -0.01em;
+
+    @media (max-width: 767px) { @include font-sans_pro-bold(28px); }
+  }
+
+  &-sub {
+    @include font-sans_pro-regular(16px);
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.65;
+    margin: 0;
+    max-width: 580px;
+    margin-left: auto;
+    margin-right: auto;
+
+    @media (max-width: 767px) { @include font-sans_pro-regular(14px); }
+  }
+}
+
+/* ---------- Tab Navigation ---------- */
+.ab__tabs {
+  background: #fff;
+  border-bottom: 1px solid $_gray-200;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+
+  @media (max-width: 767px) {
+    top: 56px; // below fixed mobile header
+  }
+
+  &-inner {
+    max-width: $content-max-width;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 16px;
+
+    @media (max-width: 767px) {
+      max-width: $content-sm-max-width;
+      gap: 4px;
+      padding: 0 8px;
+    }
+  }
+
+  &-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 20px;
+    @include font-sans_pro-semibold(14px);
+    color: $_gray-400;
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+    transition: color $_transition, border-color $_transition;
+    white-space: nowrap;
+    cursor: pointer;
+
+    svg {
+      flex-shrink: 0;
+      opacity: 0.5;
+      transition: opacity $_transition;
+    }
+
+    &:hover {
+      color: $_gray-700;
+      svg { opacity: 0.7; }
+    }
+
+    &--active {
+      color: $_purple;
+      border-bottom-color: $_purple;
+
+      svg { opacity: 1; }
+    }
+
+    @media (max-width: 767px) {
+      @include font-sans_pro-semibold(13px);
+      padding: 14px 12px;
+      gap: 6px;
+
+      svg { width: 16px; height: 16px; }
+    }
+  }
+}

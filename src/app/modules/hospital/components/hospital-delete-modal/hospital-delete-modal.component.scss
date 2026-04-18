@@ -1,0 +1,10 @@
+@use "variable.scss" as *;
+
+
+.red-button {
+  color: $white;
+  background: $red;
+  border: 1px solid $border-color;
+  border-radius: 5px;
+  padding: 12px 24px;
+}

@@ -1,0 +1,309 @@
+/* =================================================================
+   FAQ Section – Modern Card-Based Design
+   ================================================================= */
+@use "tools.mediaquery" as *;
+@use "tools.typography" as *;
+@use "settings.containers" as *;
+@use "variable.scss" as *;
+
+$_purple: #45197c;
+$_radius: 12px;
+$_transition: 0.25s ease;
+
+/* ===============================================
+   SECTION WRAPPER
+   =============================================== */
+.faq {
+  &__wrapper {
+    padding: 0 24px 24px;
+
+    @media screen and (max-width: 767px) {
+      padding: 0;
+      margin-top: 12px;
+    }
+  }
+
+  /* --- Header with icon --- */
+  &__header {
+    margin-bottom: 20px;
+
+    @media screen and (max-width: 767px) {
+      margin-bottom: 16px;
+      padding: 0 4px;
+    }
+
+    h2 {
+      @include font-sans_pro-semibold(22px);
+      color: #1a1a1a;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
+    }
+
+    &-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: rgba($_purple, 0.08);
+      border-radius: 10px;
+      flex-shrink: 0;
+
+      svg {
+        width: 22px;
+        height: 22px;
+      }
+    }
+  }
+
+  /* --- Empty state --- */
+  &__empty {
+    text-align: center;
+    padding: 40px 20px;
+
+    p {
+      @include font-sans_pro-regular(16px);
+      color: rgba(0, 0, 0, 0.4);
+      margin: 0;
+    }
+  }
+
+  /* ===============================================
+     DESKTOP FAQ — Accordion Cards
+     =============================================== */
+  &__desktop {
+    display: block;
+
+    @media screen and (max-width: 767px) {
+      display: none;
+    }
+  }
+
+  &__item {
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: $_radius;
+    margin-bottom: 12px;
+    overflow: hidden;
+    background: $white;
+    transition: box-shadow $_transition, border-color $_transition;
+
+    &:hover {
+      border-color: rgba($_purple, 0.15);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    &--last {
+      margin-bottom: 0;
+    }
+
+    &-question {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 20px;
+      cursor: pointer;
+      transition: background $_transition;
+      user-select: none;
+
+      &:hover {
+        background: rgba($_purple, 0.02);
+      }
+    }
+
+    &-answer {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 0 20px 0;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.3s ease;
+
+      &--visible {
+        max-height: 500px;
+        opacity: 1;
+        padding: 0 20px 20px;
+      }
+    }
+  }
+
+  /* --- Badge styles (Q / A) --- */
+  &__q-badge,
+  &__a-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  &__q-badge {
+    background: $_purple;
+    color: #fff;
+  }
+
+  &__a-badge {
+    background: rgba($_purple, 0.08);
+    color: $_purple;
+    margin-top: 2px;
+  }
+
+  /* --- Desktop Q text --- */
+  &__q-text {
+    flex: 1;
+    @include font-sans_pro-semibold(15px);
+    line-height: 1.5;
+    color: #1a1a1a;
+  }
+
+  /* --- Desktop A text --- */
+  &__a-text {
+    flex: 1;
+    @include font-sans_pro-regular(14px);
+    line-height: 1.7;
+    color: rgba(0, 0, 0, 0.65);
+  }
+
+  /* --- Chevron icon --- */
+  &__chevron {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba($_purple, 0.06);
+    color: $_purple;
+    flex-shrink: 0;
+    transition: transform 0.3s ease, background $_transition;
+
+    svg {
+      transition: transform 0.3s ease;
+    }
+
+    &--open {
+      background: rgba($_purple, 0.12);
+
+      svg {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  /* ===============================================
+     MOBILE FAQ — Mat Accordion
+     =============================================== */
+  &__mobile {
+    display: none;
+
+    @media screen and (max-width: 767px) {
+      display: block;
+    }
+  }
+
+  /* --- Question row inside header --- */
+  &__question {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+  }
+
+  &__text {
+    flex: 1;
+    @include font-sans_pro-semibold(14px);
+    line-height: 1.5;
+    color: rgba(0, 0, 0, 0.82);
+  }
+
+  /* --- Answer body --- */
+  &__answer {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 0 4px;
+  }
+
+  &__answer-body {
+    flex: 1;
+    @include font-sans_pro-regular(13px);
+    line-height: 1.7;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  /* --- Read more / less button --- */
+  &__read-more {
+    border: none !important;
+    background: none !important;
+    color: $_purple !important;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 0;
+    cursor: pointer;
+    transition: opacity $_transition;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+/* ===============================================
+   MATERIAL OVERRIDES — Mobile accordion panels
+   =============================================== */
+:host::ng-deep {
+  .mat-expansion-panel-header {
+    padding: 14px 16px !important;
+    min-height: 48px !important;
+    height: max-content !important;
+  }
+
+  .mat-accordion .mat-expansion-panel {
+    border-radius: 0 !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+    margin: 0 !important;
+  }
+
+  .mat-expansion-panel:not([class*="mat-elevation-z"]) {
+    box-shadow: none !important;
+  }
+
+  .mat-expansion-panel-content {
+    background: rgba($_purple, 0.015);
+  }
+
+  .mat-expanded {
+    background: rgba($_purple, 0.015) !important;
+  }
+
+  .mat-expansion-panel-body {
+    padding: 4px 16px 16px;
+  }
+
+  .mat-expansion-indicator::after {
+    color: $_purple !important;
+    border-width: 0 2px 2px 0 !important;
+    padding: 3.5px !important;
+  }
+
+  @media screen and (max-width: 767px) {
+    .mat-expansion-panel:first-of-type {
+      border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
+    }
+  }
+}
+
+/* ===============================================
+   UTILITY
+   =============================================== */
+.padding-top-32 {
+  padding: 32px 0;
+}

@@ -1,0 +1,243 @@
+<section class="calendar-view">
+  <div class="hero-card__accent" aria-hidden="true"></div>
+  <div class="calendar-view__grid-view">
+    <div class="calendar-view__grid-view__details">
+      <a
+        class="calendar-view__grid-view__details__image-section cursor-pointer"
+        [routerLink]="doctorLink"
+        (click)="eventService.broadcastEvent('view-doctor', true)"
+      >
+        <div class="profile-icon" *ngIf="!data?.profilePic">
+          {{ data?.fullName | nameInitial | uppercase }}
+        </div>
+        <img
+          [src]="data?.profilePic || ''"
+          [alt]="data?.fullName"
+          *ngIf="data?.profilePic"
+          [attr.loading]="index === 0 ? 'eager' : 'lazy'"
+          [attr.fetchpriority]="index === 0 ? 'high' : 'auto'"
+          height="90" width="90"
+        />
+      </a>
+
+      <div class="calendar-view__grid-view__details__doctor-section">
+        <div class="name">
+          <a [routerLink]="doctorLink"
+            (click)="eventService.broadcastEvent('view-doctor', true)">
+            <h2 class="cursor-pointer m-0 truncate-text text-black">
+              {{ (data?.fullName | titlecase) || "N/A" }}
+            </h2>
+          </a>
+          <img
+            loading="lazy"
+            src="assets/images/svg/verified_tick.svg"
+            alt="Verified"
+            class="verified-tick"
+          />
+        </div>
+
+        <p *ngIf="data?.specialization?.length && data?.address?.city">
+          <ng-container *ngFor="let spec of data.specialization; let i = index">
+            <a
+              [routerLink]="['/', formatCity(data?.address?.city), formatSpecialization(spec.name)]"
+              class="specialization-link2"
+            >
+              {{ spec.name }}
+            </a>
+            <span *ngIf="i !== data.specialization.length - 1">, </span>
+          </ng-container>
+        </p>
+
+        <p class="education-line" *ngIf="data?.education?.length">
+          <span *ngFor="let edu of data?.education; let last = last">
+            {{ edu.degree || 'N/A' }}<span *ngIf="!last">, </span>
+          </span>
+        </p>
+
+        <p class="experience-tag" *ngIf="data?.experience">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+            <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          {{ data?.experience }} Yrs Exp.
+        </p>
+
+        <div class="doctor-details-price">
+          <div class="score" *ngIf="data?.recommended > 0">
+            <img loading="lazy" src="assets/images/homepage/thumbs-up.svg" alt="" />
+            <p>{{ (data?.recommended | number : ".0-1") }}%</p>
+          </div>
+          <div class="price-box price-box--clinic" *ngIf="data?.consultationFees | validFee">
+            <span class="badge badge-primary">
+              <svg width="16" height="13" viewBox="0 0 16 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.2 13C6.36569 13 6.5 12.8657 6.5 12.7V8.8C6.5 8.63431 6.63431 8.5 6.8 8.5H9.2C9.36569 8.5 9.5 8.63431 9.5 8.8V12.7C9.5 12.8657 9.63431 13 9.8 13H12.95C13.1157 13 13.25 12.8657 13.25 12.7V7.3C13.25 7.13431 13.3843 7 13.55 7H14.7182C14.9932 7 15.1233 6.66094 14.9189 6.47701L8.20069 0.430621C8.0866 0.327939 7.9134 0.327938 7.79931 0.43062L1.0811 6.47701C0.876734 6.66094 1.00684 7 1.28179 7H2.45C2.61569 7 2.75 7.13431 2.75 7.3V12.7C2.75 12.8657 2.88431 13 3.05 13H6.2Z" fill="#45197C" />
+              </svg>
+            </span>
+            &#8377;{{ data?.consultationFees }}
+          </div>
+          <div class="price-box price-box--video" *ngIf="data?.videoConsultationFees | validFee">
+            <span class="badge badge-success">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" stroke="#008000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+            </span>
+            &#8377;{{ data?.videoConsultationFees }}
+          </div>
+          <div class="rating-chip" *ngIf="data?.rating > 0">
+            <img loading="lazy" src="assets/images/svg/stars.svg" alt="" />
+            <span class="rating-chip__value">{{ data?.rating | number : "1.1" }}</span>
+            <span class="rating-chip__max">/5</span>
+          </div>
+        </div>
+
+        <!-- Address + Establishment (desktop only) -->
+        <a
+          *ngIf="data?.address?.city"
+          class="specialization-link2 desktop-only-info"
+          [routerLink]="getAddressRoute(data)"
+        >
+          <p *ngIf="data?.address?.locality && data?.address?.city">
+            {{ data?.address?.locality }}, {{ data?.address?.city }}
+            {{ data?.address?.pincode }}
+          </p>
+          <p *ngIf="data?.address?.locality && !data?.address?.city">
+            {{ data?.address?.locality }}
+          </p>
+          <p *ngIf="!data?.address?.locality && data?.address?.city">
+            {{ data?.address?.city }} {{ data?.address?.pincode }}
+          </p>
+          <p *ngIf="!data?.address?.locality && !data?.address?.city">N/A</p>
+        </a>
+
+        <p class="desktop-only-info" *ngIf="data?.specialization?.length && data?.address?.city">
+          <a
+            *ngIf="data?.address?.city"
+            class="specialization-link2"
+            [routerLink]="getAddressRoute2(data?.establishmentProfileSlug, data?.address?.city, data?.address?.locality)"
+          >
+            <span class="truncate-text">
+              {{ formatName(data?.establishmentName, 30) | titlecase }}
+            </span>
+          </a>
+        </p>
+
+        <a
+          class="get-direction cursor-pointer desktop-only-info"
+          [href]="'https://www.google.com/maps?q=' + (data?.pinLocation?.coordinates?.[1] || 28.6448) + ',' + (data?.pinLocation?.coordinates?.[0] || 77.216721)"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z" fill="currentColor"/>
+          </svg>
+          Get Directions
+        </a>
+      </div>
+    </div>
+
+    <!-- Mobile hospital card -->
+    <div class="hospital-card">
+      <div class="hospital-card__header">
+        <span class="hospital-card__name">
+          {{ formatName(data?.establishmentName, 30) | titlecase }}
+        </span>
+        <span
+          class="hospital-card__change"
+          *ngIf="data?.establishmentMaster?.length > 1"
+          (click)="changeClinic()"
+        >
+          Change
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+            <path d="M9 18l6-6-6-6" stroke="#45197c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </div>
+
+      <div class="hospital-card__address">
+        <svg class="hospital-card__address-icon" width="14" height="14" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z" fill="#888"/>
+        </svg>
+        <span *ngIf="data?.address?.locality && data?.address?.city">
+          {{ (data?.address?.locality + ', ' + data?.address?.city) | truncate: 35 }}
+        </span>
+        <span *ngIf="data?.address?.locality && !data?.address?.city">
+          {{ data?.address?.locality | truncate: 35 }}
+        </span>
+        <span *ngIf="!data?.address?.locality && data?.address?.city">
+          {{ data?.address?.city | truncate: 35 }}
+        </span>
+        <span *ngIf="!data?.address?.locality && !data?.address?.city">N/A</span>
+      </div>
+
+      <div class="hospital-card__fees">
+        <div class="hospital-card__fee-item" *ngIf="data?.consultationFees | validFee">
+          <svg width="14" height="14" viewBox="0 0 16 13" fill="none">
+            <path d="M6.2 13c.166 0 .3-.134.3-.3V8.8c0-.166.134-.3.3-.3h2.4c.166 0 .3.134.3.3v3.9c0 .166.134.3.3.3h3.15c.166 0 .3-.134.3-.3V7.3c0-.166.134-.3.3-.3h1.168c.275 0 .405-.339.201-.523L8.2.43a.3.3 0 00-.402 0L1.081 6.477c-.204.184-.074.523.201.523H2.45c.166 0 .3.134.3.3v5.4c0 .166.134.3.3.3H6.2z" fill="#45197c"/>
+          </svg>
+          &#8377;{{ data?.consultationFees }}
+        </div>
+        <div class="hospital-card__fee-item hospital-card__fee-item--video" *ngIf="data?.videoConsultationFees | validFee">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" stroke="#008000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          &#8377;{{ data?.videoConsultationFees }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile appointment slider -->
+    <div class="appointment-slider">
+      <div class="appointment-slider__track">
+        <div
+          class="appointment-slider__card"
+          [class.appointment-slider__card--empty]="!item?.remainingSlots"
+          *ngFor="let item of data?.appointmentCounts"
+          (click)="appoinmentDetail(item?.date, item?.remainingSlots)"
+        >
+          <span class="appointment-slider__day">
+            {{ checkTodayDate(item?.date) ? "Today" : (item?.date | date : "EE, MMM dd") }}
+          </span>
+          <span
+            class="appointment-slider__slots"
+            [class.appointment-slider__slots--none]="!item?.remainingSlots"
+          >
+            {{ item?.remainingSlots || 0 }} slots
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile book button -->
+    <div class="mobile-book-appointment">
+      <button
+        class="mobile-book-appointment__btn"
+        [class.mobile-book-appointment__btn--disabled]="!data?.isActive"
+        (click)="data?.isActive ? appoinmentDetail(null, 1) : null"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Book Appointment
+      </button>
+    </div>
+
+    <!-- Desktop calendar cards -->
+    <div class="calendar-view__grid-view__calendar">
+      <div
+        class="calendar-view__grid-view__calendar__cards"
+        *ngFor="let item of data?.appointmentCounts"
+        [ngClass]="{ disabled: !item?.remainingSlots, 'is-today': checkTodayDate(item?.date) }"
+        (click)="appoinmentDetail(item?.date, item?.remainingSlots)"
+      >
+        <span class="cal-day">
+          {{ checkTodayDate(item?.date) ? "Today" : (item?.date | date : "EE") }}
+        </span>
+        <span class="cal-date">
+          {{ item?.date | date : "MMM dd" }}
+        </span>
+        <span class="cal-slots" [class.cal-slots--none]="!item?.remainingSlots">
+          {{ item?.remainingSlots || 0 }} slots
+        </span>
+      </div>
+    </div>
+  </div>
+</section>

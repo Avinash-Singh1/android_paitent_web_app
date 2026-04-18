@@ -1,0 +1,166 @@
+$purple: #45197c;
+$lavender: #f2e8ff;
+
+.symptoms {
+  margin-bottom: 40px;
+
+  &__title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 16px;
+  }
+
+  &__subtitle {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin: 28px 0 12px;
+  }
+
+  &__body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #444;
+    ul, ol { padding-left: 20px; }
+    li { margin-bottom: 6px; }
+  }
+
+  // Symptom Checker
+  &__checker {
+    margin-top: 24px;
+    background: linear-gradient(135deg, #f8f5ff, #faf8fd);
+    border: 1px solid #e8e0f3;
+    border-radius: 14px;
+    padding: 24px;
+  }
+
+  &__checker-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: $purple;
+    margin: 0 0 6px;
+  }
+
+  &__checker-desc {
+    font-size: 14px;
+    color: #666;
+    margin: 0 0 16px;
+  }
+
+  &__checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  &__check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #fff;
+    border: 1.5px solid #e8e0f3;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+
+    input { display: none; }
+
+    &--active {
+      border-color: $purple;
+      background: $lavender;
+    }
+  }
+
+  &__check-box {
+    width: 22px;
+    height: 22px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+
+    .symptoms__check-item--active & {
+      border-color: $purple;
+      background: $purple;
+    }
+  }
+
+  &__check-tick {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  &__check-text {
+    font-size: 14px;
+    color: #333;
+  }
+
+  &__check-btn {
+    background: $purple;
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover { opacity: 0.9; }
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
+  }
+
+  // Result — reserve space to avoid CLS when result appears
+  &__result {
+    margin-top: 16px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: symptom-result-in 0.25s ease-out;
+
+    &--high { background: #fff2f2; border: 1px solid #ffcccc; }
+    &--moderate { background: #fff8e6; border: 1px solid #ffe0a0; }
+    &--low { background: #e6f9e6; border: 1px solid #b3e6b3; }
+  }
+
+  // Smooth reveal so the shift is perceived as intentional animation
+  @keyframes symptom-result-in {
+    from { opacity: 0; max-height: 0; padding: 0 20px; margin-top: 0; overflow: hidden; }
+    to   { opacity: 1; max-height: 120px; padding: 16px 20px; margin-top: 16px; }
+  }
+
+  &__result-icon { font-size: 22px; }
+
+  &__result-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin: 0;
+  }
+
+  // Sub-sections
+  &__causes {
+    margin-top: 28px;
+    padding: 20px 24px;
+    background: #fef9f0;
+    border-left: 4px solid #e8a040;
+    border-radius: 0 10px 10px 0;
+  }
+
+  &__diagnosis {
+    margin-top: 20px;
+    padding: 20px 24px;
+    background: #f0f7ff;
+    border-left: 4px solid #4a90d9;
+    border-radius: 0 10px 10px 0;
+  }
+}

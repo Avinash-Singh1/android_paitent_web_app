@@ -1,0 +1,557 @@
+@use "sass:color";
+@use "tools.mediaquery" as *;
+@use "tools.typography" as *;
+@use "settings.containers" as *;
+@use "variable.scss" as *;
+
+/* ===========================================================
+   Modern Healthcare Search Bar
+   =========================================================== */
+
+$_purple: #45197c;
+$_purple-hover: #5a2da0;
+$_gray-100: #f3f4f6;
+$_gray-200: #e5e7eb;
+$_gray-300: #d1d5db;
+$_gray-400: #9ca3af;
+$_gray-500: #6b7280;
+$_gray-700: #374151;
+$_gray-900: #111827;
+$_radius: 28px;
+$_transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+.input-text {
+  display: flex;
+  align-items: center;
+  height: 52px;
+  border-radius: $_radius;
+  border: 1.5px solid $_gray-200;
+  background: #fff;
+  overflow: visible;
+  transition: border-color $_transition, box-shadow $_transition;
+  gap: 0;
+
+  &:hover {
+    border-color: $_gray-300;
+  }
+
+  &:focus-within {
+    border-color: $_purple;
+    box-shadow: 0 0 0 3px rgba($_purple, 0.08);
+  }
+
+  // Pipe divider
+  > span {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    width: 1px;
+    height: 24px;
+    background: $_gray-200;
+    font-size: 0;
+    color: transparent;
+  }
+
+  &__container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    flex: 1;
+    min-width: 0;
+
+    .icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      pointer-events: none;
+      opacity: 0.5;
+      transition: opacity $_transition;
+    }
+
+    &:focus-within .icon {
+      opacity: 0.85;
+    }
+
+    .input-box {
+      border: none;
+      width: 100%;
+      height: 100%;
+      padding: 0 36px 0 46px;
+      box-sizing: border-box;
+      background: transparent;
+      text-overflow: ellipsis;
+      color: $_gray-900;
+      @include font-sans_pro-regular(14px);
+      line-height: normal;
+
+      &:focus,
+      &:focus-visible {
+        outline: none;
+      }
+
+      &::placeholder {
+        color: $_gray-400;
+        font-weight: 400;
+      }
+    }
+
+    // Clear (cross) icon
+    > img.me-3 {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      opacity: 0.4;
+      transition: opacity 0.15s ease;
+      padding: 0;
+      margin: 0 !important;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  // City box (left) — narrower
+  &__container:first-child {
+    flex: 0 0 30%;
+    max-width: 30%;
+
+    @media (max-width: 1024px) {
+      flex: 0 0 35%;
+      max-width: 35%;
+    }
+  }
+
+  // Search box (right) — wider
+  .box1 {
+    flex: 1 1 auto;
+  }
+}
+
+/* ---------- Find Doctor Button ---------- */
+.button_search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 22px;
+  margin-right: 5px;
+  border: none;
+  border-radius: 24px;
+  background: linear-gradient(135deg, $_purple 0%, $_purple-hover 100%);
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background $_transition, box-shadow $_transition, transform 0.1s ease;
+  @include font-sans_pro-semibold(14px);
+
+  img {
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    background: linear-gradient(135deg, $_purple-hover 0%, color.adjust($_purple-hover, $lightness: -5%) 100%);
+    box-shadow: 0 4px 14px rgba($_purple, 0.35);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &__label {
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+}
+
+/* ---------- Autocomplete dropdown ---------- */
+::ng-deep {
+  .mat-mdc-optgroup-label {
+    background: $_gray-100 !important;
+    border-top: 1px solid $_gray-200;
+    border-bottom: 1px solid $_gray-200;
+    min-height: 32px !important;
+    padding: 6px 16px !important;
+    @include font-sans_pro-semibold(11px);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $_gray-500 !important;
+    opacity: 1;
+  }
+
+  .mdc-menu-surface.mat-mdc-autocomplete-panel {
+    padding: 6px 0 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12), 0 0 1px rgba(0, 0, 0, 0.08) !important;
+    border: none !important;
+    margin-top: 6px !important;
+    max-height: 420px !important;
+  }
+
+  .mdc-menu-surface.mat-mdc-autocomplete-panel.mat-mdc-autocomplete-visible {
+    border: none !important;
+    margin: 6px 0 !important;
+  }
+
+  /* Force wider search dropdown */
+  .search-dropdown.mat-mdc-autocomplete-panel {
+    min-width: 520px !important;
+    width: auto !important;
+
+    @media (min-width: 1024px) {
+      min-width: 580px !important;
+    }
+  }
+
+  .mat-mdc-option {
+    border: none !important;
+    background: #fff !important;
+    min-height: 48px !important;
+    padding: 0 16px !important;
+    border-radius: 8px;
+    margin: 0 6px;
+    transition: background 0.15s ease;
+
+    &:hover,
+    &.mat-mdc-option-active {
+      background: rgba($_purple, 0.04) !important;
+    }
+  }
+
+  .mat-mdc-optgroup .mat-mdc-option {
+    border: none !important;
+    background: #fff !important;
+
+    &:hover,
+    &.mat-mdc-option-active {
+      background: rgba($_purple, 0.04) !important;
+    }
+  }
+
+  .mat-mdc-option .mdc-list-item__primary-text {
+    margin-right: 0;
+    width: 100% !important;
+    color: $_gray-900 !important;
+  }
+
+  .mat-mdc-optgroup .mat-mdc-option:not(.mat-mdc-option-multiple) {
+    padding-left: 16px !important;
+  }
+
+  .mat-mdc-option.mdc-list-item {
+    min-height: 48px !important;
+  }
+}
+
+/* ---------- Profile icon in dropdown ---------- */
+.profile-icon {
+  border-radius: 50%;
+  height: 32px;
+  width: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, rgba($_purple, 0.08), rgba($_purple, 0.04));
+  border: 1px solid rgba($_purple, 0.12);
+  font-size: 11px;
+  font-weight: 700;
+  color: $_purple;
+  flex-shrink: 0;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════
+   SUGGESTION ITEMS — matches mobile design
+   ═══════════════════════════════════════ */
+
+$_purple-light-dd: rgba(69, 25, 124, 0.06);
+$_gps-blue: #2563eb;
+
+/* Suggestion icon (search, recent) */
+.suggestion-icon {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &--search {
+    background: $_purple-light-dd;
+    color: $_purple;
+  }
+
+  &--recent {
+    background: rgba($_gray-400, 0.1);
+    color: $_gray-500;
+  }
+}
+
+/* Suggestion name text */
+.suggestion-name {
+  flex: 1;
+  @include font-sans_pro-regular(14px);
+  color: $_gray-900;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.35;
+}
+
+/* Subtitle (specialization, locality) */
+.suggestion-sub {
+  @include font-sans_pro-regular(12px);
+  color: $_gray-500;
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Info block (name + subtitle) */
+.suggestion-info {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Badge pills */
+.suggestion-badge {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: 20px;
+  @include font-sans_pro-semibold(10px);
+  background: $_purple-light-dd;
+  color: $_purple;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+
+  &--service {
+    background: rgba(16, 185, 129, 0.08);
+    color: #059669;
+  }
+}
+
+/* Avatar (doctor/hospital/clinic) — matches mobile 40px rounded rect */
+.suggestion-avatar {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: $_purple-light-dd;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+
+  &--initials {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include font-sans_pro-semibold(13px);
+    color: $_purple;
+  }
+}
+
+/* Right arrow on entity items */
+.suggestion-arrow {
+  flex-shrink: 0;
+  color: #d1d5db;
+  transition: transform $_transition, color $_transition;
+
+  .mat-mdc-option:hover &,
+  .mat-mdc-option.mat-mdc-option-active & {
+    transform: translateX(2px);
+    color: $_purple;
+  }
+}
+
+/* Entity row (doctor/hospital/clinic) */
+.suggestion-entity {
+  width: 100%;
+}
+
+/* Category label inside optgroup */
+.suggestion-category {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  @include font-sans_pro-semibold(12px);
+  color: $_gray-500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  svg { opacity: 0.55; }
+}
+
+/* Quick search link options */
+.suggestion-quick {
+  border-top: 1px solid $_gray-100 !important;
+
+  strong {
+    color: $_purple;
+  }
+}
+/* ---------- Loading spinner ---------- */
+.search-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid $_gray-200;
+  border-top-color: $_purple;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------- Search states ---------- */
+.search-state {
+  pointer-events: none;
+  opacity: 1 !important;
+}
+
+/* ---------- Text helpers ---------- */
+.text-muted {
+  color: $_gray-400;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(2px);
+  z-index: 4;
+}
+
+.text-purple {
+  color: $_purple !important;
+}
+
+/* ---------- City dropdown — action options ---------- */
+.city-action-option {
+  border-bottom: 1px solid $_gray-100;
+  cursor: pointer;
+  padding: 8px 16px;
+  &:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }
+}
+
+.city-action-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+
+  &--gps {
+    color: $_purple;
+  }
+
+  &--entire {
+    color: $_purple;
+  }
+}
+
+.city-action-text {
+  @include font-sans_pro-regular(14px);
+  color: $_purple;
+  font-weight: 500;
+}
+
+/* ---------- City dropdown icons ---------- */
+.city-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &--city {
+    background: rgba($_purple, 0.07);
+    color: $_purple;
+  }
+
+  &--locality {
+    background: rgba(#2563eb, 0.07);
+    color: #2563eb;
+  }
+}
+
+.city-name {
+  @include font-sans_pro-regular(14px);
+  color: $_gray-900;
+  line-height: 1.3;
+}
+
+.city-parent {
+  @include font-sans_pro-regular(11px);
+  color: $_gray-400;
+  line-height: 1.3;
+  margin-top: 1px;
+}
+
+.box1 {
+  // Width now handled by flex in .input-text__container
+}
+
+/* ═══════════════════════════════════════
+   ATLAS SEARCH — highlights & did-you-mean
+   ═══════════════════════════════════════ */
+
+.did-you-mean {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba($_purple, 0.04);
+  color: $_gray-500;
+  @include font-sans_pro-regular(13px);
+  cursor: pointer;
+  transition: background $_transition;
+
+  svg { color: $_purple; opacity: 0.6; flex-shrink: 0; }
+
+  strong {
+    color: $_purple;
+    @include font-sans_pro-semibold(13px);
+  }
+
+  &:hover {
+    background: rgba($_purple, 0.08);
+  }
+}
+
+::ng-deep .did-you-mean-option {
+  border-bottom: 1px solid $_gray-100 !important;
+}
+
+.highlight-hit {
+  background: rgba($_purple, 0.10);
+  color: $_purple;
+  @include font-sans_pro-semibold(14px);
+  border-radius: 2px;
+  padding: 0 1px;
+}

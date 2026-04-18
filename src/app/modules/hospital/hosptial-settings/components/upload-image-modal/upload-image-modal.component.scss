@@ -1,0 +1,17 @@
+@use "variable.scss" as *;
+
+.upload-wrapper {
+  padding: 40px;
+
+  .drop-zone {
+    padding: 40px;
+    border: 1px dashed $border-color;
+    border-radius: 4px;
+  }
+
+  .uploaded-image {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+  }
+}

@@ -1,0 +1,56 @@
+<section class="blogs">
+  <div class="blogs__container">
+    <div class="blogs__container__text-section">
+      <h2>Stay Top On Health & Wellness Articles</h2>
+      <p>
+        Health articles that keep you informed about good health practices and
+        achieve your goals.
+      </p>
+
+      <button
+        *ngIf="deviceWidh > 767"
+        class="my-3 button"
+        (click)="goToBlogs()"
+      >
+        See all articles
+      </button>
+    </div>
+    <div class="blogs__container__carousel-section">
+      <owl-carousel-o [options]="customOptions">
+        <ng-container *ngFor="let slide of apiData; let i = index">
+          <ng-template
+            class="slide"
+            carouselSlide
+            [id]="i + 'c'"
+            [width]="cardWidth"
+          >
+            <div class="blogs__container__carousel-section__items">
+              <div
+                class="blogs__container__carousel-section__items__image border-class"
+              >
+                <img
+                  class="cursor-pointer"
+                  [src]=" slide?.yoast_head_json?.og_image?.[0]?.url"
+                  alt=""
+                  (click)="viewBlog(slide)"
+                />
+              </div>
+              <div class="blogs__container__carousel-section__items__text">
+                <p>
+                  {{ slide?.categoryName }}
+                </p>
+                <h3 (click)="viewBlog(slide)" class="line-clamp3">
+                  {{ slide?.title?.rendered }}
+                </h3>
+              </div>
+            </div>
+          </ng-template>
+        </ng-container>
+      </owl-carousel-o>
+    </div>
+
+    <button *ngIf="deviceWidh < 767" class="mt-4 button" (click)="goToBlogs()">
+      View all
+    </button>
+  </div>
+</section>

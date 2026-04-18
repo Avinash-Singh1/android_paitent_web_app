@@ -1,0 +1,617 @@
+<div *ngIf="isDeviceReady">
+
+
+<section class="desktop-header"
+         *ngIf="mode != 'register' && doctorListHeader == false && show"
+         [class.back-orange]="headerColor == 'orange'"
+         [class.back-grey]="headerColor == 'grey'">
+         
+  <div class="desktop-header-container">
+    <div class="desktop-header-container__wrapper">
+      <div class="desktop-header-container__wrapper__first-section">
+        <div class="desktop-header-container__wrapper__first-section__icon" routerLink="/">
+          <svg-icon src="assets/images/svg/logo.svg" class="d-flex"></svg-icon>
+        </div>
+      </div>
+      <div class="desktop-header-container__wrapper__second-section">
+        <!-- <div class="desktop-header-container__wrapper__second-section">
+          <div class="desktop-header-container__wrapper__second-section__items" *ngIf="!doctorListMode">
+            <a class="header_menu" *ngFor="let item of firstSectionContent"
+               [routerLink]="item.url"
+               [ngClass]="{'active': item.isActive}"
+               (click)="redirection(item)">
+              {{ item?.name }}
+            </a>
+          </div>
+        </div> -->
+        <div class="desktop-header-container__wrapper__second-section">
+          <div class="desktop-header-container__wrapper__second-section__items" *ngIf="!doctorListMode">
+            <a class="header_menu" *ngFor="let item of firstSectionContent"
+               [routerLink]="item.url"
+               [ngClass]="{'active': item.isActive}"
+               (click)="redirection(item)">
+              {{ item?.name }}
+            </a>
+            <!-- Hardcoded Blog URL -->
+            <!-- <a class="header_menu" 
+               href="https://blog.nectarplus.health/" 
+               target="_blank" 
+               rel="noopener noreferrer">
+              Blogs/News
+            </a> -->
+          </div>
+        </div>
+        
+        
+
+        <div class="search-wrap" *ngIf="doctorListMode">
+          <nectar-wrap-search></nectar-wrap-search>
+        </div>
+        <div class="desktop-header-container__wrapper__second-section__items">
+          <div class="desktop-header-container__wrapper__second-section__items me-4">
+            <p class="maxSize">
+              <a href="https://doctor.nectarplus.health/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">List your practice for free</a>
+            </p>
+          </div>
+
+          <!-- security and help section -->
+          <!-- <div
+            class="desktop-header-container__wrapper__second-section__items me-4"
+          >
+            <p [matMenuTriggerFor]="security" class="maxSize">
+              Security & Help &nbsp;
+              <svg-icon
+                src="assets/images/homepage/dropdown.svg"
+                alt=""
+                [class.security]="headerColor == 'orange'"
+              ></svg-icon>
+            </p>
+            <mat-menu #security="matMenu" class="header-menus">
+              <div class="security-help">
+                <a mat-menu-item routerLink="privacy-policy">
+                  Privacy & Policy
+                </a>
+                <a mat-menu-item routerLink="terms-conditions">
+                  Terms & Conditions
+                </a>
+                <a mat-menu-item routerLink="contact-us"> Help </a>
+              </div>
+            </mat-menu>
+          </div> -->
+        </div>
+      </div>
+
+      <div class="desktop-header-container__wrapper__third-section">
+        <div class="desktop-header-container__wrapper__second-section__items">
+          <div>
+            <p class="login d-flex gap-3" [matMenuTriggerFor]="login" *ngIf="!isLoggedin">
+              Login/Signup
+              <svg-icon src="assets/images/svg/downarrow.svg" alt="" class="me-2"></svg-icon>
+            </p>
+          </div>
+
+
+          <div class="loggedInMenu" *ngIf="isDoctor && loggedin">
+            <div class="rounded-0 dropdown w-100">
+              <div class="dropdown">
+                <div class="day d-flex gap-3 align-items-center dropdownbtn w-100 cursor-pointer"
+                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <div class="profile-wrapper d-flex justify-content-center align-items-center">
+                    <img loading="lazy" [src]="doctorDetail?.doctor?.profilePic" alt="" *ngIf="doctorDetail?.doctor?.profilePic" />
+                    <span class="text-18 font-600" *ngIf="!doctorDetail?.doctor?.profilePic">
+                      {{ doctorDetail?.fullName | nameInitial | uppercase }}
+                    </span>
+                  </div>
+                  <svg-icon src="assets/images/svg/downarrow.svg"></svg-icon>
+                </div>
+                <div class="dropdown-menu">
+                  <div class="d-flex gap-3 align-items-center border-bottom-style p-24 dropdown-item">
+                    <div class="profile-wrapper d-flex justify-content-center align-items-center">
+                      <img loading="lazy" [src]="doctorDetail?.doctor?.profilePic" alt="" *ngIf="doctorDetail?.doctor?.profilePic" />
+                      <span class="text-18 font-600" *ngIf="!doctorDetail?.doctor?.profilePic">
+                        {{ doctorDetail?.fullName | nameInitial | uppercase }}
+                      </span>
+                    </div>
+                    <div class="d-flex flex-column gap-2 whitespace-nowrap">
+                      <span class="font-600 text-18">{{
+                        doctorDetail?.fullName | titlecase
+                        }}</span>
+                      <span class="text-18">{{ doctorDetail?.phone }}</span>
+                    </div>
+                  </div>
+                  <div class="w-100 border-bottom-style px-24 py-12 text-18 dropdown-item"
+                    routerLink="/doctor/change-password">
+                    <span>
+                      <svg style="enable-background:new 0 0 24 24; width:15px  " version="1.1" viewBox="0 0 24 24"
+                        xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <g id="info"></g>
+                        <g id="icons">
+                          <path
+                            d="M22.2,14.4L21,13.7c-1.3-0.8-1.3-2.7,0-3.5l1.2-0.7c1-0.6,1.3-1.8,0.7-2.7l-1-1.7c-0.6-1-1.8-1.3-2.7-0.7   L18,5.1c-1.3,0.8-3-0.2-3-1.7V2c0-1.1-0.9-2-2-2h-2C9.9,0,9,0.9,9,2v1.3c0,1.5-1.7,2.5-3,1.7L4.8,4.4c-1-0.6-2.2-0.2-2.7,0.7   l-1,1.7C0.6,7.8,0.9,9,1.8,9.6L3,10.3C4.3,11,4.3,13,3,13.7l-1.2,0.7c-1,0.6-1.3,1.8-0.7,2.7l1,1.7c0.6,1,1.8,1.3,2.7,0.7L6,18.9   c1.3-0.8,3,0.2,3,1.7V22c0,1.1,0.9,2,2,2h2c1.1,0,2-0.9,2-2v-1.3c0-1.5,1.7-2.5,3-1.7l1.2,0.7c1,0.6,2.2,0.2,2.7-0.7l1-1.7   C23.4,16.2,23.1,15,22.2,14.4z M12,16c-2.2,0-4-1.8-4-4c0-2.2,1.8-4,4-4s4,1.8,4,4C16,14.2,14.2,16,12,16z"
+                            id="settings"></path>
+                        </g>
+                      </svg>
+                    </span>
+                    <span style="padding-left: 3px;">
+
+                      {{ "ACCOUNT_SETTINGS" | translate }}
+                    </span>
+                  </div>
+                  <div class="w-100 border-bottom-style px-24 py-12 text-18 dropdown-item"
+                    routerLink="/doctor/dashboard">
+
+                    <span>
+                      <svg width="17px" height="24px" viewBox="0 0 21 20" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <!-- Generator: Sketch 3.8.1 (29687) - http://www.bohemiancoding.com/sketch -->
+                        <title>gallery_grid_view [#1405]</title>
+                        <desc>Created with Sketch.</desc>
+                        <defs></defs>
+                        <g id="Page-1" stroke="none" stroke-width="1" fill="grey" fill-rule="evenodd">
+                          <g id="Dribbble-Light-Preview" transform="translate(-259.000000, -680.000000)" fill="#000000">
+                            <g id="icons" transform="translate(56.000000, 160.000000)">
+                              <path
+                                d="M209.3,538 L206.15,538 C205.5704,538 205.1,537.552 205.1,537 C205.1,536.448 205.5704,536 206.15,536 L209.3,536 C209.8796,536 210.35,536.448 210.35,537 C210.35,537.552 209.8796,538 209.3,538 L209.3,538 Z M210.35,534 L205.1,534 C203.93975,534 203,534.895 203,536 L203,538 C203,539.105 203.93975,540 205.1,540 L210.35,540 C211.51025,540 212.45,539.105 212.45,538 L212.45,536 C212.45,534.895 211.51025,534 210.35,534 L210.35,534 Z M220.85,524 L217.7,524 C217.1204,524 216.65,523.552 216.65,523 C216.65,522.448 217.1204,522 217.7,522 L220.85,522 C221.4296,522 221.9,522.448 221.9,523 C221.9,523.552 221.4296,524 220.85,524 L220.85,524 Z M221.9,520 L216.65,520 C215.48975,520 214.55,520.895 214.55,522 L214.55,524 C214.55,525.105 215.48975,526 216.65,526 L221.9,526 C223.06025,526 224,525.105 224,524 L224,522 C224,520.895 223.06025,520 221.9,520 L221.9,520 Z M221.9,537 C221.9,537.552 221.4296,538 220.85,538 L217.7,538 C217.1204,538 216.65,537.552 216.65,537 L216.65,531 C216.65,530.448 217.1204,530 217.7,530 L220.85,530 C221.4296,530 221.9,530.448 221.9,531 L221.9,537 Z M221.9,528 L216.65,528 C215.48975,528 214.55,528.895 214.55,530 L214.55,538 C214.55,539.105 215.48975,540 216.65,540 L221.9,540 C223.06025,540 224,539.105 224,538 L224,530 C224,528.895 223.06025,528 221.9,528 L221.9,528 Z M210.35,529 C210.35,529.552 209.8796,530 209.3,530 L206.15,530 C205.5704,530 205.1,529.552 205.1,529 L205.1,523 C205.1,522.448 205.5704,522 206.15,522 L209.3,522 C209.8796,522 210.35,522.448 210.35,523 L210.35,529 Z M210.35,520 L205.1,520 C203.93975,520 203,520.895 203,522 L203,530 C203,531.105 203.93975,532 205.1,532 L210.35,532 C211.51025,532 212.45,531.105 212.45,530 L212.45,522 C212.45,520.895 211.51025,520 210.35,520 L210.35,520 Z"
+                                id="gallery_grid_view-[#1405]"></path>
+                            </g>
+                          </g>
+                        </g>
+                      </svg>
+                    </span>
+                    <span style="padding-left: 3px;">
+
+                      Dashboard
+                    </span>
+                  </div>
+                  <div class="w-100 px-24 py-12 text-18 dropdown-item" (click)="onLogout()">
+
+                    <span>
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="17" height="24">
+                        <path fill="none" d="M0 0h24v24H0z"></path>
+                        <path
+                          d="M5 22a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v3h-2V4H6v16h12v-2h2v3a1 1 0 0 1-1 1H5zm13-6v-3h-7v-2h7V8l5 4-5 4z"
+                          fill="red"></path>
+                      </svg>
+
+                    </span>
+                    <span style="color: red; padding-left: 3px;">
+
+                      {{ "LOG_OUT" | translate }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="loggedInMenu" *ngIf="!isDoctor">
+            <div>
+              <button class="header-avatar-trigger" [matMenuTriggerFor]="loggedIn"
+                *ngIf="isLoggedin && !userData?.patient?.profilePic" type="button" aria-label="Profile menu">
+                <span class="header-avatar-trigger__initials">{{ userData?.fullName | nameInitial | uppercase }}</span>
+                <svg class="header-avatar-trigger__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <button class="header-avatar-trigger header-avatar-trigger--photo" [matMenuTriggerFor]="loggedIn"
+                *ngIf="isLoggedin && userData?.patient?.profilePic" type="button" aria-label="Profile menu">
+                <img [src]="userData?.patient?.profilePic" alt="" class="header-avatar-trigger__img" />
+                <svg class="header-avatar-trigger__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <mat-menu #loggedIn="matMenu" xPosition="before" class="profile-dropdown">
+                <div class="profile-dropdown__content" mat-menu-item [disableRipple]="true">
+                  <!-- User info header -->
+                  <div class="profile-dropdown__header" routerLink="/profile/personal-info">
+                    <div class="profile-dropdown__avatar" *ngIf="!userData?.patient?.profilePic">
+                      {{ userData?.fullName | nameInitial | uppercase }}
+                    </div>
+                    <img [src]="userData?.patient?.profilePic" routerLink="/profile/personal-info" alt="" 
+                      class="profile-dropdown__avatar-img"
+                      *ngIf="userData?.patient?.profilePic" />
+                    <div class="profile-dropdown__user-info">
+                      <span class="profile-dropdown__name">{{ (userData?.fullName | titlecase) || "" }}</span>
+                      <span class="profile-dropdown__phone">+91{{ userData?.phone || 0 }}</span>
+                    </div>
+                  </div>
+
+                  <!-- Menu items -->
+                  <div class="profile-dropdown__menu">
+                    <a class="profile-dropdown__item" routerLink="/profile">
+                      <span class="profile-dropdown__icon profile-dropdown__icon--appointments">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                      </span>
+                      <span class="profile-dropdown__label">My Appointments</span>
+                    </a>
+                    <a class="profile-dropdown__item" routerLink="/profile/medical-reports">
+                      <span class="profile-dropdown__icon profile-dropdown__icon--reports">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                      </span>
+                      <span class="profile-dropdown__label">Medical Reports</span>
+                    </a>
+                    <a class="profile-dropdown__item" routerLink="/profile/feedbacks">
+                      <span class="profile-dropdown__icon profile-dropdown__icon--feedback">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                        </svg>
+                      </span>
+                      <span class="profile-dropdown__label">My Feedback</span>
+                    </a>
+                    <a class="profile-dropdown__item" routerLink="/profile/personal-info">
+                      <span class="profile-dropdown__icon profile-dropdown__icon--personal">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                        </svg>
+                      </span>
+                      <span class="profile-dropdown__label">Personal Information</span>
+                    </a>
+                    <a class="profile-dropdown__item" routerLink="/profile/settings">
+                      <span class="profile-dropdown__icon profile-dropdown__icon--settings">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+                        </svg>
+                      </span>
+                      <span class="profile-dropdown__label">Settings</span>
+                    </a>
+                  </div>
+
+                  <!-- Logout -->
+                  <div class="profile-dropdown__footer">
+                    <a class="profile-dropdown__item profile-dropdown__item--logout" (click)="logout()">
+                      <span class="profile-dropdown__icon profile-dropdown__icon--logout">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                      </span>
+                      <span class="profile-dropdown__label">Logout</span>
+                    </a>
+                  </div>
+                </div>
+              </mat-menu>
+            </div>
+          </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- header 2 -->
+
+<section *ngIf=" 
+    mode != 'register' &&
+    doctorListHeader == false &&
+    deviceWidth > 767 &&
+    !show
+  " class="afterScroll" [class.back-orange]="headerColor == 'orange'" [class.back-grey]="headerColor == 'grey'"
+  [style.display]="!show ? 'block' : 'none'">
+  <div class="desktop-header-container">
+    <div class="desktop-header-container__wrapper">
+      <div class="desktop-header-container__wrapper__first-section">
+        <div class="desktop-header-container__wrapper__first-section__icon" routerLink="/">
+          <svg-icon src="assets/images/svg/logo.svg" class="d-flex"></svg-icon>
+        </div>
+      </div>
+      <div style="width: 97%">
+        <nectar-global-search [type]="'scroll'"></nectar-global-search>
+      </div>
+      <div class="desktop-header-container__wrapper__third-section">
+        <div class="desktop-header-container__wrapper__second-section__items">
+          <div>
+            <p class="login d-flex gap-3" [matMenuTriggerFor]="login" *ngIf="!isLoggedin">
+              Login/Signup
+              <svg-icon src="assets/images/svg/downarrow.svg" alt="" class="me-2"></svg-icon>
+            </p>
+          </div>
+          <div class="loggedInMenu">
+            <div>
+              <button class="header-avatar-trigger" [matMenuTriggerFor]="loggedIn"
+                *ngIf="isLoggedin && !userData?.patient?.profilePic" type="button" aria-label="Profile menu">
+                <span class="header-avatar-trigger__initials">{{ userData?.fullName | nameInitial | uppercase }}</span>
+                <svg class="header-avatar-trigger__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <button class="header-avatar-trigger header-avatar-trigger--photo" [matMenuTriggerFor]="loggedIn"
+                *ngIf="isLoggedin && userData?.patient?.profilePic" type="button" aria-label="Profile menu">
+                <img [src]="userData?.patient?.profilePic" alt="" class="header-avatar-trigger__img" />
+                <svg class="header-avatar-trigger__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <mat-menu #loggedIn="matMenu" xPosition="before" class="profile-dropdown">
+                <div class="profile-dropdown__content" mat-menu-item [disableRipple]="true">
+                  <div class="profile-dropdown__header" routerLink="/profile/personal-info">
+                    <div class="profile-dropdown__avatar" *ngIf="!userData?.patient?.profilePic">
+                      {{ userData?.fullName | nameInitial | uppercase }}
+                    </div>
+                    <img [src]="userData?.patient?.profilePic" routerLink="/profile/personal-info" alt=""
+                      class="profile-dropdown__avatar-img" *ngIf="userData?.patient?.profilePic" />
+                    <div class="profile-dropdown__user-info">
+                      <span class="profile-dropdown__name">{{ (userData?.fullName | titlecase) || "" }}</span>
+                      <span class="profile-dropdown__phone">+91{{ userData?.phone || 0 }}</span>
+                    </div>
+                  </div>
+                  <div class="profile-dropdown__menu">
+                    <a class="profile-dropdown__item" routerLink="/profile">
+                      <span class="profile-dropdown__icon profile-dropdown__icon--appointments">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                      </span>
+                      <span class="profile-dropdown__label">My Appointments</span>
+                    </a>
+                    <a class="profile-dropdown__item" routerLink="/profile/medical-reports">
+                      <span class="profile-dropdown__icon profile-dropdown__icon--reports">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                      </span>
+                      <span class="profile-dropdown__label">Medical Reports</span>
+                    </a>
+                    <a class="profile-dropdown__item" routerLink="/profile/feedbacks">
+                      <span class="profile-dropdown__icon profile-dropdown__icon--feedback">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                      </span>
+                      <span class="profile-dropdown__label">My Feedback</span>
+                    </a>
+                    <a class="profile-dropdown__item" routerLink="/profile/personal-info">
+                      <span class="profile-dropdown__icon profile-dropdown__icon--personal">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                      </span>
+                      <span class="profile-dropdown__label">Personal Information</span>
+                    </a>
+                    <a class="profile-dropdown__item" routerLink="/profile/settings">
+                      <span class="profile-dropdown__icon profile-dropdown__icon--settings">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                      </span>
+                      <span class="profile-dropdown__label">Settings</span>
+                    </a>
+                  </div>
+                  <div class="profile-dropdown__footer">
+                    <a class="profile-dropdown__item profile-dropdown__item--logout" (click)="logout()">
+                      <span class="profile-dropdown__icon profile-dropdown__icon--logout">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                      </span>
+                      <span class="profile-dropdown__label">Logout</span>
+                    </a>
+                  </div>
+                </div>
+              </mat-menu>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- header for register screen -->
+
+<section *ngIf="mode == 'register' && deviceWidth > 767" class="registerHeader">
+  <div class="d-flex justify-content-between align-items-end wrapper">
+    <div routerLink="/" class="logo-register" style="vertical-align: bottom">
+      <svg-icon src="assets/images/svg/logo.svg" style="display: flex"></svg-icon>
+    </div>
+    <div class="d-flex justify-content-between box">
+      <div class="step d-flex align-items-end">
+        <div class="" *ngIf="steps.showstep">
+          Steps {{ steps.currentstep + "/" + steps.laststep }}
+        </div>
+      </div>
+      <div class="support cursor-pointer" (click)="openDialog()">
+        <img loading="lazy" src="assets/images/svg/support.svg" alt="img" />&nbsp;&nbsp;
+        <span>Support</span>
+      </div>
+    </div>
+    <div class="saveExit whitespace-nowrap" (click)="onSaveExit()">
+      Save & Exit
+    </div>
+  </div>
+</section>
+
+<!-- header for doctor list screen -->
+
+<section class="doctor-list-header" *ngIf="doctorListHeader && doctorListMode"
+  [ngClass]="{ afterScroll: doctorListHeader }">
+  <div class="d-flex " style="
+  width: 80%;
+  justify-content: space-around;
+">
+    <!-- <nectar-filters></nectar-filters> -->
+    <div class="search-wrap" *ngIf="deviceWidth > 767" style="margin-left: 110px;"  routerLink="/">
+      <svg-icon src="assets/images/svg/logo.svg" width="50" class="small-logo d-flex"></svg-icon>
+    </div>
+    <div class="search-wrap" *ngIf="deviceWidth > 767">
+      <nectar-wrap-search></nectar-wrap-search>
+    </div>
+  </div>
+</section>
+
+<!-- ✅ Modern mobile header -->
+<section *ngIf="!removeHeader" class="hamber-sidenav mobile-header-section">
+  <div class="mh">
+    <!-- Left: Menu toggle -->
+    <div class="mh__left">
+      <button class="mh__icon-btn" (click)="openSidenav()" *ngIf="mode != 'register'" type="button" aria-label="Open menu">
+        <svg-icon src="assets/images/svg/hamber.svg"></svg-icon>
+      </button>
+    </div>
+
+    <!-- Center: Logo (home/profile) or Search (inner pages) -->
+    <div class="mh__center">
+      <svg-icon
+        *ngIf="isHomePage || isProfilePage"
+        src="assets/images/svg/logo.svg"
+        class="mh__logo"
+        routerLink="/"
+      ></svg-icon>
+
+      <button *ngIf="!isHomePage && !isProfilePage" class="mh__search" (click)="openBottomSheet()" type="button">
+        <svg class="mh__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <span class="mh__search-text">Search doctor, hospital, clinic</span>
+      </button>
+    </div>
+
+    <!-- Right: Profile / Login / Save -->
+    <div class="mh__right">
+      <!-- Logged-in avatar (initials) -->
+      <button
+        class="mh__avatar"
+        *ngIf="isLoggedin && !userData?.patient?.profilePic && mode !== 'register'"
+        [matMenuTriggerFor]="mobileLoggedIn"
+        type="button"
+        aria-label="Profile menu"
+      >
+        {{ userData?.fullName | nameInitial | uppercase }}
+      </button>
+
+      <!-- Logged-in avatar (photo) -->
+      <button
+        class="mh__avatar mh__avatar--photo"
+        *ngIf="isLoggedin && userData?.patient?.profilePic && mode !== 'register'"
+        [matMenuTriggerFor]="mobileLoggedIn"
+        type="button"
+        aria-label="Profile menu"
+      >
+        <img loading="lazy" [src]="userData?.patient?.profilePic" alt="Profile" />
+      </button>
+
+      <!-- Login pill -->
+      <button
+        class="mh__login-btn"
+        [matMenuTriggerFor]="login"
+        *ngIf="!isLoggedin && mode !== 'register'"
+        type="button"
+      >
+        <svg class="mh__login-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span>Login</span>
+      </button>
+
+      <!-- Save & Exit (register mode) -->
+      <button *ngIf="mode == 'register'" (click)="onSaveExit()" class="mh__save-btn" type="button">
+        Save &amp; Exit
+      </button>
+    </div>
+  </div>
+</section>
+
+
+<!-- ✅ Modern login dropdown -->
+<mat-menu #login="matMenu" xPosition="before" class="login-menu">
+  <button mat-menu-item class="login-menu__item" routerLink="/auth/patient/login">
+    <span class="login-menu__icon login-menu__icon--patient">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+    </span>
+    <span class="login-menu__label">Patient Login</span>
+    <span class="login-menu__chevron">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"/>
+      </svg>
+    </span>
+  </button>
+
+  <div class="login-menu__divider"></div>
+
+  <a mat-menu-item class="login-menu__item" href="https://doctor.nectarplus.health/" target="_blank" rel="noopener noreferrer">
+    <span class="login-menu__icon login-menu__icon--doctor">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/>
+        <path d="M8 15v1a6 6 0 0 0 6 6h.3"/>
+        <path d="M16 20a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/>
+      </svg>
+    </span>
+    <span class="login-menu__label">Doctor Login</span>
+    <span class="login-menu__chevron">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"/>
+      </svg>
+    </span>
+  </a>
+</mat-menu>
+
+
+<!-- ✅ Mobile profile dropdown (same as desktop) -->
+<mat-menu #mobileLoggedIn="matMenu" xPosition="before" class="profile-dropdown profile-dropdown--mobile">
+  <div class="profile-dropdown__content" mat-menu-item [disableRipple]="true">
+    <!-- User info header -->
+    <div class="profile-dropdown__header" routerLink="/profile/personal-info">
+      <div class="profile-dropdown__avatar" *ngIf="!userData?.patient?.profilePic">
+        {{ userData?.fullName | nameInitial | uppercase }}
+      </div>
+      <img [src]="userData?.patient?.profilePic" routerLink="/profile/personal-info" alt=""
+        class="profile-dropdown__avatar-img"
+        *ngIf="userData?.patient?.profilePic" />
+      <div class="profile-dropdown__user-info">
+        <span class="profile-dropdown__name">{{ (userData?.fullName | titlecase) || "" }}</span>
+        <span class="profile-dropdown__phone">+91{{ userData?.phone || 0 }}</span>
+      </div>
+    </div>
+
+    <!-- Menu items -->
+    <div class="profile-dropdown__menu">
+      <a class="profile-dropdown__item" routerLink="/profile">
+        <span class="profile-dropdown__icon profile-dropdown__icon--appointments">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </span>
+        <span class="profile-dropdown__label">My Appointments</span>
+      </a>
+      <a class="profile-dropdown__item" routerLink="/profile/medical-reports">
+        <span class="profile-dropdown__icon profile-dropdown__icon--reports">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </span>
+        <span class="profile-dropdown__label">Medical Reports</span>
+      </a>
+      <a class="profile-dropdown__item" routerLink="/profile/feedbacks">
+        <span class="profile-dropdown__icon profile-dropdown__icon--feedback">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+          </svg>
+        </span>
+        <span class="profile-dropdown__label">My Feedback</span>
+      </a>
+      <a class="profile-dropdown__item" routerLink="/profile/personal-info">
+        <span class="profile-dropdown__icon profile-dropdown__icon--personal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </span>
+        <span class="profile-dropdown__label">Personal Information</span>
+      </a>
+      <a class="profile-dropdown__item" routerLink="/profile/settings">
+        <span class="profile-dropdown__icon profile-dropdown__icon--settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+          </svg>
+        </span>
+        <span class="profile-dropdown__label">Settings</span>
+      </a>
+    </div>
+
+    <!-- Logout -->
+    <div class="profile-dropdown__footer">
+      <a class="profile-dropdown__item profile-dropdown__item--logout" (click)="logout()">
+        <span class="profile-dropdown__icon profile-dropdown__icon--logout">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+        </span>
+        <span class="profile-dropdown__label">Logout</span>
+      </a>
+    </div>
+  </div>
+</mat-menu>
+
+
+</div>

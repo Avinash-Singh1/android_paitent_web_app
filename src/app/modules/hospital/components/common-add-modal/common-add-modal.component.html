@@ -1,0 +1,46 @@
+<main class="add-specilality text-18">
+  <div class="border-bottom-style px-24 py-3 text-24 font-600">
+    <span *ngIf="data.addKey == 'specialityList'">
+      {{ "ADD_SPECIALITY" | translate }}
+    </span>
+    <span *ngIf="data.addKey == 'procedureList'">
+      {{ "ADD_PROCEDURE" | translate }}
+    </span>
+  </div>
+  <mat-dialog-content class="add-speciality">
+    <form class="form-item d-flex flex-column gap-2">
+      <label>
+        <span *ngIf="data.addKey == 'specialityList'">
+          {{ "SPECIALITY" | translate }}
+        </span>
+        <span *ngIf="data.addKey == 'procedureList'">
+          {{ "PROCEDURE" | translate }} 
+        </span>
+        <span class="required-hint">*</span>
+      </label>
+      <div
+        class="w-100 speciality-large-rounded d-flex justify-content-between align-items-center gap-2"
+      >
+        <ng-select
+          class="w-100 speciality"
+          [clearOnBackspace]="true"
+          [scrollLeft]="true"
+          [formControl]="recordId"
+          [placeholder]="placeHolder"
+          [items]="suggestionList"
+          bindLabel="name"
+          bindValue="_id"
+        >
+        </ng-select>
+      </div>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions class="add-speciality">
+    <div class="d-flex justify-content-end border-top-style px-24 py-3 w-100 gap-4">
+      <button class="cancel" (click)="matdialogRef.close(false)">
+        {{ "CANCEL" | translate }}
+      </button>
+      <button class="save" (click)="onSave()">{{ "SAVE" | translate }}</button>
+    </div>
+  </mat-dialog-actions>
+</main>

@@ -1,0 +1,273 @@
+<div class="inner-wrapper" id="clickToCloseArea">
+  <!-- <nectar-subheader>
+    <span subheader-part1 class="text-24 font-600">Medical Verification</span>
+  </nectar-subheader> -->
+  <div class="side-menu" id="sideMenu" [class.hide]="isMenuHidden" [ngClass]="{'widht_clas':isMenuHidden == true}">
+    <div class="mobile-menu-header">
+      <div class="header-logo">
+        <svg-icon class="assets/images/new-svg/sidemenu-svg/Dashboard_logo.svg"></svg-icon>
+
+      </div>
+      <button type="button" id="close_menu_btn" (click)="onCloseMenuClick($event)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g clip-path="url(#clip0_720_6065)">
+            <path d="M21 11H6.83L10.41 7.41L9 6L3 12L9 18L10.41 16.59L6.83 13H21V11Z" fill="black" />
+          </g>
+          <defs>
+            <clipPath id="clip0_720_6065">
+              <rect width="24" height="24" fill="white" />
+            </clipPath>
+          </defs>
+        </svg>
+      </button>
+    </div>
+    <ul class="menu-list">
+      <li *ngFor="let item of menuItems" [class.exclude-menu]="item.hasSubmenu">
+        <a *ngIf="!item.hasSubmenu" [routerLink]="[item.routerLink]" [routerLinkActive]="'active'">
+          <img loading="lazy" [src]="item.icon" [alt]="item.alt" [ngStyle]="item.style || {}" />
+          <span>{{ item.label }}</span>
+        </a>
+        <a *ngIf="item.hasSubmenu" href="#" class="hasSubmenu" (click)="settingtoggleSubmenu($event)">
+          <div style="display: flex; align-items:center;justify-content:space-between; width:100% ">
+            <div>
+              <img loading="lazy" [src]="item.icon" [alt]="item.alt" />
+              <span>{{ item.label }}</span>
+            </div>
+            <svg-icon *ngIf="!isSubmenuOpen" src="assets/images/right.svg"></svg-icon>
+            <svg *ngIf="isSubmenuOpen" width="12" height="8" viewBox="0 0 12 8" fill="white">
+              <path d="M1.41 0.589844L6 5.16984L10.59 0.589844L12 1.99984L6 7.99984L0 1.99984L1.41 0.589844Z"></path>
+            </svg>
+          </div>
+        </a>
+        <div *ngIf="item.hasSubmenu" class="submenu" [style.display]="isSubmenuOpen ? 'block' : 'none'">
+          <a *ngFor="let subitem of item.submenu" [routerLink]="[subitem.routerLink]">
+            <img loading="lazy" [src]="subitem.icon" [alt]="subitem.alt" />
+            <span>{{ subitem.label }}</span>
+          </a>
+        </div>
+      </li>
+    </ul>
+
+  </div>
+  <div class="main-content medical-verification-screen" [class.full-width]="isMenuHidden"
+    [ngClass]="{'widht_remove': isMenuHidden == false}">
+    <div class="page-title">
+      <h2 class="d-flex align-items-end">
+        <div class="hamber">
+          <button class="svg-icon-button" id="showMenu" (click)="onMenuClick()">
+            <img loading="lazy" src="assets/images/svg/hamber.svg" alt="" />
+          </button>
+        </div>
+        <div class="d-none d-lg-block d-md-none">
+          <button class="svg-icon-button" id="hideMenu" (click)="toggleMenu()">
+            <img loading="lazy" src="assets/images/svg/hamber.svg" alt="" />
+          </button>
+        </div>
+        Medical Verification
+      </h2>
+    </div>
+    <form [formGroup]="consultationForm" (click)="closeSideBar()">
+      <div class="page-form " style="min-height: 100% !important; padding: 0px !important;">
+        <!-- <div class="row g-0">
+          <div class="col-lg-12">
+            <div class="form-group pb-0">
+              <label class="main required">Consultation type</label>
+              <div class="form-check form-check-inline main">
+                <input class="form-check-input" name="consultationType" type="radio" formControlName="consultationType"
+                  id="in_clinic_consultation" value="In-clinic" />
+                <label class="form-check-label" for="in_clinic_consultation">In-clinic Consultation</label>
+              </div>
+              <div class="form-check form-check-inline main">
+                <input class="form-check-input" name="consultationType" type="radio" formControlName="consultationType"
+                  id="video_consultation" value="video" />
+                <label class="form-check-label" for="video_consultation">Video Consultation (Only)</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row g-0" *ngIf="consultationForm.get('consultationType').value == 'In-clinic'">
+          <div class="col-lg-12" formGroupName="consultationDetails">
+            <div class="form-group pt-0">
+              <div class="form-check p-0 form-check-inline main border-0">
+                <div class="form-check pt-0 form-check-inline">
+                  <input class="form-check-input" type="checkbox" name="isInClinic" id="in_clinic" value="In-clinic"
+                    formControlName="isInClinic" />
+                  <label class="form-check-label" for="in_clinic">In-clinic</label>
+                </div>
+                <div class="form-check pt-0 form-check-inline">
+                  <input class="form-check-input" type="checkbox" formControlName="isVideo" name="isVideo" id="video"
+                    value="Video Consultation" />
+                  <label class="form-check-label" for="video">Video Consultation</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        <div class="row g-0">
+          <div class="col-lg-12">
+            <div class="form-group pt-0 pb-0">
+              <!-- <label class="main">Medical Verification</label> -->
+              <label class="main">{{ profileForm.get("fullName").value }}</label>
+            </div>
+          </div>
+        </div>
+        <div class="row g-0">
+          <div class="col-lg-4">
+            <div class="form-group pr-0">
+              <label for="reg_num" class="required">Registration Number</label>
+              <input type="text" class="form-control" formControlName="regNum" id="reg_num"
+                [ngClass]="{'error_border': consultationForm.get('regNum')?.hasError('required')}"
+                (blur)="consultationForm.get('regNum')?.markAsTouched()" placeholder="Enter registration number" />
+              <div class="text-danger"
+                *ngIf="consultationForm.get('regNum')?.touched && consultationForm.get('regNum')?.invalid">
+                <p *ngIf="consultationForm.get('regNum')?.hasError('required')">
+                  <svg-icon src="assets/images/error.svg"></svg-icon> Registration Number is required.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="form-group pr-0">
+              <label for="reg_council" class="required">Registration Council</label>
+              <input type="text" class="form-control" formControlName="regCouncil" id="reg_council"
+                placeholder="Enter registration council"
+                [ngClass]="{'error_border': consultationForm.get('regCouncil')?.hasError('required')}" />
+              <div class="text-danger"
+                *ngIf="consultationForm.get('regCouncil')?.touched && consultationForm.get('regCouncil')?.invalid">
+                <p *ngIf="consultationForm.get('regCouncil')?.hasError('required')">
+                  <svg-icon src="assets/images/error.svg"></svg-icon> Registration Council is required.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="form-group pr-0">
+              <label for="reg_year" class="required">Registration Year</label>
+              <input type="text" class="form-control" formControlName="regYear" id="reg_year"
+                placeholder="Select your registration year"
+                [ngClass]="{'error_border': consultationForm.get('regYear')?.hasError('required')}"
+                (input)="onInput($event)" />
+              <div class="text-danger"
+                *ngIf="consultationForm.get('regYear')?.touched && consultationForm.get('regYear')?.invalid">
+                <p *ngIf="consultationForm.get('regYear')?.hasError('required')">
+                  <svg-icon src="assets/images/error.svg"></svg-icon> Registration year is required.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row g-0">
+          <div class="col-lg-12">
+            <div class="form-group pb-0">
+              <label class="main">Upload Documents</label>
+              <p>Please upload the required documents for verification</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-0">
+          <div class="col-lg-12 pb-0">
+            <div class="upload-docs">
+              <div class="form-group pt-0 pb-0">
+                <label class="required">Identity Proof</label>
+              </div>
+              <div class="upload-docs-inner">
+                <select class="form-control form-select" formControlName="identityProof" (change)="onDropdownChange()">
+                  <option disabled value="">Select Identity Proof Type</option>
+                  <option *ngFor="let option of identityProofOptions; let i = index" [value]="option">
+                    {{ option }}
+                  </option>
+                </select>
+
+                <!-- File upload section -->
+                <div class="col-2">
+                  <div class="custom-file-upload-wrapper">
+                    <label for="file_upload_1" class="custom-file-upload"> Choose File </label>
+                    <input id="file_upload_1" class="d-none" type="file"
+                      (change)="onFileSelected($event, 'identityProof')" />
+                  </div>
+
+                  <!-- Image Preview -->
+                  <div class="file-preview-inline pb-0">
+                    <div class="previewBox" id="file_upload_preview_1">
+                      <img loading="lazy" *ngIf="identityProofUrl" [src]="identityProofUrl" alt="Identity Proof Preview" />
+                    </div>
+                    <p *ngIf="identityProofUrl" class="me-2">Identity Proof.jpg</p>
+
+                    <!-- Remove Button -->
+                    <a *ngIf="identityProofUrl" (click)="removeFile('identityProof')">
+                      <svg-icon src="assets/images/delet.svg"></svg-icon>
+                    </a>
+                  </div>
+                </div>
+
+              </div>
+              <div *ngIf="!identityProofUrl" class="text-danger mt-2 error_massage"
+                style="text-align: center;margin:0px 55px -14px 0px;">
+                <svg-icon src="assets/images/error.svg"></svg-icon> <span>This Field is Mandatory</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-0">
+          <div class="col-lg-12 pb-0">
+            <div class="upload-docs">
+              <div class="form-group pt-0 pb-0">
+                <label class="required">Medical Proof</label>
+              </div>
+              <div class="upload-docs-inner">
+                <select class="form-control form-select" formControlName="medicalProof">
+                  <option value="" disabled>Select Identity Proof Type</option>
+                  <option *ngFor="let option of medicalProofOptions let i = index" [value]="option">
+                    {{ option }}
+                  </option>
+                </select>
+
+                <div class="col-2">
+                  <div class="custom-file-upload-wrapper">
+                    <label for="file_upload_2" class="custom-file-upload"> Choose File </label>
+                    <input id="file_upload_2" class="d-none" type="file"
+                      (change)="onFileSelected($event, 'medicalProof')" />
+                  </div>
+
+                  <div class="file-preview-inline pb-0">
+                    <div class="previewBox" id="file_upload_preview_2">
+                      <img loading="lazy" *ngIf="medicalProofUrl" [src]="medicalProofUrl" alt="Medical Proof Preview" />
+                    </div>
+                    <p *ngIf="medicalProofUrl" class="me-2">Medical Proof.jpg</p>
+
+                    <!-- Remove Button -->
+                    <a *ngIf="medicalProofUrl" (click)="removeFile('medicalProof')">
+                      <svg-icon src="assets/images/delet.svg"></svg-icon>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="!medicalProofUrl" class="text-danger mt-2  error_massage"
+                style="text-align: center;margin:0px 55px -14px 0px;">
+                <svg-icon src="assets/images/error.svg"></svg-icon> <span class="mb-3">This Field is Mandatory</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="page-footer">
+        <button class="btn btn-primary" (click)="onSubmit()">
+          Save & Continue
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_414_309)">
+              <path d="M8.58984 16.59L13.1698 12L8.58984 7.41L9.99984 6L15.9998 12L9.99984 18L8.58984 16.59Z"
+                fill="white" />
+            </g>
+            <defs>
+              <clipPath id="clip0_414_309">
+                <rect width="24" height="24" fill="white" />
+              </clipPath>
+            </defs>
+          </svg>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<mat-drawer-container [hasBackdrop]="true">
+  <mat-drawer #matdrawer [mode]="'over'">
+    <nectar-sidebar>
+      <button class="svg-icon-button" cancel-button (click)="onClose()">
+        <svg-icon src="assets/images/svg/back.svg"></svg-icon>
+      </button>
+    </nectar-sidebar>
+  </mat-drawer>
+  <mat-drawer-content class="drawer-container">
+    <div class="">
+      <nectar-header ></nectar-header>
+      <router-outlet></router-outlet>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

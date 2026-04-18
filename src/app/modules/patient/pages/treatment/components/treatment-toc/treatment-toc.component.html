@@ -1,0 +1,9 @@
+<nav class="toc" *ngIf="sections?.length" aria-label="Page sections">
+  <div class="toc__inner">
+    <button *ngFor="let s of sections" class="toc__item"
+            [class.toc__item--active]="activeSection === s.id"
+            (click)="onSectionClick(s.id)">
+      {{ s.label }}
+    </button>
+  </div>
+</nav>

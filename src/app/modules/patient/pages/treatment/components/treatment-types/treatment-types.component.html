@@ -1,0 +1,4 @@
+<section id="types" class="types" *ngIf="treatment?.typesOfSurgery">
+  <h2 class="types__title">Types of {{ treatment.title }}</h2>
+  <div class="types__body" [innerHTML]="sanitize(treatment.typesOfSurgery)"></div>
+</section>

@@ -1,0 +1,29 @@
+/* ==========================================================================
+   #BREAKPOINTS-VARIABLES
+   ========================================================================== */
+
+// ── Mobile-First Breakpoints (min-width, progressive) ──
+$screen-min-width: 320px;      // Base: small phones (iPhone SE)
+$screen-xs-min: 375px;         // Standard phones
+$bp-phone: 480px;              // Large phones / landscape small
+$screen-sm-min: 576px;         // Phablets
+$screen-768-min: 768px;        // Tablets portrait
+$screen-md-min: 810px;         // iPad Air / large tablets
+$screen-lg-min: 992px;         // Landscape tablets / small desktop
+$bp-desktop: 1024px;           // Desktop threshold
+$screen-xl-min: 1200px;        // Wide desktop
+$bp-wide: 1280px;              // Wide screens
+$bp-ultra: 1440px;             // Ultra-wide
+
+// ── Legacy / iPad-specific (kept for backward compat) ──
+$screen-ipad-pro-portrait-min: 1024px;
+$screen-ipad-max: 811px;
+$screen-767-min: 767px;        // Legacy mobile breakpoint reference
+$screen-ipad-max-landscape: 1180px;
+$screen-ipad-max-landscapeH: 820px;
+$screen-ipad-pro-potrait-width: 1024px;
+$screen-ipad-pro-potrait-height: 1366px;
+$screen-ipad-pro-10-width: 782px;
+$screen-ipad-pro-10-height: 834px;
+$screen-ipad-pro-9-width: 694px;
+

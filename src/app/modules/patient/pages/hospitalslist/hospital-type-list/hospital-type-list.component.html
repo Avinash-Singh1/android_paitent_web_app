@@ -1,0 +1,299 @@
+<!-- Hospital Type List Page — e.g. /delhi/hospital-type/multi-speciality-clinic -->
+
+<!-- ── Breadcrumb ─────────────────────────────────── -->
+<div class="htl__breadcrumb">
+  <nav aria-label="Breadcrumb">
+    <ol class="htl__breadcrumb-list">
+      <li class="htl__breadcrumb-item">
+        <a routerLink="/" class="htl__breadcrumb-link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Home</span>
+        </a>
+      </li>
+      <li class="htl__breadcrumb-item">
+        <a [routerLink]="['/', city]" class="htl__breadcrumb-link">{{ capitalizeWords(city) }}</a>
+      </li>
+      <li class="htl__breadcrumb-item">
+        <a [routerLink]="['/', city, 'hospitals']" class="htl__breadcrumb-link">Hospitals &amp; Clinics</a>
+      </li>
+      <li class="htl__breadcrumb-item" *ngIf="locality">
+        <a [routerLink]="['/', city, typePluralSlug || typeSlug + 's']" class="htl__breadcrumb-link">{{ typeName }}</a>
+      </li>
+      <li class="htl__breadcrumb-item htl__breadcrumb-item--active">
+        <span class="htl__breadcrumb-current">
+          {{ locality ? (localityDisplay || slugToDisplay(locality)) : typeName }}
+        </span>
+      </li>
+    </ol>
+  </nav>
+</div>
+
+<!-- ── Hero ─────────────────────────────────────── -->
+<section class="htl__hero">
+  <div class="htl__hero-inner">
+    <div class="htl__hero-dots"></div>
+    <h1 class="htl__hero-title">
+      Best <span>{{ typeName }}</span> in {{ localityDisplay ? localityDisplay + ', ' : '' }}{{ capitalizeWords(city) }}
+    </h1>
+    <p class="htl__hero-sub">
+      Compare top-rated {{ typeName?.toLowerCase() }}{{ localityDisplay ? ' in ' + localityDisplay : '' }} — browse doctors, ratings &amp; specializations
+    </p>
+    <div class="htl__hero-stats" *ngIf="!loading">
+      <div class="htl__hero-stat">
+        <span class="htl__hero-stat-num">{{ filteredEstablishments.length }}</span>
+        <span class="htl__hero-stat-label">{{ typeName }}</span>
+      </div>
+      <div class="htl__hero-stat" *ngIf="availableSpecializations.length">
+        <span class="htl__hero-stat-num">{{ availableSpecializations.length }}</span>
+        <span class="htl__hero-stat-label">Specializations</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Hospital Type Chips (Sibling Types) ─────── -->
+<nav class="htl__type-nav" *ngIf="hospitalTypes.length">
+  <div class="htl__type-nav-inner">
+    <a
+      class="htl__type-chip"
+      [routerLink]="['/', city, 'hospitals']"
+    >
+      All Hospitals
+    </a>
+    <a
+      *ngFor="let type of hospitalTypes; trackBy: trackByIndex"
+      class="htl__type-chip"
+      [class.htl__type-chip--active]="nameToSlug(type.name) === typeSlug"
+      [routerLink]="['/', city, 'hospital-type', nameToSlug(type.name)]"
+    >
+      {{ type.name }}
+    </a>
+  </div>
+</nav>
+
+<!-- ── Specialization Filter Chips ───────────────── -->
+<nav class="htl__spec-filters" *ngIf="availableSpecializations.length">
+  <div class="htl__spec-filters-inner">
+    <span class="htl__spec-filters-label">Specialization:</span>
+    <div class="htl__spec-filters-track">
+      <button
+        class="htl__spec-chip"
+        [class.htl__spec-chip--active]="!selectedSpecId"
+        (click)="selectSpecialization(null)"
+      >
+        All
+      </button>
+      <button
+        *ngFor="let spec of availableSpecializations; trackBy: trackByIndex"
+        class="htl__spec-chip"
+        [class.htl__spec-chip--active]="selectedSpecId === spec._id"
+        (click)="selectSpecialization(spec._id)"
+      >
+        {{ spec.name }}
+        <span class="htl__spec-chip-count">{{ getSpecCount(spec._id) }}</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Results Section ─────────────────────────── -->
+<section class="htl__results">
+  <div class="htl__results-inner">
+
+    <!-- Active Filters Summary -->
+    <div class="htl__active-filters" *ngIf="selectedSpecId">
+      <span class="htl__active-filters-label">Filters:</span>
+      <span class="htl__active-tag">
+        {{ typeName }}
+      </span>
+      <span class="htl__active-tag" *ngIf="selectedSpecId">
+        <ng-container *ngFor="let s of availableSpecializations">
+          <ng-container *ngIf="s._id === selectedSpecId">{{ s.name }}</ng-container>
+        </ng-container>
+        <button class="htl__active-tag-x" (click)="selectSpecialization(null)">&times;</button>
+      </span>
+    </div>
+
+    <!-- Header -->
+    <div class="htl__results-header">
+      <h2 class="htl__results-title">
+        {{ filteredEstablishments.length }}
+        {{ typeName }}{{ filteredEstablishments.length !== 1 ? '' : '' }}
+        in {{ localityDisplay ? localityDisplay + ', ' : '' }}{{ capitalizeWords(city) }}
+      </h2>
+    </div>
+
+    <!-- Skeleton Loader -->
+    <div *ngIf="loading" class="htl__grid">
+      <div *ngFor="let i of [1,2,3,4,5,6]" class="htl__skel">
+        <div class="htl__skel-top">
+          <div class="htl__skel-avatar"></div>
+          <div class="htl__skel-lines">
+            <div class="htl__skel-line htl__skel-line--w60"></div>
+            <div class="htl__skel-line htl__skel-line--w40"></div>
+            <div class="htl__skel-line htl__skel-line--w80"></div>
+          </div>
+        </div>
+        <div class="htl__skel-bar"></div>
+        <div class="htl__skel-bar htl__skel-bar--short"></div>
+      </div>
+    </div>
+
+    <!-- Card Grid -->
+    <div *ngIf="!loading && filteredEstablishments.length" class="htl__grid">
+      <article
+        *ngFor="let est of pagedEstablishments; trackBy: trackByEstId"
+        class="htl__card"
+      >
+        <!-- Top: Avatar + Info -->
+        <div class="htl__card-top">
+          <div class="htl__card-avatar" *ngIf="est.profilePic; else initialsBlock">
+            <img loading="lazy" [src]="est.profilePic" [alt]="est.name" loading="lazy" />
+          </div>
+          <ng-template #initialsBlock>
+            <div class="htl__card-avatar htl__card-avatar--initials">
+              {{ getInitials(est.name) }}
+            </div>
+          </ng-template>
+          <div class="htl__card-info">
+            <span class="htl__card-type">
+              {{ est.hospitalType?.[0]?.name || typeName }}
+            </span>
+            <h3 class="htl__card-name">{{ est.name }}</h3>
+            <p class="htl__card-addr" *ngIf="est.address">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              {{ est.address.locality }}{{ est.address.city ? ', ' + est.address.city : '' }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="htl__card-stats">
+          <span
+            class="htl__card-rating"
+            [ngClass]="'htl__card-rating--' + getRatingClass(est.rating)"
+            *ngIf="est.rating"
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            {{ est.rating | number:'1.1-1' }}
+          </span>
+          <span class="htl__card-tag" *ngIf="est.totalBed">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 4v16M22 4v16M2 8h20M7 8v8M2 16h20"/>
+            </svg>
+            {{ est.totalBed }} Beds
+          </span>
+          <span class="htl__card-tag" *ngIf="getFilteredDocList(est).length">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <line x1="19" y1="8" x2="19" y2="14"/>
+              <line x1="22" y1="11" x2="16" y2="11"/>
+            </svg>
+            {{ getFilteredDocList(est).length }} Doctors
+          </span>
+          <span class="htl__card-tag" *ngIf="est.ambulance">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="3" width="15" height="13" rx="2"/>
+              <path d="M16 8h4l3 3v5h-7V8z"/>
+              <circle cx="5.5" cy="18.5" r="2.5"/>
+              <circle cx="18.5" cy="18.5" r="2.5"/>
+            </svg>
+            Ambulance
+          </span>
+        </div>
+
+        <!-- Doctor Previews -->
+        <div class="htl__card-docs" *ngIf="getFilteredDocList(est).length">
+          <div class="htl__card-docs-label">Top Doctors</div>
+          <div
+            *ngFor="let doc of getFilteredDocList(est) | slice:0:3; trackBy: trackByDocId"
+            class="htl__doc"
+          >
+            <div class="htl__doc-avatar">
+              <img
+                *ngIf="doc.doctorProfilePic"
+                [src]="doc.doctorProfilePic"
+                [alt]="doc.doctorName"
+                loading="lazy"
+              />
+              <span *ngIf="!doc.doctorProfilePic">
+                {{ getInitials(doc.doctorName) }}
+              </span>
+            </div>
+            <div class="htl__doc-info">
+              <span class="htl__doc-name">{{ doc.doctorName }}</span>
+              <span class="htl__doc-spec">
+                {{ doc.specialization?.[0]?.name }}
+                <ng-container *ngIf="doc.experience"> &middot; {{ doc.experience }}y exp</ng-container>
+              </span>
+            </div>
+            <span class="htl__doc-fee" *ngIf="doc.consultationFees">
+              &#8377;{{ doc.consultationFees }}
+            </span>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <a
+          class="htl__card-cta"
+          [routerLink]="['/', city, getTypeSlug(est), est.establishmentProfileSlug]"
+        >
+          View Details
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </article>
+    </div>
+
+    <!-- Empty State -->
+    <div
+      *ngIf="!loading && filteredEstablishments.length === 0"
+      class="htl__empty"
+    >
+      <svg class="htl__empty-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.5">
+        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+        <line x1="9" y1="9" x2="15" y2="15"/>
+        <line x1="15" y1="9" x2="9" y2="15"/>
+      </svg>
+      <h3 class="htl__empty-title">No {{ typeName?.toLowerCase() || 'establishments' }} found</h3>
+      <p class="htl__empty-text">
+        Try checking back later or browse
+        <a [routerLink]="['/', city, 'hospitals']">all hospitals in {{ capitalizeWords(city) }}</a>
+      </p>
+    </div>
+
+    <!-- Pagination -->
+    <nav *ngIf="totalPages > 1" class="htl__pagination">
+      <button
+        class="htl__pagination-btn"
+        [disabled]="currentPage === 1"
+        (click)="goToPage(currentPage - 1)"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+        Previous
+      </button>
+      <span class="htl__pagination-info">
+        Page {{ currentPage }} of {{ totalPages }}
+      </span>
+      <button
+        class="htl__pagination-btn"
+        [disabled]="currentPage >= totalPages"
+        (click)="goToPage(currentPage + 1)"
+      >
+        Next
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+    </nav>
+  </div>
+</section>

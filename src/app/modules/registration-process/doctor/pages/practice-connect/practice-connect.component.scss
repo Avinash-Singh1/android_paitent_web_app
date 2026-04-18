@@ -1,0 +1,138 @@
+@use "tools.mediaquery" as *;
+
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+
+@use "variable.scss" as *;
+
+
+.percetDone {
+  height: 4px;
+  background: $purple;
+  width: 80%;
+}
+
+.containers {
+  max-width: 720px;
+  width: 720px;
+  min-height: calc(100vh - 120px);
+  background: $white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @media screen and (max-width: 767px) {
+    width: 100%;
+  }
+
+  .form {
+    min-height: calc(100vh - 124px);
+  }
+
+  .content {
+    margin: 2rem;
+    padding-bottom: 32px;
+
+    .heading {
+      padding-top: 2rem;
+      font-style: normal;
+      color: $black;
+      @include font-sans_pro-bold($size: 32px, $lineheight: 40px);
+
+      @media screen and (max-width: 767px) {
+        @include font-sans_pro-bold($size: 24px);
+      }
+    }
+
+    .wrapper {
+      margin-top: 3rem;
+
+      @media screen and (max-width: 767px) {
+        margin-top: 1rem;
+      }
+
+      p {
+        @include font-sans_pro-regular($size: 18px, $lineheight: 23px);
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-regular($size: 16px);
+        }
+      }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+
+      //   margin-bottom: 12rem;
+      .radios {
+        padding: 12px 20px;
+        border: 1px solid $border-color;
+        display: flex;
+        gap: 10px;
+
+        &:first-child {
+          border-radius: 4px 4px 0px 0px;
+        }
+
+        &:last-child {
+          border-radius: 0 0 4px 4px;
+        }
+
+        align-items: center;
+
+        input[type="radio"] {
+          width: 18px;
+          height: 18px;
+          accent-color: $blue-violet;
+        }
+
+        label {
+          padding-top: 2px;
+          @include font-sans_pro-regular($size: 18px, $lineheight: 23px);
+          color: rgba(0, 0, 0, 0.7);
+
+          @media screen and (max-width: 767px) {
+            @include font-sans_pro-regular($size: 16px);
+          }
+        }
+      }
+    }
+  }
+
+  .continue {
+    margin: 2rem;
+    padding-top: 5rem;
+    display: flex;
+    justify-content: space-between;
+
+    @media screen and (max-width: 767px) {
+      padding-top: 1rem;
+    }
+
+    button {
+      width: 200px;
+      cursor: pointer;
+      padding: 10px 30px;
+      border: none;
+      color: $white;
+      background: $purple;
+      border-radius: 4px;
+      @include font-sans_pro-regular($size: 18px, $lineheight: 23px);
+
+      @media screen and (max-width: 767px) {
+        width: 100px;
+        @include font-sans_pro-regular($size: 16px);
+      }
+    }
+
+    .back {
+      background: $white;
+      color: $black;
+      border: 1px solid $border-color;
+      border-radius: 4px;
+    }
+  }
+}

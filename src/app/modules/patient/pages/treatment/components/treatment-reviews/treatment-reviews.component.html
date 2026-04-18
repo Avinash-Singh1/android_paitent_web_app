@@ -1,0 +1,69 @@
+<section class="reviews" *ngIf="reviews?.length">
+  <h2 class="reviews__title">What Our Patients Say</h2>
+
+  <!-- Aggregate Rating -->
+  <div class="reviews__summary">
+    <span class="reviews__summary-text">
+      Based on {{ recommendCount }} Recommendations | Rated {{ avgRating }} Out of 5
+    </span>
+  </div>
+
+  <!-- Review Cards - Horizontal Scroll -->
+  <div class="reviews__scroll">
+    <div class="reviews__card" *ngFor="let review of reviews">
+      <div class="reviews__card-header">
+        <!-- Avatar initials -->
+        <div class="reviews__card-avatar">
+          <img *ngIf="review.userId?.profilePic" [src]="review.userId.profilePic"
+               [alt]="review.userId?.fullName || review.name" class="reviews__card-avatar-img" loading="lazy"
+               width="44" height="44" />
+          <span *ngIf="!review.userId?.profilePic" class="reviews__card-initials">
+            {{ getInitials(review.userId?.fullName || review.name) }}
+          </span>
+        </div>
+        <div class="reviews__card-info">
+          <span class="reviews__card-name">
+            {{ review.userId?.fullName || review.name }}
+            <span *ngIf="review.age">, {{ review.age }} Yrs</span>
+          </span>
+          <span class="reviews__card-verified">✓ Verified</span>
+        </div>
+      </div>
+
+      <!-- Stars -->
+      <div class="reviews__card-stars">
+        <span class="reviews__card-star" *ngFor="let s of getStars(review.rating)">★</span>
+        <span class="reviews__card-star reviews__card-star--empty" *ngFor="let s of getEmptyStars(review.rating)">★</span>
+        <span class="reviews__card-score">{{ review.rating || 5 }}/5</span>
+      </div>
+
+      <!-- Recommends badge -->
+      <div class="reviews__card-recommend" *ngIf="review.rating >= 4">
+        <span>👍</span> Recommends
+      </div>
+
+      <!-- Review Text -->
+      <p class="reviews__card-text">{{ review.comment || review.review }}</p>
+
+      <!-- Meta: City + Doctor -->
+      <div class="reviews__card-meta">
+        <span *ngIf="review.city || review.userId?.city" class="reviews__card-city">
+          City : {{ review.city || review.userId?.city }}
+        </span>
+        <span *ngIf="review.doctorName">
+          Treated by : <strong>{{ review.doctorName }}</strong>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Aggregate -->
+  <div class="reviews__bottom">
+    <div class="reviews__bottom-rating">
+      Best {{ treatmentTitle }} Treatment<span *ngIf="city"> in {{ cityLabel }}</span> — Exceptional Care
+      <span class="reviews__bottom-score">{{ avgRating }}</span>
+      <span class="reviews__bottom-stars">★★★★★</span>
+      <span class="reviews__bottom-count">({{ reviews.length }} Reviews)</span>
+    </div>
+  </div>
+</section>

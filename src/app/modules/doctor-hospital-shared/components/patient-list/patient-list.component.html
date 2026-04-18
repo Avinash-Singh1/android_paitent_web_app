@@ -1,0 +1,48 @@
+<div class="d-flex flex-column text-18 font-600 patient-list">
+  <div class="patient-count px-24 py-3 text-white">
+    {{ patientList.length }} &nbsp;&nbsp;&nbsp; Appointment
+  </div>
+  <div class="d-flex flex-column gap-1">
+    <ng-container *ngFor="let patient of patientList">
+      <div
+        class="patient p-2 d-flex align-items-center gap-3"
+        [ngClass]="[patient.status | appointmentStatus]"
+        [attr.data-patients]="patient | stringify | async"
+      >
+        <div class="img-wrapper">
+          <img
+            class="profile-img"
+            [src]="
+              patient.patient?.patientProfilePic ||
+              patient.patientDetails?.profilePic
+            "
+            alt=""
+            *ngIf="
+              patient.patient?.patientProfilePic ||
+              patient.patientDetails?.profilePic
+            "
+          />
+          <span
+            class="text-18 font-600"
+            *ngIf="
+              !patient.patient?.patientProfilePic &&
+              !patient.patientDetails?.profilePic
+            "
+          >
+            {{
+              patient.patient?.patientName || patient.fullName
+                | nameInitial
+                | uppercase
+            }}
+          </span>
+        </div>
+        <span
+          class="line-clamp-1 w-75"
+          [ngClass]="{ 'line-through': patient.status == -1 }"
+        >
+          {{ patient?.patient?.patientName || patient?.fullName | titlecase }}
+        </span>
+      </div>
+    </ng-container>
+  </div>
+</div>

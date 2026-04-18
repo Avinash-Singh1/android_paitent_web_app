@@ -1,0 +1,264 @@
+@use "tools.mediaquery" as *;
+
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+
+@use "variable.scss" as *;
+
+section {
+  padding: 32px;
+
+  @media screen and (max-width: 767px) {
+    padding: 20px;
+  }
+
+  .box {
+
+    border-radius: 6px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      height: 40px;
+      width: 40px;
+    }
+  }
+
+  .container-class {
+    padding: 20px;
+  }
+}
+
+.text-18 {
+  font-size: 14px !important;
+
+  @media screen and (max-width: 767px) {
+    font-size: 16px;
+  }
+}
+
+
+
+.cotainer-fluid {
+  width: calc(100%) !important;
+  max-width: calc(100%) !important;
+}
+
+.main_top_container {
+  width: calc(100%);
+  max-width: calc(100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.container_section_background {
+  background: #E2E2F880;
+  padding: 50px 92px 0px;
+}
+
+.main_top_container .content_here_section {
+  width: calc(100% - 30%);
+  max-width: calc(100% - 30%);
+  display: flex;
+}
+
+.main_top_container .form_section {
+  width: calc(100% - 70%);
+  max-width: calc(100% - 70%);
+}
+
+.imag_conatner {
+  width: calc(40%);
+  max-width: calc(40%);
+  display: flex;
+  justify-content: end;
+}
+
+.imag_conatner img {
+  width: 520px;
+  max-width: 100%;
+  position: relative;
+  top: 0px;
+  margin: 0px;
+  height: fit-content;
+}
+
+
+.text_content {
+  padding: 20px 0px 0px 45px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.text_content .tittle {
+  font-family: Source Sans Pro;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 45.25px;
+  text-align: left;
+}
+
+.text_content .subttile {
+  font-family: Source Sans Pro;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 22.63px;
+  text-align: left;
+
+}
+
+.box_content {
+  width: calc(100%);
+  max-width: calc(100%);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.container_box {
+  width: 230px;
+  height: 84px;
+  display: flex;
+  background-color: #45197C1A;
+  gap: 10px;
+  border-radius: 10px;
+  opacity: 0px;
+  padding: 18px;
+}
+
+.container_box .svg {
+  width: calc(30%);
+  max-width: calc(30%);
+  border-radius: 50%;
+  background: #45197C;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.surgery_box_section {
+  background: #45197C0D;
+  padding: 20px;
+  border-radius: 10px;
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sugreys_top {
+  padding: 50px 106px 24px 105px;
+}
+
+.surgery_box_section .box {
+  display: flex;
+  justify-content: center;
+}
+
+.see-more {
+  border-radius: 15px;
+  padding: 10px 20px;
+  font-weight: bold;
+}
+
+.department_card {
+  display: flex;
+  background: #F7D6E080;
+  border-radius: 10px;
+  padding: 7px 20px;
+  width: 370px;
+}
+
+.department_card .image_section_deparment {
+  width: calc(20%);
+  max-width: calc(20%);
+  display: flex;
+  align-items: center;
+}
+
+.department_card .text-section {
+  width: calc(50%);
+  max-width: calc(50%);
+}
+
+.department_card .svg_setin {
+  width: calc(30%);
+  max-width: calc(30%);
+}
+
+.question-answer div h2 {
+  font-weight: 600;
+}
+
+.moobile_secton {
+  display: none;
+}
+
+.surgery_box_section {
+  background: rgba(69, 25, 124, 0.0509803922);
+  padding: 10px;
+  border-radius: 10px;
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+
+.surgery_box_section .box {
+  display: flex;
+  justify-content: center;
+}
+
+.container-class {
+  padding: 20px 100px 10px;
+}
+
+@media (max-width: 768px) {
+  .moobile_secton {
+    display: block !important;
+  }
+
+  .moobile_secton .row {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobile_view {
+    display: block !important;
+  }
+
+  .container-class {
+    padding: 20px;
+  }
+
+  .container_section_background {
+    padding: 26px 11px !important;
+    background: none;
+  }
+
+  .box img {
+    height: 25px !important;
+    width: 25px !important;
+  }
+
+  .surgery_box_section {
+    padding: 9px;
+    border: 1px solid #cdcbcb;
+    margin-right: 15px;
+    width: 97px;
+  }
+
+  .main_center_between {
+    display: flex;
+    justify-content: start !important;
+    gap: 0px !important;
+    margin-top: 0px !important;
+  }
+}

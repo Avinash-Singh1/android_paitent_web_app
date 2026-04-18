@@ -1,0 +1,35 @@
+<section class="auth-landing" [class.auth-landing--doctor]="userType == 2 || userType == 8" [class.auth-landing--hospital]="userType == 3">
+  <div class="auth-landing__wrapper">
+    <div class="auth-landing__container">
+      <!-- Left: Illustration / Branding -->
+      <div class="auth-landing__hero">
+        <div class="auth-landing__hero-content" *ngIf="userType == 1 || !userType">
+          <img loading="lazy" src="assets/images/auth/auth-logo.svg" alt="NectarPlus Health" class="auth-landing__logo" />
+          <h1 class="auth-landing__tagline">Your Health,<br>Our Priority</h1>
+          <p class="auth-landing__desc">Book appointments, manage health records, and access trusted doctors — all in one place.</p>
+          <div class="auth-landing__badges">
+            <div class="auth-landing__badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span>Verified Doctors</span>
+            </div>
+            <div class="auth-landing__badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span>Easy Scheduling</span>
+            </div>
+            <div class="auth-landing__badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>Secure & Private</span>
+            </div>
+          </div>
+        </div>
+        <img loading="lazy" src="assets/images/auth/Doctor.png" alt="doctor-image" class="auth-landing__bg-image" *ngIf="userType == 2 || userType == 8" />
+        <img loading="lazy" src="assets/images/auth/Hospital.png" alt="hospital-image" class="auth-landing__bg-image" *ngIf="userType == 3" />
+      </div>
+
+      <!-- Right: Form Card -->
+      <div class="auth-landing__card">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</section>

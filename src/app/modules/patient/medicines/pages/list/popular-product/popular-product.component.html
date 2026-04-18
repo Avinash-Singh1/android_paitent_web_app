@@ -1,0 +1,148 @@
+<!-- ========== FILTER CHIPS (category pages only) ========== -->
+<nectar-medicine-filter-chips
+  *ngIf="currentFilters && currentUrl !== '/medicines'"
+  [filters]="currentFilters"
+  (filterRemoved)="onFilterRemoved($event)"
+  (clearAll)="onClearAllFilters()"
+></nectar-medicine-filter-chips>
+
+<div class="pp">
+  <div class="pp__layout">
+    <!-- ========== FILTER SIDEBAR (category pages only) ========== -->
+    <nectar-medicine-filter-sidebar
+      *ngIf="currentUrl !== '/medicines'"
+      class="d-none d-lg-block"
+      [medicines]="data.length > 0 ? data : productData"
+      (filtersChanged)="onFiltersChanged($event)"
+    ></nectar-medicine-filter-sidebar>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <div class="pp__main">
+
+      <!-- Header bar -->
+      <div class="pp__header" *ngIf="currentUrl !== '/medicines'">
+        <h2 class="pp__heading">
+          {{ categoryNameurl ? (categoryNameurl | capitalize) : 'All Medicines' }}
+        </h2>
+        <div class="pp__tabs" *ngIf="currentUrl !== '/medicines'">
+          <button class="pp__tab" [class.pp__tab--active]="selectedFilter === 'All'" (click)="selectFilter('All')">All</button>
+          <button class="pp__tab" [class.pp__tab--active]="selectedFilter === 'Ayurveda'" (click)="selectFilter('Ayurveda')">Ayurveda</button>
+          <button class="pp__tab" [class.pp__tab--active]="selectedFilter === 'General'" (click)="selectFilter('General')">General</button>
+          <button class="pp__tab" [class.pp__tab--active]="selectedFilter === 'Allopath'" (click)="selectFilter('Allopath')">Allopath</button>
+          <button class="pp__tab" [class.pp__tab--active]="selectedFilter === 'Homeopath'" (click)="selectFilter('Homeopath')">Homeopath</button>
+        </div>
+      </div>
+
+      <!-- Popular Products header for /medicines page -->
+      <div class="pp__section-title" *ngIf="currentUrl === '/medicines'">
+        <h2>Popular Products</h2>
+        <p>Trending health & wellness products trusted by thousands</p>
+      </div>
+
+      <!-- Loading spinner -->
+      <div class="pp__loading" *ngIf="loading">
+        <div class="pp__spinner"></div>
+      </div>
+
+      <!-- Error state -->
+      <div class="pp__error" *ngIf="errorMessage && !loading">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <!-- Product grid: filteredData (category pages) -->
+      <div class="pp__grid" *ngIf="productData.length === 0 && filteredData.length > 0">
+        <ng-container *ngFor="let item of filteredData">
+          <ng-container *ngTemplateOutlet="productCard; context: { $implicit: item }"></ng-container>
+        </ng-container>
+      </div>
+
+      <!-- Product grid: productData (/medicines page) -->
+      <div class="pp__grid" *ngIf="productData.length > 0">
+        <ng-container *ngFor="let item of productData">
+          <ng-container *ngTemplateOutlet="productCard; context: { $implicit: item }"></ng-container>
+        </ng-container>
+      </div>
+
+      <!-- Empty state -->
+      <div class="pp__empty" *ngIf="!loading && productData.length === 0 && filteredData.length === 0">
+        <img loading="lazy" src="assets/images/medicine-placeholder.png" alt="No products" />
+        <h3>No products found</h3>
+        <p>Try adjusting your filters or browse a different category.</p>
+      </div>
+
+      <!-- View More -->
+      <div class="pp__more" *ngIf="filteredData && filteredData.length > 0">
+        <button class="pp__more-btn" (click)="viewMore()">
+          View More Products
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== REUSABLE PRODUCT CARD TEMPLATE ========== -->
+<ng-template #productCard let-a>
+  <a class="pc" [routerLink]="['/medicines/details', a.product_id, formatProductName(a.name)]">
+    <!-- Image area -->
+    <div class="pc__img-area">
+      <span class="pc__badge-type" *ngIf="a.otc_type">{{ a.otc_type }}</span>
+      <span class="pc__badge-off" *ngIf="a.price?.discount > 0">{{ a.price.discount }}% OFF</span>
+      <img
+        class="pc__img"
+        [src]="a.image || a.images_hsh?.array?.[0] || 'assets/images/medicine-placeholder.png'"
+        [alt]="a.name"
+        loading="lazy"
+        (error)="onImageError($event)"
+      />
+    </div>
+
+    <!-- Info area -->
+    <div class="pc__body">
+      <h3 class="pc__name">{{ a.name | truncate: 50 }}</h3>
+
+      <!-- Rating -->
+      <div class="pc__rating" *ngIf="a.rating && a.rating.average > 0">
+        <span class="pc__star">&#9733;</span>
+        <span class="pc__star-val">{{ a.rating.average | number:'1.1-1' }}</span>
+        <span class="pc__star-count" *ngIf="a.rating.count">({{ a.rating.count }} reviews)</span>
+      </div>
+
+      <!-- Manufacturer -->
+      <p class="pc__brand" *ngIf="a.manufacturer?.name">
+        by <span class="pc__brand-name">{{ a.manufacturer.name | truncate: 30 }}</span>
+      </p>
+
+      <!-- Spacer to push price to bottom -->
+      <div class="pc__spacer"></div>
+
+      <!-- Price -->
+      <div class="pc__price" *ngIf="a.price">
+        <span class="pc__final" *ngIf="a.price.final_price">
+          {{ a.price.final_price | currency: 'INR': 'symbol':'1.0-0' }}
+        </span>
+        <span class="pc__mrp" *ngIf="a.price.mrp && a.price.mrp !== a.price.final_price">
+          {{ a.price.mrp | currency: 'INR': 'symbol':'1.0-0' }}
+        </span>
+      </div>
+
+      <!-- CTA -->
+      <span class="pc__cta">
+        View Details
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+    </div>
+  </a>
+</ng-template>
+
+<!-- ========== MOBILE FILTER OVERLAY ========== -->
+<div class="pp__filter-overlay" *ngIf="filterSidebarOpen" (click)="toggleFilterSidebar()">
+  <div class="pp__filter-drawer" (click)="$event.stopPropagation()">
+    <nectar-medicine-filter-sidebar
+      [medicines]="data.length > 0 ? data : productData"
+      (filtersChanged)="onFiltersChanged($event)"
+      (closeFilter)="toggleFilterSidebar()"
+    ></nectar-medicine-filter-sidebar>
+  </div>
+</div>

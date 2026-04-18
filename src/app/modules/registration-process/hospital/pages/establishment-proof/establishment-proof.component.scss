@@ -1,0 +1,169 @@
+@use "tools.mediaquery" as *;
+
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+@use "variable.scss" as *;
+
+
+.percetDone {
+  height: 4px;
+  background: $purple;
+  width: 66.66%;
+}
+
+.containers {
+  max-width: 720px;
+  width: 720px;
+  min-height: calc(100vh - 120px);
+  background: $white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @media screen and (max-width: 767px) {
+    width: 100%;
+  }
+
+  .form {
+    min-height: calc(100vh - 124px);
+  }
+
+  .content {
+    margin: 2rem;
+
+    .heading {
+      padding-top: 1rem;
+      font-style: normal;
+      color: $black;
+      @include font-sans_pro-bold($size: 32px, $lineheight: 40px);
+
+      @media screen and (max-width: 767px) {
+        padding-top: 0;
+        @include font-sans_pro-bold($size: 24px);
+      }
+    }
+
+    p {
+      @include font-sans_pro-regular($size: 18px, $lineheight: 23px);
+
+      @media screen and (max-width: 767px) {
+        @include font-sans_pro-regular($size: 16px);
+      }
+    }
+
+    .opt {
+      p {
+        @include font-sans_pro-semibold($size: 18px, $lineheight: 23px);
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-semibold($size: 16px);
+        }
+      }
+
+      label {
+        @include font-sans_pro-regular($size: 18px, $lineheight: 23px);
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-regular($size: 16px);
+        }
+      }
+
+      input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: $purple;
+      }
+    }
+
+    .subHeading {
+      .subTitle {
+        @include font-sans_pro-semibold($size: 18px, $lineheight: 23px);
+        margin-bottom: 8px;
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-semibold($size: 16px);
+        }
+      }
+
+      span {
+        @include font-sans_pro-regular($size: 18px, $lineheight: 23px);
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-regular($size: 16px);
+        }
+      }
+    }
+
+    .wrapper {
+      //   margin: 3rem 0px;
+      background: $bright-gray;
+      border-radius: 12px;
+      height: 220px;
+      width: 100%;
+
+      .centerText {
+        @include font-sans_pro-regular($size: 18px, $lineheight: 23px);
+        padding: 12px 30px;
+        background: $white;
+        border-radius: 8px;
+        width: 150px;
+      }
+    }
+  }
+
+  .continue {
+    margin: 2rem;
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      width: 200px;
+      cursor: pointer;
+      padding: 10px 30px;
+      border: none;
+      color: $white;
+      background: $purple;
+      border-radius: 4px;
+      @include font-sans_pro-regular($size: 18px, $lineheight: 23px);
+
+      @media screen and (max-width: 767px) {
+        width: 100px;
+        @include font-sans_pro-regular($size: 16px);
+      }
+    }
+
+    .back {
+      background: $white;
+      color: $black;
+      border: 1px solid $border-color;
+      border-radius: 4px;
+    }
+  }
+}
+
+// ul{
+//     padding-left: 1rem;
+// }
+
+.customMargin {
+  //   margin-top: 50px;
+  align-items: center;
+  height: 100%;
+}
+
+.customMargin1 {
+  align-items: end;
+}
+
+.upload-image {
+  width: 150px;
+  height: 150px;
+
+  @media screen and (max-width: 767px) {
+    width: 100px;
+    height: 100px;
+  }
+}

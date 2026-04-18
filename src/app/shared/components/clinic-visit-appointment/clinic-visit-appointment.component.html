@@ -1,0 +1,234 @@
+<div class="booking-dialog" style="position: relative">
+  <!-- ===== HEADER ===== -->
+  <div class="booking-header">
+    <h2 class="booking-header__title">Book Appointment</h2>
+    <button class="booking-header__close" (click)="_bottomSheet.dismiss()" *ngIf="type == 'bottomSheet'"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 1L1 13M1 1l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+  </div>
+
+  <!-- ===== TAB TOGGLE (In Clinic / Video) ===== -->
+  <div class="booking-tabs">
+    <button class="booking-tab" [class.booking-tab--active]="selectedTab === 1" [class.booking-tab--disabled]="hideFlagTab === 1" (click)="selectTab(1)"
+      *ngIf="hideFlagTab !== 1">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM12 6C13.93 6 15.5 7.57 15.5 9.5S13.93 13 12 13S8.5 11.43 8.5 9.5S10.07 6 12 6ZM19 19H5V18.22C5 17.07 5.53 15.98 6.44 15.28C8.05 14.03 9.98 13.34 12 13.34C14.02 13.34 15.95 14.03 17.56 15.28C18.47 15.98 19 17.07 19 18.22V19Z" fill="currentColor"/></svg>
+      In Clinic
+    </button>
+    <button class="booking-tab booking-tab--video" [class.booking-tab--active]="selectedTab === 2" [class.booking-tab--disabled]="hideFlagTab === 2" (click)="selectTab(2)"
+      *ngIf="hideFlagTab !== 2">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 10.5V7C17 6.45 16.55 6 16 6H4C3.45 6 3 6.45 3 7V17C3 17.55 3.45 18 4 18H16C16.55 18 17 17.55 17 17V13.5L21 17.5V6.5L17 10.5Z" fill="currentColor"/></svg>
+      Video
+    </button>
+  </div>
+
+  <!-- ===== IN CLINIC TAB ===== -->
+  <div *ngIf="selectedTab === 1">
+    <div class="booking-info">
+      <div class="booking-info__top">
+        <div class="booking-info__profile">
+          <div class="booking-info__avatar" *ngIf="doctorDetail?.profilePic">
+            <img loading="lazy" [src]="doctorDetail?.profilePic" alt="" width="44" height="44" />
+          </div>
+          <div class="booking-info__avatar booking-info__avatar--initials" *ngIf="!doctorDetail?.profilePic">
+            {{ doctorDetail?.name | nameInitial | uppercase }}
+          </div>
+          <div class="booking-info__name">
+            <span>{{ doctorDetail?.name }}</span>
+            <span class="booking-info__hospital-tag">{{ establishmentDetail[0]?.establishmentName }}</span>
+          </div>
+        </div>
+        <div class="booking-info__actions">
+          <span class="booking-info__change-clinic cursor-pointer" (click)="changeClinicMobile()" *ngIf="doctorDetail?.establishmentDetails?.length > 1">
+            Change
+            <img loading="lazy" src="assets/images/Vector.png" alt="" width="10" height="6" />
+          </span>
+        </div>
+      </div>
+      <div class="booking-info__meta">
+        <div class="booking-info__row">
+          <span class="booking-info__fee" *ngIf="selectedTab==1 && (establishmentDetail[0]?.consultationFees | validFee)">
+            &#x20B9; {{ establishmentDetail[0]?.consultationFees }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="booking-dates">
+      <owl-carousel-o [options]="customOptions" class="caraousel" (translated)="carouselChange($event)" #carousel>
+        <ng-container *ngFor="let name of dates; let i = index; trackBy: trackByIndex">
+          <ng-template carouselSlide [id]="name" [width]="120">
+            <p (click)="getClickedDate(name)" class="cursor-pointer">{{ name }}</p>
+          </ng-template>
+        </ng-container>
+      </owl-carousel-o>
+    </div>
+
+    <div class="booking-slots">
+      <div class="booking-slots__header" *ngIf="availableSlots">
+        <span class="booking-slots__badge">{{ availableSlots }} slots available</span>
+      </div>
+      <p *ngIf="!availableSlots && !(morningSlots.length || noonSlots.length || eveSlots.length)" class="booking-slots__empty">No Slots Available</p>
+      <div class="booking-slots__group" *ngIf="morningSlots.length">
+        <div class="booking-slots__label">
+          <img loading="lazy" src="assets/images/sunrise 1.png" alt="morning" width="20" height="20" />
+          <span>Morning</span>
+        </div>
+        <div class="booking-slots__grid">
+          <button *ngFor="let timings of morningSlots; trackBy: trackByIndex"
+            [class.booking-slot--active]="timings?.status == 1"
+            [class.booking-slot--inactive]="timings?.status !== 1"
+            class="booking-slot booking-slot--clinic"
+            [disabled]="timings?.status !== 1"
+            (click)="timings?.status == 1 && selectTime(timings, 'morning')">
+            {{ timings?.time }}
+          </button>
+        </div>
+      </div>
+      <div class="booking-slots__group" *ngIf="noonSlots.length">
+        <div class="booking-slots__label">
+          <img loading="lazy" src="assets/images/sunset 1.png" alt="afternoon" width="20" height="20" />
+          <span>Afternoon</span>
+        </div>
+        <div class="booking-slots__grid">
+          <button *ngFor="let timings of noonSlots; trackBy: trackByIndex"
+            [class.booking-slot--active]="timings?.status == 1"
+            [class.booking-slot--inactive]="timings?.status !== 1"
+            class="booking-slot booking-slot--clinic"
+            [disabled]="timings?.status !== 1"
+            (click)="timings?.status == 1 && selectTime(timings, 'afternoon')">
+            {{ timings?.time }}
+          </button>
+        </div>
+      </div>
+      <div class="booking-slots__group" *ngIf="eveSlots.length">
+        <div class="booking-slots__label">
+          <img loading="lazy" src="assets/images/night-mode 1.svg" alt="evening" width="20" height="20" />
+          <span>Evening</span>
+        </div>
+        <div class="booking-slots__grid">
+          <button *ngFor="let timings of eveSlots; trackBy: trackByIndex"
+            [class.booking-slot--active]="timings?.status == 1"
+            [class.booking-slot--inactive]="timings?.status !== 1"
+            class="booking-slot booking-slot--clinic"
+            [disabled]="timings?.status !== 1"
+            (click)="timings?.status == 1 && selectTime(timings, 'evening')">
+            {{ timings?.time }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== VIDEO TAB ===== -->
+  <div *ngIf="selectedTab === 2">
+    <div class="booking-info">
+      <div class="booking-info__top">
+        <div class="booking-info__profile">
+          <div class="booking-info__avatar" *ngIf="doctorDetail?.profilePic">
+            <img loading="lazy" [src]="doctorDetail?.profilePic" alt="" width="44" height="44" />
+          </div>
+          <div class="booking-info__avatar booking-info__avatar--initials" *ngIf="!doctorDetail?.profilePic">
+            {{ doctorDetail?.name | nameInitial | uppercase }}
+          </div>
+          <div class="booking-info__name">
+            <span>{{ doctorDetail?.name }}</span>
+            <span class="booking-info__hospital-tag">{{ establishmentDetail[0]?.establishmentName }}</span>
+          </div>
+        </div>
+        <div class="booking-info__actions">
+          <span class="booking-info__change-clinic cursor-pointer" (click)="changeClinicMobile()" *ngIf="doctorDetail?.establishmentDetails?.length > 1">
+            Change
+            <img loading="lazy" src="assets/images/Vector.png" alt="" width="10" height="6" />
+          </span>
+        </div>
+      </div>
+      <div class="booking-info__meta">
+        <div class="booking-info__row">
+          <span class="booking-info__fee" *ngIf="selectedTab==2 && (establishmentDetail[0]?.videoConsultationFees | validFee)">
+            <img loading="lazy" src="assets/images/videogrey.png" alt="video" class="me-1" width="16" height="16" />
+            &#x20B9; {{ establishmentDetail[0]?.videoConsultationFees }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="booking-dates">
+      <owl-carousel-o [options]="customOptions" class="caraousel" (translated)="carouselChange($event)" #carousel>
+        <ng-container *ngFor="let name of dates; let i = index; trackBy: trackByIndex">
+          <ng-template carouselSlide [id]="name" [width]="120">
+            <p (click)="getClickedDate(name)" class="cursor-pointer">{{ name }}</p>
+          </ng-template>
+        </ng-container>
+      </owl-carousel-o>
+    </div>
+
+    <div class="booking-slots">
+      <div class="booking-slots__header" *ngIf="availableSlots">
+        <span class="booking-slots__badge">{{ availableSlots }} slots available</span>
+      </div>
+      <p *ngIf="!availableSlots && !(morningSlots.length || noonSlots.length || eveSlots.length)" class="booking-slots__empty">No Slots Available</p>
+      <div class="booking-slots__group" *ngIf="morningSlots.length">
+        <div class="booking-slots__label">
+          <img loading="lazy" src="assets/images/sunrise 1.png" alt="morning" width="20" height="20" />
+          <span>Morning</span>
+        </div>
+        <div class="booking-slots__grid">
+          <button *ngFor="let timings of morningSlots; trackBy: trackByIndex"
+            [class.booking-slot--active]="timings?.status == 1"
+            [class.booking-slot--inactive]="timings?.status !== 1"
+            class="booking-slot booking-slot--video"
+            [disabled]="timings?.status !== 1"
+            (click)="timings?.status == 1 && selectTime(timings, 'morning')">
+            {{ timings?.time }}
+          </button>
+        </div>
+      </div>
+      <div class="booking-slots__group" *ngIf="noonSlots.length">
+        <div class="booking-slots__label">
+          <img loading="lazy" src="assets/images/sunset 1.png" alt="afternoon" width="20" height="20" />
+          <span>Afternoon</span>
+        </div>
+        <div class="booking-slots__grid">
+          <button *ngFor="let timings of noonSlots; trackBy: trackByIndex"
+            [class.booking-slot--active]="timings?.status == 1"
+            [class.booking-slot--inactive]="timings?.status !== 1"
+            class="booking-slot booking-slot--video"
+            [disabled]="timings?.status !== 1"
+            (click)="timings?.status == 1 && selectTime(timings, 'afternoon')">
+            {{ timings?.time }}
+          </button>
+        </div>
+      </div>
+      <div class="booking-slots__group" *ngIf="eveSlots.length">
+        <div class="booking-slots__label">
+          <img loading="lazy" src="assets/images/night-mode 1.svg" alt="evening" width="20" height="20" />
+          <span>Evening</span>
+        </div>
+        <div class="booking-slots__grid">
+          <button *ngFor="let timings of eveSlots; trackBy: trackByIndex"
+            [class.booking-slot--active]="timings?.status == 1"
+            [class.booking-slot--inactive]="timings?.status !== 1"
+            class="booking-slot booking-slot--video"
+            [disabled]="timings?.status !== 1"
+            (click)="timings?.status == 1 && selectTime(timings, 'evening')">
+            {{ timings?.time }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div></div>
+</div>
+
+<!-- Hospital Switcher Dropdown -->
+<div class="hospital-dropdown w-100" *ngIf="toggle" nectarClickOutside style="position: absolute; top: 140px" (clickOutside)="toggle = !toggle">
+  <div *ngFor="let item of establishmentDetail; let i = index; trackBy: trackByIndex" class="hospital-dropdown__item cursor-pointer" (click)="selectHospital(item)">
+    <ng-container *ngIf="i != 0">
+      <p class="hospital-dropdown__name">{{ doctorDetail?.name }} &mdash; {{ item?.establishmentName }}</p>
+      <div class="hospital-dropdown__meta">
+        <span class="hospital-dropdown__address">
+          {{ item?.address?.locality ? item?.address?.locality + ", " : "" }}{{ item?.address?.city || "" }} {{ item?.address?.pincode || "" }}
+        </span>
+        <span class="hospital-dropdown__fee" *ngIf="item?.consultationFees | validFee">&#x20B9; {{ item?.consultationFees }}</span>
+      </div>
+    </ng-container>
+  </div>
+</div>

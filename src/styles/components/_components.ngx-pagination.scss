@@ -1,0 +1,233 @@
+@use "tools.typography" as *;
+@use "variable.scss" as *;
+
+// ── SVG data-URIs for chevron arrows ────────────────────
+$_chevron-left: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='15 18 9 12 15 6'/%3E%3C/svg%3E");
+$_chevron-right: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E");
+
+@mixin _arrow-icon() {
+  content: "";
+  display: block;
+  width: 18px;
+  height: 18px;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+@mixin ngx-pagination($background, $border) {
+  /* ── Reset ──────────────────────────────────────────── */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: 14px !important;
+  line-height: 1 !important;
+
+  /* ── Screen-reader text ─────────────────────────────── */
+  .show-for-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ── Hide mobile "X / Y" – show page numbers on all screens ── */
+  .small-screen {
+    display: none !important;
+  }
+
+  /* ── Every page item (same on mobile & desktop) ─────── */
+  li {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none !important;
+    border-radius: 8px !important;
+    margin: 0 !important;
+    height: auto;
+    width: auto;
+    min-width: 34px;
+    min-height: 34px;
+    text-align: center;
+    transition: background 0.15s ease, color 0.15s ease;
+
+    @media (min-width: 768px) {
+      min-width: 36px;
+      min-height: 36px;
+    }
+
+    /* Page number link */
+    a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      min-width: 34px;
+      min-height: 34px;
+      padding: 0 6px;
+      border-radius: 8px;
+      color: rgba(0, 0, 0, 0.6);
+      text-decoration: none !important;
+      @include font-sans_pro-regular(13px);
+      transform: none !important;
+      transition: background 0.15s ease, color 0.15s ease;
+
+      @media (min-width: 768px) {
+        @include font-sans_pro-regular(14px);
+        min-width: 36px;
+        min-height: 36px;
+      }
+
+      &:hover {
+        background: rgba($background, 0.07) !important;
+        color: $background;
+      }
+    }
+
+    /* Disabled span (boundary prev/next) */
+    > span[aria-disabled="true"] {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      min-width: 34px;
+      min-height: 34px;
+    }
+  }
+
+  /* ── Current page ──────────────────────────────────── */
+  .current {
+    background-color: $background !important;
+    border-radius: 8px !important;
+
+    span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transform: none;
+      color: #fff;
+      @include font-sans_pro-semibold(13px);
+      min-width: 34px;
+      min-height: 34px;
+
+      @media (min-width: 768px) {
+        @include font-sans_pro-semibold(14px);
+        min-width: 36px;
+        min-height: 36px;
+      }
+    }
+  }
+
+  /* ── Prev / Next arrows ────────────────────────────── */
+  .pagination-previous,
+  .pagination-next {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    border: none !important;
+    border-radius: 8px !important;
+    min-width: 38px;
+    min-height: 38px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    position: relative;
+
+    @media (min-width: 768px) {
+      min-width: 40px;
+      min-height: 40px;
+    }
+
+    /* Clear old image-based pseudo-elements on the <li> itself */
+    &::before,
+    &::after {
+      content: none !important;
+    }
+
+    /* Active link – clicking works */
+    a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 38px;
+      min-height: 38px;
+      border-radius: 8px;
+      position: relative;
+      transform: none !important;
+      color: transparent; // hide label text (set to " " in HTML)
+      font-size: 0;       // double insurance for text hide
+
+      /* Only use ::after for the arrow icon */
+      &::before { content: none !important; }
+
+      &::after {
+        @include _arrow-icon();
+        background-color: $background;
+      }
+    }
+
+    /* Disabled span */
+    > span[aria-disabled="true"] {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 38px;
+      min-height: 38px;
+      color: transparent;
+      font-size: 0;
+
+      &::before { content: none !important; }
+
+      &::after {
+        @include _arrow-icon();
+        background-color: $background;
+      }
+    }
+
+    &:not(.disabled):hover {
+      background: rgba($background, 0.08);
+    }
+
+    &.disabled {
+      opacity: 0.35;
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+
+  /* Prev = left chevron */
+  .pagination-previous {
+    a::after {
+      mask-image: $_chevron-left;
+      -webkit-mask-image: $_chevron-left;
+    }
+    > span::after {
+      mask-image: $_chevron-left;
+      -webkit-mask-image: $_chevron-left;
+    }
+  }
+
+  /* Next = right chevron */
+  .pagination-next {
+    a::after {
+      mask-image: $_chevron-right;
+      -webkit-mask-image: $_chevron-right;
+    }
+    > span::after {
+      mask-image: $_chevron-right;
+      -webkit-mask-image: $_chevron-right;
+    }
+  }
+}

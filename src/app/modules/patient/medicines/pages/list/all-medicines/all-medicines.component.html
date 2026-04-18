@@ -1,0 +1,113 @@
+<!-- ========== HERO BANNER ========== -->
+<section class="med-hero">
+  <div class="med-hero__inner">
+    <div class="med-hero__content">
+      <span class="med-hero__badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Healthcare Store
+      </span>
+      <h1 class="med-hero__title">Your One-Stop Destination for Health &amp; Wellness</h1>
+      <p class="med-hero__subtitle">Find Prescription Medicines, OTC Products, and Health Supplements — delivered to your doorstep.</p>
+      <div class="med-hero__actions">
+        <a class="med-hero__btn" [routerLink]="['/medicines/all-medicines']">
+          Shop Now
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+      <div class="med-hero__perks">
+        <div class="med-hero__perk">
+          <img loading="lazy" src="assets/images/my-upchar-image/free-shipping 1.png" alt="Free Shipping" loading="lazy" />
+          <span>Free Shipping on ₹199+</span>
+        </div>
+        <div class="med-hero__perk">
+          <img loading="lazy" src="assets/images/my-upchar-image/24-hours-support 1.png" alt="24/7 Support" loading="lazy" />
+          <span>24/7 Customer Support</span>
+        </div>
+      </div>
+    </div>
+    <div class="med-hero__visual">
+      <img loading="lazy" class="med-hero__img" src="assets/images/my-upchar-image/doctor-image.png" alt="Doctor and medicines" loading="eager" />
+    </div>
+  </div>
+</section>
+
+<!-- ========== LOADING ========== -->
+<div class="med-loader" *ngIf="loading">
+  <div class="med-loader__spinner"></div>
+</div>
+
+<!-- ========== ERROR ========== -->
+<div class="med-error" *ngIf="errorMessage" role="alert">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+  {{ errorMessage }}
+</div>
+
+<!-- ========== FEATURED CATEGORIES ========== -->
+<section class="med-cats" *ngIf="!loading && categories.length > 0">
+  <div class="med-cats__header">
+    <h2 class="med-cats__title">Browse Categories</h2>
+    <p class="med-cats__desc">Shop health essentials by category</p>
+  </div>
+  <div class="med-cats__track">
+    <a class="med-cats__card" *ngFor="let category of categories" (click)="navigateToCategory(category)">
+      <div class="med-cats__icon-box" [style.background]="getCategoryBg(category)">
+        <span class="med-cats__icon" [innerHTML]="getCategoryIcon(category)"></span>
+      </div>
+      <span class="med-cats__card-name">{{ category.name }}</span>
+      <span class="med-cats__card-hindi" *ngIf="category.nameHindi">{{ category.nameHindi }}</span>
+    </a>
+  </div>
+</section>
+
+<!-- ========== PROMO CARDS ========== -->
+<section class="med-promos">
+  <div class="med-promos__grid">
+    <div class="med-promos__card med-promos__card--blue">
+      <div class="med-promos__card-body">
+        <span class="med-promos__badge">Upto 25% Off</span>
+        <h3 class="med-promos__name">Hand Sanitizer</h3>
+        <p class="med-promos__desc">Protect yourself with top-rated hand hygiene products.</p>
+        <a class="med-promos__link" [routerLink]="['/medicines/all-medicines']">
+          Shop Now
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+      <div class="med-promos__card-img">
+        <img loading="lazy" src="assets/images/my-upchar-image/Doctor-card.png" alt="Hand Sanitizer" loading="lazy" />
+      </div>
+    </div>
+    <div class="med-promos__card med-promos__card--pink">
+      <div class="med-promos__card-body">
+        <span class="med-promos__badge">Upto 20% Off</span>
+        <h3 class="med-promos__name">Fitness Gear</h3>
+        <p class="med-promos__desc">Stay active with premium fitness equipment and accessories.</p>
+        <a class="med-promos__link" [routerLink]="['/medicines/all-medicines']">
+          Shop Now
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+      <div class="med-promos__card-img">
+        <img loading="lazy" src="assets/images/my-upchar-image/Card-2.png" alt="Fitness Gear" loading="lazy" />
+      </div>
+    </div>
+    <div class="med-promos__card med-promos__card--green">
+      <div class="med-promos__card-body">
+        <span class="med-promos__badge">Upto 25% Off</span>
+        <h3 class="med-promos__name">Health Check-Up</h3>
+        <p class="med-promos__desc">Ensure your well-being with our comprehensive health check-up.</p>
+        <a class="med-promos__link" [routerLink]="['/medicines/all-medicines']">
+          Shop Now
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+      <div class="med-promos__card-img">
+        <img loading="lazy" src="assets/images/my-upchar-image/Card-3.png" alt="Health Check-Up" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== POPULAR PRODUCTS ========== -->
+<section class="med-products" *ngIf="medicinedata.length > 0">
+  <nectar-popular-product [productData]="medicinedata"></nectar-popular-product>
+</section>

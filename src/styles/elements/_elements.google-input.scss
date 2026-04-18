@@ -1,0 +1,25 @@
+@use 'src/styles/tools/tools.typography' as *;
+@use 'src/styles/settings/settings.colors' as *;
+
+@mixin googleAutocomplete() {
+  padding: 5px 20px;
+  color: $color-grey-light-3;
+  border: 0;
+  @include font-proxima-regular(20);
+
+  &:hover {
+    background-color: $color-gray-dark;
+    span {
+      color: $color-white;
+    }
+  }
+
+  .pac-item-query,.pac-matched {
+    color: $color-grey-light-3;
+    @include font-proxima-regular(20);
+  }
+
+  .pac-icon {
+    display: none;
+  }
+}

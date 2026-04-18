@@ -1,0 +1,26 @@
+@use "src/styles/elements/_elements.svg.scss" as *;
+.subheader-wrapper {
+  position: sticky;
+  top: 72px;
+  left: 0;
+  height: 72px;
+  background: white;
+  .hamber {
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .pr-5 {
+    padding-right: 3rem;
+  }
+  .content {
+    width: calc(75vw - 100px);
+  }
+  .sub-content {
+    min-width: 360px;
+  }
+  &.calendar {
+    top: 0 !important;
+  }
+}

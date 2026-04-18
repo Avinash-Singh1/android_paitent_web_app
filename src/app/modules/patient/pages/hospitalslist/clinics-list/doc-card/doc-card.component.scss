@@ -1,0 +1,194 @@
+@use "sass:color";
+@use "variable.scss" as *;
+@use "tools.typography" as *;
+
+.dc {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #e8ecf1;
+  border-radius: 16px;
+  padding: 14px;
+  min-height: 230px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: rgba($purple, 0.2);
+    box-shadow: 0 6px 24px rgba($purple, 0.08);
+  }
+
+  // ── Top: Avatar + Name/Edu ──
+  &__top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__avatar {
+    flex-shrink: 0;
+    cursor: pointer;
+
+    img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba($purple, 0.1);
+      background: #faf8ff;
+      display: block;
+    }
+  }
+
+  &__avatar-fallback {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #f3eaff 0%, #e8d5ff 100%);
+    border: 2px solid rgba($purple, 0.12);
+    color: $purple;
+    @include font-sans_pro-bold(16px);
+  }
+
+  &__info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    display: block;
+    @include font-sans_pro-bold(13px);
+    color: #111827;
+    text-decoration: none;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &:hover { color: $purple; }
+  }
+
+  &__edu {
+    display: block;
+    @include font-sans_pro-regular(11px);
+    color: #6b7280;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // ── Specialization pills ──
+  &__specs {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 4px;
+    margin-top: 10px;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  &__spec {
+    flex: 0 0 auto;
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 6px;
+    background: rgba($purple, 0.06);
+    color: color.adjust($purple, $lightness: -5%);
+    @include font-sans_pro-regular(10px);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s ease;
+
+    &:hover { background: rgba($purple, 0.12); }
+  }
+
+  // ── Details: experience + recommend ──
+  &__details {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  &__exp {
+    @include font-sans_pro-regular(11px);
+    color: #9ca3af;
+  }
+
+  &__recommend {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    @include font-sans_pro-semibold(11px);
+    color: #059669;
+    background: #ecfdf5;
+    padding: 2px 7px;
+    border-radius: 6px;
+
+    svg { color: #10b981; }
+  }
+
+  // ── Bottom: Fee + CTA ──
+  &__bottom {
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid #f0f1f3;
+  }
+
+  &__fee-row {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+
+  &__fee {
+    @include font-sans_pro-bold(16px);
+    color: #111827;
+  }
+
+  &__fee-label {
+    @include font-sans_pro-regular(11px);
+    color: #9ca3af;
+  }
+
+  // ── CTA button ──
+  &__cta {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 9px 0;
+    border: none;
+    border-radius: 10px;
+    background: $purple;
+    color: #fff;
+    @include font-sans_pro-semibold(12px);
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+
+    svg { color: #fff; }
+
+    &:hover:not(:disabled) {
+      background: color.adjust($purple, $lightness: -6%);
+      box-shadow: 0 4px 12px rgba($purple, 0.25);
+      transform: translateY(-1px);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    &:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+  }
+}

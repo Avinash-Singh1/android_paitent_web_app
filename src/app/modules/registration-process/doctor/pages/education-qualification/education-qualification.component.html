@@ -1,0 +1,84 @@
+<div class="containers">
+  <div class="percetDone"></div>
+  <form
+    class="form d-flex justify-content-between flex-column"
+    [formGroup]="educationalQualification"
+    (ngSubmit)="onSubmit()"
+  >
+    <div class="content">
+      <div class="heading">Education Qualification</div>
+      <div class="wrapper">
+        <p>Please enter your base level education</p>
+        <div class="fields">
+          <label for="">Degree<span>*</span> </label>
+          <nectar-form-field>
+            <input
+              nectarError
+              controlName="Degree"
+              class="form-input w-100"
+              type="text"
+              placeholder="Degree"
+              formControlName="degree"
+              oninput="this.value= this.value.toUpperCase().replace(/^\s/,'')"
+            />
+          </nectar-form-field>
+        </div>
+        <div class="fields">
+          <label for="">College/Institute<span>*</span> </label>
+          <nectar-form-field>
+            <input
+              nectarError
+              controlName="College/Institute"
+              class="form-input w-100"
+              type="text"
+              placeholder="College/Institute"
+              formControlName="college"
+              oninput="this.value = this.value.replace(/^\s/,'').replace(/(?<=\s|^)[a-z]/g, (match) => match.toUpperCase());"
+            />
+          </nectar-form-field>
+        </div>
+        <div class="fields">
+          <label for="">Year of Completion<span>*</span> </label>
+          <nectar-form-field>
+            <ng-select
+              nectarError
+              controlName="Completion Year"
+              #completionYear
+              class=""
+              [items]="yearList"
+              bindLabel="name"
+              bindValue="_id"
+              placeholder="Select completion year"
+              formControlName="year"
+              (focus)="completionYear.open()"
+            ></ng-select>
+          </nectar-form-field>
+        </div>
+        <div class="fields">
+          <label for="">Years of experience<span>*</span> </label>
+          <nectar-form-field>
+            <ng-select
+              nectarError
+              controlName="Experience Year"
+              #experienceYear
+              class=""
+              [items]="yearofExperienceList"
+              bindLabel="name"
+              bindValue="_id"
+              placeholder="Select experience year"
+              formControlName="experience"
+              (focus)="experienceYear.open()"
+            ></ng-select>
+          </nectar-form-field>
+        </div>
+        <div class="footerData">
+          Note - You will be able to add more qualification later.
+        </div>
+      </div>
+    </div>
+    <div class="continue">
+      <button type="button" class="back" (click)="back()">Back</button>
+      <button type="submit">Next</button>
+    </div>
+  </form>
+</div>

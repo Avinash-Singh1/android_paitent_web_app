@@ -1,0 +1,41 @@
+<section class="services-section w-100">
+  <header
+    class="w-100 heading d-flex justify-content-between gap-40 align-items-center border-bottom-style"
+  >
+    <div class="text-16 font-600">
+      {{ "SOCIAL" | translate }}
+    </div>
+    <button class="add-more" (click)="onAddSocialMedia()">
+      <svg-icon src="assets/images/svg/add.svg"></svg-icon>
+      <span class="mt-1">
+        {{ "ADD" | translate }}
+      </span>
+    </button>
+  </header>
+  <main class="p-24 d-flex flex-column gap-3">
+    <ng-container *ngFor="let socialMedia of socialList">
+      <div
+        class="p-24 border-style d-flex justify-content-between align-items-center"
+      >
+        <div class="d-flex gap-40 align-items-center">
+          <img
+            alt=""
+            class="social-image"
+            [src]="socialMedia.socialMediaLogo"
+            [title]="socialMedia.socialMediaName"
+          />
+          <p class="font-600 m-0">{{ socialMedia.socialMediaName }}</p>
+        </div>
+        <div
+          class="d-flex justify-content-between align-items-center gap-2 py-12 px-24 border-style cursor-pointer rounded-1"
+          (click)="onEditSocialMedia(socialMedia)"
+        >
+          <svg-icon src="assets/images/svg/edit.svg"></svg-icon>
+          <span class="mt-1">
+            {{ "EDIT" | translate }}
+          </span>
+        </div>
+      </div>
+    </ng-container>
+  </main>
+</section>

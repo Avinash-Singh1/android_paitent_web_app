@@ -1,0 +1,21 @@
+<section id="benefits" class="benefits" *ngIf="treatment?.benefits">
+  <h2 class="benefits__title">Benefits of {{ treatment.title }}</h2>
+
+  <!-- Icon Card Grid -->
+  <div class="benefits__grid" *ngIf="benefitItems.length > 1">
+    <div class="benefits__card" *ngFor="let item of benefitItems; let i = index">
+      <span class="benefits__card-icon">{{ benefitIcons[i % benefitIcons.length] }}</span>
+      <p class="benefits__card-text">{{ item }}</p>
+    </div>
+  </div>
+
+  <!-- Fallback Rich HTML -->
+  <div class="benefits__body" *ngIf="benefitItems.length <= 1"
+       [innerHTML]="sanitize(treatment.benefits)"></div>
+
+  <!-- Risks Section -->
+  <div class="benefits__risks" *ngIf="treatment.risks">
+    <h3 class="benefits__risks-title">⚠️ Possible Risks & Complications</h3>
+    <div class="benefits__body" [innerHTML]="sanitize(treatment.risks)"></div>
+  </div>
+</section>

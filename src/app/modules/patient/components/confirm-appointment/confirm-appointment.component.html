@@ -1,0 +1,152 @@
+<section class="confirm-booking">
+  <div class="confirm-booking__wrapper">
+    <!-- Step Indicator -->
+    <div class="step-indicator">
+      <div class="step-indicator__step completed">
+        <div class="step-indicator__circle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M9 16.17L4.83 12l1.42-1.41L9 13.34l8.24-8.24L18.66 6.5 9 16.17z" fill="currentColor"/>
+          </svg>
+        </div>
+        <span>Booking Details</span>
+      </div>
+      <div class="step-indicator__line active"></div>
+      <div class="step-indicator__step active">
+        <div class="step-indicator__circle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M9 16.17L4.83 12l1.42-1.41L9 13.34l8.24-8.24L18.66 6.5 9 16.17z" fill="currentColor"/>
+          </svg>
+        </div>
+        <span>Confirmation</span>
+      </div>
+    </div>
+
+    <div class="confirm-booking__wrapper__name">
+      <div>
+        <img
+          [src]="doctorDetail?.doctorPic"
+          alt="Doctor"
+          class="cursor-pointer"
+          (click)="viewDoctor()"
+        />
+      </div>
+      <div>
+        <h2 class="cursor-pointer" (click)="viewDoctor()">
+          {{ doctorDetail?.fullname || "N/A" }}
+        </h2>
+        <p>
+          {{ (doctorDetail?.specialization | formatarray : "name") || "N/A" }}
+        </p>
+      </div>
+    </div>
+    <hr class="light-line" />
+    <div class="confirm-booking__wrapper__name hospital">
+      <div>
+        <img
+          [src]="details?.establishment?.pic"
+          alt="Hospital"
+          class="cursor-pointer"
+          (click)="viewHospital()"
+        />
+      </div>
+      <div>
+        <h2 (click)="viewHospital()" class="cursor-pointer">
+          {{ details?.establishment?.name }}
+        </h2>
+        <p>
+          {{ details?.establishment?.address?.locality }} ,
+          {{ details?.establishment?.address?.city }}&nbsp;
+          {{ details?.establishment?.address?.pincode }}
+        </p>
+        <h4
+          class="cursor-pointer"
+          (click)="openGoogleMaps(details.establishment)"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#45197c"/>
+          </svg>
+          Get Direction
+        </h4>
+      </div>
+    </div>
+    <hr class="light-line" />
+
+    <div class="main-data">
+      <div class="confirm-banner">
+        <div class="confirm-banner__icon pulse-ring">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" fill="white"/>
+          </svg>
+        </div>
+        <div class="confirm-banner__text">
+          <h4>Appointment Confirmed!</h4>
+          <p>We have sent an SMS confirmation to your number</p>
+        </div>
+      </div>
+
+      <div class="appointment-id">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 0h-4V4h4v2z" fill="#45197c"/>
+        </svg>
+        <span>Appointment ID:</span>
+        <strong>{{ details?.appointmentId }}</strong>
+      </div>
+
+      <div class="info-card">
+        <p class="info-card__label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" fill="#999"/>
+          </svg>
+          Appointment Details
+        </p>
+        <h2>{{ details?.date | date : "hh:mm a, dd MMM, yyyy" }}</h2>
+        <p class="text-break">{{ doctorDetail?.fullname || "N/A" }}</p>
+        <p class="text-break">Booked for {{ details?.fullName }}</p>
+      </div>
+
+      <div class="info-card">
+        <div class="details-row">
+          <div class="detail-item">
+            <h3>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#999"/>
+              </svg>
+              Patient Name
+            </h3>
+            <h5 class="text-break">{{ details?.fullName }}</h5>
+          </div>
+          <div class="detail-item">
+            <h3>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                <path d="M6.62 10.79C8.06 13.62 10.38 15.94 13.21 17.38L15.41 15.18C15.69 14.9 16.08 14.82 16.43 14.93C17.55 15.3 18.75 15.5 20 15.5C20.55 15.5 21 15.95 21 16.5V20C21 20.55 20.55 21 20 21C10.61 21 3 13.39 3 4C3 3.45 3.45 3 4 3H7.5C8.05 3 8.5 3.45 8.5 4C8.5 5.25 8.7 6.45 9.07 7.57C9.18 7.92 9.1 8.31 8.82 8.59L6.62 10.79Z" fill="#999"/>
+              </svg>
+              Mobile Number
+            </h3>
+            <h5>+91 {{ details?.phone }}</h5>
+          </div>
+        </div>
+        <div class="action-buttons">
+          <button class="btn-cancel" (click)="cancelBooking()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="#e53935"/>
+            </svg>
+            Cancel
+          </button>
+          <button class="btn-reschedule" (click)="redschduleAppoinment()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" fill="#45197c"/>
+            </svg>
+            Reschedule
+          </button>
+        </div>
+      </div>
+
+      <button class="btn-profile" routerLink="/profile">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="white"/>
+        </svg>
+        Back to Profile
+      </button>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,275 @@
+<section>
+  <!-- 1. Description + Interlinking -->
+  <ng-container *ngFor="let item of data?.slice(0, 1)">
+    <div class="wrap" *ngIf="item">
+      <!-- Description (Always renders) -->
+      <div class="description" *ngIf="allowDescription && item?.description">
+        <div class="content" [class.collapsed]="!isExpanded" [innerHTML]="item?.description | safeHtml">
+        </div>
+        <button class="read-more-btn" (click)="toggleDescription()">
+          {{ isExpanded ? "Read Less" : "Read More" }}
+        </button>
+      </div>
+
+      <!-- DESKTOP SECTIONS ONLY -->
+      <div class="sections" *ngIf="shouldRenderDesktop() && item?.sections?.length">
+        <div class="section-container">
+          <div *ngFor="let section of item.sections; let sectionIndex = index" class="section-box">
+            <div class="link-heading" style="font-size: 22px">{{ section.title }}</div>
+            <div #linksList class="links-grid">
+              <ng-container *ngFor="let link of section.content | splitFilter:'<br>'">
+                <div class="link-item" [innerHTML]="link | safeHtml"></div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOBILE SECTIONS ONLY -->
+      <div class="accordion" *ngIf="shouldRenderMobile() && item?.sections?.length">
+        <div *ngFor="let section of item.sections; let i = index" class="accordion-item">
+          <h2 class="accordion-header m-0">
+            <button class="accordion-button" [class.collapsed]="openSectionIndex !== i" type="button"
+                    (click)="toggleSectionAccordion(i)"
+                    [attr.aria-expanded]="openSectionIndex === i">
+              <img loading="lazy" src="assets/images/doctor-details/purple-service.svg" alt="Service icon" />
+              &nbsp; {{ section.title }}
+            </button>
+          </h2>
+          <div class="accordion-collapse" [class.collapse]="openSectionIndex !== i" [class.show]="openSectionIndex === i">
+            <div class="accordion-body">
+              <ul>
+                <li *ngFor="let link of section.content | splitFilter:'<br>'" [innerHTML]="link | safeHtml">
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- 2. Locality Interlinking -->
+  <div class="wrap" *ngIf="localityWiseData?.length">
+    <!-- DESKTOP ONLY -->
+    <ng-container *ngIf="shouldRenderDesktop()">
+      <div class="section-box desktop-only">
+        <h2>{{getSpecializationName()}} in Top Localities</h2>
+        <ul class="Listing-Item">
+          <li *ngFor="let item of localityWiseData.slice(0,12); trackBy: trackBySlug">
+            <a *ngIf="city && getSpecializationName() && item.locality"
+               [routerLink]="getLocalityRouterLink(item.locality)"
+               (click)="triggerScrollToTop()">
+              Top Doctors in {{ item.locality | capitalizeFirst }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </ng-container>
+
+    <!-- MOBILE ONLY -->
+    <ng-container *ngIf="shouldRenderMobile()">
+      <div class="accordion mobile-only">
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0">
+            <button class="accordion-button" [class.collapsed]="openAccordion !== 'locality'" type="button"
+                    (click)="toggleAccordion('locality')"
+                    [attr.aria-expanded]="openAccordion === 'locality'">
+              <img loading="lazy" src="assets/images/doctor-details/purple-service.svg" alt="Service icon" />
+              &nbsp;{{getSpecializationName()}} in Top Localities
+            </button>
+          </h2>
+          <div class="accordion-collapse" [class.collapse]="openAccordion !== 'locality'" [class.show]="openAccordion === 'locality'">
+            <div class="accordion-body">
+              <ul>
+                <li *ngFor="let item of localityWiseData.slice(0,12); trackBy: trackBySlug">
+                  <a *ngIf="city && getSpecializationName() && item.locality"
+                     [routerLink]="getLocalityRouterLink(item.locality)"
+                     (click)="triggerScrollToTop()">
+                    Top Doctors in {{ item.locality | capitalizeFirst }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- 3. Best Doctor Specialities -->
+  <div class="wrap" *ngIf="citySpecialization?.length">
+    <!-- DESKTOP ONLY -->
+    <ng-container *ngIf="shouldRenderDesktop()">
+      <div class="section-box desktop-only">
+        <h2>Best Doctor Specialities in {{city | capitalizeFirst}}</h2>
+        <ul class="Listing-Item">
+          <li *ngFor="let item of citySpecialization.slice(0,12)">
+            <a [routerLink]="getCitySpecializationLink(item.name)" (click)="triggerScrollToTop()">
+              Best {{ item.name }} in {{city | capitalizeFirst}}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </ng-container>
+
+    <!-- MOBILE ONLY -->
+    <ng-container *ngIf="shouldRenderMobile()">
+      <div class="accordion mobile-only">
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0">
+            <button class="accordion-button" [class.collapsed]="openAccordion !== 'specialization'" type="button"
+                    (click)="toggleAccordion('specialization')"
+                    [attr.aria-expanded]="openAccordion === 'specialization'">
+              <img loading="lazy" src="assets/images/doctor-details/purple-service.svg" alt="Service icon" />
+              &nbsp; Best Doctor Specialities in {{city | capitalizeFirst}}
+            </button>
+          </h2>
+          <div class="accordion-collapse" [class.collapse]="openAccordion !== 'specialization'" [class.show]="openAccordion === 'specialization'">
+            <div class="accordion-body">
+              <ul>
+                <li *ngFor="let item of citySpecialization.slice(0,12)">
+                  <a [routerLink]="getCitySpecializationLink(item.name)" (click)="triggerScrollToTop()">
+                    Best {{ item.name }} in {{city | capitalizeFirst}}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- 4. Top Cities for Specialization -->
+  <div class="wrap" *ngIf="seo_citys?.length && getSpecializationName()">
+    <!-- DESKTOP ONLY -->
+    <ng-container *ngIf="shouldRenderDesktop()">
+      <div class="section-box desktop-only">
+        <h2>Best {{ getSpecializationName() }} in Top Cities</h2>
+        <ul class="Listing-Item">
+          <li *ngFor="let item of seo_citys.slice(0,12)">
+            <a [routerLink]="getSeoCitiesLink(item.city)" (click)="triggerScrollToTop()">
+              {{ getSpecializationName() }} in {{ item.city | capitalizeFirst }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </ng-container>
+
+    <!-- MOBILE ONLY -->
+    <ng-container *ngIf="shouldRenderMobile()">
+      <div class="accordion mobile-only">
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0">
+            <button class="accordion-button" [class.collapsed]="openAccordion !== 'cities'" type="button"
+                    (click)="toggleAccordion('cities')"
+                    [attr.aria-expanded]="openAccordion === 'cities'">
+              <img loading="lazy" src="assets/images/doctor-details/purple-service.svg" alt="Service icon" />
+              &nbsp; Best {{ getSpecializationName() }} in Top Cities
+            </button>
+          </h2>
+          <div class="accordion-collapse" [class.collapse]="openAccordion !== 'cities'" [class.show]="openAccordion === 'cities'">
+            <div class="accordion-body">
+              <ul>
+                <li *ngFor="let item of seo_citys.slice(0,12)">
+                  <a [routerLink]="getSeoCitiesLink(item.city)" (click)="triggerScrollToTop()">
+                    {{ getSpecializationName() }} in {{ item.city | capitalizeFirst }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- 5. Best Doctors in Top Cities -->
+  <div class="wrap" *ngIf="cityDoctors?.length">
+    <!-- DESKTOP ONLY -->
+    <ng-container *ngIf="shouldRenderDesktop()">
+      <div class="section-box desktop-only">
+        <h2>Best Doctors in Top Cities</h2>
+        <ul class="Listing-Item">
+          <li *ngFor="let cityItem of cityDoctors.slice(0, 15)">
+            <a [routerLink]="getCityDoctorsLink(cityItem)" (click)="triggerScrollToTop()">
+              Best Doctors in {{ cityItem | capitalizeFirst }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </ng-container>
+
+    <!-- MOBILE ONLY -->
+    <ng-container *ngIf="shouldRenderMobile()">
+      <div class="accordion mobile-only">
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0">
+            <button class="accordion-button" [class.collapsed]="openAccordion !== 'cityDoctors'" type="button"
+                    (click)="toggleAccordion('cityDoctors')"
+                    [attr.aria-expanded]="openAccordion === 'cityDoctors'">
+              <img loading="lazy" src="assets/images/doctor-details/purple-service.svg" alt="Service icon" />
+              &nbsp; Best Doctors in Top Cities
+            </button>
+          </h2>
+          <div class="accordion-collapse" [class.collapse]="openAccordion !== 'cityDoctors'" [class.show]="openAccordion === 'cityDoctors'">
+            <div class="accordion-body">
+              <ul>
+                <li *ngFor="let cityItem of cityDoctors.slice(0, 15)">
+                  <a [routerLink]="getCityDoctorsLink(cityItem)" (click)="triggerScrollToTop()">
+                    Best Doctors in {{ cityItem | capitalizeFirst }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- 6. Best Services -->
+  <div class="wrap" *ngIf="validServices?.length">
+    <!-- DESKTOP ONLY -->
+    <ng-container *ngIf="shouldRenderDesktop()">
+      <div class="section-box desktop-only">
+        <h2>Best {{getSpecializationName()}} Services in {{city | capitalizeFirst}}</h2>
+        <ul class="Listing-Item">
+          <li *ngFor="let serviceName of validServices.slice(0,12)">
+            <a [routerLink]="getServiceLink(serviceName)" (click)="triggerScrollToTop()" class="seo-link">
+              Best {{ serviceName }} in {{ city | capitalizeFirst }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </ng-container>
+
+    <!-- MOBILE ONLY -->
+    <ng-container *ngIf="shouldRenderMobile()">
+      <div class="accordion mobile-only">
+        <div class="accordion-item">
+          <h2 class="accordion-header m-0">
+            <button class="accordion-button" [class.collapsed]="openAccordion !== 'services'" type="button"
+                    (click)="toggleAccordion('services')"
+                    [attr.aria-expanded]="openAccordion === 'services'">
+              <img loading="lazy" src="assets/images/doctor-details/purple-service.svg" alt="Service icon" />
+              &nbsp; Best {{getSpecializationName()}} Services in {{city | capitalizeFirst}}
+            </button>
+          </h2>
+          <div class="accordion-collapse" [class.collapse]="openAccordion !== 'services'" [class.show]="openAccordion === 'services'">
+            <div class="accordion-body">
+              <ul>
+                <li *ngFor="let serviceName of validServices.slice(0,12)">
+                  <a [routerLink]="getServiceLink(serviceName)" (click)="triggerScrollToTop()" class="seo-link">
+                    Best {{ serviceName }} in {{ city | capitalizeFirst }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</section>

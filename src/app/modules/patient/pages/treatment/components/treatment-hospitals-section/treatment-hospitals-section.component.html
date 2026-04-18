@@ -1,0 +1,29 @@
+<section class="hospitals" *ngIf="visibleHospitals.length">
+  <h2 class="hospitals__title">
+    Our Hospitals
+    <span *ngIf="city"> in {{ cityLabel }}</span>
+  </h2>
+
+  <div class="hospitals__scroll">
+    <a class="hospitals__card" *ngFor="let hosp of visibleHospitals"
+       [routerLink]="['/', city || 'delhi', hosp.type || 'hospital', hosp.slug || hosp._id]">
+      <div class="hospitals__card-img-wrap">
+        <img [src]="hosp.profilePic || 'assets/images/svg/default-profile-pic.svg'"
+             [alt]="hosp.hospitalName" class="hospitals__card-img" loading="lazy"
+             width="260" height="140" />
+      </div>
+      <div class="hospitals__card-body">
+        <h3 class="hospitals__card-name">{{ hosp.hospitalName }}</h3>
+        <p class="hospitals__card-location" *ngIf="hosp.address?.city">
+          {{ hosp.address?.city }}
+        </p>
+        <!-- Google-style rating -->
+        <div class="hospitals__card-rating">
+          <span class="hospitals__card-google-icon">🌐</span>
+          <span class="hospitals__card-stars">⭐</span>
+          <span class="hospitals__card-rating-text">{{ hosp.rating || '4.5' }}/5</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>

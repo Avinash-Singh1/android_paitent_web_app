@@ -1,0 +1,267 @@
+/* =================================================================
+   Service Search Result – Mobile-First Responsive Design
+   Matches doctor-search-result theme
+   ================================================================= */
+@use "tools.mediaquery" as *;
+@use "tools.typography" as *;
+@use "settings.containers" as *;
+@use "variable.scss" as *;
+@use "src/styles/components/_components.ngx-pagination.scss" as *;
+
+/* ---------- Design Tokens ---------- */
+$_purple: #45197c;
+$_radius: 0.75rem;
+$_shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+$_transition: 0.2s ease;
+
+/* ---------- Breadcrumb ---------- */
+.breadcrumb {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  padding: 0.625rem 0 0.375rem;
+  margin: 0;
+  gap: 0;
+  background: none;
+  list-style: none;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    padding: 0.75rem 0 0.5rem;
+    gap: 3px 0;
+  }
+
+  a {
+    @include font-sans_pro-regular(12px);
+    color: rgba(0, 0, 0, 0.5);
+    text-decoration: none;
+    transition: color $_transition, background $_transition;
+    white-space: nowrap;
+    padding: 5px 8px;
+    border-radius: 4px;
+    line-height: 1.2;
+    display: inline-flex;
+    align-items: center;
+
+    &:hover {
+      color: $_purple;
+      background: rgba($_purple, 0.05);
+    }
+
+    &:last-of-type {
+      color: $_purple;
+      background: rgba($_purple, 0.08);
+      @include font-sans_pro-semibold(12px);
+      pointer-events: none;
+      border-radius: 100px;
+      padding: 4px 12px;
+    }
+
+    @media (min-width: 768px) {
+      @include font-sans_pro-regular(13px);
+      padding: 5px 10px;
+
+      &:last-of-type {
+        @include font-sans_pro-semibold(13px);
+        padding: 5px 14px;
+      }
+    }
+  }
+
+  &__sep {
+    display: inline-flex;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.18);
+    margin: 0 1px;
+    flex-shrink: 0;
+
+    svg {
+      width: 10px;
+      height: 10px;
+    }
+  }
+}
+
+/* ---------- Heading ---------- */
+.heading {
+  padding-bottom: 0.75rem;
+
+  @media (min-width: 768px) {
+    padding-bottom: 1rem;
+  }
+}
+
+.heading-item h1 {
+  margin: 0;
+  @include font-sans_pro-bold(18px);
+  line-height: 1.4;
+  color: $black;
+
+  @media (min-width: 768px) {
+    @include font-sans_pro-bold(22px);
+  }
+}
+
+.heading-count {
+  color: $_purple;
+}
+
+.heading-description p {
+  @include font-sans_pro-regular(14px);
+  color: rgba(0, 0, 0, 0.5);
+  margin: 4px 0 0;
+  line-height: 1.5;
+}
+
+/* ---------- Page Container ---------- */
+.doctor-search-result {
+  min-height: 600px;
+  contain: layout style;
+  background: $white;
+  overflow-x: hidden;
+
+  @media (min-width: 768px) {
+    background: #fafafa;
+  }
+
+  &__container {
+    width: 100%;
+    max-width: 100%;
+    margin: 1rem auto 0;
+    padding: 0 0.75rem;
+    box-sizing: border-box;
+
+    @media (min-width: 768px) {
+      max-width: $content-max-width;
+      margin-top: 0;
+      padding: 0 1.5rem;
+    }
+
+    &__cards {
+      max-width: 72.1875rem;
+
+      ul {
+        list-style: none;
+        padding-left: 0;
+        margin: 0;
+
+        li {
+          background: $white;
+          border-radius: 0;
+          border: none;
+          border-bottom: 3px solid #f0f0f0;
+          margin-bottom: 0;
+          padding: 0;
+          transition: box-shadow $_transition;
+
+          @media (min-width: 768px) {
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: $_radius;
+            margin-bottom: 0.75rem;
+            padding: 0 0.75rem;
+
+            &:hover {
+              box-shadow: $_shadow;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* ---------- Pagination ---------- */
+.pagination-section {
+  padding: 1.25rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+:host::ng-deep {
+  .ngx-pagination {
+    @include ngx-pagination($purple, $purple);
+  }
+}
+
+/* ---------- No Data ---------- */
+.no-data .first-section {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: $_radius;
+  padding: 2.5rem 2rem;
+  margin-bottom: 1.25rem;
+  text-align: center;
+  background: $white;
+
+  h2 {
+    @include font-sans_pro-semibold($size: 22px);
+    color: rgba(0, 0, 0, 0.7);
+
+    @media (min-width: 768px) {
+      @include font-sans_pro-bold($size: 28px, $lineheight: 36px);
+    }
+  }
+
+  p {
+    @include font-sans_pro-regular($size: 16px);
+    color: rgba(0, 0, 0, 0.5);
+    margin-top: 0.5rem;
+
+    @media (min-width: 768px) {
+      @include font-sans_pro-regular($size: 18px, $lineheight: 28px);
+    }
+  }
+}
+
+/* ---------- Transitions ---------- */
+.fade-enter, .fade-leave {
+  transition: opacity 0.4s ease-in-out;
+}
+
+.fade-enter { opacity: 0; }
+.fade-leave { opacity: 0; }
+
+/* ---------- Fade-in for loaded content ---------- */
+.fade-in-content {
+  opacity: 0;
+  transition: opacity 0.3s ease-in;
+  &.is-visible { opacity: 1; }
+}
+
+/* ---------- Skeleton ---------- */
+.skeleton-section {
+  max-width: 72.1875rem;
+  padding-top: 0.75rem;
+}
+
+.skeleton-heading { margin-bottom: 1rem; }
+
+.skeleton-bone {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+.skeleton-h1 {
+  width: 50%;
+  height: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-subtext {
+  width: 35%;
+  height: 1rem;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}

@@ -1,0 +1,924 @@
+/* ═══════════════════════════════════════════════════
+   City Page — Healthcare Providers with Type Filtering
+   BEM prefix: cp__
+   ═══════════════════════════════════════════════════ */
+
+// ── Design Tokens ─────────────────────────────────
+$_purple: #45197c;
+$_purple-light: rgba(69, 25, 124, 0.06);
+$_purple-soft: rgba(69, 25, 124, 0.10);
+$_purple-dark: #35125f;
+$_accent: #7c3aed;
+$_radius: 12px;
+$_radius-sm: 8px;
+$_radius-pill: 24px;
+$_shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+$_shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+$_shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.10);
+$_transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+$_text: #1a1a2e;
+$_text-secondary: #6b7280;
+$_border: rgba(0, 0, 0, 0.06);
+$_bg: #f8f9fb;
+$_bg-white: #ffffff;
+$_max-w: 1140px;
+
+:host {
+  display: block;
+  color: $_text;
+  line-height: 1.6;
+  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, sans-serif;
+}
+
+/* ── Hero ──────────────────────────────────────────── */
+.cp__hero {
+  background: linear-gradient(135deg, $_purple 0%, $_purple-dark 100%);
+  padding: 56px 24px 48px;
+  text-align: center;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+
+  &-inner {
+    max-width: $_max-w;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  &-dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+
+  &-title {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin: 0 0 10px;
+    line-height: 1.25;
+
+    span {
+      color: #d4bbff;
+    }
+  }
+
+  &-sub {
+    font-size: 16px;
+    margin: 0;
+    opacity: 0.75;
+    font-weight: 400;
+  }
+
+  @media (max-width: 767px) {
+    padding: 40px 16px 32px;
+
+    &-title { font-size: 22px; }
+    &-sub   { font-size: 14px; }
+  }
+}
+
+/* ── Type Filter Chips ─────────────────────────────── */
+.cp__filters {
+  background: $_bg-white;
+  border-bottom: 1px solid $_border;
+  padding: 16px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  &-inner {
+    max-width: $_max-w;
+    margin: 0 auto;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  @media (max-width: 767px) {
+    padding: 12px 16px;
+    top: 56px; // below mobile header
+  }
+}
+
+.cp__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: $_radius-pill;
+  border: 1.5px solid #e5e7eb;
+  background: $_bg-white;
+  color: $_text-secondary;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all $_transition;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  &:hover:not(.cp__chip--active) {
+    border-color: $_purple;
+    color: $_purple;
+    background: $_purple-light;
+  }
+
+  &--active {
+    background: $_purple;
+    color: #fff;
+    border-color: $_purple;
+    box-shadow: 0 2px 8px rgba(69, 25, 124, 0.3);
+  }
+
+  &-count {
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0.7;
+    padding: 1px 6px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.06);
+    transition: all $_transition;
+
+    .cp__chip--active & {
+      background: rgba(255, 255, 255, 0.2);
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 767px) {
+    padding: 7px 14px;
+    font-size: 13px;
+  }
+}
+
+.cp__chip--video {
+  border-color: #a7f3d0;
+  color: #047857;
+  background: #ecfdf5;
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  &:hover:not(.cp__chip--active) {
+    border-color: #059669;
+    color: #065f46;
+    background: #d1fae5;
+  }
+
+  &.cp__chip--active {
+    background: #059669;
+    color: #fff;
+    border-color: #059669;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
+  }
+}
+
+/* ── Results Section ───────────────────────────────── */
+
+/* ── Specialization Filter Row ─────────────────────── */
+.cp__spec-filters {
+  background: $_bg-white;
+  border-bottom: 1px solid $_border;
+  padding: 12px 24px;
+
+  &-inner {
+    max-width: $_max-w;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: $_text-secondary;
+    white-space: nowrap;
+    flex-shrink: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &-track {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  @media (max-width: 767px) {
+    padding: 10px 16px;
+
+    &-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    &-track { width: 100%; }
+  }
+}
+
+.cp__spec-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  border-radius: $_radius-pill;
+  border: 1px solid #e5e7eb;
+  background: $_bg-white;
+  color: $_text-secondary;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all $_transition;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  &:hover:not(.cp__spec-chip--active) {
+    border-color: $_accent;
+    color: $_accent;
+    background: rgba(124, 58, 237, 0.04);
+  }
+
+  &--active {
+    background: $_accent;
+    color: #fff;
+    border-color: $_accent;
+    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.25);
+  }
+
+  &-count {
+    font-size: 11px;
+    font-weight: 500;
+    opacity: 0.65;
+
+    .cp__spec-chip--active & {
+      opacity: 0.9;
+    }
+  }
+
+  @media (max-width: 767px) {
+    padding: 5px 12px;
+    font-size: 12px;
+  }
+}
+
+/* ── Active Filters Summary ────────────────────────── */
+.cp__active-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 10px 16px;
+  background: $_bg-white;
+  border-radius: $_radius-sm;
+  border: 1px solid $_border;
+
+  &-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: $_text-secondary;
+    margin-right: 4px;
+  }
+}
+
+.cp__active-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: $_radius-pill;
+  background: $_purple-light;
+  color: $_purple;
+  font-size: 13px;
+  font-weight: 600;
+
+  &-x {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(69, 25, 124, 0.15);
+    color: $_purple;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all $_transition;
+    padding: 0;
+
+    &:hover {
+      background: $_purple;
+      color: #fff;
+    }
+  }
+
+  &--video {
+    background: #ecfdf5;
+    color: #059669;
+
+    .cp__active-tag-x {
+      background: rgba(5, 150, 105, 0.15);
+      color: #059669;
+
+      &:hover {
+        background: #059669;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.cp__results {
+  padding: 32px 24px 48px;
+  background: $_bg;
+  min-height: 400px;
+
+  &-inner {
+    max-width: $_max-w;
+    margin: 0 auto;
+  }
+
+  &-header {
+    margin-bottom: 24px;
+  }
+
+  &-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: $_text;
+    margin: 0;
+  }
+
+  @media (max-width: 767px) {
+    padding: 24px 16px 36px;
+
+    &-title { font-size: 18px; }
+  }
+}
+
+/* ── Card Grid ─────────────────────────────────────── */
+.cp__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* ── Establishment Card ────────────────────────────── */
+.cp__card {
+  background: $_bg-white;
+  border-radius: $_radius;
+  border: 1px solid $_border;
+  padding: 0;
+  overflow: hidden;
+  transition: box-shadow $_transition, transform $_transition;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    box-shadow: $_shadow-md;
+    transform: translateY(-2px);
+  }
+
+  /* Top: Avatar + Info */
+  &-top {
+    display: flex;
+    gap: 14px;
+    padding: 20px 20px 0;
+  }
+
+  &-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: $_radius-sm;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: $_purple-light;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &--initials {
+      font-size: 18px;
+      font-weight: 700;
+      color: $_purple;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  &-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &-type {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: $_radius-pill;
+    background: $_purple-light;
+    color: $_purple;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  &-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: $_text;
+    margin: 0 0 4px;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &-addr {
+    font-size: 13px;
+    color: $_text-secondary;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    svg {
+      flex-shrink: 0;
+      color: $_text-secondary;
+    }
+  }
+
+  /* Stats Row */
+  &-stats {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-bottom: 1px solid $_border;
+  }
+
+  &-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 3px 10px;
+    border-radius: $_radius-pill;
+    font-size: 13px;
+    font-weight: 700;
+
+    svg { flex-shrink: 0; }
+
+    &--excellent { background: #dcfce7; color: #166534; }
+    &--good      { background: #fef9c3; color: #854d0e; }
+    &--average   { background: #fee2e2; color: #991b1b; }
+  }
+
+  &-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: $_radius-pill;
+    background: $_bg;
+    font-size: 12px;
+    font-weight: 500;
+    color: $_text-secondary;
+
+    svg { flex-shrink: 0; opacity: 0.6; }
+  }
+
+  /* Doctor Previews */
+  &-docs {
+    padding: 12px 20px;
+    flex: 1;
+
+    &-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: $_text-secondary;
+      margin-bottom: 8px;
+    }
+  }
+
+  /* CTA */
+  &-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 20px;
+    background: $_purple-light;
+    color: $_purple;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all $_transition;
+    border-top: 1px solid $_border;
+    margin-top: auto;
+
+    svg { transition: transform $_transition; }
+
+    &:hover {
+      background: $_purple;
+      color: #fff;
+
+      svg { transform: translateX(3px); }
+    }
+  }
+}
+
+/* ── Doctor Preview Row ────────────────────────────── */
+.cp__doc {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+
+  & + .cp__doc {
+    border-top: 1px solid $_border;
+  }
+
+  &-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: $_purple-light;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: $_purple;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &-name {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: $_text;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &-spec {
+    display: block;
+    font-size: 12px;
+    color: $_text-secondary;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &-fee {
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: #059669;
+    padding: 2px 8px;
+    border-radius: $_radius-pill;
+    background: #ecfdf5;
+  }
+}
+
+/* ── Skeleton Loader ───────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.cp__skel {
+  background: $_bg-white;
+  border-radius: $_radius;
+  border: 1px solid $_border;
+  padding: 20px;
+
+  &-top {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  &-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: $_radius-sm;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  &-lines {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 4px;
+  }
+
+  &-line {
+    height: 12px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+
+    &--w60 { width: 60%; }
+    &--w40 { width: 40%; }
+    &--w80 { width: 80%; }
+  }
+
+  &-bar {
+    height: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+
+    &--short { width: 50%; }
+  }
+}
+
+/* ── Empty State ───────────────────────────────────── */
+.cp__empty {
+  text-align: center;
+  padding: 64px 24px;
+  background: $_bg-white;
+  border-radius: $_radius;
+  border: 1px solid $_border;
+
+  &-icon {
+    margin-bottom: 16px;
+  }
+
+  &-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: $_text;
+    margin: 0 0 8px;
+  }
+
+  &-text {
+    font-size: 14px;
+    color: $_text-secondary;
+    margin: 0;
+  }
+}
+
+/* ── Pagination ────────────────────────────────────── */
+.cp__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+
+  &-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: $_radius-sm;
+    border: 1.5px solid $_border;
+    background: $_bg-white;
+    color: $_text;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all $_transition;
+
+    &:hover:not(:disabled) {
+      border-color: $_purple;
+      color: $_purple;
+      background: $_purple-light;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  &-info {
+    font-size: 14px;
+    font-weight: 500;
+    color: $_text-secondary;
+  }
+}
+
+/* ── Content Sections (Specialties / Localities) ───── */
+.cp__section {
+  padding: 36px 24px;
+  background: $_bg;
+
+  & + .cp__section {
+    padding-top: 0;
+  }
+
+  &-inner {
+    max-width: $_max-w;
+    margin: 0 auto;
+  }
+
+  &-heading {
+    font-size: 22px;
+    font-weight: 700;
+    color: $_text;
+    margin: 0 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid $_purple;
+    display: inline-block;
+  }
+
+  @media (max-width: 767px) {
+    padding: 24px 16px;
+
+    &-heading {
+      font-size: 18px;
+      margin-bottom: 14px;
+    }
+  }
+}
+
+/* ── Pills (Specialty / Locality tags) ─────────────── */
+.cp__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  &-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 18px;
+    border-radius: $_radius-pill;
+    background: $_bg-white;
+    border: 1px solid #e5e7eb;
+    color: $_text;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all $_transition;
+    white-space: nowrap;
+
+    &:hover {
+      background: $_purple;
+      color: #fff;
+      border-color: $_purple;
+      transform: translateY(-1px);
+      box-shadow: $_shadow-sm;
+    }
+  }
+
+  &-count {
+    color: $_text-secondary;
+    font-size: 13px;
+    font-weight: 400;
+    transition: color $_transition;
+
+    .cp__pills-item:hover & {
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+
+  @media (max-width: 767px) {
+    gap: 8px;
+
+    &-item {
+      padding: 7px 14px;
+      font-size: 13px;
+    }
+  }
+}
+
+/* ── Video Consultation Banner ─────────────────── */
+.cp__video-banner {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border-bottom: 1px solid #a7f3d0;
+  padding: 14px 24px;
+
+  &-inner {
+    max-width: $_max-w;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  &-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #059669;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  &-text {
+    font-size: 15px;
+    color: #064e3b;
+    font-weight: 400;
+    line-height: 1.4;
+
+    strong {
+      font-weight: 700;
+      font-size: 18px;
+      color: #047857;
+    }
+
+    em {
+      font-style: normal;
+      font-weight: 600;
+      color: #059669;
+    }
+  }
+
+  @media (max-width: 767px) {
+    padding: 12px 16px;
+
+    &-icon {
+      width: 36px;
+      height: 36px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    &-text {
+      font-size: 13px;
+
+      strong {
+        font-size: 15px;
+      }
+    }
+  }
+}
+
+/* ── Doctor Video Fee Tag ──────────────────────── */
+.cp__doc-fee--video {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: #059669 !important;
+  background: #ecfdf5;
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 12px;
+  font-weight: 600;
+}

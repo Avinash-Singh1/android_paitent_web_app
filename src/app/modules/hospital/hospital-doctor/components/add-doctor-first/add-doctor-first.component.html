@@ -1,0 +1,87 @@
+<main class="add-doctor-first h-100">
+  <div class="border-bottom-style px-24 py-3 font-600 text-24">
+    {{ "ADD_NEW_DOCTOR" | translate }}
+  </div>
+  <div class="main-content d-flex flex-column justify-content-between">
+    <mat-dialog-content class="add-doctor-first">
+      <form class="d-flex flex-column gap-40" [formGroup]="doctorForm">
+        <div class="form-item">
+          <label>
+            {{ "REGISTERED_MOBILE_NUMBER" | translate }}
+            <span class="required-hint">*</span>
+          </label>
+          <input
+            class="form-input"
+            type="text"
+            oninput="this.value = this.value.replace(/\D/,'')"
+            placeholder="{{ 'TYPE_MOBILE_NUMBER' | translate }}"
+            formControlName="phone"
+            minlength="10"
+            maxlength="10"
+          />
+
+          <div
+            class="error-hint"
+            *ngIf="control['phone'].errors?.['minlength'] && control['phone'].touched"
+          >
+            Mobile number must be atleast 10 digits long.
+          </div>
+          <div
+            class="error-hint"
+            *ngIf="control['phone'].errors?.['maxlength'] && control['phone'].touched"
+          >
+            Mobile number must be less than or equal to 10 digits long.
+          </div>
+        </div>
+        <div class="text-center">
+          {{ "OR" | translate }}
+        </div>
+        <div class="form-item">
+          <label>{{
+            "NECTAR_+_HEALTH_DOCTOR’S_PROFILE_URL" | translate
+          }}</label>
+          <input
+            class="form-input"
+            type="text"
+            placeholder="{{
+              'PASTE_NECTAR_+_HEALTH_DOCTOR’S_PROFILE_URL' | translate
+            }}"
+            formControlName="publicUrl"
+            minlength="20"
+            maxlength="150"
+          />
+          <div
+            class="error-hint"
+            *ngIf="(doctorForm.errors?.['onlyOne']) && (control['phone'].touched && control['publicUrl'].touched)"
+          >
+            Please provide one value.
+          </div>
+          <div
+            class="error-hint"
+            *ngIf="control['publicUrl'].errors?.['minlength'] && control['publicUrl'].touched"
+          >
+            Profile url must be atleast 20 digits long.
+          </div>
+          <div
+            class="error-hint"
+            *ngIf="control['publicUrl'].errors?.['maxlength'] && control['publicUrl'].touched"
+          >
+            Profile url must be less than or equal to 150 digits long.
+          </div>
+        </div>
+      </form>
+    </mat-dialog-content>
+    <mat-dialog-actions class="add-doctor-first">
+      <div
+        class="d-flex justify-content-end gap-4 align-items-center w-100 border-top-style px-24 py-3 position-absolute"
+      >
+        <button class="cancel" (click)="matdialogRef.close()">
+          {{ "CANCEL" | translate }}
+        </button>
+        <button class="next" (click)="onNext()">
+          {{ "NEXT" | translate }}
+        </button>
+      </div>
+    </mat-dialog-actions>
+  </div>
+</main>

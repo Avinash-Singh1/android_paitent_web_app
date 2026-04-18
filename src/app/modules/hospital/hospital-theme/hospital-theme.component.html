@@ -1,0 +1,18 @@
+<mat-drawer-container [hasBackdrop]="true" class="hospital-theme">
+  <mat-drawer #matdrawer [mode]="'over'" class="hospital-theme">
+    <nectar-hospital-sidebar>
+      <button class="svg-icon-button" (click)="onClose()">
+        <svg-icon
+          src="assets/images/svg/back.svg"
+          class="cursor-pointer toggle-icon"
+        ></svg-icon>
+      </button>
+    </nectar-hospital-sidebar>
+  </mat-drawer>
+  <mat-drawer-content class="drawer-container">
+    <div class="">
+      <nectar-hospital-header *ngIf="showHeader"></nectar-hospital-header>
+      <router-outlet></router-outlet>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

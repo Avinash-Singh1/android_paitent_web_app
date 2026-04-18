@@ -1,0 +1,183 @@
+@use 'src/styles/tools/tools.typography' as *;
+@use 'src/styles/settings/settings.colors' as *;
+
+@mixin findArepSelectCountryOptionsPanelWidth() {
+	min-width: calc(100% + 12px) !important;
+}
+
+@mixin selectInput($border: false, $background: $color-white, $padding: large) {
+	cursor: pointer;
+	appearance: none;
+	background: $background;
+	color: $color-gray-dark;
+	border-radius: 3px;
+	text-align: center;
+	width: 100%;
+	@include font-proxima-medium(16px);
+
+	@if ($padding == large) {
+		padding: 10px 20px;
+	} @else if($padding == medium) {
+		padding: 8px 20px;
+	} @else {
+		padding: 5px 10px;
+	}
+
+	@if ($border == true) {
+		border: 1px solid $color-gray-dark;
+	} @else {
+		border: 0;
+	}
+
+	&[aria-expanded='true'] ~ .icon- {
+		transform: rotateZ(360deg);
+	}
+
+	&:focus {
+		outline: none;
+	}
+
+	mat-select-trigger {
+		display: inline-block;
+
+		span {
+			margin: 0;
+		}
+
+		.selected-country {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.country-flag {
+			height: 20px;
+			width: 20px;
+			margin: 0 10px 0 0 !important; /** Override Material **/
+			border-radius: 50%;
+			overflow: hidden;
+
+			& > svg {
+				display: block;
+			}
+		}
+	}
+
+	.mat-select-arrow {
+		border: 2px;
+	}
+}
+
+@mixin findArepSelectCountryForm($isPageForm: true) {
+	form {
+		width: 100%;
+		text-align: center;
+		position: relative;
+		padding-bottom: 10px;
+		display: block;
+		margin: 0 auto;
+
+		@include mq-breakpoint-md() {
+			padding-bottom: 20px;
+
+			@if ($isPageForm) {
+				width: 75%;
+			}
+		}
+
+		@include mq-breakpoint-lg() {
+			@if ($isPageForm) {
+				width: 50%;
+			}
+		}
+
+		fieldset {
+			position: relative;
+			margin-bottom: 20px;
+			padding: 0;
+			border: 0;
+			width: 100%;
+			min-width: auto;
+
+			@include mq-breakpoint-md() {
+				min-width: 300px;
+				margin-bottom: 40px;
+			}
+
+			&:last-of-type {
+				margin-bottom: 0;
+
+				@if ($isPageForm) {
+					margin-bottom: 20px;
+
+					@include mq-breakpoint-md() {
+						margin-bottom: 40px;
+					}
+				}
+			}
+		}
+
+		legend {
+			margin-bottom: 10px;
+		}
+
+		mat-select {
+			@include selectInput();
+
+			&[aria-expanded='true'] {
+				& + .icon- {
+					transform: translateY(50%) scale(1);
+				}
+			}
+		}
+
+		::ng-deep .mat-select-arrow {
+			border: 0;
+		}
+
+		.icon- {
+			transform: translateY(50%) scale(-1);
+			cursor: pointer;
+			pointer-events: none;
+			display: inline-block;
+			margin: 0;
+			right: 20px;
+			top: 50%;
+			position: absolute;
+			color: $color-gray-dark;
+			font-size: 14px;
+			line-height: 0;
+
+			&.autolocate {
+				pointer-events: auto;
+				transform: translateY(-50%) scale(1);
+				width: 30px;
+				height: 30px;
+				line-height: 30px;
+			}
+		}
+
+		input {
+			border: 0;
+			border-radius: 3px;
+			padding: 8px 0;
+			margin: auto;
+			text-align: center;
+			background: $color-white;
+			width: 100%;
+			@include font-proxima-regular(20px);
+
+			&:focus {
+				border-width: 1px;
+				box-shadow: 0 0 5px rgba($color-black, 0.3);
+				outline: none;
+			}
+
+			&::-webkit-inner-spin-button,
+			&::-webkit-outer-spin-button {
+				-webkit-appearance: none;
+				margin: 0;
+			}
+		}
+	}
+}

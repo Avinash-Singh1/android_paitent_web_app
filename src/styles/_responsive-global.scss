@@ -1,0 +1,340 @@
+// ============================================
+// GLOBAL RESPONSIVE UTILITIES
+// Mobile-first adaptive strategy
+// Base: 320px → Progressive enhancement
+// ============================================
+
+@use "tools/tools.mediaquery" as *;
+@use "settings/settings.containers" as *;
+@use "settings/settings.colors" as *;
+
+// ──────────────────────────────────────
+// 1. RESPONSIVE TYPOGRAPHY (clamp-based)
+// ──────────────────────────────────────
+
+.responsive-h1,
+h1.responsive {
+  font-size: clamp(20px, 5vw, 32px);
+  line-height: 1.3;
+}
+
+.responsive-h2,
+h2.responsive {
+  font-size: clamp(18px, 4vw, 24px);
+  line-height: 1.35;
+}
+
+.responsive-h3,
+h3.responsive {
+  font-size: clamp(16px, 3.5vw, 20px);
+  line-height: 1.4;
+}
+
+.responsive-body,
+p.responsive {
+  font-size: clamp(14px, 3.5vw, 16px);
+  line-height: 1.6;
+}
+
+.responsive-small {
+  font-size: clamp(12px, 3vw, 14px);
+  line-height: 1.5;
+}
+
+// ──────────────────────────────────────
+// 2. RESPONSIVE CONTAINER
+// ──────────────────────────────────────
+
+.responsive-container {
+  width: 100%;
+  margin: 0 auto;
+  padding-left: $container-padding-mobile;
+  padding-right: $container-padding-mobile;
+  box-sizing: border-box;
+
+  @include mq-phone() {
+    padding-left: $container-padding-phone;
+    padding-right: $container-padding-phone;
+  }
+
+  @include mq-768-min() {
+    padding-left: $container-padding-tablet;
+    padding-right: $container-padding-tablet;
+    max-width: $content-sm-max-width;
+  }
+
+  @include mq-desktop() {
+    padding-left: $container-padding-desktop;
+    padding-right: $container-padding-desktop;
+    max-width: $content-max-width;
+  }
+}
+
+// ──────────────────────────────────────
+// 3. TOUCH-FRIENDLY TAP TARGETS
+// ──────────────────────────────────────
+
+.tap-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Ensure all interactive elements have adequate size on mobile
+@media (max-width: 767px) {
+  // Buttons full-width on mobile
+  .btn-mobile-full {
+    width: 100%;
+    display: block;
+  }
+
+  // Adequate tap spacing
+  a, button, [role="button"], .clickable {
+    // Minimum 44px effective area (using padding if needed)
+    &:not(.no-tap-expand) {
+      min-height: 44px;
+    }
+  }
+}
+
+// ──────────────────────────────────────
+// 4. OVERFLOW PREVENTION UTILITIES
+// ──────────────────────────────────────
+
+.no-overflow {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+// Safe full-width (avoids scrollbar issues)
+.full-width-safe {
+  width: 100%;
+  max-width: 100%;
+}
+
+// Replace width: 100vw patterns (scrollbar-safe)
+.full-viewport-safe {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+// ──────────────────────────────────────
+// 5. RESPONSIVE GRID HELPERS
+// ──────────────────────────────────────
+
+.responsive-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+
+  @include mq-768-min() {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  @include mq-desktop() {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+}
+
+.responsive-grid-2 {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+
+  @include mq-768-min() {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+// ──────────────────────────────────────
+// 6. RESPONSIVE FLEX PATTERNS
+// ──────────────────────────────────────
+
+.flex-col-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  @include mq-768-min() {
+    flex-direction: row;
+    gap: 24px;
+  }
+}
+
+.flex-wrap-responsive {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+// ──────────────────────────────────────
+// 7. RESPONSIVE SPACING
+// ──────────────────────────────────────
+
+.section-spacing {
+  padding-top: 24px;
+  padding-bottom: 24px;
+
+  @include mq-768-min() {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  @include mq-breakpoint-xl() {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+}
+
+// ──────────────────────────────────────
+// 8. IMAGE RESPONSIVE & CLS PREVENTION
+// ──────────────────────────────────────
+
+.img-responsive {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+// Fixed aspect-ratio containers (prevents CLS)
+.aspect-ratio-16-9 {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.aspect-ratio-4-3 {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.aspect-ratio-1-1 {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// ──────────────────────────────────────
+// 9. VISIBILITY UTILITIES
+// ──────────────────────────────────────
+
+.show-mobile-only {
+  display: none !important;
+
+  @media (max-width: 767px) {
+    display: block !important;
+  }
+}
+
+.show-mobile-flex {
+  display: none !important;
+
+  @media (max-width: 767px) {
+    display: flex !important;
+  }
+}
+
+.hide-mobile {
+  @media (max-width: 767px) {
+    display: none !important;
+  }
+}
+
+.show-tablet-up {
+  display: none !important;
+
+  @include mq-768-min() {
+    display: block !important;
+  }
+}
+
+.show-desktop-only {
+  display: none !important;
+
+  @include mq-desktop() {
+    display: block !important;
+  }
+}
+
+// ──────────────────────────────────────
+// 10. ACCESSIBLE FOCUS RING
+// ──────────────────────────────────────
+
+:focus-visible {
+  outline: 2px solid $purple;
+  outline-offset: 2px;
+}
+
+// Remove focus ring for mouse users
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+// ──────────────────────────────────────
+// 11. RESPONSIVE TEXT TRUNCATION
+// ──────────────────────────────────────
+
+.text-truncate-mobile {
+  @media (max-width: 767px) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.line-clamp-mobile-2 {
+  @media (max-width: 767px) {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+.line-clamp-mobile-3 {
+  @media (max-width: 767px) {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+// ──────────────────────────────────────
+// 12. SAFE AREA INSETS (notch devices)
+// ──────────────────────────────────────
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0);
+}
+
+.safe-area-padded {
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
+}

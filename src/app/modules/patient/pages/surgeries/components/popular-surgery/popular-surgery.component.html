@@ -1,0 +1,167 @@
+<!-- ========== Hero Section ========== -->
+<section class="surg-hero">
+  <div class="surg-hero__wrapper">
+    <div class="surg-hero__content">
+
+      <h1 class="surg-hero__title">Advanced Surgical Solutions, <span>Personalized</span></h1>
+      <p class="surg-hero__subtitle">Experience expert surgeons, advanced facilities, and personalized care from diagnosis to recovery — making your journey stress-free.</p>
+
+      <!-- Feature Badges -->
+      <div class="surg-hero__badges">
+        <div class="surg-hero__badge">
+          <span class="surg-hero__badge-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </span>
+          <span class="surg-hero__badge-text">High Success Rate</span>
+        </div>
+        <div class="surg-hero__badge">
+          <span class="surg-hero__badge-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </span>
+          <span class="surg-hero__badge-text">Experienced Surgeons</span>
+        </div>
+        <div class="surg-hero__badge">
+          <span class="surg-hero__badge-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </span>
+          <span class="surg-hero__badge-text">Personalized Care</span>
+        </div>
+        <div class="surg-hero__badge">
+          <span class="surg-hero__badge-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </span>
+          <span class="surg-hero__badge-text">Super Specialists</span>
+        </div>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="surg-hero__stats">
+        <div class="surg-hero__stat">
+          <span class="surg-hero__stat-num">50+</span>
+          <span class="surg-hero__stat-label">Surgeries</span>
+        </div>
+        <div class="surg-hero__stat-divider"></div>
+        <div class="surg-hero__stat">
+          <span class="surg-hero__stat-num">98%</span>
+          <span class="surg-hero__stat-label">Success Rate</span>
+        </div>
+        <div class="surg-hero__stat-divider"></div>
+        <div class="surg-hero__stat">
+          <span class="surg-hero__stat-num">10K+</span>
+          <span class="surg-hero__stat-label">Happy Patients</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enquiry Form (Desktop) -->
+    <div class="surg-hero__form-wrap d-none d-lg-block">
+      <nectar-enquiry [popular_sergury_Data]="popular_sergury"></nectar-enquiry>
+    </div>
+  </div>
+</section>
+
+<!-- Enquiry Form (Mobile) -->
+<div class="surg-mobile-form d-block d-lg-none">
+  <nectar-enquiry [popular_sergury_Data]="popular_sergury"></nectar-enquiry>
+</div>
+
+<!-- ========== Treatment Guides (Published) ========== -->
+<section class="surg-treatments" *ngIf="publishedTreatments?.length">
+  <div class="surg-treatments__wrapper">
+    <div class="surg-treatments__header">
+      <h2 class="surg-treatments__title">Treatment <span>Guides</span></h2>
+      <p class="surg-treatments__subtitle">In-depth treatment guides with symptoms, procedures, recovery, costs &amp; top doctors</p>
+    </div>
+    <div class="surg-treatments__grid">
+      <a class="surg-treat-card" *ngFor="let t of publishedTreatments" [routerLink]="['/', city || 'delhi', 'treatment', t?.departmentId?.slug || 'general-surgery', t?.slug]" (click)="scrollToTop()">
+        <div class="surg-treat-card__img">
+          <img loading="lazy" [src]="t?.imageUrl" [alt]="t?.title" />
+        </div>
+        <div class="surg-treat-card__body">
+          <h3 class="surg-treat-card__name">{{ t?.title }}</h3>
+          <p class="surg-treat-card__desc" *ngIf="t?.seoDescription">{{ t?.seoDescription | truncate:90 }}</p>
+          <span class="surg-treat-card__link">Read Treatment Guide →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Surgeries Grid ========== -->
+<section class="surg-grid">
+  <div class="surg-grid__wrapper">
+    <div class="surg-grid__header">
+      <h2 class="surg-grid__title">Explore <span>50+ Surgical Solutions</span></h2>
+      <p class="surg-grid__subtitle">We offer expert care across a wide range of surgical specialties</p>
+    </div>
+
+    <div class="surg-grid__cards">
+      <a class="surg-card" *ngFor="let i of data"
+        [routerLink]="['/', city || 'delhi', 'treatment', i?.departmentId?.slug || 'general-surgery', i?.slug]" (click)="scrollToTop()">
+        <div class="surg-card__img-wrap">
+          <img loading="lazy" [src]="i?.imageUrl" [alt]="i?.title" />
+        </div>
+        <span class="surg-card__name">{{ i?.title | truncate:28 }}</span>
+        <span class="surg-card__badge" *ngIf="i?.isPublished">Treatment Guide</span>
+      </a>
+    </div>
+
+    <div class="surg-grid__actions" *ngIf="data?.length >= (deviceWidth > 767 ? 14 : 8)">
+      <button class="surg-grid__btn" *ngIf="payload?.size" (click)="seeMore(true)">
+        View All Surgeries
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <button class="surg-grid__btn" *ngIf="!payload?.size" (click)="seeMore(false)">
+        Show Less
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Departments Section ========== -->
+<section class="surg-depts">
+  <div class="surg-depts__wrapper">
+    <div class="surg-depts__header">
+      <h2 class="surg-depts__title">Browse by <span>Department</span></h2>
+      <p class="surg-depts__subtitle">Find surgical solutions organized by medical specialty</p>
+    </div>
+
+    <div class="surg-depts__grid">
+      <div class="surg-dept" *ngFor="let i of tempDeparts" (click)="openDialog(i)" [class.surg-dept--disabled]="i?.countOfSurgery < 1">
+        <div class="surg-dept__icon">
+          <img loading="lazy" [src]="i?.image" [alt]="i?.name" loading="lazy" />
+        </div>
+        <div class="surg-dept__info">
+          <h3 class="surg-dept__name">{{ i?.name }}</h3>
+          <span class="surg-dept__count">{{ i?.countOfSurgery || 0 }} {{ i?.countOfSurgery === 1 ? 'Surgery' : 'Surgeries' }}</span>
+        </div>
+        <svg class="surg-dept__arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+    <div class="surg-depts__actions d-block d-md-none" *ngIf="departments?.length > 6">
+      <button class="surg-grid__btn" (click)="viewMoreD()">
+        {{ viewMoreDepart ? 'Show Less' : 'View More Departments' }}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline *ngIf="!viewMoreDepart" points="6 9 12 15 18 9"/>
+          <polyline *ngIf="viewMoreDepart" points="18 15 12 9 6 15"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Benefits / FAQ / Testimonials ========== -->
+<nectar-benefits></nectar-benefits>
+
+<!-- ========== WhatsApp FAB ========== -->
+<a class="surg-whatsapp" [href]="whatsappLink" target="_blank" aria-label="Chat on WhatsApp">
+  <img loading="lazy" src="assets/images/svg/whatsapp.svg" alt="WhatsApp" />
+</a>
+
+<!-- ========== Mobile Book Now Footer ========== -->
+<div class="surg-mobile-footer" (click)="openBottomSheet()">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+  Book Consultation
+</div>

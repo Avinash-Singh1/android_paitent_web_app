@@ -1,0 +1,130 @@
+<!-- ===== Enquiry Form ===== -->
+<div class="enq" *ngIf="!otpSend" [class.enq--sheet]="bottomSheet">
+  <!-- Bottom sheet drag handle -->
+  <div class="enq__handle" *ngIf="bottomSheet"><span></span></div>
+
+  <div class="enq__top">
+    <div class="enq__top-text">
+      <h2 class="enq__title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Book Free Consultation
+      </h2>
+      <p class="enq__subtitle">Get expert surgical advice today</p>
+    </div>
+    <button class="enq__close" *ngIf="bottomSheet" (click)="closeSheet()" aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <form [formGroup]="consultForm" class="enq__form" autocomplete="off">
+    <!-- Row: City + Treatment -->
+    <div class="enq__row">
+      <div class="enq__field">
+        <label class="enq__label">City</label>
+        <input class="enq__input" type="text" placeholder="Your city" formControlName="city" maxlength="50"
+          oninput="this.value = this.value.replace(/^ $/,'');" (keypress)="cValidator.alphabetOnly($event)" />
+        <div class="enq__error" *ngIf="(control['city'].touched || submitted) && control['city'].errors?.['required']">
+          Please enter city
+        </div>
+      </div>
+      <div class="enq__field">
+        <label class="enq__label">Treatment</label>
+        <ng-select [items]="popular_sergury_Data" bindLabel="title" bindValue="_id" placeholder="Select treatment"
+          formControlName="treatmentType" class="enq__select"></ng-select>
+        <div class="enq__error"
+          *ngIf="(consultForm.get('treatmentType').touched || submitted) && consultForm.get('treatmentType').errors?.['required']">
+          Please select treatment
+        </div>
+      </div>
+    </div>
+
+    <!-- Name -->
+    <div class="enq__field">
+      <label class="enq__label">Full Name</label>
+      <input class="enq__input" type="text" placeholder="Enter your full name" formControlName="name" maxlength="50"
+        oninput="this.value = this.value.replace(/^ $/,'');" (keypress)="cValidator.alphabetOnly($event)" />
+      <div class="enq__error" *ngIf="(control['name'].touched || submitted) && control['name'].errors?.['required']">
+        Please enter name
+      </div>
+    </div>
+
+    <!-- Phone -->
+    <div class="enq__field">
+      <label class="enq__label">Phone Number</label>
+      <div class="enq__phone-group">
+        <select class="enq__country-code" name="countryCode" id="countryCode" (change)="onCountryChange($event)">
+          <option [value]="item?.phonecode" *ngFor="let item of countryCodes"
+            [selected]="item?.phonecode == selectedCountryCode">
+            {{ item?.flag }} +{{ item?.phonecode }}
+          </option>
+        </select>
+        <input class="enq__input enq__input--phone" type="text" placeholder="Phone number" formControlName="phone"
+          maxlength="15" oninput="this.value = this.value.replace(/\D/g, '').replace(/^0/,'');" />
+      </div>
+      <div *ngIf="consultForm.get('phone')?.errors">
+        <div class="enq__error" *ngIf="(control['phone'].touched || submitted) && control['phone'].errors?.['required']">
+          Please enter phone number
+        </div>
+        <div class="enq__error" *ngIf="(control['phone'].touched || submitted) && control['phone'].errors?.['minlength']">
+          Please enter valid phone number
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <button class="enq__submit" type="submit" (click)="enquire()">
+      Book Consultation
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+
+    <p class="enq__note">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Your information is secure & confidential
+    </p>
+  </form>
+</div>
+
+<!-- ===== OTP Verification ===== -->
+<div class="enq enq--otp" *ngIf="otpSend" [class.enq--sheet]="bottomSheet">
+  <div class="enq__handle" *ngIf="bottomSheet"><span></span></div>
+
+  <div class="enq__top">
+    <div class="enq__top-text">
+      <h2 class="enq__title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Verify Mobile
+      </h2>
+      <p class="enq__subtitle">OTP sent to
+        <strong>+{{ selectedCountryCode }} {{ consultForm.value.phone }}</strong>
+        <a class="enq__edit-link" (click)="onEdit()">Edit</a>
+      </p>
+    </div>
+    <button class="enq__close" *ngIf="bottomSheet" (click)="closeSheet()" aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <form [formGroup]="otpForm" class="enq__form">
+    <div class="enq__field">
+      <label class="enq__label">Enter OTP</label>
+      <input class="enq__input enq__input--otp" type="text" placeholder="6-digit OTP" maxlength="6"
+        formControlName="otp" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+      <div class="enq__error" *ngIf="(control['otp'].touched || submitted) && control['otp'].errors?.['required']">
+        OTP is required
+      </div>
+      <div class="enq__error" *ngIf="(control['otp'].touched || submitted) && control['otp'].errors?.['minlength'] && (!control['otp'].errors?.['required'])">
+        OTP must be valid
+      </div>
+    </div>
+
+    <div class="enq__resend">
+      <span class="enq__resend-text" *ngIf="resendOtpVlaue">{{ resendTime }}</span>
+      <a class="enq__resend-link" *ngIf="!resendOtpVlaue" (click)="resendOTP()">Resend OTP</a>
+    </div>
+
+    <button class="enq__submit" type="button" (click)="submit()">
+      Verify & Submit
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </button>
+  </form>
+</div>

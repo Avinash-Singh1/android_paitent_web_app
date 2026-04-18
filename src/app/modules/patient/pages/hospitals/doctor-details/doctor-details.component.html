@@ -1,0 +1,472 @@
+<!-- ===== SEARCH BAR (Desktop Sticky — Homepage-style) ===== -->
+<div class="search-wrap" role="search" aria-label="Search doctors and hospitals">
+  <nectar-global-search [type]="'scroll'"></nectar-global-search>
+</div>
+
+<!-- ===== DESKTOP HEADER (Scrolled — Doctor Info Bar) ===== -->
+<div class="desktop-scroll-header desktop-only" *ngIf="isScrolled && dataLoaded && deviceService.isDesktop()">
+  <div class="desktop-scroll-header__inner">
+    <div class="desktop-scroll-header__left">
+      <div class="desktop-scroll-header__avatar">
+        <div class="desktop-scroll-header__initials" *ngIf="!doctorDetail?.profilePic">
+          {{ doctorDetail?.fullName | nameInitial | uppercase }}
+        </div>
+        <img loading="lazy" [src]="doctorDetail?.profilePic" [alt]="doctorDetail?.fullName"
+             *ngIf="doctorDetail?.profilePic" width="36" height="36" />
+      </div>
+      <div class="desktop-scroll-header__info">
+        <span class="desktop-scroll-header__name">
+          {{ doctorDetail?.fullName }}
+          <img loading="lazy" src="assets/images/svg/verified_tick.svg" alt="Verified" height="16" width="16"
+               *ngIf="doctorDetail?.claimProfile" />
+        </span>
+        <span class="desktop-scroll-header__spec">
+          {{ (doctorDetail?.specialization | formatarray : "name") || "N/A" }}
+        </span>
+      </div>
+    </div>
+    <div class="desktop-scroll-header__right">
+      <span class="desktop-scroll-header__fee" *ngIf="selectedHospital?.consultationFees > 0">
+        &#8377;{{ selectedHospital?.consultationFees }}
+      </span>
+      <button class="desktop-scroll-header__cta"
+              *ngIf="doctorDetail?.claimProfile"
+              (click)="scrollToBooking()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 002 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z" fill="currentColor"/></svg>
+        Book Appointment
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MOBILE DEFAULT HEADER (frosted glass – replaces global header) ===== -->
+<div class="mobile-header mobile-only" *ngIf="!isScrolled && deviceService.isMobile()">
+  <!-- Left: Back + Logo -->
+  <div class="mobile-header__left">
+    <button class="mobile-header__icon-btn" type="button" (click)="locations.back()" aria-label="Go back">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    <svg-icon src="assets/images/svg/logo.svg" routerLink="/" class="mobile-header__logo"></svg-icon>
+  </div>
+
+  <!-- Center: Search pill -->
+  <div class="mobile-header__center">
+    <button class="mobile-header__search" type="button" (click)="openBottomSheet1()">
+      <svg class="mobile-header__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <span class="mobile-header__search-text">Search doctor, hospital...</span>
+    </button>
+  </div>
+</div>
+
+<!-- ===== MOBILE SCROLL HEADER (appears on scroll – frosted glass with doctor info) ===== -->
+<div class="mobile-scroll-header mobile-only" *ngIf="isScrolled && deviceService.isMobile()">
+  <div class="mobile-scroll-header__left">
+    <!-- Back button -->
+    <button class="mobile-scroll-header__back" type="button" (click)="locations.back()" aria-label="Go back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+
+    <!-- Doctor info -->
+    <div class="mobile-scroll-header__doctor">
+      <div class="mobile-scroll-header__avatar">
+        <div class="mobile-scroll-header__initials" *ngIf="!doctorDetail?.profilePic">
+          {{ doctorDetail?.fullName | nameInitial | uppercase }}
+        </div>
+        <img loading="lazy" [src]="doctorDetail?.profilePic" [alt]="doctorDetail?.fullName"
+             *ngIf="doctorDetail?.profilePic" width="36" height="36" />
+      </div>
+      <div class="mobile-scroll-header__info">
+        <span class="mobile-scroll-header__name">
+          {{ doctorDetail?.fullName }}
+          <img loading="lazy" src="assets/images/svg/Verified.svg" height="14" width="14" alt="Verified"
+               *ngIf="doctorDetail?.claimProfile" />
+        </span>
+        <span class="mobile-scroll-header__spec">
+          {{ (doctorDetail?.specialization | formatarray : "name") || "N/A" }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SKELETON LOADER ===== -->
+<nectar-doctor-profile-skeleton *ngIf="!dataLoaded"></nectar-doctor-profile-skeleton>
+
+<!-- ===== MAIN CONTENT ===== -->
+<section class="doctor-details" *ngIf="dataLoaded">
+  <div class="doctor-details__wrapper">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+      <ol class="breadcrumb-list">
+        <li class="breadcrumb-item">
+          <a routerLink="/" class="breadcrumb-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Home</span>
+          </a>
+        </li>
+        <li class="breadcrumb-item" *ngIf="selectedHospital?.address?.city">
+          <a class="breadcrumb-link"
+             [routerLink]="['/', commonService.replaceSpaceWithHyphen(selectedHospital?.address?.city)]">
+            {{ selectedHospital?.address?.city }}
+          </a>
+        </li>
+        <li class="breadcrumb-item" *ngFor="let spec of doctor_Specialization; trackBy: trackByName">
+          <a class="breadcrumb-link"
+             [routerLink]="['/', commonService.replaceSpaceWithHyphen(selectedHospital?.address?.city), commonService.replaceSpaceWithHyphen(spec.name)]">
+            {{ spec.name }}
+          </a>
+        </li>
+        <li class="breadcrumb-item" *ngIf="selectedHospital?.address?.locality && selectedHospital?.address?.locality !== ''">
+          <a class="breadcrumb-link"
+             [routerLink]="['/', commonService.replaceSpaceWithHyphen(selectedHospital?.address?.city),
+                           commonService.replaceSpaceWithHyphen(doctorDetail?.specialization[0]?.name),
+                           commonService.replaceSpaceWithHyphen(selectedHospital?.address?.locality)]">
+            {{ selectedHospital?.address?.locality | titlecase }}
+          </a>
+        </li>
+        <li class="breadcrumb-item active" *ngIf="doctorDetail?.fullName">
+          <span class="breadcrumb-current">{{ doctorDetail?.fullName }}</span>
+        </li>
+      </ol>
+    </nav>
+
+    <!-- ===== 2-COLUMN GRID ===== -->
+    <div class="doctor-details__grid">
+      <!-- LEFT COLUMN -->
+      <div class="doctor-details__main">
+
+        <!-- ========== HERO CARD ========== -->
+        <div class="hero-card">
+          <!-- Gradient accent bar -->
+          <div class="hero-card__accent" aria-hidden="true"></div>
+
+          <div class="hero-card__content">
+            <!-- Doctor Image Column -->
+            <div class="hero-card__avatar-col">
+              <div class="hero-card__avatar">
+                <div class="hero-card__avatar-ring">
+                  <img loading="lazy" [src]="doctorDetail?.profilePic"
+                    [alt]="doctorDetail?.fullName"
+                    fetchpriority="high"
+                    loading="eager"
+                    decoding="async"
+                    width="130"
+                    height="130"
+                  />
+                </div>
+              </div>
+
+              <!-- Star badge below image -->
+              <div class="hero-card__star-badge" *ngIf="doctorDetail?.rating">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z" fill="#fff"/></svg>
+                {{ (doctorDetail?.rating | number : "1.1-1") || "0.0" }}
+              </div>
+            </div>
+
+            <!-- Doctor Info Column -->
+            <div class="hero-card__info">
+              <!-- Row 1: Name + Verified -->
+              <div class="hero-card__name-row">
+                <h1>
+                  {{ doctorDetail?.fullName || "N/A" }}
+                  <img loading="lazy" src="assets/images/svg/verified_tick.svg" alt="Verified" height="20" width="20"
+                    *ngIf="doctorDetail?.claimProfile" />
+                </h1>
+                <span (click)="openLoginDialog()" class="hero-card__claim cursor-pointer" *ngIf="!doctorDetail?.claimProfile">
+                  Claim Profile
+                </span>
+              </div>
+
+              <!-- Row 2: Specialization as subtitle -->
+              <h2 class="hero-card__specialization">
+                {{ (doctorDetail?.specialization | formatarray : "name") || "N/A" }}
+              </h2>
+
+              <!-- Row 3: Education -->
+              <p class="hero-card__education">
+                {{ (doctorDetail?.education | formatarray : "degree") || "N/A" }}
+              </p>
+
+              <!-- Row 4: Stats row (experience, rating, recommend) -->
+              <div class="hero-card__stats">
+                <div class="hero-card__stat">
+                  <span class="hero-card__stat-value">{{ doctorDetail?.experience || "0" }}+</span>
+                  <span class="hero-card__stat-label">Years Exp.</span>
+                </div>
+                <div class="hero-card__stat-divider" aria-hidden="true"></div>
+                <div class="hero-card__stat">
+                  <span class="hero-card__stat-value">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: -2px; margin-right: 2px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z" fill="#f59e0b"/></svg>
+                    {{ (doctorDetail?.rating | number : "1.1-1") || "0.0" }}
+                  </span>
+                  <span class="hero-card__stat-label">
+                    {{ doctorDetail?.totalReview || "0" }} Reviews
+                  </span>
+                </div>
+                <div class="hero-card__stat-divider" aria-hidden="true" *ngIf="doctorDetail?.recommended"></div>
+                <div class="hero-card__stat" *ngIf="doctorDetail?.recommended">
+                  <span class="hero-card__stat-value">{{ (doctorDetail?.recommended | number : ".0-0") || "0" }}%</span>
+                  <span class="hero-card__stat-label">Recommend</span>
+                </div>
+              </div>
+
+              <!-- Row 5: Fees -->
+              <div class="hero-card__fees">
+                <div class="hero-card__fee-tag hero-card__fee-tag--clinic"
+                  *ngIf="doctorDetail?.consultationFees | validFee">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor"/></svg>
+                  &#8377;{{ doctorDetail?.consultationFees }}
+                  <span>Clinic</span>
+                </div>
+                <div class="hero-card__fee-tag hero-card__fee-tag--video"
+                  *ngIf="doctorDetail?.videoConsultationFees | validFee">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z" fill="currentColor"/></svg>
+                  &#8377;{{ doctorDetail?.videoConsultationFees }}
+                  <span>Video</span>
+                </div>
+              </div>
+
+              <!-- Row 6: Actions -->
+              <div class="hero-card__actions">
+                <button class="hero-card__share-btn" (click)="openShareDialog()" aria-label="Share doctor profile">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z" fill="currentColor"/></svg>
+                  Share
+                </button>
+                <div class="hero-card__social" *ngIf="doctorDetail?.social?.length">
+                  <a [href]="item?.url" target="_blank" rel="noopener" *ngFor="let item of doctorDetail?.social; trackBy: trackByIndex" aria-label="Social link">
+                    <img loading="lazy" [src]="item?.socialmedias?.logo" alt="" height="22" width="22" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== MOBILE APPOINTMENT CARD ========== -->
+        <div class="mobile-card mobile-only" *ngIf="deviceService.isMobile()">
+          <div class="mobile-card__header">
+            <div class="mobile-card__type-tabs">
+              <div class="mobile-card__type mobile-card__type--clinic"
+                *ngIf="selectedHospital?.consultationFees | validFee">
+                <img loading="lazy" src="assets/images/pharmacy 1@2x.png" alt="" height="20" width="20" /> In-clinic
+              </div>
+              <div class="mobile-card__type mobile-card__type--video"
+                *ngIf="selectedHospital?.videoConsultationFees | validFee">
+                <img loading="lazy" src="assets/images/video.png" alt="" height="20" width="20" /> Video
+              </div>
+            </div>
+          </div>
+
+          <div class="mobile-card__body">
+            <div class="mobile-card__hospital-row">
+              <p class="mobile-card__hospital-name">{{ formatName(selectedHospital?.name, 25) }}</p>
+              <div class="mobile-card__change-clinic" *ngIf="this.doctorDetail?.establishmentmaster.length > 1"
+                (click)="openBottomSheet('Hospital')">
+                Change Clinic
+                <img loading="lazy" src="assets/images/svg/downarrow.svg" alt="" height="14" width="14" />
+              </div>
+            </div>
+            <div class="mobile-card__address">
+              {{ selectedHospital?.address?.city }}{{ selectedHospital?.address?.locality ? ', ' + selectedHospital?.address?.locality : '' }}
+            </div>
+            <div class="mobile-card__fees-row">
+              <span *ngIf="selectedHospital?.consultationFees | validFee"
+                class="mobile-card__fee">
+                <img loading="lazy" src="assets/images/inclinickblue.png" alt="" class="me-1" height="16" width="16">
+                &#8377;{{ selectedHospital?.consultationFees }}
+              </span>
+              <span *ngIf="selectedHospital?.videoConsultationFees | validFee"
+                class="mobile-card__fee">
+                <img loading="lazy" src="assets/images/videogrey.png" alt="" class="me-1" height="16" width="16">
+                &#8377;{{ selectedHospital?.videoConsultationFees }}
+              </span>
+            </div>
+          </div>
+
+          <div class="mobile-card__dates">
+            <!-- Skeleton loader while date data loads -->
+            <div class="mobile-card__date-scroll" *ngIf="!dateRange?.length">
+              <div class="mobile-card__date-skeleton" *ngFor="let s of [1,2,3,4,5]">
+                <div class="skeleton-line skeleton-line--label"></div>
+                <div class="skeleton-line skeleton-line--count"></div>
+              </div>
+            </div>
+
+            <!-- Actual date boxes -->
+            <div class="mobile-card__date-scroll" *ngIf="dateRange?.length">
+              <div class="mobile-card__date-box" [class.mobile-card__date-box--disabled]="!item?.count"
+                *ngFor="let item of dateRange; let i = index; trackBy: trackByIndex"
+                (click)="item?.count ? openBottomSheet('apoointment', selectedHospital, item?.date) : ''">
+                <p class="mobile-card__date-label" *ngIf="i > 1">{{ item?.date | date : "EEE, MMM d" }}</p>
+                <p class="mobile-card__date-label" *ngIf="i == 0">Today</p>
+                <p class="mobile-card__date-label" *ngIf="i == 1">Tomorrow</p>
+                <div class="mobile-card__date-count" *ngIf="item?.count != 0">{{ item?.count }} appts</div>
+                <div class="mobile-card__date-count mobile-card__date-count--none" *ngIf="!item?.count">No appts</div>
+              </div>
+              </div>
+            </div>
+            <button class="mobile-card__book-btn"
+              [style.opacity]="selectedHospital?.isActive && doctorDetail?.claimProfile ? '1' : '0.5'"
+              [ngClass]="(selectedHospital?.consultationFees | validFee) ? '' : 'newclass'"
+              (click)="selectedHospital?.isActive && doctorDetail?.claimProfile ? openBottomSheet('apoointment', selectedHospital) : ''"
+              aria-label="Book Appointment">
+              Book Appointment
+            </button>
+          </div>
+
+        <!-- ========== TAB NAVIGATION ========== -->
+        <nav class="tab-nav" aria-label="Doctor information tabs">
+          <ul role="tablist">
+            <li *ngFor="let item of tabContent; let i = index; trackBy: trackByName"
+              [ngClass]="{ 'tab-nav__item--active': selected == i }"
+              class="tab-nav__item"
+              (click)="tabChange(i)"
+              role="tab"
+              [attr.aria-selected]="selected == i">
+              <svg-icon [src]="item.img" class="desktop-only"></svg-icon>
+              <span>{{ item.name }}<span class="tab-nav__count" *ngIf="item?.count">&nbsp;({{ item.count }})</span></span>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- ========== TAB CONTENT ========== -->
+        <div class="tab-content" role="tabpanel">
+          <!-- About Tab -->
+          <div class="tab-content__panel" *ngIf="doctorId && selected == 0">
+            <nectar-about-section [doctorDetail]="doctorDetail" [id]="doctorId"
+              [city]="doctorDetail?.establishmentmaster?.[0]?.address?.city"
+              (backdrop)="enableBackdrop($event)"
+              (establishEvent)="receive_EstablishEvent($event)">
+            </nectar-about-section>
+
+            <nectar-videos-section [tab]="0" [id]="doctorId"></nectar-videos-section>
+
+            <nectar-faq-section [tab]="0" [id]="doctorId"></nectar-faq-section>
+
+            <nectar-services-section *ngIf="deviceService.isDesktop()" [tab]="0" [id]="doctorId" class="dextop-service"
+              [city]="doctorDetail?.establishmentmaster?.[0]?.address?.city"
+              [doc_procedure]="filteredDocProcedure$ | async"
+              [services]="doctorDetail?.service">
+            </nectar-services-section>
+
+            <nectar-review-section [tab]="0" [id]="doctorId" [name]="doctorDetail?.fullName"
+                [services]="doctorDetail?.service"
+                (valueChange)="tabChangeReview()">
+            </nectar-review-section>
+          </div>
+
+          <!-- Services Tab -->
+          <div class="tab-content__panel" *ngIf="selected == 1">
+            <nectar-services-section [tab]="1" [id]="doctorId"
+              [city]="doctorDetail?.establishmentmaster?.[0]?.address?.city"
+              [doc_procedure]="filteredDocProcedure$ | async"
+              [services]="doctorDetail?.service">
+            </nectar-services-section>
+          </div>
+
+          <!-- Videos Tab -->
+          <div class="tab-content__panel" *ngIf="selected == 2">
+            <nectar-videos-section [id]="doctorId"></nectar-videos-section>
+          </div>
+
+          <!-- FAQs Tab -->
+          <div class="tab-content__panel" *ngIf="selected == 3">
+            <nectar-faq-section [id]="doctorId"></nectar-faq-section>
+          </div>
+
+          <!-- Reviews Tab -->
+          <div class="tab-content__panel" *ngIf="selected == 4">
+            <nectar-review-section [tab]="1" [id]="doctorId" [name]="doctorDetail?.fullName"
+              [services]="doctorDetail?.service">
+            </nectar-review-section>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN (Desktop Appointment Sidebar) -->
+      <aside *ngIf="deviceService.isDesktop()" [style.z-index]="bookAppointment ? '10' : '0'" class="doctor-details__sidebar desktop-only">
+        <nectar-clinicappointment *ngIf="estabId && isBrowser" [inlineDoctorId]="doctorId"
+          [inlineEstablishmentId]="estabId">
+        </nectar-clinicappointment>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- Backdrop -->
+<section *ngIf="bookAppointment" class="backdrop-overlay" (click)="bookAppointment = false"></section>
+
+<!-- ===== MOBILE STICKY BOTTOM CTA ===== -->
+<div class="sticky-cta" *ngIf="scrollTop > 70 && deviceService.isMobile()"
+  [ngClass]="(selectedHospital?.consultationFees | validFee) ? '' : 'sticky-cta--video'"
+  (click)="doctorDetail?.claimProfile ? openBottomSheet('doctor') : ''"
+  role="button" aria-label="Book Appointment" tabindex="0">
+  <div class="sticky-cta__inner">
+    <div class="sticky-cta__info">
+      <span class="sticky-cta__doctor-name">{{ formatName(doctorDetail?.fullName, 18) }}</span>
+      <span class="sticky-cta__fee" *ngIf="selectedHospital?.consultationFees | validFee">
+        &#8377;{{ selectedHospital?.consultationFees }}
+      </span>
+    </div>
+    <button class="sticky-cta__button" aria-label="Book Appointment">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 002 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z" fill="currentColor"/></svg>
+      Book Appointment
+    </button>
+  </div>
+</div>
+
+<!-- ===== SEO SECTION ===== -->
+<nectar-seo-section
+  *ngIf="doctorDetail && selectedHospital"
+  [allowDescription]="true"
+  [data]="seoData"
+  [search]="doctorSearchTerm"
+  [city]="selectedHospital?.address?.city"
+  [locality]="selectedHospital?.address?.locality"
+  [doctorDetail]="doctorDetail"
+  [HospitalURLS]="hospitalURLs">
+</nectar-seo-section>
+
+<!-- ===== OFFCANVAS MOBILE MENU ===== -->
+<div class="offcanvas offcanvas-start w-auto" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions"
+  aria-labelledby="offcanvasWithBothOptionsLabel">
+  <div class="offcanvas-body">
+    <div>
+      <div class="py-3 d-flex align-items-center justify-content-between" style="margin-top: -30px;">
+        <div class="d-flex gap-2 align-items-center">
+          <div class="hamber">
+            <svg-icon src="assets/images/svg/hamber.svg" class="cursor-pointer"></svg-icon>
+          </div>
+          <svg-icon src="assets/images/svg/logo.svg" routerLink="/" class="d-flex cursor-pointer" style="width: 155px"></svg-icon>
+        </div>
+        <svg-icon src="assets/images/svg/back.svg" class="cursor-pointer ms-4" data-bs-dismiss="offcanvas" aria-label="Close"></svg-icon>
+      </div>
+      <div class="my-2">
+        <ng-container *ngFor="let i of menus; let j = index; trackBy: trackByName">
+          <div class="d-flex gap-2 align-items-center tabs" *ngIf="j != 3 && j != 4">
+            <img loading="lazy" [src]="i?.icon" alt="" />
+            <div [routerLink]="i?.route" class="cursor-pointer">{{ i?.name }}</div>
+          </div>
+          <ng-container *ngIf="j == 4">
+            <div class="d-flex justify-content-between align-items-center tabs"
+              [ngClass]="{'highlight-practice': i?.name === 'List your practice for Free'}">
+              <div class="d-flex gap-2">
+                <img loading="lazy" [src]="i?.icon" alt="" />
+                <a class="cursor-pointer" [href]="i?.route" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">{{ i?.name }}</a>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

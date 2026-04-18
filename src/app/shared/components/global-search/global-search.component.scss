@@ -1,0 +1,573 @@
+@use "tools.mediaquery" as *;
+@use "tools.typography" as *;
+@use "settings.containers" as *;
+@use "variable.scss" as *;
+
+/* ═══════════════════════════════════════
+   GLOBAL SEARCH BAR — mobile-first
+   ═══════════════════════════════════════ */
+.input-text {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: $white;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+  overflow: hidden;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+    height: 56px;
+    border-radius: 60px;
+    overflow: visible;
+  }
+
+  &:focus-within {
+    border-color: rgba($purple, 0.2);
+    box-shadow: 0 4px 20px rgba($purple, 0.10);
+  }
+
+  /* ── Pipe divider (desktop) ── */
+  > span {
+    display: none;
+    @media (min-width: 768px) {
+      display: block;
+      color: rgba(0, 0, 0, 0.10);
+      font-size: 22px;
+      line-height: 1;
+      flex-shrink: 0;
+      user-select: none;
+    }
+  }
+
+  /* ── Input containers ── */
+  &__container {
+    position: relative;
+    width: 100%;
+
+    &:not(:last-of-type) {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      @media (min-width: 768px) { border-bottom: none; }
+    }
+
+    @media (min-width: 768px) {
+      width: auto;
+    }
+
+    .icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.40;
+      width: 18px;
+      height: 18px;
+
+      @media (min-width: 768px) {
+        left: 20px;
+      }
+    }
+
+    .input-box {
+      border: none;
+      width: 100%;
+      height: 48px;
+      padding: 0 12px 0 42px;
+      background: transparent;
+      text-overflow: ellipsis;
+      @include font-sans_pro-regular(14px);
+      color: $black;
+
+      @media (min-width: 768px) {
+        height: 54px;
+        padding-left: 48px;
+        @include font-sans_pro-regular(14.5px);
+      }
+
+      &:focus {
+        outline: none;
+        &::placeholder { opacity: 0.4; }
+      }
+      &:focus-visible { outline: none; }
+
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.38);
+        opacity: 1;
+      }
+    }
+  }
+
+  /* ── Button ── */
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: calc(100% - 20px);
+    margin: 6px auto 10px;
+    height: 44px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, $purple 0%, #6b3fa0 60%, #0891b2 100%);
+    color: $white;
+    @include font-sans_pro-semibold(15px);
+    cursor: pointer;
+    transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
+    letter-spacing: 0.01em;
+    flex-shrink: 0;
+
+    @media (min-width: 768px) {
+      width: auto;
+      min-width: 160px;
+      margin: 0;
+      padding: 0 24px;
+      height: 44px;
+      border-radius: 60px;
+      margin-right: 5px;
+      @include font-sans_pro-semibold(14.5px);
+    }
+    @media (min-width: 1024px) {
+      min-width: 180px;
+      padding: 0 28px;
+    }
+
+    &:hover {
+      background: linear-gradient(135deg, #3a1169 0%, #5c348e 60%, #077a8f 100%);
+      box-shadow: 0 4px 14px rgba($purple, 0.25);
+    }
+    &:active { transform: scale(0.97); }
+
+    img { width: 18px; height: 18px; }
+  }
+}
+
+/* ── Box widths on desktop ── */
+.box-city {
+  @media (min-width: 768px) {
+    flex: 0 0 200px;
+    border-radius: 60px 0 0 60px;
+  }
+  @media (min-width: 1024px) {
+    flex: 0 0 220px;
+  }
+}
+
+.box-search {
+  @media (min-width: 768px) {
+    flex: 1 1 0%;
+  }
+}
+
+.divider-pipe {
+  color: rgba(0, 0, 0, 0.10) !important;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════
+   MAT AUTOCOMPLETE overrides
+   ═══════════════════════════════════════ */
+
+$_purple-dd: #45197c;
+$_purple-light-dd: rgba(69, 25, 124, 0.06);
+$_purple-soft-dd: rgba(69, 25, 124, 0.10);
+$_gray-100-dd: #f3f4f6;
+$_gray-200-dd: #e5e7eb;
+$_gray-400-dd: #9ca3af;
+$_gray-500-dd: #6b7280;
+$_gray-900-dd: #111827;
+$_gps-blue: #2563eb;
+$_dd-transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+::ng-deep {
+  .mat-mdc-optgroup-label {
+    background: $_gray-100-dd !important;
+    border-top: 1px solid $_gray-200-dd;
+    border-bottom: 1px solid $_gray-200-dd;
+    min-height: 32px !important;
+    padding: 6px 16px !important;
+    @include font-sans_pro-semibold(11px);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $_gray-500-dd !important;
+    opacity: 1;
+  }
+  .mdc-menu-surface.mat-mdc-autocomplete-panel {
+    padding: 4px 0 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12), 0 0 1px rgba(0, 0, 0, 0.08) !important;
+    border: none !important;
+    margin-top: 6px !important;
+    max-height: 440px !important;
+  }
+  .mdc-menu-surface.mat-mdc-autocomplete-panel.mat-mdc-autocomplete-visible {
+    border: none !important;
+    margin: 6px 0 !important;
+  }
+  /* Force wider search dropdown on desktop */
+  .search-dropdown.mat-mdc-autocomplete-panel {
+    @media (min-width: 768px) {
+      min-width: 520px !important;
+      width: auto !important;
+    }
+    @media (min-width: 1024px) {
+      min-width: 580px !important;
+    }
+  }
+  .mat-mdc-option {
+    border: none !important;
+    background: #fff !important;
+    min-height: 48px !important;
+    padding: 0 16px !important;
+    border-radius: 8px;
+    margin: 0 6px;
+    transition: background 0.15s ease;
+
+    &:hover,
+    &.mat-mdc-option-active {
+      background: rgba($_purple-dd, 0.04) !important;
+    }
+  }
+  .mat-mdc-optgroup .mat-mdc-option {
+    border: none !important;
+    background: #fff !important;
+
+    &:hover,
+    &.mat-mdc-option-active {
+      background: rgba($_purple-dd, 0.04) !important;
+    }
+  }
+  .mat-mdc-option .mdc-list-item__primary-text {
+    margin-right: 0;
+    width: 100% !important;
+    color: $_gray-900-dd !important;
+  }
+  .mat-mdc-optgroup .mat-mdc-option:not(.mat-mdc-option-multiple) {
+    padding-left: 16px !important;
+  }
+  .mat-mdc-option.mdc-list-item {
+    min-height: 48px !important;
+  }
+}
+
+/* ═══════════════════════════════════════
+   SUGGESTION ITEMS — matches mobile design
+   ═══════════════════════════════════════ */
+
+/* Suggestion icon (search, recent) */
+.suggestion-icon {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &--search {
+    background: $_purple-light-dd;
+    color: $_purple-dd;
+  }
+
+  &--recent {
+    background: rgba($_gray-400-dd, 0.1);
+    color: $_gray-500-dd;
+  }
+}
+
+/* Suggestion name text */
+.suggestion-name {
+  flex: 1;
+  @include font-sans_pro-regular(14px);
+  color: $_gray-900-dd;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.35;
+}
+
+/* Subtitle (specialization, locality) */
+.suggestion-sub {
+  @include font-sans_pro-regular(12px);
+  color: $_gray-500-dd;
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Info block (name + subtitle) */
+.suggestion-info {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Badge pills */
+.suggestion-badge {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: 20px;
+  @include font-sans_pro-semibold(10px);
+  background: $_purple-light-dd;
+  color: $_purple-dd;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+
+  &--service {
+    background: rgba(16, 185, 129, 0.08);
+    color: #059669;
+  }
+}
+
+/* Avatar (doctor/hospital/clinic) — matches mobile 40px rounded rect */
+.suggestion-avatar {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: $_purple-light-dd;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+
+  &--initials {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include font-sans_pro-semibold(13px);
+    color: $_purple-dd;
+  }
+}
+
+/* Right arrow on entity items */
+.suggestion-arrow {
+  flex-shrink: 0;
+  color: #d1d5db;
+  transition: transform $_dd-transition, color $_dd-transition;
+
+  .mat-mdc-option:hover &,
+  .mat-mdc-option.mat-mdc-option-active & {
+    transform: translateX(2px);
+    color: $_purple-dd;
+  }
+}
+
+/* Entity row (doctor/hospital/clinic) */
+.suggestion-entity {
+  width: 100%;
+}
+
+/* Category label inside optgroup */
+.suggestion-category {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  @include font-sans_pro-semibold(12px);
+  color: $_gray-500-dd;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  svg { opacity: 0.55; }
+}
+
+/* Quick search link options */
+.suggestion-quick {
+  border-top: 1px solid $_gray-100-dd !important;
+
+  strong {
+    color: $_purple-dd;
+  }
+}
+
+/* Loading spinner */
+.search-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid $_gray-200-dd;
+  border-top-color: $_purple-dd;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Search states */
+.search-state {
+  pointer-events: none;
+  opacity: 1 !important;
+}
+
+/* City dropdown — action options */
+.city-action-option {
+  border-bottom: 1px solid $_gray-100-dd;
+  cursor: pointer;
+  padding: 8px 16px;
+  &:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }
+}
+
+.city-action-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+
+  &--gps {
+    color: $_purple-dd;
+  }
+
+  &--entire {
+    color: $_purple-dd;
+  }
+}
+
+.city-action-text {
+  @include font-sans_pro-regular(14px);
+  color: $_purple-dd;
+  font-weight: 500;
+}
+
+/* City dropdown icons */
+.city-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &--city {
+    background: rgba($_purple-dd, 0.07);
+    color: $_purple-dd;
+  }
+
+  &--locality {
+    background: rgba($_gps-blue, 0.07);
+    color: $_gps-blue;
+  }
+}
+
+.city-name {
+  @include font-sans_pro-regular(14px);
+  color: $_gray-900-dd;
+  line-height: 1.3;
+}
+
+.city-parent {
+  @include font-sans_pro-regular(11px);
+  color: $_gray-400-dd;
+  line-height: 1.3;
+  margin-top: 1px;
+}
+
+.profile-icon {
+  border-radius: 50%;
+  height: 24px;
+  width: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: $bright-gray;
+  border: 1px solid $border-color;
+  font-size: 12px;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 4;
+}
+
+.text-purple { color: $purple !important; }
+
+/* ═══════════════════════════════════════
+   MOBILE STICKY FOOTER
+   ═══════════════════════════════════════ */
+.footer {
+  display: none;
+
+  @media screen and (max-width: 767px) {
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    display: block;
+    position: fixed;
+    z-index: 5;
+    left: 0; bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 14px 0;
+    @include font-sans_pro-semibold(15px);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    p { margin: 0; }
+  }
+}
+
+.white-footer {
+  background: rgba(255, 255, 255, 0.94) !important;
+  color: $purple !important;
+  box-shadow: 0 -1px 12px rgba(0, 0, 0, 0.05);
+}
+
+.purple-footer {
+  background: rgba($purple, 0.95) !important;
+  color: $white !important;
+}
+
+.button_search img {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+}
+
+/* ═══════════════════════════════════════
+   ATLAS SEARCH — highlights & did-you-mean
+   ═══════════════════════════════════════ */
+
+/* "Did you mean: X?" banner */
+.did-you-mean {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba($_purple-dd, 0.04);
+  color: $_gray-500-dd;
+  @include font-sans_pro-regular(13px);
+  cursor: pointer;
+  transition: background $_dd-transition;
+
+  svg { color: $_purple-dd; opacity: 0.6; flex-shrink: 0; }
+
+  strong {
+    color: $_purple-dd;
+    @include font-sans_pro-semibold(13px);
+  }
+
+  &:hover {
+    background: rgba($_purple-dd, 0.08);
+  }
+}
+
+::ng-deep .did-you-mean-option {
+  border-bottom: 1px solid $_gray-100-dd !important;
+}
+
+/* Highlighted matched text from Atlas Search */
+.highlight-hit {
+  background: rgba($_purple-dd, 0.10);
+  color: $_purple-dd;
+  @include font-sans_pro-semibold(14px);
+  border-radius: 2px;
+  padding: 0 1px;
+}

@@ -1,0 +1,58 @@
+@use "variable.scss" as *;
+@use "_settings.colors.scss" as *;
+
+.patient-list {
+  width: 300px;
+  max-height: 400px;
+  overflow: auto;
+
+  .patient-count {
+    position: sticky;
+    top: 0;
+    left: 0;
+    background: $purple;
+  }
+
+  .patient {
+    .img-wrapper {
+      width: 40px;
+      height: 40px;
+      border-radius: 20px;
+      border: 1px solid $border-color;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .profile-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        object-fit: contain;
+      }
+    }
+
+    &.booked {
+      border-left: 10px solid $pending;
+      background: rgba($color: $pending, $alpha: 0.2);
+    }
+
+    &.cancelled {
+      border-left: 10px solid $red;
+      background: rgba($color: $red, $alpha: 0.2);
+    }
+
+    &.completed {
+      border-left: 10px solid $green;
+      background: rgba($color: $green, $alpha: 0.2);
+    }
+  }
+}
+.tippy-box[data-theme="custom-patient"] {
+  background-color: #f9f9f9;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+}

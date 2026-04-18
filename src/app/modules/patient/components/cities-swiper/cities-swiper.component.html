@@ -1,0 +1,139 @@
+<section class="critical-issues">
+  <div class="critical-issues__wrapper">
+  <h2>Find Best Doctors in Hospitals and Clinics.</h2>
+  </div>
+
+  <!-- Desktop View -->
+  <div class="critical-issues__carousel" style="margin-left: 7.5%" *ngIf="isBrowser && !isMobileView">
+    <owl-carousel-o [options]="customOptions">
+      <ng-container *ngFor="let slide of apiData; trackBy: trackById">
+        <ng-template class="slide" carouselSlide [id]="slide.id + 'c'" [width]="cardWidth">
+          <div class="critical-issues__carousel__items">
+            <div class="center">
+              <div class="critical-issues__carousel__items__image">
+                <!-- Fallback Initials if Image Missing or Error -->
+                <a
+                  class="profile-icon cursor-pointer"
+                  *ngIf="!slide.image || slide.imageError"
+                  [routerLink]="[ commonService.replaceSpaceWithHyphen(slide?.name) ]"
+                  [title]="slide?.name"
+                >
+                  {{ slide?.name | nameInitial | uppercase }}
+                </a>
+
+                <!-- Image if available -->
+                <a
+                  *ngIf="slide.image && !slide.imageError"
+                  [routerLink]="[ commonService.replaceSpaceWithHyphen(slide?.name) ]"
+                  [title]="slide?.name"
+                >
+                  <img
+                    class="cursor-pointer"
+                    [src]="slide.image"
+                    [alt]="slide?.name"
+                    width="100"
+                    height="100"
+                    loading="lazy"
+                    (error)="onImageError(slide)"
+                  />
+                </a>
+              </div>
+            </div>
+
+            <a
+              class="cursor-pointer line-clamp-2 text-center text-decoration-none text-black"
+              [routerLink]="[ commonService.replaceSpaceWithHyphen(slide?.name) ]"
+              [title]="slide?.name"
+            >
+              {{ slide?.name }}
+            </a>
+          </div>
+        </ng-template>
+      </ng-container>
+    </owl-carousel-o>
+  </div>
+
+  <!-- Mobile View -->
+  <div class="critical-issues__carousel" style="margin-left: 5%" *ngIf="isBrowser && isMobileView">
+    <owl-carousel-o [options]="customOptions">
+      <ng-container *ngFor="let slide of apiData; trackBy: trackById">
+        <ng-template class="slide" carouselSlide [width]="cardWidth">
+          <div class="d-flex flex-column gap-3">
+            <!-- First Item -->
+            <div class="critical-issues__carousel__items" *ngIf="slide[0]">
+              <div class="center">
+                <div class="critical-issues__carousel__items__image">
+                  <div
+                    class="profile-icon"
+                    *ngIf="!slide[0]?.image || slide[0]?.imageError"
+                    (click)="viewDoctor(slide[0]?.name)"
+                  >
+                    {{ slide[0]?.name | nameInitial | uppercase }}
+                  </div>
+                  <img
+                    *ngIf="slide[0]?.image && !slide[0]?.imageError"
+                    [src]="slide[0]?.image"
+                    [alt]="slide[0]?.name"
+                    (click)="viewDoctor(slide[0]?.name)"
+                    (error)="onImageError(slide[0])"
+                    width="100"
+                    height="100"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+              <h3 (click)="viewDoctor(slide[0]?.name)">
+                {{ slide[0]?.name }}
+              </h3>
+            </div>
+
+            <!-- Second Item -->
+            <div class="critical-issues__carousel__items" *ngIf="slide[1]">
+              <div class="center">
+                <div class="critical-issues__carousel__items__image">
+                  <div
+                    class="profile-icon"
+                    *ngIf="!slide[1]?.image || slide[1]?.imageError"
+                    (click)="viewDoctor(slide[1]?.name)"
+                  >
+                    {{ slide[1]?.name | nameInitial | uppercase }}
+                  </div>
+                  <img
+                    *ngIf="slide[1]?.image && !slide[1]?.imageError"
+                    [src]="slide[1]?.image"
+                    [alt]="slide[1]?.name"
+                    (click)="viewDoctor(slide[1]?.name)"
+                    (error)="onImageError(slide[1])"
+                    width="100"
+                    height="100"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+              <h3 (click)="viewDoctor(slide[1]?.name)">
+                {{ slide[1]?.name }}
+              </h3>
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+    </owl-carousel-o>
+  </div>
+</section>
+<style>
+.profile-icon {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  color: #45197c;
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: linear-gradient(135deg, #f3eaff 0%, #e8dcf5 100%);
+}
+
+</style>

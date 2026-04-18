@@ -1,0 +1,30 @@
+<div class="filter-chips-container" *ngIf="hasActiveFilters()">
+  <div class="chips-header">
+    <span class="active-filters-label">
+      <mat-icon>filter_alt</mat-icon>
+      Active Filters ({{ activeChips.length }})
+    </span>
+    <button 
+      mat-button 
+      class="clear-all-btn" 
+      (click)="clearAllFilters()"
+      aria-label="Clear all filters"
+    >
+      <mat-icon>clear_all</mat-icon>
+      Clear All
+    </button>
+  </div>
+
+  <div class="chips-list">
+    <div class="chip-container" aria-label="Active filters">
+      <div 
+        *ngFor="let chip of activeChips" 
+        class="filter-chip"
+      >
+        <mat-icon class="chip-icon">{{ getChipIcon(chip) }}</mat-icon>
+        <span class="chip-label">{{ chip.label }}</span>
+        <mat-icon class="chip-remove" (click)="removeChip(chip)" aria-label="Remove filter">cancel</mat-icon>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,87 @@
+<div class="hospital-patient">
+  <div
+    class="subheader-wrapper d-flex justify-content-between align-items-center gap-5 w-100 border-bottom-style"
+  >
+    <div class="heading d-flex align-items-center h-100">
+      <div class="hamber">
+        <button class="svg-icon-button" (click)="openSidenav()">
+          <svg-icon
+            src="assets/images/svg/hamber.svg"
+          ></svg-icon>
+        </button>
+      </div>
+      <span class="text-24 font-600">{{ "Procedure" }}</span>
+    </div>
+    <button
+      class="add-button d-flex align-items-center justify-content-center"
+      (click)="onAdd()"
+    >
+      <svg-icon src="assets/images/svg/add.svg"></svg-icon>
+      &nbsp;&nbsp;
+      <div class="button-text">Add</div>
+    </button>
+  </div>
+  <div class="patient-list">
+    <table>
+      <caption></caption>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th class="name">
+            <div class="d-flex gap-3 align-items-center">
+              {{ "PROCEDURE_NAME" | translate }}
+              <div class="d-flex flex-column">
+                <svg-icon
+                  src="assets/images/svg/whitedropup.svg"
+                  class="cursor-pointer"
+                  (click)="onSorting('procedureName', 'ASC')"
+                ></svg-icon>
+                <svg-icon
+                  src="assets/images/svg/whitedropdown.svg"
+                  class="cursor-pointer"
+                  (click)="onSorting('procedureName', 'DESC')"
+                ></svg-icon>
+              </div>
+            </div>
+          </th>
+
+          <th>{{ "OPTIONS" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let procedure of procedureList
+              | paginate
+                : {
+                    itemsPerPage: payload.size,
+                    currentPage: payload.page,
+                    totalItems: totalItems
+                  };
+            let i = index
+          "
+        >
+          <td>{{ i + 1 }}</td>
+
+          <td class="name">{{ procedure.procedureName | titlecase }}</td>
+
+          <td>
+            <button
+              class="delete-btn bg-white border-0"
+              (click)="onDelete(procedure.procedureId)"
+            >
+              <svg-icon src="assets/images/svg/trash.svg"></svg-icon
+              >&nbsp;&nbsp;&nbsp;
+              <span>
+                {{ "DELETE" | translate }}
+              </span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="text-center py-24 text-18" *ngIf="!totalItems && apiCalled">
+      {{ "NO_PROCEDURE_FOUND" | translate }}
+    </div>
+  </div>
+</div>

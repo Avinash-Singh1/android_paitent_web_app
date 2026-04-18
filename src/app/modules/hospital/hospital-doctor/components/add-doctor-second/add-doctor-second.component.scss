@@ -1,0 +1,97 @@
+@use "variable.scss" as *;
+@use "src/styles/components/_components.form.scss" as *;
+
+.add-doctor-first {
+  .form-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    &.non-editable {
+      opacity: 0.5;
+    }
+  }
+
+  .main-content {
+    height: calc(100% - 79px);
+  }
+
+  button {
+    padding: 12px 24px;
+    width: 150px;
+    border-radius: 5px;
+    font-size: 14px;
+
+    &.cancel {
+      background: $white;
+      border: 1px solid $border-color;
+    }
+
+    &.next {
+      background: $purple;
+      border: none;
+      color: $white;
+    }
+  }
+}
+
+::ng-deep {
+  .mdc-dialog__actions.add-doctor-second {
+    padding: 0 !important;
+  }
+
+  .mdc-dialog__content.add-doctor-second {
+    color: $black !important;
+    font-size: 14px !important;
+
+    font-family: "Source Sans Pro", sans-serif !important;
+
+    max-height: 70vh !important;
+  }
+}
+
+:host::ng-deep {
+  .ng-select {
+    font-size: 14px !important;
+  }
+
+  .specialisation.ng-select .ng-select-container {
+    border: 1px solid $border-color;
+    border-radius: 4px !important;
+    min-height: 48px !important;
+    padding: 0 24px;
+  }
+
+  .ng-select .ng-select-container .ng-value-container {
+    padding-left: 0 !important;
+  }
+
+  .specialisation.ng-select .ng-select-container .ng-value-container .ng-input>input {
+    padding: 6px 0px !important;
+  }
+
+  .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-placeholder {
+    top: unset !important;
+  }
+
+  .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon.left {
+    border-right: none !important;
+    font-size: 14px !important;
+  }
+
+  .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-label {
+    font-size: 14px !important;
+  }
+
+  .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+    padding: 4px !important;
+    border: 1px solid $border-color !important;
+    border-radius: 4px !important;
+    background: $white !important;
+    white-space: normal !important;
+  }
+
+  .ng-dropdown-panel .ng-dropdown-panel-items {
+    font-size: 14px !important;
+  }
+}

@@ -1,0 +1,243 @@
+$purple: #45197c;
+$lavender: #f2e8ff;
+
+.doctors {
+  margin-bottom: 40px;
+
+  &__title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 20px;
+    max-width: 1200px;
+  }
+
+  // Slider wrapper with arrows
+  &__slider {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__arrow {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1.5px solid #e0e0e0;
+    background: #fff;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    z-index: 2;
+
+    &:hover {
+      border-color: $purple;
+      color: $purple;
+      box-shadow: 0 2px 12px rgba($purple, 0.12);
+    }
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  // Horizontal scroll container
+  &__scroll {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    min-height: 340px; // Reserve scroll container height for CLS
+
+    &::-webkit-scrollbar { height: 4px; }
+    &::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
+  }
+
+  &__card {
+    min-width: 260px;
+    max-width: 280px;
+    flex-shrink: 0;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 14px;
+    padding: 20px;
+    contain: content; // Isolate layout recalc
+    text-align: center;
+    scroll-snap-align: start;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      border-color: $purple;
+      box-shadow: 0 4px 16px rgba($purple, 0.08);
+    }
+  }
+
+  &__card-top {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 12px;
+  }
+
+  &__card-online {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 12px;
+    height: 12px;
+    background: #22c55e;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    z-index: 1;
+  }
+
+  &__card-img {
+    width: 80px;
+    height: 80px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid $lavender;
+  }
+
+  &__card-name {
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a2e;
+    text-decoration: none;
+    margin-bottom: 4px;
+
+    &:hover { color: $purple; }
+  }
+
+  &__card-qual {
+    font-size: 13px;
+    color: #666;
+    margin: 0 0 8px;
+  }
+
+  &__card-meta {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 6px;
+  }
+
+  &__card-exp { font-weight: 500; }
+
+  &__card-rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 6px;
+  }
+
+  &__card-stars { font-size: 14px; }
+
+  &__card-rating-num {
+    font-size: 14px;
+    font-weight: 700;
+    color: #333;
+  }
+
+  &__card-exp-line {
+    font-size: 13px;
+    color: #666;
+    margin: 0 0 8px;
+  }
+
+  &__card-location {
+    font-size: 12px;
+    color: #888;
+    margin: 0 0 8px;
+    line-height: 1.4;
+  }
+
+  &__card-hospital {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    margin: 0 0 12px;
+    padding: 6px 10px;
+    background: #f2e8ff;
+    border-radius: 8px;
+    justify-content: center;
+  }
+
+  &__card-hospital-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  &__card-hospital-name {
+    color: #45197c;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &:hover { text-decoration: underline; }
+  }
+
+  &__card-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  &__card-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+
+    &--call {
+      border: 1.5px solid $purple;
+      color: $purple;
+      background: #fff;
+      &:hover { background: $lavender; }
+    }
+
+    &--book {
+      background: $purple;
+      color: #fff;
+      &:hover { opacity: 0.9; }
+    }
+  }
+
+  // View All
+  &__view-all {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  &__view-all-link {
+    display: inline-block;
+    color: $purple;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 10px 28px;
+    border: 1.5px solid $purple;
+    border-radius: 8px;
+    transition: all 0.2s;
+
+    &:hover {
+      background: $purple;
+      color: #fff;
+    }
+  }
+}

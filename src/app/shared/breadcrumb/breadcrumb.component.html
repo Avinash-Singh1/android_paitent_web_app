@@ -1,0 +1,47 @@
+<nav class="breadcrumb-container" aria-label="Breadcrumb" *ngIf="(breadcrumbs$ | async) as breadcrumbs">
+  <ol class="breadcrumb-list">
+    <li 
+      *ngFor="let breadcrumb of getVisibleBreadcrumbs(breadcrumbs); let last = last" 
+      class="breadcrumb-item"
+      [class.active]="breadcrumb.isActive"
+    >
+      <!-- Home icon -->
+      <a 
+        *ngIf="breadcrumb.icon && !breadcrumb.isActive"
+        class="breadcrumb-link breadcrumb-home"
+        [routerLink]="breadcrumb.url"
+        [attr.aria-current]="breadcrumb.isActive ? 'page' : null"
+      >
+        <mat-icon class="breadcrumb-icon">{{ breadcrumb.icon }}</mat-icon>
+        <span class="breadcrumb-home-label">{{ breadcrumb.label }}</span>
+      </a>
+
+      <!-- Regular link -->
+      <a 
+        *ngIf="!breadcrumb.icon && !breadcrumb.isActive && breadcrumb.url"
+        class="breadcrumb-link"
+        [routerLink]="breadcrumb.url"
+      >
+        {{ breadcrumb.label }}
+      </a>
+
+      <!-- Active/current page (not clickable) -->
+      <span 
+        *ngIf="breadcrumb.isActive || !breadcrumb.url"
+        class="breadcrumb-current"
+        [attr.aria-current]="breadcrumb.isActive ? 'page' : null"
+      >
+        {{ breadcrumb.label }}
+      </span>
+
+      <!-- Separator -->
+      <mat-icon 
+        *ngIf="!last" 
+        class="breadcrumb-separator"
+        aria-hidden="true"
+      >
+        {{ config.separator }}
+      </mat-icon>
+    </li>
+  </ol>
+</nav>

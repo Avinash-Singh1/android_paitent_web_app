@@ -1,0 +1,122 @@
+@use "variable.scss" as *;
+
+.menu-list li a img {
+  transition: filter 0.3s ease; /* Smooth transition */
+}
+
+.menu-list li a:hover img {
+  filter: invert(100%);
+}
+
+.edit-profile {
+  .content {
+    gap: 24px 0;
+
+    .image-wrapper {
+      height: 100px;
+      width: 100px;
+      background: $light-gray;
+      border-radius: 100%;
+
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 100%;
+      }
+
+      &.no-bg {
+        background: $white !important;
+        border: 1px solid $border-color;
+      }
+    }
+
+    .change-photo {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 14px
+    }
+
+    .non-editable {
+      opacity: 0.7 !important;
+    }
+
+    .form-item {
+      padding: 0 20px;
+    }
+  }
+
+  input[type="text"],
+  input[type="date"] {
+    height: 48px;
+    border: 1px solid $border-color;
+    border-radius: 5px;
+    outline: none;
+    padding: 0 24px;
+    font-size: 14px
+  }
+
+  input[type="radio"] {
+    width: 24px;
+    height: 24px;
+    accent-color: $black;
+  }
+
+  .matdate-input {
+    padding: 1px 0;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    height: 48px;
+    border-radius: 5px;
+    position: relative;
+
+    .toggle {
+      position: absolute;
+      top: 0px;
+      right: 4px;
+    }
+
+    input {
+      height: 100%;
+      border: none;
+      border-radius: 5px;
+      width: 90%;
+      padding: 0 24px;
+      outline: none;
+      font-size: 14px;
+
+      text-overflow: ellipsis;
+    }
+  }
+
+  label {
+    font-size: 14px // white-space: nowrap !important;
+  }
+}
+
+:host::ng-deep {
+  .ng-select .ng-select-container {
+    height: 48px !important;
+    padding: 0 10px !important;
+    border: 1px solid $border-color;
+
+    .ng-value-container .ng-input>input {
+      padding: 7px 10px !important;
+    }
+  }
+
+  .mdc-dialog__actions {
+    padding: 0 !important;
+  }
+
+  --mat-dialog-supporting-text-color: $black !important;
+}
+
+::ng-deep {
+  .dialog-content.mat-mdc-dialog-container .mdc-dialog__content {
+    color: $black !important;
+  }
+}
+
+.error-div {
+  margin-top: -8px;
+}

@@ -1,0 +1,195 @@
+$purple: #45197c;
+$lavender: #f2e8ff;
+
+.related {
+  margin-bottom: 40px;
+
+  &__title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 20px;
+
+    @media (max-width: 768px) { font-size: 20px; margin-bottom: 16px; }
+  }
+
+  &__subtitle {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin: 0 0 14px;
+
+    @media (max-width: 768px) { font-size: 17px; }
+  }
+
+  // Subtopics
+  &__subtopics {
+    margin-bottom: 36px;
+  }
+
+  &__subtopics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+  }
+
+  &__subtopic-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #faf8fd;
+    border: 1px solid #e8e0f3;
+    border-radius: 10px;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      border-color: $purple;
+      box-shadow: 0 2px 8px rgba($purple, 0.1);
+    }
+  }
+
+  // Related grid
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+    transition: border-color 0.2s, transform 0.2s;
+
+    &:hover {
+      border-color: $purple;
+      transform: translateY(-2px);
+    }
+  }
+
+  &__card-img {
+    width: 64px;
+    height: 64px;
+    aspect-ratio: 1 / 1;
+    border-radius: 10px;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+
+  &__card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  /* ---------- city links ---------- */
+  &__cities {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid #e8e0f3;
+  }
+
+  &__cities-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 16px;
+
+    @media (max-width: 768px) { font-size: 17px; }
+  }
+
+  &__cities-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  &__city-link {
+    display: inline-block;
+    padding: 8px 16px;
+    background: #faf8fd;
+    border: 1px solid #e8e0f3;
+    border-radius: 8px;
+    font-size: 13px;
+    color: $purple;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+
+    &:hover {
+      background: $lavender;
+      border-color: $purple;
+    }
+  }
+
+  /* ---------- department links ---------- */
+  &__depts {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid #e8e0f3;
+  }
+
+  &__depts-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 16px;
+
+    svg { stroke: $purple; flex-shrink: 0; }
+
+    @media (max-width: 768px) { font-size: 17px; }
+  }
+
+  &__depts-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  &__dept-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: $purple;
+      background: $lavender;
+      transform: translateY(-2px);
+      box-shadow: 0 2px 8px rgba($purple, 0.08);
+    }
+  }
+
+  &__dept-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  &__dept-count {
+    font-size: 11px;
+    color: #888;
+    background: #f5f5f5;
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+}

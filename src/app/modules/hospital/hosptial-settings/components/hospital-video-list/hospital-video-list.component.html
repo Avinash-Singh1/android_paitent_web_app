@@ -1,0 +1,51 @@
+<section class="services-section w-100">
+  <header
+    class="w-100 heading d-flex justify-content-between gap-40 align-items-center border-bottom-style"
+  >
+    <div class="text-16 font-600">
+      {{ "VIDEOS" | translate }}
+    </div>
+    <button class="add-more" (click)="onAddVideo()">
+      <svg-icon src="assets/images/svg/add.svg"></svg-icon>
+      <span class="mt-1">
+        {{ "ADD" | translate }}
+      </span>
+    </button>
+  </header>
+  <main class="p-24 d-flex flex-column gap-3">
+    <ng-container *ngFor="let video of videoList; let i = index">
+      <div
+        class="p-24 border-style d-flex justify-content-between align-items-center"
+      >
+        <div class="d-flex align-items-center justify-content-center gap-40">
+          <span>{{ i + 1 }}</span>
+          <iframe
+            title=""
+            [src]="
+              video.url
+                | replace : 'watch?v=' : 'embed/'
+                | async
+                | sanitize
+                | async
+            "
+            allowfullscreen
+            class="video-wrapper"
+          ></iframe>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <svg-icon src="assets/images/svg/Access time.svg"></svg-icon>
+          <span>{{ video.updatedAt | date : "dd EEE, yyyy" }}</span>
+        </div>
+        <div
+          class="d-flex justify-content-between align-items-center gap-2 py-12 px-24 border-style cursor-pointer rounded-1"
+          (click)="onEditVideos(video)"
+        >
+          <svg-icon src="assets/images/svg/edit.svg"></svg-icon>
+          <span class="mt-1">
+            {{ "EDIT" | translate }}
+          </span>
+        </div>
+      </div>
+    </ng-container>
+  </main>
+</section>

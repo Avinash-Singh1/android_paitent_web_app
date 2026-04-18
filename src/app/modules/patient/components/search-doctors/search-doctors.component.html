@@ -1,0 +1,58 @@
+<section class="hero">
+  <!-- Subtle background -->
+  <div class="hero__bg" aria-hidden="true">
+    <div class="hero__bg-blob hero__bg-blob--1"></div>
+    <div class="hero__bg-blob hero__bg-blob--2"></div>
+  </div>
+
+  <div class="hero__inner">
+    <!-- Badge -->
+    <div class="hero__badge">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <rect x="6" y="2" width="4" height="12" rx="1" fill="currentColor"/>
+        <rect x="2" y="6" width="12" height="4" rx="1" fill="currentColor"/>
+      </svg>
+      Trusted Healthcare Platform
+    </div>
+
+    <!-- Heading -->
+    <h1 class="hero__title">
+      Find Your Perfect
+      <span class="hero__rotator" [@animSlider]="currentNum">
+        <ng-container *ngFor="let item of textArray; let i = index; trackBy: trackByIndex">
+          <em *ngIf="i === currentNum">{{ item }}</em>
+        </ng-container>
+      </span>
+    </h1>
+
+    <!-- Sub-text -->
+    <p class="hero__subtitle">
+      Book appointments with verified doctors, get instant consultations
+      and access quality healthcare — all in one place.
+    </p>
+
+    <!-- Search -->
+    <div
+      class="hero__search anime-section"
+      [class.hero__search--hidden]="show"
+    >
+      <nectar-global-search class="w-100"></nectar-global-search>
+    </div>
+
+    <!-- Stats -->
+    <div class="hero__stats">
+      <div class="hero__stat">
+        <strong>10,000+</strong>
+        <span>Verified Doctors</span>
+      </div>
+      <div class="hero__stat">
+        <strong>50,000+</strong>
+        <span>Happy Patients</span>
+      </div>
+      <div class="hero__stat">
+        <strong>200+</strong>
+        <span>Specializations</span>
+      </div>
+    </div>
+  </div>
+</section>

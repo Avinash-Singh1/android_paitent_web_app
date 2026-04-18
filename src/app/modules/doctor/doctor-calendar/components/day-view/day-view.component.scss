@@ -1,0 +1,112 @@
+@use "src/styles/scss/variable.scss" as *;
+@use "src/styles/elements/_elements.svg.scss" as *;
+
+.day-view {
+  max-height: calc(100vh - 72px);
+  overflow: auto;
+  font-size: 14px;
+  table {
+    table-layout: auto;
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid rgba($color: #000000, $alpha: 0.3);
+    border-spacing: 0;
+  }
+  width: 100%;
+  height: 100%;
+  td {
+    border: 1px solid rgba($color: #000000, $alpha: 0.3);
+    white-space: nowrap;
+    vertical-align: middle;
+    background: $white;
+    padding: 0;
+    &.timing {
+      .timepointer {
+        left: 4px;
+      }
+    }
+    .dotted-border {
+      border-top: 2px dotted $purple;
+    }
+  }
+  .timing {
+    width: 100px !important;
+    padding: 8px 20px;
+    text-align: center;
+  }
+  .timing.header {
+    color: $faded-text;
+    font-weight: 400;
+    width: 100px !important;
+  }
+  .day-name {
+    text-align: center;
+    background: $gray;
+    color: $white;
+  }
+  .day-data {
+    height: 44px !important;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-left: 10px solid $gray;
+    &.booked {
+      border-left: 10px solid $pending;
+      background: rgba($color: $pending, $alpha: 0.2);
+    }
+    &.cancelled {
+      border-left: 10px solid $red;
+      background: rgba($color: $red, $alpha: 0.2);
+    }
+    &.completed {
+      border-left: 10px solid $green;
+      background: rgba($color: $green, $alpha: 0.2);
+    }
+  }
+  th {
+    background: $white;
+    white-space: nowrap;
+    position: sticky;
+    z-index: 1;
+    top: 0;
+    &.current-day {
+      background: $purple;
+      color: $white;
+    }
+  }
+  th::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid $border-color;
+    display: block;
+    top: 0px;
+  }
+
+  th::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-bottom: 1px solid $border-color;
+    display: block;
+    bottom: 0px;
+  }
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+.day {
+  border: none;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-left: 10px solid $gray;
+  background: $silver-sand;
+}

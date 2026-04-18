@@ -1,0 +1,102 @@
+@use "tools.mediaquery" as *;
+
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+
+@use "variable.scss" as *;
+
+
+.find-doctors {
+  background: $purple;
+
+  &__container {
+    max-width: $content-max-width;
+    margin: 0 auto;
+    padding: 70px 20px 100px 0px;
+
+    @media screen and (max-width: 767px) {
+      max-width: $content-sm-max-width;
+    }
+
+    h2 {
+      color: $white;
+      @include font-sans_pro-semibold($size: 32px, $lineheight: 40px);
+
+      margin-bottom: 30px;
+
+      @media screen and (max-width: 767px) {
+        @include font-sans_pro-semibold($size: 24px);
+      }
+    }
+
+    &__data {
+      mat-accordion {
+        break-inside: avoid;
+
+        ::ng-deep {
+          mat-expansion-panel {
+            margin-top: 20px;
+            box-shadow: none;
+            border: none;
+            border-bottom: 1px solid #6e489d;
+            border-radius: 0px !important;
+
+            &.mat-expanded {
+              border-radius: 0px 0px 0px 0px !important;
+            }
+
+            &:first-child {
+              margin-top: 0px;
+            }
+
+            // &:last-child {
+            //   break-before: avoid-column;
+            // }
+            mat-panel-title {
+              color: $white;
+              @include font-sans_pro-semibold($size: 16px, $lineheight: 21px);
+            }
+
+            .mat-expansion-indicator {
+              &::after {
+                color: $white;
+                margin-bottom: 7px;
+              }
+            }
+
+            mat-expansion-panel-header {
+              height: 56px;
+              background: $purple;
+              padding: 10px 15px 0 15px;
+
+              .mat-content {
+                display: block;
+              }
+
+              &:hover {
+                background: $purple !important;
+              }
+            }
+
+            .mat-expansion-panel-content {
+              background: $purple;
+            }
+
+            .mat-expansion-panel-body {
+              background: transparent;
+              // padding: 10px;
+              padding: 0 15px 10px 15px;
+
+              a {
+                display: block;
+                color: yellow;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

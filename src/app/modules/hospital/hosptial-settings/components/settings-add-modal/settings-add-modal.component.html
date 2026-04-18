@@ -1,0 +1,56 @@
+<main class="settings-add">
+  <header class="px-24 py-3 font-600 text-24 border-bottom-style">
+    {{ data.heading }}
+  </header>
+  <mat-dialog-content class="settings-add">
+    <form [formGroup]="addForm" class="d-flex flex-column gap-6">
+      <ng-container *ngFor="let field of formList[data.type].fields">
+        <div class="form-item d-flex flex-column gap-2">
+          <label [htmlFor]="field.formcontrolName" class="font-600">
+            {{ field.label }}
+            <span class="required-hint" *ngIf="field.required">*</span>
+          </label>
+          <nectar-form-field *ngIf="field.type == 'input'">
+            <input
+              nectarError
+              [controlName]="field.formcontrolName | titlecase"
+              type="text"
+              [formControlName]="field.formcontrolName"
+              class="form-input w-100"
+              [placeholder]="field.placeholder"
+            />
+          </nectar-form-field>
+          <nectar-form-field *ngIf="field.type == 'textarea'">
+            <textarea
+              nectarError
+              [controlName]="field.formcontrolName | titlecase"
+              type="text"
+              [formControlName]="field.formcontrolName"
+              class="textarea-input w-100"
+              [rows]="field.rows"
+              [placeholder]="field.placeholder"
+            ></textarea>
+          </nectar-form-field>
+        </div>
+      </ng-container>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions class="settings-add">
+    <div
+      class="buttongroup d-flex justify-content-between gap-6 border-top-style w-100 px-24 py-3"
+    >
+      <div>
+        <button class="delete" *ngIf="data.edit" (click)="onDelete()">
+          <span class="mt-0-5 required-hint text-18">
+            {{ "DELETE" | translate }}
+          </span>
+          <svg-icon src="assets/images/svg/delete1.svg"></svg-icon>
+        </button>
+      </div>
+      <div class="d-flex gap-6">
+        <button class="cancel" (click)="matdialogRef.close()">Cancel</button>
+        <button class="save" (click)="onSubmit()">Save</button>
+      </div>
+    </div>
+  </mat-dialog-actions>
+</main>

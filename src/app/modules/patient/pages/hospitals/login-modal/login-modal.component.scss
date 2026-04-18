@@ -1,0 +1,728 @@
+// ═══════════════════════════════════════════════════════════════
+// Login Modal — Modern Healthcare Design System
+// ═══════════════════════════════════════════════════════════════
+
+$purple: #45197c;
+$purple-light: #f3eaff;
+$purple-100: #ede5f7;
+$purple-200: #d9c9f0;
+$purple-hover: #5a2da0;
+$gray-50: #f9fafb;
+$gray-100: #f3f4f6;
+$gray-200: #e5e7eb;
+$gray-300: #d1d5db;
+$gray-400: #9ca3af;
+$gray-500: #6b7280;
+$gray-600: #4b5563;
+$gray-700: #374151;
+$gray-800: #1f2937;
+$gray-900: #111827;
+$green-50: #f0fdf4;
+$green-500: #22c55e;
+$green-700: #15803d;
+$red-500: #ef4444;
+$red-50: #fef2f2;
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 16px;
+$radius-xl: 20px;
+$radius-full: 9999px;
+$shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+$shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+$shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+$shadow-xl: 0 20px 60px rgba(69,25,124,0.12), 0 8px 24px rgba(0,0,0,0.08);
+$transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+// ─── Base modal container ──────────────────────────────────────
+.lm {
+  border-radius: $radius-xl !important;
+  border: none !important;
+  overflow: hidden;
+  box-shadow: $shadow-xl;
+  position: relative;
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+// ─── Close button ──────────────────────────────────────────────
+.lm__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  width: 36px;
+  height: 36px;
+  border-radius: $radius-full;
+  border: none;
+  background: $gray-100;
+  color: $gray-500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all $transition;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    background: $gray-200;
+    color: $gray-700;
+    transform: rotate(90deg);
+  }
+}
+
+// ─── Claim profile header ──────────────────────────────────────
+.lm__claim-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 28px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: $purple;
+
+  svg { color: $purple; }
+}
+
+// ─── Body & grid ───────────────────────────────────────────────
+.lm__body {
+  padding: 0;
+}
+
+.lm__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 992px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+// ─── LEFT: Summary pane ────────────────────────────────────────
+.lm__summary {
+  padding: 28px 28px 24px;
+  background: #fff;
+  border-right: 1px solid $gray-200;
+
+  @media (max-width: 991px) {
+    border-right: none;
+    border-bottom: 1px solid $gray-200;
+    padding: 24px 20px 20px;
+  }
+}
+
+// Type badge
+.lm__type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 8px;
+  background: $purple-light;
+  border-radius: $radius-full;
+  font-size: 13px;
+  font-weight: 600;
+  color: $purple;
+  margin-bottom: 24px;
+}
+
+.lm__type-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: $radius-full;
+  background: $purple;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &--video {
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+  }
+}
+
+// Doctor card
+.lm__doctor {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid $gray-100;
+}
+
+.lm__avatar {
+  flex-shrink: 0;
+
+  img {
+    width: 64px;
+    height: 64px;
+    border-radius: $radius-md;
+    object-fit: cover;
+    border: 2px solid $purple-100;
+  }
+}
+
+.lm__avatar-fallback {
+  width: 64px;
+  height: 64px;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, $purple-light, $purple-100);
+  border: 2px solid $purple-200;
+  color: $purple;
+  font-size: 20px;
+  font-weight: 700;
+
+  &--sm {
+    width: 48px;
+    height: 48px;
+    font-size: 16px;
+    border-radius: $radius-sm;
+  }
+}
+
+.lm__doctor-name {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: $gray-900;
+  line-height: 1.3;
+}
+
+.lm__doctor-spec {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: $gray-500;
+  line-height: 1.4;
+}
+
+// Establishment
+.lm__establishment {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 0;
+  border-bottom: 1px solid $gray-100;
+}
+
+.lm__est-avatar {
+  flex-shrink: 0;
+
+  img {
+    width: 48px;
+    height: 48px;
+    border-radius: $radius-sm;
+    object-fit: cover;
+    border: 1px solid $gray-200;
+  }
+}
+
+.lm__est-name {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: $gray-800;
+  line-height: 1.3;
+}
+
+.lm__est-address {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: $gray-500;
+  line-height: 1.4;
+}
+
+.lm__directions-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: $purple;
+  cursor: pointer;
+  transition: color $transition;
+
+  svg { color: $purple; }
+
+  &:hover {
+    color: $purple-hover;
+    text-decoration: underline;
+  }
+}
+
+// Schedule row
+.lm__schedule {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-top: 20px;
+  padding: 14px 16px;
+  background: $gray-50;
+  border: 1px solid $gray-200;
+  border-radius: $radius-md;
+}
+
+.lm__schedule-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.lm__schedule-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: $radius-sm;
+  background: $purple-light;
+  color: $purple;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.lm__schedule-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: $gray-400;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lm__schedule-value {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: $gray-800;
+  margin-top: 1px;
+}
+
+.lm__schedule-divider {
+  width: 1px;
+  height: 36px;
+  background: $gray-200;
+  margin: 0 16px;
+  flex-shrink: 0;
+}
+
+.lm__change-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: $purple;
+  cursor: pointer;
+  transition: color $transition;
+
+  svg { color: $purple; }
+
+  &:hover {
+    color: $purple-hover;
+    text-decoration: underline;
+  }
+}
+
+// ─── RIGHT: Verify pane ────────────────────────────────────────
+.lm__verify {
+  padding: 28px 28px 24px;
+  background: linear-gradient(180deg, $purple-light 0%, #faf7ff 40%, #fff 100%);
+
+  @media (max-width: 991px) {
+    padding: 24px 20px 20px;
+  }
+
+  &--full {
+    grid-column: 1 / -1;
+  }
+}
+
+.lm__secure-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px 5px 8px;
+  background: $green-50;
+  border: 1px solid rgba($green-500, 0.2);
+  border-radius: $radius-full;
+  font-size: 12px;
+  font-weight: 600;
+  color: $green-700;
+  margin-bottom: 16px;
+
+  svg { color: $green-500; }
+}
+
+.lm__verify-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: $gray-900;
+  line-height: 1.3;
+}
+
+.lm__verify-subtitle {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: $gray-500;
+  line-height: 1.5;
+}
+
+// Form
+.lm__form {
+  margin-top: 24px;
+}
+
+.lm__input-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: $gray-700;
+  margin-bottom: 8px;
+}
+
+.lm__phone-input {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 2px solid $gray-200;
+  border-radius: $radius-md;
+  overflow: hidden;
+  transition: border-color $transition, box-shadow $transition;
+
+  &:focus-within {
+    border-color: $purple;
+    box-shadow: 0 0 0 3px rgba($purple, 0.1);
+  }
+
+  &--error {
+    border-color: $red-500;
+
+    &:focus-within {
+      border-color: $red-500;
+      box-shadow: 0 0 0 3px rgba($red-500, 0.1);
+    }
+  }
+
+  input {
+    flex: 1;
+    border: none;
+    padding: 14px 16px;
+    font-size: 16px;
+    font-weight: 500;
+    color: $gray-900;
+    background: transparent;
+    outline: none;
+    font-family: inherit;
+
+    &::placeholder {
+      color: $gray-400;
+      font-weight: 400;
+    }
+  }
+}
+
+.lm__country-code {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 0 14px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: $gray-700;
+  border-right: 1px solid $gray-200;
+  padding-right: 12px;
+  flex-shrink: 0;
+  user-select: none;
+
+  svg {
+    flex-shrink: 0;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+}
+
+.lm__text-input {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: 2px solid $gray-200;
+  border-radius: $radius-md;
+  padding: 0 16px;
+  transition: border-color $transition, box-shadow $transition;
+
+  &:focus-within {
+    border-color: $purple;
+    box-shadow: 0 0 0 3px rgba($purple, 0.1);
+  }
+
+  svg {
+    flex-shrink: 0;
+    color: $gray-400;
+  }
+
+  input {
+    flex: 1;
+    border: none;
+    padding: 14px 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: $gray-900;
+    background: transparent;
+    outline: none;
+    font-family: inherit;
+
+    &::placeholder {
+      color: $gray-400;
+      font-weight: 400;
+    }
+  }
+
+  &--otp input {
+    letter-spacing: 4px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+}
+
+.lm__error {
+  margin-top: 8px;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: $red-500;
+    font-weight: 500;
+  }
+
+  svg { color: $red-500; flex-shrink: 0; }
+}
+
+// Submit button
+.lm__submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px 24px;
+  margin-top: 20px;
+  border: 2px solid $purple;
+  border-radius: $radius-md;
+  background: $purple;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all $transition;
+  font-family: inherit;
+  letter-spacing: 0.2px;
+
+  svg { color: #fff; flex-shrink: 0; }
+
+  &:hover {
+    background: $purple-hover;
+    border-color: $purple-hover;
+    box-shadow: $shadow-md;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  &--outline {
+    background: transparent;
+    color: $purple;
+    border: 2px solid $gray-300;
+
+    svg { color: $purple; }
+
+    &:hover {
+      background: $gray-50;
+      border-color: $purple;
+      color: $purple;
+      box-shadow: none;
+    }
+  }
+}
+
+// Terms
+.lm__terms {
+  margin: 16px 0 0;
+  font-size: 12px;
+  color: $gray-400;
+  text-align: center;
+  line-height: 1.5;
+
+  a {
+    color: $purple;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover { text-decoration: underline; }
+  }
+}
+
+// ─── Claim benefits ────────────────────────────────────────────
+.lm__benefits {
+  grid-column: 1 / -1;
+  padding: 20px 28px 28px;
+  background: $gray-50;
+  border-top: 1px solid $gray-200;
+}
+
+.lm__benefits-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: $gray-800;
+
+  svg { color: $green-500; }
+}
+
+.lm__benefits-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    position: relative;
+    padding: 6px 0 6px 24px;
+    font-size: 14px;
+    color: $gray-600;
+    line-height: 1.5;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 12px;
+      width: 8px;
+      height: 8px;
+      border-radius: $radius-full;
+      background: $green-500;
+    }
+  }
+}
+
+.lm__help-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid $gray-200;
+}
+
+.lm__help-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: $purple;
+  text-decoration: none;
+
+  img { flex-shrink: 0; }
+
+  &:hover { text-decoration: underline; }
+}
+
+// ─── OTP phone display ────────────────────────────────────────
+.lm__phone-display {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: $gray-50;
+  border: 1px solid $gray-200;
+  border-radius: $radius-md;
+
+  span {
+    font-size: 22px;
+    font-weight: 700;
+    color: $gray-900;
+    letter-spacing: 1px;
+  }
+}
+
+.lm__edit-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  padding: 6px 12px;
+  border: 1px solid $gray-300;
+  border-radius: $radius-sm;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  color: $purple;
+  cursor: pointer;
+  transition: all $transition;
+
+  svg { color: $purple; }
+
+  &:hover {
+    background: $purple-light;
+    border-color: $purple;
+  }
+}
+
+.lm__resend {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: $gray-500;
+}
+
+.lm__resend-link {
+  color: $purple;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover { text-decoration: underline; }
+}
+
+// ─── Overrides for Bootstrap modal backdrop ────────────────────
+.modal {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.modal-content.lm {
+  border: none;
+}
+
+.modal-header .close {
+  display: none; // Hide old close; we use lm__close
+}
+
+// ─── Custom dialog override ────────────────────────────────────
+.custom-dialog-container {
+  overflow: auto;
+  height: 80vh;
+}

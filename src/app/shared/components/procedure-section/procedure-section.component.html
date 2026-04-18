@@ -1,0 +1,207 @@
+<div
+  class="main"
+  [ngClass]="{ 'border-bottom-style': tab == 0, 'pt-0': tab == 1 }"
+>
+  <div class="wrapper">
+    <div class="heading">Doctors in {{ name | titlecase }}</div>
+
+    <div *ngIf="deviceWidth < 767" class="search mt-3">
+      <img
+        loading="lazy"
+        src="assets/images/svg/search-icon-black.svg"
+        alt=""
+      />
+      <input type="text" placeholder="Search" #search />
+    </div>
+    <div class="filter">
+      <div class="filter-heading">Filter by Procedure</div>
+      <div class="letter-section d-flex flex-wrap">
+        <div
+          *ngFor="let letter of letters"
+          class="letter-box"
+          (click)="selectedLetter(letter)"
+          [class.disable]="letter?.status == 0"
+          [class.selected]="payload?.filter == letter?.name"
+        >
+          {{ letter?.name }}
+        </div>
+      </div>
+      <div
+        class="specialities d-flex gap-3"
+        *ngIf="specialityList && specialityList.length"
+      >
+        <div
+          class="box"
+          *ngFor="let item of specialityList"
+          (click)="selectProcedure(item)"
+          [class.selected]="selectedProcedure == item?._id"
+        >
+          {{ item?.name | titlecase }}
+        </div>
+      </div>
+    </div>
+
+    <div class="list-section" id="list-section" *ngIf="totalCount">
+      <div
+        class="card"
+        *ngFor="
+          let doctor of doctorList
+            | paginate
+              : {
+                  itemsPerPage: payload.size,
+                  currentPage: payload.page,
+                  totalItems: totalCount
+                }
+        "
+      >
+        <div class="card-detail d-flex justify-content-between">
+          <div class="first-section d-flex gap-2">
+            <div class="image-section">
+              <div
+                class="profile-icon d-flex align-items-center justify-content-center"
+                *ngIf="!doctor?.profilePic"
+                (click)="viewDoctor(doctor)"
+              >
+                {{ doctor?.fullName | nameInitial | uppercase }}
+              </div>
+              <img
+                [src]="doctor.profilePic"
+                [alt]="doctor?.fullName"
+                *ngIf="doctor?.profilePic"
+                (click)="viewDoctor(doctor)"
+              />
+            </div>
+            <div class="content">
+              <div class="name d-flex align-items-center">
+                <span (click)="viewDoctor(doctor)" class="cursor-pointer"
+                  >{{ doctor.fullName | titlecase }}
+                  <img
+                    loading="lazy"
+                    src="assets/images/svg/verified_tick.svg"
+                    alt=""
+                /></span>
+              </div>
+              <div class="speciality">
+                {{ doctor?.specialization | formatarray : "name" }}
+              </div>
+              <div class="experience">
+                {{ doctor.experience || 0 }} Years Experience Overall
+              </div>
+              <div class="rating" *ngIf="deviceWidth > 767">
+                <star-rating
+                  [rating]="doctor?.rating || 0"
+                  [step]="0.1"
+                  [showHalfStars]="true"
+                  [readOnly]="true"
+                ></star-rating>
+                <span class="star">
+                  {{ (doctor?.rating | number : "1.0-1") || "0.0" }}</span
+                >
+                <span class="total">&nbsp;/5 </span>
+                <span class="review" *ngIf="doctor?.reviews <= 1"
+                  >({{ doctor?.reviews || "0" }} review)</span
+                >
+                <span class="review" *ngIf="doctor?.reviews > 1"
+                  >({{ doctor.reviews }} reviews)</span
+                >
+              </div>
+              <div class="d-flex gap-3 align-items-center">
+                <div class="score d-flex gap-2">
+                  <img
+                    loading="lazy"
+                    src="assets/images/homepage/thumbs-up.svg"
+                    alt=""
+                  />
+                  <span
+                    >{{ (doctor?.recommended | number : ".0-2") || 0 }}%</span
+                  >
+                </div>
+                <div class="price-box" *ngIf="deviceWidth > 767 && (doctor?.consultationFees | validFee)">
+                  &#8377;{{ doctor?.consultationFees }}
+                  <span class="price"> Consultation Fees </span>
+                </div>
+                <div
+                  *ngIf="deviceWidth < 767"
+                  class="text-18 font-600 d-flex align-items-center"
+                  style="color: #008000"
+                >
+                  <img
+                    src="assets/images/svg/stars.svg"
+                    alt=""
+                    height="20"
+                    width="20"
+                  />
+
+                  {{ (doctor?.rating | number : "1.0-1") || "0.0" }}
+                  <span class="font-400 text-black">/5</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="deviceWidth < 767" class="mobile-hospital-detail">
+            <div class="text-16 font-600">
+              {{
+                doctor?.establishmentMaster?.address?.locality ??
+                  doctor?.establishmentMaster?.address?.landmark
+              }}, {{ doctor?.establishmentMaster?.address?.city }}
+            </div>
+            <div class="text-16 font-400 opacity-80">
+              {{ doctor?.establishmentMaster?.hospitalTypeMaster?.name }}
+            </div>
+            <div class="text-16 font-600" *ngIf="doctor?.consultationFees | validFee">
+              ₹{{ doctor?.consultationFees }}
+              <span class="font-400 opacity-50">Consultant Fees</span>
+            </div>
+          </div>
+
+          <div class="second-section">
+            <div class="time" *ngFor="let i of doctor?.establishmentTiming">
+              <span
+                *ngIf="i?.day && (i?.morning || i?.afternoon || i?.evening)"
+              >
+                <img
+                  loading="lazy"
+                  src="assets/images/svg/Access time.svg"
+                  alt=""
+                />
+                {{ i?.day | titlecase }}</span
+              >
+              <p *ngIf="i?.morning">{{ i?.morning }}</p>
+              <p *ngIf="i?.afternoon">{{ i?.afternoon }}</p>
+              <p *ngIf="i?.evening">{{ i?.evening }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="text-end booking"
+          [style.opacity]="doctor?.isActive ? '1' : '0.5'"
+        >
+          <button (click)="bookAppointment(doctor)">Book Appointment</button>
+        </div>
+      </div>
+      <div
+        class="seeMore mt-2"
+        *ngIf="tab == 0 && totalCount > payload.size"
+        (click)="valueChange.emit('true')"
+      >
+        See more
+      </div>
+      <div class="pagination-section" *ngIf="totalCount > 10">
+        <pagination-controls
+          class="text-center"
+          [previousLabel]="' '"
+          [nextLabel]="' '"
+          (pageChange)="changingPage($event)"
+        ></pagination-controls>
+      </div>
+    </div>
+    <div class="no-data" *ngIf="!totalCount">
+      <!-- <div class="first-section">
+        <h2>We couldn't find any doctors for you</h2>
+        <p></p>
+      </div> -->
+    </div>
+  </div>
+</div>

@@ -1,0 +1,144 @@
+@use "variable.scss" as *;
+@use "src/styles/elements/_elements.svg.scss" as *;
+@use "src/styles/components/_components.ngx-pagination.scss" as *;
+
+.hospital-patient {
+  min-height: calc(100vh - 72px);
+
+  .subheader-wrapper {
+    position: sticky;
+    top: 72px;
+    left: 0;
+    height: 72px;
+    background: $white;
+
+    .hamber {
+      width: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .search-wrapper {
+      padding: 12px 64px 12px 24px;
+
+      svg-icon {
+        svg {
+          path {
+            fill: $purple;
+          }
+        }
+      }
+
+      border: 1px solid rgba($color: $purple, $alpha: 0.3);
+      border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+
+      input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: 14px;
+
+        &::placeholder {
+          color: $purple;
+        }
+
+        color: $purple;
+      }
+    }
+  }
+
+  .patient-list {
+    min-width: 100%;
+    width: 100%;
+    overflow: auto;
+    max-height: calc(100vh - 146px);
+
+    table {
+      width: 100%;
+      overflow: auto;
+      font-size: 14px;
+
+      th {
+        color: $white;
+        background: $blue-violet;
+        padding: 12px 24px;
+        white-space: nowrap;
+        position: sticky;
+        top: 0;
+
+        &:first-child {
+          padding-left: 60px;
+        }
+
+        &:last-child {
+          padding-right: 60px;
+        }
+      }
+
+      td {
+        padding: 12px 24px;
+        border-bottom: 1px solid $border-color;
+
+        &:first-child {
+          padding-left: 60px;
+        }
+
+        &:last-child {
+          padding-right: 60px;
+        }
+
+        &.profile-image {
+          img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid $border-color;
+          }
+        }
+      }
+
+      .profile-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: $bright-gray;
+        border: 1px solid $border-color;
+
+        img {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+
+  .export-button {
+    margin-right: 48px;
+    background: $white;
+    padding: 12px;
+    border: 1px solid rgba(69, 25, 124, 0.3);
+    border-radius: 5px;
+    font-size: 14px;
+    color: $purple;
+  }
+}
+
+:host::ng-deep {
+  .pagination-section {
+    margin: 0 auto;
+
+    .ngx-pagination {
+      @include ngx-pagination($purple, $purple);
+    }
+  }
+}

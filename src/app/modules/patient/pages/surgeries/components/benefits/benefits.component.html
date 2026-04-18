@@ -1,0 +1,69 @@
+<!-- ═══ Video Section ═══ -->
+<section class="ben-video">
+  <div class="ben-video__inner">
+    <div class="ben-video__badge">
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M9.5 16.5L16 12 9.5 7.5v9z" fill="currentColor"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="currentColor"/></svg>
+      Watch How It Works
+    </div>
+    <h2 class="ben-video__title">Expert Guidance from Start to Finish</h2>
+    <p class="ben-video__subtitle">See how our team supports you through every step of your surgical journey</p>
+    <div class="ben-video__player">
+      <iframe [src]="videoUrl | sanitize | async" allowfullscreen title="Surgery guidance video"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Steps Section ═══ -->
+<section class="ben-steps">
+  <div class="ben-steps__inner">
+    <h2 class="ben-steps__title">How It Works</h2>
+    <p class="ben-steps__subtitle">Your journey to better health in 7 simple steps</p>
+    <div class="ben-steps__grid">
+      <div class="ben-step" *ngFor="let i of data; let j = index">
+        <div class="ben-step__number">{{ j + 1 }}</div>
+        <div class="ben-step__icon">
+          <img loading="lazy" [src]="i?.img" [alt]="i?.title" />
+        </div>
+        <p class="ben-step__text">{{ i?.title | truncate:70 }}</p>
+        <div class="ben-step__connector" *ngIf="j < data.length - 1">
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Testimonials ═══ -->
+<nectar-client-testimonials></nectar-client-testimonials>
+
+<!-- ═══ FAQ Section ═══ -->
+<section class="ben-faq">
+  <div class="ben-faq__inner">
+    <div class="ben-faq__header">
+      <div class="ben-faq__badge">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" fill="currentColor"/></svg>
+        FAQ
+      </div>
+      <h2 class="ben-faq__title">Frequently Asked Questions</h2>
+      <p class="ben-faq__subtitle">Find answers to common questions about surgeries and procedures</p>
+    </div>
+    <div class="ben-faq__grid">
+      <mat-accordion *ngFor="let item of faqlist; let i = index">
+        <mat-expansion-panel class="ben-faq__panel">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="ben-faq__question">{{ item?.question }}</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p class="ben-faq__answer">
+            {{ item.answer | slice: 0:(isExpanded[i] ? undefined : 100) }}
+            <span *ngIf="item.answer.length > 100">
+              ...
+              <button class="ben-faq__toggle" (click)="toggleReadMore(i)">
+                {{ isExpanded[i] ? 'Read Less' : 'Read More' }}
+              </button>
+            </span>
+          </p>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,132 @@
+<div class="hospital-patient">
+  <div
+    class="subheader-wrapper d-flex justify-content-between align-items-center gap-5 w-100 border-bottom-style"
+  >
+    <div class="heading d-flex align-items-center h-100">
+      <div class="hamber">
+        <button class="svg-icon-button">
+          <svg-icon
+            src="assets/images/svg/hamber.svg"
+            class="cursor-pointer"
+            (click)="openSidenav()"
+          ></svg-icon>
+        </button>
+      </div>
+      <div class="d-flex align-items-center gap-40">
+        <span class="text-24 font-600">{{ "Patients" }}</span>
+        <div class="search-wrapper">
+          <svg-icon src="assets/images/svg/search.svg"></svg-icon>
+          <input
+            type="text"
+            placeholder="Search by Name, Numbers "
+            (input)="onSearch($event)"
+          />
+        </div>
+      </div>
+    </div>
+    <button class="export-button" (click)="onExport()">
+      <svg-icon src="assets/images/svg/export-blue.svg"></svg-icon>
+      &nbsp;&nbsp; Export
+    </button>
+  </div>
+  <div class="patient-list">
+    <table>
+      <caption></caption>
+      <thead>
+        <tr>
+          <th></th>
+          <th>#</th>
+          <th>
+            <div class="d-flex gap-3 align-items-center">
+              {{ "PATIENT_NAME" | translate }}
+              <div class="d-flex flex-column">
+                <svg-icon
+                  src="assets/images/svg/whitedropup.svg"
+                  class="cursor-pointer"
+                  (click)="onSorting('fullName', 'ASC')"
+                ></svg-icon>
+                <svg-icon
+                  src="assets/images/svg/whitedropdown.svg"
+                  class="cursor-pointer"
+                  (click)="onSorting('fullName', 'DESC')"
+                ></svg-icon>
+              </div>
+            </div>
+          </th>
+          <th>{{ "AGE" | translate }}</th>
+          <th>{{ "GENDER" | translate }}</th>
+          <th>{{ "BLOOD_GROUP" | translate }}</th>
+          <th>{{ "MOBILE" | translate }}</th>
+          <th>{{ "EMAIL" | translate }}</th>
+          <th class="text-center">{{ "HISTORY" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let patient of patientList
+              | paginate
+                : {
+                    itemsPerPage: payload.size,
+                    currentPage: payload.page,
+                    totalItems: totalItems
+                  };
+            let i = index
+          "
+        >
+          <td class="profile-image">
+            <div class="profile-icon" *ngIf="!patient.profilePic">
+              {{ patient.fullName | nameInitial | uppercase }}
+            </div>
+            <img
+              loading="lazy"
+              [src]="patient.profilePic"
+              *ngIf="patient.profilePic"
+              alt=""
+            />
+          </td>
+          <td>{{ (payload.page - 1) * payload.size + i + 1 }}</td>
+
+          <td>{{ patient.fullName | titlecase }}</td>
+          <td>
+            {{ patient.age ? patient.age : "N/A" }}
+          </td>
+          <td>
+            {{ GENDER[patient.gender] }}
+          </td>
+          <td>
+            {{ patient.bloodGroup ? BLOOD_GROUP[patient.bloodGroup] : "N/A" }}
+          </td>
+          <td>
+            {{ patient.phone }}
+          </td>
+          <td>
+            {{ patient.email ?? "Not Avaliable" }}
+          </td>
+          <td class="text-center">
+            <button
+              class="px-24 py-12 border-style rounded-5px bg-white"
+              (click)="showHistory(patient._id)"
+            >
+              View
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="text-center py-24" *ngIf="!patientList.length">
+      No Patient Found
+    </div>
+  </div>
+  <div
+    class="pagination-section"
+    *ngIf="patientList.length && totalItems > payload.size"
+  >
+    <pagination-controls
+      class="text-center"
+      [previousLabel]="' '"
+      [nextLabel]="' '"
+      (pageChange)="onPageChange($event)"
+    ></pagination-controls>
+  </div>
+</div>

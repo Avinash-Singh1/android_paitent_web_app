@@ -1,0 +1,127 @@
+<div class="establishment-request">
+  <div class="heading font-600 text-24">
+    {{ "NEW_ESTABLISHMENT_REQUESTED" | translate }}
+  </div>
+  <mat-dialog-content class="request-content">
+    <div class="request-table">
+      <table>
+        <caption></caption>
+        <thead>
+          <tr>
+            <th></th>
+            <th>#</th>
+            <th>
+              <div class="d-flex gap-3 align-items-center">
+                Establishment Name
+                <div class="d-flex flex-column">
+                  <svg-icon
+                    src="assets/images/svg/whitedropup.svg"
+                    (click)="onSorting('fullName', 'ASC')"
+                  ></svg-icon>
+                  <svg-icon
+                    src="assets/images/svg/whitedropdown.svg"
+                    (click)="onSorting('fullName', 'DESC')"
+                  ></svg-icon>
+                </div>
+              </div>
+            </th>
+            <th>{{ "TYPE" | translate }}</th>
+            <th>{{ "SPECIALITY" | translate }}</th>
+            <th>{{ "STATUS" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let request of requestList
+                | paginate
+                  : {
+                      itemsPerPage: payload.size,
+                      currentPage: payload.page,
+                      totalItems: totalItems
+                    };
+              let i = index
+            "
+          >
+            <td>
+              <div
+                class="profile-icon d-flex justify-content-center align-items-center"
+              >
+                <span *ngIf="!request.profilePic">
+                  {{ request.hospitalName | nameInitial | uppercase }}
+                </span>
+                <img
+                  *ngIf="request.profilePic"
+                  [src]="request.profilePic"
+                  alt=""
+                />
+              </div>
+            </td>
+            <td>{{ (payload.page - 1) * payload.size + i + 1 }}</td>
+
+            <td>{{ request.hospitalName }}</td>
+            <td>
+              {{
+                request.hospitalType.length
+                  ? request.hospitalType[0].name
+                  : "N/A"
+              }}
+            </td>
+            <td>
+              {{ request.specilityData | formatarray : "name" }}
+            </td>
+            <td>
+              <div
+                class="request dropdown w-100"
+                *ngIf="request.isVerified == 1"
+              >
+                <div
+                  class="d-flex status-dropdown cursor-pointer gap-3 align-items-center justify-content-between dropdownbtn w-100 dropup"
+                  data-bs-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  {{ statusObj[request.isVerified] }}
+                  <svg-icon
+                    src="assets/images/svg/downarrow.svg"
+                    *ngIf="request.isVerified == 1"
+                  ></svg-icon>
+                </div>
+                <div class="notification dropdown-menu dropdown-menu-end w-100">
+                  <div
+                    class="dropdown-item cursor-pointer"
+                    *ngFor="let status of statusArray"
+                    (click)="onChangeStatus(status.value, request, i)"
+                  >
+                    {{ status.label }}
+                  </div>
+                </div>
+              </div>
+              <div
+                class="status-dropdown text-center"
+                *ngIf="request.isVerified != 1"
+                [ngClass]="{ rejected: request.isVerified == -1 }"
+              >
+                {{ statusObj[request.isVerified] }}
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="text-center py-24" *ngIf="!requestList?.length">
+        No Establishments Request
+      </div>
+    </div>
+    <div
+      class="pagination-section"
+      *ngIf="requestList?.length && totalItems > payload.size"
+    >
+      <pagination-controls
+        class="text-center"
+        [previousLabel]="' '"
+        [nextLabel]="' '"
+        (pageChange)="changingPage($event)"
+      ></pagination-controls>
+    </div>
+  </mat-dialog-content>
+</div>

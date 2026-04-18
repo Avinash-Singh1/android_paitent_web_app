@@ -1,0 +1,160 @@
+<nectar-subheader [calendar]="true">
+  <div class="d-flex align-items-center" subheader-part1>
+    <div class="d-flex align-items-center gap-6">
+      <span class="heading-label">{{ "CALENDAR" | translate }}</span>
+      <div
+        class="d-flex gap-3 p-2 border rounded align-items-center cursor-pointer"
+        (click)="onChangingMonth(0)"
+      >
+        <svg-icon src="assets/images/svg/calendar.svg"></svg-icon>
+        <span class="font-400">{{ "TODAY" | translate }}</span>
+      </div>
+      <div class="d-flex gap-3 align-items-center">
+        <button class="svg-icon-button" (click)="onChangingMonth(-1)">
+          <svg-icon
+            src="assets/images/svg/backarrow.svg"
+            class="cursor-pointer"
+          ></svg-icon>
+        </button>
+        <span>{{ monthdetails }}</span>
+        <button class="svg-icon-button" (click)="onChangingMonth(1)">
+          <svg-icon
+            src="assets/images/svg/forwardarrow.svg"
+            class="cursor-pointer"
+          ></svg-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="button-wrapper d-flex w-fit" subheader-part2>
+    <button
+      type="button"
+      class="bg-white toggole-button day"
+      [ngClass]="{ active: viewmode === 'day' }"
+      (click)="onChangingMode('day')"
+    >
+      {{ "DAY" | translate }}
+    </button>
+    <button
+      type="button"
+      class="bg-white toggole-button"
+      [ngClass]="{ active: viewmode === 'week' }"
+      (click)="onChangingMode('week')"
+    >
+      {{ "WEEK" | translate }}
+    </button>
+    <button
+      type=" button"
+      class="bg-white toggole-button month"
+      [ngClass]="{ active: viewmode === 'month' }"
+      (click)="onChangingMode('month')"
+    >
+      {{ "MONTH" | translate }}
+    </button>
+  </div>
+</nectar-subheader>
+<div class="content d-flex w-100 justify-content-between">
+  <div class="w-75 calendar">
+    <mat-drawer-container [hasBackdrop]="false" class="hospital-calendar">
+      <mat-drawer #matdrawer [mode]="'push'" class="hospital-calendar">
+        <nectar-doctor-list [viewmode]="viewmode"></nectar-doctor-list>
+      </mat-drawer>
+      <mat-drawer-content>
+        <nectar-month-view
+          *ngIf="viewmode == 'month'"
+          [doctor]="doctor"
+        ></nectar-month-view>
+        <nectar-week-view
+          *ngIf="viewmode == 'week'"
+          [doctor]="doctor"
+        ></nectar-week-view>
+        <nectar-day-view
+          *ngIf="viewmode == 'day'"
+          [today]="today"
+          [doctor]="doctor"
+        ></nectar-day-view>
+      </mat-drawer-content>
+    </mat-drawer-container>
+  </div>
+  <div class="appointment-details w-25 border-top-style border-left-style">
+    <div
+      class="header-pad d-flex justify-content-between align-items-center border-bottom-style"
+    >
+      <span class="sub-heading-label">{{
+        (todayDate | date : "d EEEE, yyyy") ==
+        (scheduleToday | date : "d EEEE, yyyy")
+          ? scheduleDay
+          : (todayDate | date : "d EEEE, yyyy")
+      }}</span>
+      <div class="d-flex gap-5">
+        <button class="svg-icon-button" (click)="onChangeSchedule(-1)">
+          <svg-icon src="assets/images/svg/backarrow.svg"></svg-icon>
+        </button>
+        <button class="svg-icon-button" (click)="onChangeSchedule(1)">
+          <svg-icon src="assets/images/svg/forwardarrow.svg"></svg-icon>
+        </button>
+      </div>
+    </div>
+    <div class="appointment-content">
+      <ng-container *ngFor="let appt of appointmentConstant; let i = index">
+        <div class="pending">
+          <div
+            class="sub-heading-label px-24 py-3"
+            [ngClass]="['border-' + (appt.status | appointmentStatus)]"
+          >
+            {{ appt.label | translate }}
+          </div>
+          <div class="">
+            <ng-container
+              *ngFor="
+                let item of appointments
+                  | filterAppointment : 'status' : appt.status;
+                let j = index
+              "
+            >
+              <div
+                class="d-flex px-24 py-3 justify-content-between border-bottom-pending cursor-pointer event-details"
+                [attr.data-details]="item | stringify | async"
+                [ngClass]="[item.status | appointmentStatus]"
+              >
+                <div class="d-flex gap-3">
+                  <div class="sub-heading-label whitespace-nowrap">
+                    {{ item?.date | date : "h:mm a" }}
+                  </div>
+                  <div class="text-18 d-flex gap-1 flex-column">
+                    <span class="sub-heading-label line-clamp-1 me-2">
+                      {{ item?.patient.patientName | titlecase }}
+                    </span>
+                    <span *ngIf="i == 2">{{ item?.reason ?? "N/A" }}</span>
+                    <span>{{
+                      item?.doctor?.doctorName ?? "N/A" | titlecase
+                    }}</span>
+                  </div>
+                </div>
+                <div class="d-flex text-14 font-600">
+                  <span class="me-1 status">
+                    {{ appt.label | translate }}
+                  </span>
+                  <div class="mt-minus-2">
+                    <svg-icon [src]="appt.icon"></svg-icon>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+          <div
+            class="mx-auto px-24 py-3 text-18 text-center"
+            *ngIf="
+              !(appointments | filterAppointment : 'status' : appt.status)
+                .length
+            "
+            [ngClass]="['border-' + (appt.status | appointmentStatus)]"
+          >
+            No {{ appt.label | translate }} Appointments
+          </div>
+        </div>
+      </ng-container>
+      -
+    </div>
+  </div>
+</div>

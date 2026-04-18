@@ -1,0 +1,46 @@
+@forward "settings.colors";
+
+$white: #fff;
+$black: #000;
+$purple: #45197c;
+$red: #ff0000;
+$border-color: rgba(0, 0, 0, 0.3);
+$gray: #676767;
+$green: #008000;
+$faded-text: rgba(
+  $color: $black,
+  $alpha: 0.7,
+);
+$bright-gray: #eeeeee;
+$blue-violet: #45197c;
+$light-gray: #9a9a9a;
+$dark-gray: #434343;
+$lavender: #f2e8ff;
+$light-pink: #fff2f2;
+$philippine-gray: #8e8e8e;
+$orange: #e8661b;
+$light-purple: #f3eaff;
+$emperor-gray: #525252;
+$light-yellow: #f3bc00;
+$silver-sand: #c3c3c3;
+
+$blue: #00f;
+
+// fontsize
+$font_14: 14px;
+$font_16: 16px;
+$font_18: 18px;
+$font_20: 20px;
+$font_22: 22px;
+$font_24: 24px;
+$font_28: 28px;
+
+// padding
+$pad_0: 0;
+$pad_12: 12px;
+$pad_16: 16px;
+$pad_20: 20px;
+$pad_24: 24px;
+$pad_28: 28px;
+$pad_32: 32px;
+$pad_40: 40px;

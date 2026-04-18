@@ -1,0 +1,144 @@
+.menu-list li:not(.exclude-menu) a img {
+  transition: filter 0.3s ease; /* Smooth transition */
+}
+
+.menu-list li:not(.exclude-menu) a:hover img {
+  filter: invert(100%);
+}
+
+.modal {
+  background: rgba(0, 0, 0, 0.5);
+}
+.modal.show .modal-dialog {
+  max-width: 900px;
+
+  @media only screen and (max-width: 768px) {
+    max-width: 100%;
+  }
+  .btn-primary {
+    border-color: #45197c;
+    background-color: #45197c;
+  }
+}
+.modal-header {
+  position: relative;
+  h5 {
+    margin: 0;
+  }
+}
+.modal-header .close {
+  padding: 1rem 1rem;
+  margin: -1rem -1rem -1rem auto;
+  padding: 0;
+  background-color: transparent;
+  border: 0;
+  // float: right;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: 0.5;
+  position: absolute;
+  top: 25px;
+  right: 32px;
+}
+.modal h5 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1;
+}
+.videos-screen {
+  //   padding: 24px;
+}
+
+.video-grid-item {
+  width: 100%;
+  //   max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #b3b3b3;
+
+  .grid-item-col {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding: 24px;
+
+    .video {
+      width: 180px;
+      height: auto;
+      position: relative;
+
+      .play_icon {
+        width: 75px;
+        height: 70px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        // border: 1px solid red;
+      }
+      img {
+        width: 100%;
+        max-width: 100%;
+      }
+      @media only screen and (max-width: 600px) {
+        width: 95%;
+        margin: auto;
+      }
+    }
+
+    .duration {
+      padding: 0;
+      margin: 0;
+
+      span {
+        margin-left: 10px;
+      }
+    }
+    @media only screen and (max-width: 768px) {
+      width: 100%;
+    }
+    @media only screen and (max-width: 600px) {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+  .video-edit {
+    display: flex;
+    svg,
+    img {
+      width: 24px;
+      height: 24px;
+      margin-right: 5px;
+    }
+  }
+
+  &::after {
+    content: "";
+    display: table;
+  }
+  @media only screen and (max-width: 768px) {
+    width: 95%;
+  }
+  @media only screen and (max-width: 600px) {
+    flex-direction: column;
+    padding-bottom: 20px;
+  }
+}
+.form-inline {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+.btn-link {
+  text-decoration: none;
+}
+.colz {
+  padding-right: 20px;
+}

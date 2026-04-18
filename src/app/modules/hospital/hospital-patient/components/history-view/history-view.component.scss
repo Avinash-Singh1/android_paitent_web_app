@@ -1,0 +1,86 @@
+@use "variable.scss" as *;
+@use "src/styles/components/_components.ngx-pagination.scss" as *;
+@use "src/styles/elements/_elements.svg.scss" as *;
+@use "_settings.colors.scss" as *;
+
+.search-wrapper {
+  padding: 12px 24px;
+
+  svg-icon {
+    svg {
+      path {
+        fill: $purple;
+      }
+    }
+  }
+
+  border: 1px solid rgba($color: $purple, $alpha: 0.3);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+
+  input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+
+    &::placeholder {
+      color: $purple;
+    }
+
+    color: $purple;
+  }
+}
+
+.booked {
+  color: $pending;
+  background: rgba($color: $pending, $alpha: 0.2);
+}
+
+.cancelled {
+  color: $red;
+  background: rgba($color: $red, $alpha: 0.2);
+}
+
+.completed {
+  color: $green;
+  background: rgba($color: $green, $alpha: 0.2);
+}
+
+::ng-deep {
+  .mat-mdc-dialog-container .mdc-dialog__content.appointment-history {
+    min-height: 50vh !important;
+    font-size: 14px !important;
+    color: $black !important;
+
+    .appointment-content {
+      padding: 12px 48px;
+    }
+
+    font-family: "Source Sans Pro",
+    sans-serif !important;
+  }
+
+  .mdc-dialog__actions {
+    padding: 0 !important;
+  }
+}
+
+:host::ng-deep {
+  .pagination-section {
+    .ngx-pagination {
+      @include ngx-pagination($purple, $purple);
+    }
+  }
+}
+
+.w-15 {
+  width: 15%;
+}
+
+.w-85 {
+  width: 85%;
+}

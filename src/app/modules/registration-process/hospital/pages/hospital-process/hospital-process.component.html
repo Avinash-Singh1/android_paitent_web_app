@@ -1,0 +1,58 @@
+<div class="containers">
+  <div class="wrapper">
+    <p>Profile</p>
+    <div class="notVerified d-flex align-items-center gap-2" *ngIf="step == 4">
+      <img loading="lazy" src="assets/images/svg/not-verifed.svg" alt="" />
+      Profile is under verification!
+    </div>
+    <div class="heading" *ngIf="step <= 3">Great Process!</div>
+    <span *ngIf="step <= 3">
+      Your profile is just few steps away from going live.
+    </span>
+    <div class="sections">
+      <p>Section A - Profile Details</p>
+      <span>Establishment Basic Details</span>
+      <div class="continue" *ngIf="step > 1">
+        <svg-icon src="assets/images/svg/bluetick.svg" alt=""></svg-icon>
+        <span (click)="onChangeRoute(1, true)">Change</span>
+      </div>
+      <div class="continue" *ngIf="step == 1">
+        <button (click)="onChangeRoute(1)">Continue</button>
+      </div>
+    </div>
+    <div class="sections" [ngClass]="{ 'opacity-50': step < 1 }">
+      <p>Section B - Profile Verification</p>
+
+      <span>Establishment Proof</span>
+      <div class="continue" *ngIf="step > 2">
+        <svg-icon src="assets/images/svg/bluetick.svg" alt=""></svg-icon>
+        <span (click)="onChangeRoute(2, true)">Change</span>
+      </div>
+      <div class="continue" *ngIf="step == 2">
+        <button (click)="onChangeRoute(2)">Continue</button>
+      </div>
+    </div>
+    <div class="sections" [ngClass]="{ 'opacity-50': step <= 2 }">
+      <p>Section C - Profile Details</p>
+      <span>Location, Timings</span>
+
+      <div class="continue" *ngIf="step > 3">
+        <svg-icon src="assets/images/svg/bluetick.svg" alt=""></svg-icon>
+        <span (click)="onChangeRoute(3, true)">Change</span>
+      </div>
+      <div class="continue" *ngIf="step == 3">
+        <button (click)="onChangeRoute(3)">Continue</button>
+      </div>
+    </div>
+
+    <button
+      class="white-button cursor-pointer d-flex justify-content-center align-items-center gap-3 mt-4"
+      (click)="backToHome()"
+      *ngIf="step > 3"
+    >
+      <img loading="lazy" src="assets/images/svg/back.svg" alt="" />
+
+      <span>Back to Home</span>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,278 @@
+<!-- Loading Skeleton -->
+<div class="pd-skeleton" *ngIf="loading">
+  <div class="pd-skeleton__wrap">
+    <div class="pd-skeleton__gallery">
+      <div class="pd-skeleton__img shimmer"></div>
+      <div class="pd-skeleton__thumbs">
+        <div class="pd-skeleton__thumb shimmer" *ngFor="let i of [1,2,3,4]"></div>
+      </div>
+    </div>
+    <div class="pd-skeleton__info">
+      <div class="pd-skeleton__badge shimmer"></div>
+      <div class="pd-skeleton__title shimmer"></div>
+      <div class="pd-skeleton__title2 shimmer"></div>
+      <div class="pd-skeleton__rating shimmer"></div>
+      <div class="pd-skeleton__price shimmer"></div>
+      <div class="pd-skeleton__btn shimmer"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Error State -->
+<div class="pd-error" *ngIf="errorMessage && !loading">
+  <div class="pd-error__wrap">
+    <div class="pd-error__icon">
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#e0e0e0"/></svg>
+    </div>
+    <h3 class="pd-error__title">Product Not Found</h3>
+    <p class="pd-error__msg">{{ errorMessage }}</p>
+    <a class="pd-error__btn" routerLink="/medicines">Browse Medicines</a>
+  </div>
+</div>
+
+<!-- ======== PRODUCT DETAIL ======== -->
+<div class="pd" *ngIf="productDetails?.name && !loading">
+
+  <!-- Breadcrumb -->
+  <nav class="pd-bread">
+    <a class="pd-bread__link" routerLink="/">Home</a>
+    <span class="pd-bread__sep">/</span>
+    <a class="pd-bread__link" routerLink="/medicines">Medicines</a>
+    <span class="pd-bread__sep">/</span>
+    <span class="pd-bread__current">{{ productDetails.name | truncate:50 }}</span>
+  </nav>
+
+  <!-- Main Product Section -->
+  <section class="pd-main">
+    <!-- Gallery Column -->
+    <div class="pd-gallery">
+      <div class="pd-gallery__hero">
+        <div class="pd-gallery__badge" *ngIf="discountPercentage && +discountPercentage > 0">
+          -{{ discountPercentage }}%
+        </div>
+        <img loading="lazy" class="pd-gallery__img"
+             [src]="selectedImageUrl || productDetails?.images_hsh?.array?.[0]"
+             [alt]="productDetails?.name"
+             loading="eager">
+      </div>
+
+      <!-- Thumbnail Strip -->
+      <div class="pd-gallery__thumbs" *ngIf="productDetails?.images_hsh?.array?.length > 1">
+        <button class="pd-gallery__thumb"
+                *ngFor="let img of productDetails.images_hsh.array | slice:0:5; let i = index"
+                [class.pd-gallery__thumb--active]="(selectedImageUrl || productDetails.images_hsh.array[0]) === img"
+                (click)="viewImage(img)">
+          <img loading="lazy" [src]="img" [alt]="'View ' + (i+1)" loading="lazy">
+        </button>
+        <span class="pd-gallery__more" *ngIf="productDetails.images_hsh.array.length > 5">
+          +{{ productDetails.images_hsh.array.length - 5 }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Info Column -->
+    <div class="pd-info">
+      <!-- Type Badges -->
+      <div class="pd-info__badges">
+        <span class="pd-badge pd-badge--type">{{ productDetails?.otc_type || productDetails?.medicineType }}</span>
+        <span class="pd-badge pd-badge--rx" *ngIf="productDetails?.prescription?.required">Rx Required</span>
+        <span class="pd-badge pd-badge--stock pd-badge--in" *ngIf="productDetails?.in_stock">In Stock</span>
+        <span class="pd-badge pd-badge--stock pd-badge--out" *ngIf="!productDetails?.in_stock">Out of Stock</span>
+      </div>
+
+      <!-- Title -->
+      <h1 class="pd-info__title">{{ productDetails?.name }}</h1>
+
+      <!-- Manufacturer -->
+      <p class="pd-info__brand" *ngIf="productDetails?.manufacturer?.name">
+        By <strong>{{ productDetails.manufacturer.name }}</strong>
+      </p>
+
+      <!-- Rating -->
+      <div class="pd-info__rating" *ngIf="productDetails?.rating">
+        <div class="pd-rating">
+          <span class="pd-rating__score">{{ productDetails.rating.average | number:'1.1-1' }}</span>
+          <svg class="pd-rating__star" width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        </div>
+        <span class="pd-info__reviews">{{ productDetails.rating.count }} ratings</span>
+      </div>
+
+      <!-- Price Block -->
+      <div class="pd-price">
+        <span class="pd-price__current">{{ productDetails?.offers?.[0]?.final_price | currency:'INR':'symbol' }}</span>
+        <span class="pd-price__mrp" *ngIf="discountPercentage && +discountPercentage > 0">
+          {{ productDetails?.offers?.[0]?.mrp | currency:'INR':'symbol' }}
+        </span>
+        <span class="pd-price__save" *ngIf="discountPercentage && +discountPercentage > 0">
+          Save {{ discountPercentage }}%
+        </span>
+      </div>
+      <p class="pd-info__tax">Inclusive of all taxes</p>
+
+      <!-- Pack / Form -->
+      <div class="pd-form" *ngIf="productDetails?.form">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-2h5v2zm5-4H7v-2h10v2zm0-4H7V7h10v2z" fill="#45197C" opacity="0.7"/></svg>
+        <span>{{ productDetails.form }}</span>
+      </div>
+
+      <!-- Uses Tags -->
+      <div class="pd-uses" *ngIf="getUsesList().length > 0">
+        <h4 class="pd-uses__title">Key Uses</h4>
+        <div class="pd-uses__tags">
+          <span class="pd-uses__tag" *ngFor="let use of getVisibleUses()">{{ use }}</span>
+          <button class="pd-uses__more" *ngIf="!showAllUses && getUsesOverflowCount() > 0" (click)="toggleUses()">
+            +{{ getUsesOverflowCount() }} more
+          </button>
+          <button class="pd-uses__more" *ngIf="showAllUses && getUsesList().length > 3" (click)="toggleUses()">
+            Show less
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="pd-actions">
+        <a class="pd-actions__cart"
+           [href]="productDetails?.add_to_cart_url"
+           target="_blank"
+           rel="noopener noreferrer">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" fill="white"/></svg>
+          Add to Cart
+        </a>
+        <button class="pd-actions__wish" (click)="toggleWishlist()" [class.pd-actions__wish--active]="isWishlisted" aria-label="Toggle wishlist">
+          <svg width="22" height="22" viewBox="0 0 24 24" [attr.fill]="isWishlisted ? '#ff4757' : 'none'" [attr.stroke]="isWishlisted ? '#ff4757' : '#45197C'" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Trust Signals -->
+      <div class="pd-trust">
+        <div class="pd-trust__item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" fill="#7ed321"/></svg>
+          <span>Secure Payment</span>
+        </div>
+        <div class="pd-trust__item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" fill="#45197C"/></svg>
+          <span>Free Delivery</span>
+        </div>
+        <div class="pd-trust__item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" fill="#2196f3"/></svg>
+          <span>100% Genuine</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== DETAIL TABS ======== -->
+  <section class="pd-tabs">
+    <div class="pd-tabs__nav">
+      <button class="pd-tabs__btn" [class.pd-tabs__btn--active]="activeTab === 'description'" (click)="activeTab = 'description'">Description</button>
+      <button class="pd-tabs__btn" [class.pd-tabs__btn--active]="activeTab === 'ingredients'" (click)="activeTab = 'ingredients'" *ngIf="productDetails?.ingredients?.length">Ingredients</button>
+      <button class="pd-tabs__btn" [class.pd-tabs__btn--active]="activeTab === 'sideeffects'" (click)="activeTab = 'sideeffects'" *ngIf="productDetails?.sideEffects?.length">Side Effects</button>
+      <button class="pd-tabs__btn" [class.pd-tabs__btn--active]="activeTab === 'images'" (click)="activeTab = 'images'" *ngIf="productDetails?.images_hsh?.array?.length > 1">Gallery</button>
+    </div>
+    <div class="pd-tabs__body">
+      <!-- Description Tab -->
+      <div class="pd-tabs__pane" *ngIf="activeTab === 'description'">
+        <div class="pd-desc" *ngIf="productDetails?.description">
+          <p>{{ productDetails.description }}</p>
+        </div>
+        <div class="pd-desc" *ngIf="!productDetails?.description">
+          <p class="pd-desc__empty">{{ productDetails?.form ? productDetails.form + '.' : '' }} {{ productDetails?.manufacturer?.name ? 'Manufactured by ' + productDetails.manufacturer.name + '.' : '' }}</p>
+        </div>
+
+        <!-- Info Cards Grid -->
+        <div class="pd-meta">
+          <div class="pd-meta__card" *ngIf="productDetails?.form">
+            <div class="pd-meta__icon pd-meta__icon--form">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-1 .9-1 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-2h5v2zm5-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+            </div>
+            <div class="pd-meta__text">
+              <span class="pd-meta__label">Form</span>
+              <span class="pd-meta__value">{{ productDetails.form }}</span>
+            </div>
+          </div>
+          <div class="pd-meta__card" *ngIf="productDetails?.manufacturer?.name">
+            <div class="pd-meta__icon pd-meta__icon--mfr">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>
+            </div>
+            <div class="pd-meta__text">
+              <span class="pd-meta__label">Manufacturer</span>
+              <span class="pd-meta__value">{{ productDetails.manufacturer.name }}</span>
+            </div>
+          </div>
+          <div class="pd-meta__card" *ngIf="productDetails?.packSize">
+            <div class="pd-meta__icon pd-meta__icon--pack">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 18H7v-6h2v6zm4 0h-2V8h2v10zm4 0h-2v-3h2v3z"/></svg>
+            </div>
+            <div class="pd-meta__text">
+              <span class="pd-meta__label">Pack Size</span>
+              <span class="pd-meta__value">{{ productDetails.packSize }}</span>
+            </div>
+          </div>
+          <div class="pd-meta__card" *ngIf="productDetails?.dosage">
+            <div class="pd-meta__icon pd-meta__icon--dose">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2v6h.01L6 8.01 10 12l-4 4 .01.01H6V22h12v-5.99h-.01L18 16l-4-4 4-3.99-.01-.01H18V2H6z"/></svg>
+            </div>
+            <div class="pd-meta__text">
+              <span class="pd-meta__label">Dosage</span>
+              <span class="pd-meta__value">{{ productDetails.dosage }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ingredients Tab -->
+      <div class="pd-tabs__pane" *ngIf="activeTab === 'ingredients'">
+        <div class="pd-ingredients">
+          <div class="pd-ingredients__item" *ngFor="let ing of productDetails.ingredients">
+            <span class="pd-ingredients__name">{{ ing.name }}</span>
+            <span class="pd-ingredients__qty" *ngIf="ing.quantity">{{ ing.quantity }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Side Effects Tab -->
+      <div class="pd-tabs__pane" *ngIf="activeTab === 'sideeffects'">
+        <ul class="pd-sideeffects">
+          <li *ngFor="let se of productDetails.sideEffects">{{ se }}</li>
+        </ul>
+      </div>
+
+      <!-- Gallery Tab -->
+      <div class="pd-tabs__pane" *ngIf="activeTab === 'images'">
+        <div class="pd-image-grid">
+          <div class="pd-image-grid__item" *ngFor="let img of productDetails.images_hsh.array; let i = index">
+            <img loading="lazy" [src]="img" [alt]="productDetails.name + ' image ' + (i+1)" loading="lazy" (click)="viewImage(img); activeTab = 'description'">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== RELATED PRODUCTS ======== -->
+  <section class="pd-related" *ngIf="relateddata?.length > 0">
+    <div class="pd-related__header">
+      <h2 class="pd-related__title">You May Also Like</h2>
+      <a class="pd-related__all" routerLink="/medicines">View All</a>
+    </div>
+    <div class="pd-related__grid">
+      <div class="pd-rcard" *ngFor="let item of relateddata" (click)="viewProduct(item.product_id, item.name)">
+        <div class="pd-rcard__img-wrap">
+          <img loading="lazy" class="pd-rcard__img" [src]="item.image" [alt]="item.name" loading="lazy">
+        </div>
+        <div class="pd-rcard__body">
+          <h3 class="pd-rcard__name">{{ item.name | truncate:40 }}</h3>
+          <div class="pd-rcard__rating" *ngIf="item?.rating?.average">
+            <span class="pd-rcard__score">{{ item.rating.average | number:'1.1-1' }}</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          </div>
+          <div class="pd-rcard__price">
+            <span class="pd-rcard__sell">{{ item.price.final_price | currency:'INR':'symbol' }}</span>
+            <span class="pd-rcard__mrp" *ngIf="item.price.mrp > item.price.final_price">{{ item.price.mrp | currency:'INR':'symbol' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

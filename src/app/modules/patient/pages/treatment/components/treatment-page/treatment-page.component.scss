@@ -1,0 +1,403 @@
+$purple: #45197c;
+$lavender: #f2e8ff;
+
+/* ── Skeleton shimmer animation (CLS prevention) ── */
+@keyframes tp-skeleton-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.tp-skeleton-block {
+  background: linear-gradient(90deg, #f0eaff 25%, #faf8fd 50%, #f0eaff 75%);
+  background-size: 200% 100%;
+  animation: tp-skeleton-shimmer 1.5s infinite;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.tp-content--skeleton {
+  min-height: 600px;
+}
+
+/* ── Section wrapper (placeholder for future perf optimization) ── */
+.tp-cv-section {
+  min-height: 100px;
+}
+
+/* ── City-specific content block (SEO differentiation) ── */
+.tp-city-content {
+  margin-bottom: 32px;
+  padding: 20px 24px;
+  background: #faf8fd;
+  border-left: 4px solid #45197c;
+  border-radius: 0 12px 12px 0;
+  font-size: 15px;
+  line-height: 1.75;
+  color: #444;
+
+  h2, h3 { color: #1a1a2e; margin: 16px 0 8px; }
+  p { margin-bottom: 12px; }
+  ul, ol { padding-left: 20px; }
+  li { margin-bottom: 6px; }
+
+  @media (max-width: 768px) {
+    padding: 16px;
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+}
+
+// ══ Content Layout (parent shell) ══
+.tp-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  display: flex;
+  gap: 32px;
+
+  @media (max-width: 768px) {
+    padding: 20px 16px;
+    padding-bottom: 80px; // space for mobile sticky bottom bar
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &__main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__sidebar {
+    width: 300px;
+    flex-shrink: 0;
+
+    @media (max-width: 900px) {
+      display: none;
+    }
+  }
+}
+
+// Sticky Sidebar Card
+.tp-sidebar-card {
+  position: sticky;
+  top: 70px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 0;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+
+  &__header {
+    background: linear-gradient(135deg, $purple 0%, #6b3fa0 100%);
+    padding: 22px 24px 18px;
+    text-align: center;
+
+    h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 4px;
+    }
+
+    p {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.85);
+      margin: 0;
+      line-height: 1.4;
+    }
+  }
+
+  &__trust {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px 16px;
+    font-size: 12px;
+    color: #2a7a2a;
+    border-top: 1px solid #f0f0f0;
+  }
+}
+
+// Lead Capture Form (shared between sidebar & mobile)
+.tp-sidebar-form {
+  padding: 20px 24px 16px;
+
+  &__field {
+    margin-bottom: 14px;
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 5px;
+
+      span { color: #e53935; }
+    }
+
+    input {
+      width: 100%;
+      height: 42px;
+      padding: 0 14px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #222;
+      background: #fafafa;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-sizing: border-box;
+
+      &:focus {
+        outline: none;
+        border-color: $purple;
+        box-shadow: 0 0 0 3px rgba($purple, 0.08);
+        background: #fff;
+      }
+
+      &::placeholder { color: #aaa; }
+    }
+  }
+
+  &__phone {
+    display: flex;
+    align-items: center;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fafafa;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:focus-within {
+      border-color: $purple;
+      box-shadow: 0 0 0 3px rgba($purple, 0.08);
+      background: #fff;
+    }
+
+    input {
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      padding-left: 10px;
+
+      &:focus { box-shadow: none; }
+    }
+  }
+
+  &__code {
+    padding: 0 10px 0 14px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    border-right: 1px solid #e0e0e0;
+    white-space: nowrap;
+    line-height: 42px;
+    flex-shrink: 0;
+  }
+
+  &__btn {
+    width: 100%;
+    height: 44px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, $purple 0%, #6b3fa0 100%);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    margin-top: 4px;
+
+    &:hover { opacity: 0.92; }
+    &:active { transform: scale(0.98); }
+  }
+
+  &__success {
+    padding: 28px 24px 20px;
+    text-align: center;
+
+    h4 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin: 12px 0 6px;
+    }
+
+    p {
+      font-size: 14px;
+      color: #666;
+      margin: 0 0 16px;
+    }
+  }
+
+  &__check {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #e8f5e9;
+    color: #2e7d32;
+    font-size: 24px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__wa {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #25D366;
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: opacity 0.2s;
+
+    &:hover { opacity: 0.9; }
+
+    img { flex-shrink: 0; }
+  }
+}
+
+// ══ Mobile Sticky Bottom Bar ══
+.tp-mobile-bar {
+  display: none;
+
+  @media (max-width: 900px) {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 10px 16px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    background: #fff;
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  &__btn {
+    width: 100%;
+    height: 48px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, $purple 0%, #6b3fa0 100%);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover { opacity: 0.92; }
+  }
+
+  &__success {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 48px;
+    background: #e8f5e9;
+    border-radius: 12px;
+    color: #2e7d32;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  &__check {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #2e7d32;
+    color: #fff;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+}
+
+// ══ Mobile Form Overlay ══
+.tp-mobile-overlay {
+  display: none;
+
+  @media (max-width: 900px) {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0, 0, 0, 0.5);
+    align-items: flex-end;
+    justify-content: center;
+    animation: tp-fade-in 0.2s ease;
+  }
+}
+
+.tp-mobile-form-card {
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 24px 20px;
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  animation: tp-slide-up 0.3s ease;
+  position: relative;
+
+  &__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    background: #f5f5f5;
+    color: #666;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+
+    &:hover { background: #eee; }
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 4px;
+  }
+
+  p {
+    font-size: 14px;
+    color: #666;
+    margin: 0 0 20px;
+  }
+
+  .tp-sidebar-form {
+    padding: 0;
+  }
+
+  .tp-sidebar-card__trust {
+    padding: 12px 0 0;
+    border-top: 1px solid #f0f0f0;
+    margin-top: 12px;
+  }
+}
+
+@keyframes tp-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes tp-slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}

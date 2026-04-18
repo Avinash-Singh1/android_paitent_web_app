@@ -1,0 +1,140 @@
+<div class="establishment-request">
+  <div class="heading font-600 text-16">
+    {{ "NEW_DOCTOR_REQUESTED" | translate }}
+  </div>
+  <mat-dialog-content class="request">
+    <div class="request-table">
+      <table>
+        <caption></caption>
+        <thead>
+          <tr>
+            <th></th>
+            <th>#</th>
+            <th>
+              <div class="d-flex gap-3 align-items-center">
+                Doctor Name
+                <div class="d-flex flex-column">
+                  <svg-icon
+                    src="assets/images/svg/whitedropup.svg"
+                    (click)="onSorting('fullName', 'ASC')"
+                  ></svg-icon>
+                  <svg-icon
+                    src="assets/images/svg/whitedropdown.svg"
+                    (click)="onSorting('fullName', 'DESC')"
+                  ></svg-icon>
+                </div>
+              </div>
+            </th>
+            <th>{{ "MOBILE" | translate }}</th>
+            <th>{{ "EMAIL" | translate }}</th>
+            <th>{{ "SPECIALITY" | translate }}</th>
+            <th>{{ "VIEW_PROFILE" | translate }}</th>
+            <th>{{ "STATUS" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let doctor of doctorList
+                | paginate
+                  : {
+                      itemsPerPage: payload.size,
+                      currentPage: payload.page,
+                      totalItems: totalItems
+                    };
+              let i = index
+            "
+          >
+            <td class="profile-image">
+              <div
+                class="profile-icon d-flex justify-content-center align-items-center"
+                *ngIf="!doctor.doctorDetails?.profilePic"
+              >
+                <span>
+                  {{
+                    doctor.doctorDetails?.fullName
+                      | nameInitial
+                      | uppercase
+                  }}
+                </span>
+                <img
+                  [src]="doctor.doctorDetails?.profilePic"
+                  *ngIf="doctor.doctorDetails?.profilePic"
+                  alt=""
+                />
+              </div>
+            </td>
+            <td>{{ (payload.page - 1) * payload.size + i + 1 }}</td>
+
+            <td>{{ doctor.doctorDetails?.fullName | titlecase }}</td>
+            <td>
+              {{ doctor.doctorDetails?.phone }}
+            </td>
+            <td>
+              {{ doctor.doctorDetails?.email ?? "Not Avaliable" }}
+            </td>
+
+            <td>
+              {{ (doctor.specilityData | formatarray : "name") ?? "N/A" }}
+            </td>
+
+            <td class="text-center">
+              <button
+                class="px-24 view py-2 border-style rounded-5px m-auto"
+                (click)="showHistory(doctor.doctorDetails?.userId)"
+              >
+                View
+              </button>
+            </td>
+            <td class="text-center">
+              <div class="request dropdown" *ngIf="doctor.isVerified == 1">
+                <div
+                  class="d-flex status-dropdown cursor-pointer gap-3 align-items-center justify-content-between dropdownbtn w-100 dropup"
+                  data-bs-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  {{ statusObj[doctor.isVerified] }}
+                  <svg-icon
+                    src="assets/images/svg/downarrow.svg"
+                    *ngIf="doctor.isVerified == 1"
+                  ></svg-icon>
+                </div>
+                <div class="notification dropdown-menu dropdown-menu-end w-100">
+                  <div
+                    class="dropdown-item cursor-pointer"
+                    *ngFor="let status of statusArray"
+                    (click)="onChangeStatus(status.value, doctor, i)"
+                  >
+                    {{ status.label }}
+                  </div>
+                </div>
+              </div>
+              <div
+                class="status-dropdown text-center"
+                *ngIf="doctor.isVerified != 1"
+                [ngClass]="{ rejected: doctor.isVerified == 3 }"
+              >
+                {{ statusObj[doctor.isVerified] }}
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="text-center py-24" *ngIf="!doctorList.length">
+        No Doctor Request
+      </div>
+    </div>
+    <div
+      class="pagination-section"
+      *ngIf="doctorList.length && totalItems > payload.size"
+    >
+      <pagination-controls
+        class="text-center"
+        [previousLabel]="' '"
+        [nextLabel]="' '"
+        (pageChange)="changingPage($event)"
+      ></pagination-controls>
+    </div>
+  </mat-dialog-content>
+</div>

@@ -1,0 +1,47 @@
+@use "_settings.colors.scss" as *;
+
+.svg-icon-button {
+  background-color: unset !important;
+  outline: none;
+  border: none;
+  padding: 4px 8px;
+
+  &:hover {
+    background: $theme_background_color !important;
+    border-radius: 4px;
+
+    svg {
+      path {
+        fill: $black !important;
+      }
+    }
+  }
+}
+
+.svg-icon-pending {
+  path {
+    fill: $pending;
+  }
+}
+
+.mt-minus-2 {
+  margin-top: -3px;
+}
+
+.svg-icon-purple {
+  path {
+    fill: $purple;
+  }
+}
+
+.svg-icon-white {
+  path {
+    fill: $white !important;
+  }
+}
+
+.svg-icon-red {
+  path {
+    fill: $red !important;
+  }
+}

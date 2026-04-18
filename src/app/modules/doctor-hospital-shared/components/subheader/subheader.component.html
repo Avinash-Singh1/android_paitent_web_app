@@ -1,0 +1,21 @@
+<div
+  class="subheader-wrapper d-flex justify-content-between align-items-center w-100 border-bottom-style"
+  [ngClass]="{ calendar: calendar }"
+>
+  <div class="heading d-flex align-items-center w-75">
+    <div class="hamber">
+      <button class="svg-icon-button" (click)="openSidenav()">
+        <svg-icon
+          src="assets/images/svg/hamber.svg"
+          class="cursor-pointer"
+        ></svg-icon>
+      </button>
+    </div>
+    <div class="content">
+      <ng-content select="[subheader-part1]"></ng-content>
+    </div>
+  </div>
+  <div class="w-25 sub-content">
+    <ng-content select="[subheader-part2]"></ng-content>
+  </div>
+</div>

@@ -1,0 +1,790 @@
+@use "sass:color";
+@use "variable.scss" as *;
+
+$hero-bg: linear-gradient(135deg, #f0e6ff 0%, #e8f4fd 50%, #f5f0ff 100%);
+$card-radius: 14px;
+$section-padding: 64px 0;
+
+/* ===== Hero Section ===== */
+.surg-hero {
+  background: $hero-bg;
+  padding: 0 24px;
+  position: relative;
+  overflow: hidden;
+
+  &__wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    padding: 48px 0 56px;
+
+    @media (max-width: 991px) {
+      flex-direction: column;
+      gap: 32px;
+      padding: 32px 0 40px;
+    }
+  }
+
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Breadcrumb */
+  &__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 20px;
+
+    svg {
+      color: #aaa;
+    }
+
+    @media (max-width: 767px) {
+      margin-bottom: 16px;
+    }
+  }
+
+  &__breadcrumb-link {
+    font-size: 13px;
+    color: $purple;
+    font-weight: 500;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__breadcrumb-current {
+    font-size: 13px;
+    color: #888;
+    font-weight: 500;
+  }
+
+  /* Title */
+  &__title {
+    font-size: 38px;
+    font-weight: 800;
+    color: #1a1a2e;
+    line-height: 1.2;
+    margin: 0 0 14px;
+    letter-spacing: -0.5px;
+
+    span {
+      background: linear-gradient(135deg, $purple, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @media (max-width: 767px) {
+      font-size: 28px;
+    }
+  }
+
+  &__subtitle {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+    margin: 0 0 28px;
+    max-width: 560px;
+
+    @media (max-width: 767px) {
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+  }
+
+  /* Feature Badges */
+  &__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 32px;
+
+    @media (max-width: 767px) {
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+  }
+
+  &__badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba($purple, 0.1);
+    border-radius: 40px;
+    padding: 8px 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba($purple, 0.1);
+    }
+
+    @media (max-width: 767px) {
+      padding: 6px 12px;
+    }
+  }
+
+  &__badge-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, $purple, color.adjust($purple, $lightness: 15%));
+    color: #fff;
+    flex-shrink: 0;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    @media (max-width: 767px) {
+      width: 28px;
+      height: 28px;
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
+
+  &__badge-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+
+    @media (max-width: 767px) {
+      font-size: 12px;
+    }
+  }
+
+  /* Stats */
+  &__stats {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba($purple, 0.08);
+    border-radius: 16px;
+    padding: 18px 28px;
+    width: fit-content;
+
+    @media (max-width: 767px) {
+      gap: 16px;
+      padding: 14px 20px;
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  &__stat-num {
+    font-size: 24px;
+    font-weight: 800;
+    color: $purple;
+    letter-spacing: -0.5px;
+
+    @media (max-width: 767px) {
+      font-size: 20px;
+    }
+  }
+
+  &__stat-label {
+    font-size: 12px;
+    color: #888;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    @media (max-width: 767px) {
+      font-size: 11px;
+    }
+  }
+
+  &__stat-divider {
+    width: 1px;
+    height: 36px;
+    background: rgba($purple, 0.15);
+  }
+
+  /* Form Wrap */
+  &__form-wrap {
+    flex-shrink: 0;
+    width: 380px;
+  }
+}
+
+/* ===== Mobile Form ===== */
+.surg-mobile-form {
+  padding: 0 16px;
+  margin-top: -24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== Surgery Grid ===== */
+.surg-grid {
+  padding: $section-padding;
+  background: #fafafa;
+
+  &__wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: 40px;
+
+    @media (max-width: 767px) {
+      text-align: left;
+      margin-bottom: 28px;
+    }
+  }
+
+  &__title {
+    font-size: 30px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 8px;
+
+    span {
+      color: $purple;
+    }
+
+    @media (max-width: 767px) {
+      font-size: 22px;
+    }
+  }
+
+  &__subtitle {
+    font-size: 15px;
+    color: #888;
+    margin: 0;
+
+    @media (max-width: 767px) {
+      font-size: 13px;
+    }
+  }
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+
+    @media (max-width: 576px) {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 36px;
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border: 1.5px solid rgba($purple, 0.3);
+    border-radius: 10px;
+    background: #fff;
+    color: $purple;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+
+    &:hover {
+      background: rgba($purple, 0.04);
+      border-color: $purple;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba($purple, 0.1);
+    }
+
+    svg {
+      flex-shrink: 0;
+    }
+  }
+}
+
+/* Surgery Card */
+.surg-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 12px 16px;
+  background: #fff;
+  border-radius: $card-radius;
+  border: 1px solid #f0f0f0;
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba($purple, 0.1);
+    border-color: rgba($purple, 0.2);
+  }
+
+  &__img-wrap {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba($purple, 0.08), rgba($purple, 0.03));
+    overflow: hidden;
+    flex-shrink: 0;
+
+    img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+    }
+
+    @media (max-width: 576px) {
+      width: 44px;
+      height: 44px;
+
+      img {
+        width: 28px;
+        height: 28px;
+      }
+    }
+  }
+
+  &__name {
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.35;
+    color: #333;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    @media (max-width: 576px) {
+      font-size: 11px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    padding: 14px 8px 12px;
+    gap: 8px;
+    border-radius: 10px;
+  }
+
+  &__badge {
+    font-size: 10px;
+    font-weight: 600;
+    color: $purple;
+    background: rgba($purple, 0.08);
+    padding: 3px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.3px;
+
+    @media (max-width: 576px) {
+      font-size: 9px;
+      padding: 2px 6px;
+    }
+  }
+}
+
+/* ===== Treatment Guides ===== */
+.surg-treatments {
+  padding: 56px 0 0;
+  background: #fafafa;
+
+  &__wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: 32px;
+
+    @media (max-width: 767px) {
+      text-align: left;
+      margin-bottom: 24px;
+    }
+  }
+
+  &__title {
+    font-size: 30px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 8px;
+
+    span { color: $purple; }
+
+    @media (max-width: 767px) {
+      font-size: 22px;
+    }
+  }
+
+  &__subtitle {
+    font-size: 15px;
+    color: #888;
+    margin: 0;
+
+    @media (max-width: 767px) {
+      font-size: 13px;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+
+    @media (max-width: 576px) {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+  }
+}
+
+.surg-treat-card {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+  background: #fff;
+  border-radius: $card-radius;
+  border: 1px solid #f0f0f0;
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba($purple, 0.1);
+    border-color: rgba($purple, 0.2);
+  }
+
+  &__img {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba($purple, 0.08), rgba($purple, 0.03));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin: 0 0 4px;
+  }
+
+  &__desc {
+    font-size: 13px;
+    color: #888;
+    line-height: 1.45;
+    margin: 0 0 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__link {
+    font-size: 13px;
+    font-weight: 600;
+    color: $purple;
+  }
+
+  @media (max-width: 576px) {
+    padding: 12px;
+    gap: 12px;
+
+    &__img {
+      width: 52px;
+      height: 52px;
+
+      img {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    &__name { font-size: 14px; }
+    &__desc { font-size: 12px; }
+  }
+}
+
+/* ===== Departments ===== */
+.surg-depts {
+  padding: $section-padding;
+  background: #fff;
+
+  &__wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: 40px;
+
+    @media (max-width: 767px) {
+      text-align: left;
+      margin-bottom: 24px;
+    }
+  }
+
+  &__title {
+    font-size: 30px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 8px;
+
+    span {
+      color: $purple;
+    }
+
+    @media (max-width: 767px) {
+      font-size: 22px;
+    }
+  }
+
+  &__subtitle {
+    font-size: 15px;
+    color: #888;
+    margin: 0;
+
+    @media (max-width: 767px) {
+      font-size: 13px;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 14px;
+
+    @media (max-width: 767px) {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+  }
+}
+
+/* Department Card */
+.surg-dept {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: #fff;
+  border: 1.5px solid #f0f0f0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+
+  &:hover {
+    border-color: rgba($purple, 0.25);
+    box-shadow: 0 4px 16px rgba($purple, 0.08);
+    transform: translateY(-2px);
+  }
+
+  &--disabled {
+    opacity: 0.5;
+    cursor: default;
+
+    &:hover {
+      border-color: #f0f0f0;
+      box-shadow: none;
+      transform: none;
+    }
+  }
+
+  &__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba($purple, 0.08), rgba(#ec4899, 0.06));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+
+    img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+    }
+
+    @media (max-width: 576px) {
+      width: 44px;
+      height: 44px;
+
+      img {
+        width: 28px;
+        height: 28px;
+      }
+    }
+  }
+
+  &__info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin: 0 0 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @media (max-width: 576px) {
+      font-size: 14px;
+    }
+  }
+
+  &__count {
+    font-size: 12px;
+    color: #999;
+    font-weight: 500;
+  }
+
+  &__arrow {
+    color: #ccc;
+    flex-shrink: 0;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  &:hover &__arrow {
+    color: $purple;
+    transform: translateX(3px);
+  }
+}
+
+/* ===== WhatsApp FAB ===== */
+.surg-whatsapp {
+  position: fixed;
+  bottom: 80px;
+  left: 20px;
+  z-index: 10;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  img {
+    width: 60px;
+    height: 60px;
+  }
+
+  @media (max-width: 767px) {
+    bottom: 72px;
+    left: 12px;
+    width: 48px;
+    height: 48px;
+
+    img {
+      width: 48px;
+      height: 48px;
+    }
+  }
+}
+
+/* ===== Mobile Footer ===== */
+.surg-mobile-footer {
+  display: none;
+
+  @media (max-width: 767px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background: linear-gradient(135deg, $purple, color.adjust($purple, $lightness: 8%));
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 16px 0;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    box-shadow: 0 -2px 16px rgba($purple, 0.25);
+  }
+}
+
+/* ===== Bottom Sheet override ===== */
+::ng-deep {
+  .mat-bottom-sheet-container {
+    padding: 0 !important;
+    border-radius: 20px 20px 0 0 !important;
+  }
+}

@@ -1,0 +1,86 @@
+<section id="doctors" class="doctors" *ngIf="visibleDoctors.length">
+  <h2 class="doctors__title">
+    Best {{ treatmentTitle }} Doctors
+    <span *ngIf="city"> in {{ cityLabel }}</span>
+  </h2>
+
+  <div class="doctors__slider">
+    <button class="doctors__arrow doctors__arrow--left" (click)="scrollLeft()" aria-label="Scroll left">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </button>
+
+    <div class="doctors__scroll" #scrollContainer>
+    <div class="doctors__card" *ngFor="let doc of visibleDoctors">
+      <!-- Online indicator + Photo -->
+      <div class="doctors__card-top">
+        <span class="doctors__card-online"></span>
+        <img [src]="doc.userId?.profilePic || 'assets/images/svg/default-profile-pic.svg'"
+             [alt]="doc.userId?.fullName" class="doctors__card-img" loading="lazy"
+             width="80" height="80" />
+      </div>
+
+      <!-- Name -->
+      <a [routerLink]="['/', city || 'delhi', 'doctor', doc.slug || doc._id]" class="doctors__card-name">
+        {{ doc.userId?.fullName }}
+      </a>
+
+      <!-- Qualification -->
+      <p class="doctors__card-qual" *ngIf="doc.specialization?.length">
+        {{ doc.specialization[0]?.name }}
+      </p>
+
+      <!-- Experience + Rating -->
+      <div class="doctors__card-meta">
+        <span class="doctors__card-exp" *ngIf="doc.experience">{{ doc.experience }} Yrs.Exp.</span>
+      </div>
+
+      <div class="doctors__card-rating">
+        <span class="doctors__card-stars">⭐</span>
+        <span class="doctors__card-rating-num">{{ doc.rating || '4.5' }}/5</span>
+      </div>
+
+      <p class="doctors__card-exp-line" *ngIf="doc.experience">
+        {{ doc.experience }} Years Experience
+      </p>
+
+      <!-- Location -->
+      <p class="doctors__card-location" *ngIf="doc.city || doc.address?.city">
+        📍 {{ doc.address?.locality ? doc.address.locality + ', ' : '' }}{{ doc.city || doc.address?.city }}
+      </p>
+
+      <!-- Hospital / Establishment -->
+      <div class="doctors__card-hospital" *ngIf="doc.establishment?.name">
+        <span class="doctors__card-hospital-icon">🏥</span>
+        <a *ngIf="doc.establishment?.slug"
+           [routerLink]="['/', city || 'delhi', doc.establishment.type || 'clinic', doc.establishment.slug]"
+           class="doctors__card-hospital-name">
+          {{ doc.establishment.name }}
+        </a>
+        <span *ngIf="!doc.establishment?.slug" class="doctors__card-hospital-name">
+          {{ doc.establishment.name }}
+        </span>
+      </div>
+
+      <!-- Actions -->
+      <div class="doctors__card-actions">
+        <a href="tel:+918810232143" class="doctors__card-btn doctors__card-btn--call">Call Us</a>
+        <a [routerLink]="['/', city || 'delhi', 'doctor', doc.slug || doc._id]" class="doctors__card-btn doctors__card-btn--book">Book Appointment</a>
+      </div>
+    </div>
+    </div>
+
+    <button class="doctors__arrow doctors__arrow--right" (click)="scrollRight()" aria-label="Scroll right">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="9 18 15 12 9 6"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="doctors__view-all">
+    <a [routerLink]="city ? ['/', city, 'doctors'] : ['/doctors']" class="doctors__view-all-link">
+      View All Doctors →
+    </a>
+  </div>
+</section>

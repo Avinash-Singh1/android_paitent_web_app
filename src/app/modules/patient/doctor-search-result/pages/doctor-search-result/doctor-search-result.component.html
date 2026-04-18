@@ -1,0 +1,187 @@
+
+<!-- Desktop Sticky Search Bar (matches doctor-details header) -->
+<div class="dsr-search-wrap" role="search" aria-label="Search doctors and hospitals">
+  <div class="dsr-search-wrap__inner">
+    <nectar-wrap-search></nectar-wrap-search>
+  </div>
+</div>
+
+<section class="doctor-search-result">
+  <div class="doctor-search-result__container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a routerLink="/">Home</a>
+      <span class="breadcrumb__sep" aria-hidden="true">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </span>
+      <a *ngIf="payload.city"
+        routerLink="/{{ commonService.replaceSpaceWithHyphen(payload.city) }}"
+        (click)="removeLocality()">
+        {{ payload.city | titlecase }}
+      </a>
+
+      <!-- Specializations (flag 1) -->
+      <ng-container *ngFor="let spec of breadcrumbSpecialization">
+        <ng-container *ngIf="spec.flag === 1">
+          <span class="breadcrumb__sep" aria-hidden="true">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+          <a routerLink="/{{ commonService.replaceSpaceWithHyphen(payload.city) }}/{{ commonService.replaceSpaceWithHyphen(spec.name) }}">
+            {{ spec.name | titlecase }}
+          </a>
+        </ng-container>
+      </ng-container>
+
+      <!-- Search term -->
+      <ng-container *ngIf="payload.search">
+        <span class="breadcrumb__sep" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </span>
+        <a routerLink="/{{ commonService.replaceSpaceWithHyphen(payload.city) }}/{{ commonService.replaceSpaceWithHyphen(payload.search) }}">
+          {{ payload.search | titlecase }}
+        </a>
+      </ng-container>
+
+      <!-- Specializations (flag 2) -->
+      <ng-container *ngFor="let spec of breadcrumbSpecialization">
+        <ng-container *ngIf="spec.flag === 2">
+          <span class="breadcrumb__sep" aria-hidden="true">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+          <a routerLink="/{{ commonService.replaceSpaceWithHyphen(payload.city) }}/{{ commonService.replaceSpaceWithHyphen(spec.name) }}">
+            {{ spec.name | titlecase }}
+          </a>
+        </ng-container>
+      </ng-container>
+
+      <!-- Locality -->
+      <ng-container *ngIf="payload.locality">
+        <span class="breadcrumb__sep" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </span>
+        <a routerLink="/{{ commonService.replaceSpaceWithHyphen(payload.city) }}/{{ commonService.replaceSpaceWithHyphen(payload.search) }}/{{ commonService.replaceSpaceWithHyphen(payload.locality) }}">
+          {{ payload.locality | titlecase }}
+        </a>
+      </ng-container>
+    </nav>
+    <!-- <div
+      class="doctor-search-result__container__filters filter anime-section"
+      *ngIf="scrollTop < 50"
+    >
+    </div> -->
+
+    <div class="heading" *ngIf="totalItems">
+      <div class="heading-item" >
+
+        <h1 *ngIf="isService">
+          <span class="heading-count">{{ totalItems }}</span> Best doctors for {{ serviceName | titlecase }} service in 
+          <ng-container *ngIf="payload.locality; else cityStateBlock">
+            {{ payload.locality | titlecase }}, {{ city | titlecase }}
+          </ng-container>
+          <ng-template #cityStateBlock>
+            {{ city | titlecase }}<span *ngIf="doctorState">, {{ doctorState }}</span>
+          </ng-template>
+        </h1>
+
+        <h1 *ngIf="isSpeciality">
+          <span class="heading-count">{{ totalItems }}</span> Best {{ specialityName | titlecase }} in 
+          <ng-container *ngIf="payload.locality; else cityStateBlock2">
+            {{ payload.locality | titlecase }}, {{ city | titlecase }}
+          </ng-container>
+          <ng-template #cityStateBlock2>
+            {{ city | titlecase }}<span *ngIf="doctorState">, {{ doctorState }}</span>
+          </ng-template>
+        </h1>
+
+        <h1 *ngIf="!isService && !isSpeciality">
+          <span class="heading-count">{{ totalItems }}</span> Best Doctors in 
+          <ng-container *ngIf="payload.locality; else cityStateBlock3">
+            {{ payload.locality | titlecase }}, {{ city | titlecase }}
+          </ng-container>
+          <ng-template #cityStateBlock3>
+            {{ city | titlecase }}<span *ngIf="doctorState">, {{ doctorState }}</span>
+          </ng-template>
+        </h1>
+
+
+
+      </div>
+      <div class="heading-description">
+        <p>Book appointments quickly with verified doctors.</p>
+      </div>
+    </div>
+
+    <!-- Skeleton loader while data is loading (initial load + subsequent navigations) -->
+    <div *ngIf="(isLoading || !apiHit) && !content.length" class="skeleton-section" aria-hidden="true">
+      <div class="skeleton-heading">
+        <div class="skeleton-bone skeleton-h1"></div>
+        <div class="skeleton-bone skeleton-subtext"></div>
+      </div>
+      <nectar-doctor-card-skeleton [count]="5"></nectar-doctor-card-skeleton>
+    </div>
+
+    <div 
+  class="doctor-search-result__container__cards fade-in-content"
+  *ngIf="totalItems"
+  [class.is-visible]="!isLoading"
+>
+  <ul [ngClass]="{'fade-enter': fading}" class="page-content">
+    <li
+      *ngFor="let item of content; let i = index; trackBy: trackByFn"
+    >
+      <nectar-calendar-view [data]="item" [isService]="isService" [index]="i"></nectar-calendar-view>
+    </li>
+  </ul>
+
+  <!-- Skeleton cards while fetching next page -->
+  <div class="load-more-skeleton" *ngIf="isLoadingMore" aria-hidden="true">
+    <nectar-doctor-card-skeleton [count]="3"></nectar-doctor-card-skeleton>
+  </div>
+
+  <!-- Infinite scroll sentinel (IntersectionObserver target) -->
+  <div id="loadMoreTrigger" class="scroll-sentinel"
+       *ngIf="hasMore && !isLoading" aria-hidden="true"></div>
+</div>
+
+    <div class="no-data" *ngIf="!totalItems && apiHit">
+      <div class="first-section">
+        <h2>We couldn't find any doctors for you</h2>
+        <p *ngIf="city">
+          Your search for {{ symptomps }} in {{ city }} didn't match anything.
+        </p>
+        <p *ngIf="!city">
+          Your search for {{ symptomps }} didn't match anything.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<ng-container *ngIf="(seoData$ | async) as seoData">
+  <ng-container *ngIf="(payload$ | async) as payload">
+    <nectar-seo-content
+      *ngIf="filteredData?.length"
+      [allowDescription]="true"
+      [data]="seoData.length ? seoData : (seoData$ | async)"
+      [doctorState]="doctorState"
+      [city]="payload?.city"
+      [search]="doctorSearchTerm || payload?.search"
+      [doctorDetail]="filteredData[0]"
+      [HospitalURLS]="hospitalURLs"
+    ></nectar-seo-content>
+  </ng-container>
+</ng-container>
+
+<!-- ✅ initial render READY - Direct binding + fallback -->
+<!-- <nectar-seo-section
+  *ngIf="filteredData?.length"
+  [allowDescription]="true"
+  [data]="seoData.length ? seoData : (seoData$ | async)"
+  [doctorState]="doctorState"
+  [city]="payload?.city"
+  [search]="doctorSearchTerm || payload?.search"
+  [doctorDetail]="filteredData[0]"
+  [HospitalURLS]="hospitalURLs"
+  [isDoctorSearchPage]="true">
+</nectar-seo-section> -->

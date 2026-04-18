@@ -1,0 +1,303 @@
+// @import "tools.mediaquery";
+
+// @import "settings.colors";
+
+// @import "tools.typography";
+
+// @import "settings.containers";
+
+// @import "variable.scss";
+
+
+// .videos-wrapper {
+//   padding: $pad_0 $pad_24 $pad_24;
+
+//   @media screen and (max-width: 767px) {
+//     padding: 32px 0px;
+//   }
+
+//   h2 {
+//     @include font-sans_pro-semibold($size: 22px);
+
+//     // margin-bottom: ;
+//     @media screen and (max-width: 767px) {
+//       @include font-sans_pro-semibold($size: 20px);
+//     }
+//   }
+
+//   .videos {
+//     display: flex;
+//     gap: 18px;
+//     overflow-x: auto;
+
+//     @media screen and (max-width: 767px) {
+//       width: calc(100vw - 20px);
+//     }
+
+//     .video-wrapper {
+//       iframe {
+//         height: 200px;
+//         width: 360px;
+//         border-radius: 10px;
+
+//         @media screen and (max-width: 767px) {
+//           height: 150px;
+//           width: 250px;
+//         }
+//       }
+//     }
+//   }
+// }
+
+// .videos::-webkit-scrollbar {
+//   display: none;
+// }
+
+// /* Hide scrollbar for IE, Edge and Firefox */
+// .videos {
+//   -ms-overflow-style: none;
+//   /* IE and Edge */
+//   scrollbar-width: none;
+//   /* Firefox */
+// }
+
+// .ngx-lite-video__play {
+//     width: 100%;
+//   .youtube-logo {
+//     all: unset;
+//     width: 72px;
+//     height: 48px;
+//     transition: all 0.2s cubic-bezier(0, 0, 0.2, 1);
+//     background: center / 68px 48px no-repeat
+//       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 68 48'%3E%3Cpath fill='%23f00' fill-opacity='.9' d='M66.5 7.7c-.8-2.9-2.5-5.4-5.4-6.2C55.8.1 34 0 34 0S12.2.1 6.9 1.6c-3 .7-4.6 3.2-5.4 6.1a89.6 89.6 0 000 32.5c.8 3 2.5 5.5 5.4 6.3C12.2 47.9 34 48 34 48s21.8-.1 27.1-1.6c3-.7 4.6-3.2 5.4-6.1C68 35 68 24 68 24s0-11-1.5-16.3z'/%3E%3Cpath fill='%23fff' d='M45 24L27 14v20'/%3E%3C/svg%3E");
+//     filter: grayscale(1);
+//   }
+
+//   &:hover .youtube-logo {
+//     filter: none;
+//   }
+// }
+
+
+
+$_purple: #45197c;
+$_radius: 12px;
+$_transition: 0.2s ease;
+
+/* ===============================================
+   VIDEOS SECTION
+   =============================================== */
+.videos-wrapper {
+  overflow: hidden;
+
+  /* --- Header row: title + arrows --- */
+  .videos-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+
+    h2 {
+      font-size: 22px;
+      font-weight: 600;
+      color: #1a1a2e;
+      margin: 0;
+    }
+
+    @media screen and (max-width: 767px) {
+      margin-bottom: 12px;
+    }
+  }
+
+  /* --- Prev / Next arrows (desktop only) --- */
+  .videos-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    @media screen and (max-width: 767px) {
+      display: none;
+    }
+
+    &__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(0, 0, 0, 0.12);
+      background: #fff;
+      color: #1a1a2e;
+      cursor: pointer;
+      transition: all $_transition;
+      padding: 0;
+
+      &:hover {
+        border-color: $_purple;
+        color: $_purple;
+        background: rgba($_purple, 0.04);
+        box-shadow: 0 2px 8px rgba($_purple, 0.12);
+      }
+
+      &:active {
+        transform: scale(0.92);
+      }
+
+      svg {
+        display: block;
+      }
+    }
+  }
+
+  /* --- Horizontal scroll track --- */
+  .videos {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    gap: 16px;
+    padding: 0 16px 8px;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    /* Hide scrollbar */
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+    -webkit-overflow-scrolling: touch;
+
+    @media screen and (max-width: 767px) {
+      gap: 12px;
+      padding: 0 0 6px;
+    }
+  }
+
+  /* --- Individual video card --- */
+  .video-wrapper {
+    flex: 0 0 auto;
+    width: 280px;
+    max-width: 85vw;
+    position: relative;
+    border-radius: $_radius;
+    overflow: hidden;
+    background: #0a0a0a;
+    scroll-snap-align: start;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+    transition: transform $_transition, box-shadow $_transition;
+
+    &:hover {
+      @media (min-width: 768px) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      width: 260px;
+      border-radius: 10px;
+    }
+
+    /* Iframe (after click) */
+    iframe {
+      width: 100%;
+      height: 158px;
+      border: none;
+      border-radius: $_radius;
+      display: block;
+
+      @media screen and (max-width: 767px) {
+        height: 146px;
+        border-radius: 10px;
+      }
+    }
+
+    /* Thumbnail (before click) */
+    .video-thumbnail {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 ratio */
+      background-size: cover;
+      background-position: center;
+      cursor: pointer;
+
+      /* Dark overlay for better play button visibility */
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          transparent 40%,
+          rgba(0, 0, 0, 0.35) 100%
+        );
+        pointer-events: none;
+        transition: opacity $_transition;
+      }
+
+      /* Play button — white circle with purple triangle */
+      .play-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+        width: 52px;
+        height: 52px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+        transition: transform $_transition, box-shadow $_transition;
+        pointer-events: none;
+
+        &::before {
+          content: "";
+          display: block;
+          width: 0;
+          height: 0;
+          margin-left: 4px; /* Optical centering for triangle */
+          border-left: 18px solid $_purple;
+          border-top: 11px solid transparent;
+          border-bottom: 11px solid transparent;
+        }
+
+        @media screen and (max-width: 767px) {
+          width: 46px;
+          height: 46px;
+
+          &::before {
+            margin-left: 3px;
+            border-left-width: 15px;
+            border-top-width: 9px;
+            border-bottom-width: 9px;
+          }
+        }
+      }
+
+      /* Hover lift on play button */
+      &:hover .play-button {
+        transform: translate(-50%, -50%) scale(1.08);
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Video title overlay (if present) */
+      .video-title {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+        color: #fff;
+        padding: 16px 12px 10px;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.35;
+      }
+    }
+  }
+}

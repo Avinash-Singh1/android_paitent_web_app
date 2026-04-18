@@ -1,0 +1,165 @@
+$purple: #45197c;
+$lavender: #f2e8ff;
+
+.cost {
+  margin-bottom: 40px;
+
+  &__title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 20px;
+  }
+
+  // Summary Cards
+  &__summary {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 24px;
+
+    @media (max-width: 600px) { flex-direction: column; }
+  }
+
+  &__card {
+    flex: 1;
+    background: #fff;
+    border-radius: 12px;
+    padding: 18px 22px;
+    border: 1.5px solid #e8e0f3;
+    text-align: center;
+
+    &--avg {
+      border-color: $purple;
+      background: $lavender;
+    }
+  }
+
+  &__card-label {
+    display: block;
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 4px;
+  }
+
+  &__card-price {
+    font-size: 24px;
+    font-weight: 800;
+    color: $purple;
+  }
+
+  // Range Bar
+  &__range {
+    margin-bottom: 28px;
+  }
+
+  &__range-bar {
+    height: 10px;
+    background: #e8e0f3;
+    border-radius: 5px;
+    position: relative;
+    overflow: visible;
+  }
+
+  &__range-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #7c3aed, $purple);
+    border-radius: 5px;
+    width: 100%;
+  }
+
+  &__range-marker {
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    font-weight: 600;
+    color: $purple;
+    background: #fff;
+    padding: 2px 10px;
+    border-radius: 12px;
+    border: 1px solid $lavender;
+    white-space: nowrap;
+  }
+
+  &__range-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #888;
+  }
+
+  // Factors
+  &__factors {
+    background: #faf8fd;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  &__factors-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin: 0 0 16px;
+  }
+
+  &__factors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+
+  &__factor {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  &__factor-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  &__factor-label {
+    font-size: 14px;
+    color: #333;
+  }
+
+  &__factor-desc {
+    font-size: 12px;
+    color: #888;
+    margin: 2px 0 0;
+  }
+
+  // Insurance
+  &__insurance {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #e6f5ff;
+    border: 1px solid #b3dbff;
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+
+    strong { font-size: 14px; color: #1a5bb5; }
+    p { font-size: 13px; color: #555; margin: 4px 0 0; }
+  }
+
+  &__insurance-icon { font-size: 28px; flex-shrink: 0; }
+
+  // More link
+  &__more {
+    display: inline-block;
+    color: $purple;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover { text-decoration: underline; }
+  }
+}

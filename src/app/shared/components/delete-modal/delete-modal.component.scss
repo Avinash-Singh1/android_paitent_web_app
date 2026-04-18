@@ -1,0 +1,16 @@
+@use "variable.scss" as *;
+
+@use "tools.typography" as *;
+
+.cancel {
+  padding: 10px 30px;
+  background: $white;
+  border: 1px solid $border-color;
+  color: $purple;
+  @include font-sans_pro-semibold(14px);
+}
+
+.yes {
+  color: $white;
+  background: $purple;
+}

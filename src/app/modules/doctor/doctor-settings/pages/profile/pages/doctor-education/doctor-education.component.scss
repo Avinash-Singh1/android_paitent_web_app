@@ -1,0 +1,54 @@
+@use "variable.scss" as *;
+@use "src/styles/elements/_elements.svg.scss" as *;
+
+.doctor-education {
+  .heading {
+    padding: 31px 24px;
+    background: $white;
+
+    .add-more {
+      background: $purple;
+      padding: 8px 8px;
+      border: 1px solid $border-color;
+      border-radius: 8px;
+
+    }
+  }
+
+  .listing {
+    max-height: calc(100vh - 254px);
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    .list-item {
+      padding: 16px 32px;
+
+      .edit-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 1px solid $border-color;
+        padding: 12px 24px;
+        border-radius: 4px;
+        background: $white;
+
+        .icon {
+          margin-top: -4px;
+        }
+
+        &.delete {
+          border: none !important;
+        }
+      }
+
+      .social-media {
+        width: 36px;
+        height: 36px;
+        object-fit: contain;
+      }
+    }
+  }
+}

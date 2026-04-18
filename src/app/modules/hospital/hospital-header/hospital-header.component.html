@@ -1,0 +1,192 @@
+<div
+  class="doctor-heading px-5 py-3 d-flex justify-content-between align-items-center border-bottom-style"
+>
+  <div class="d-flex align-items-center gap-4">
+    <div class="search-input" *ngIf="showSearch">
+      <svg-icon src="assets/images/svg/search.svg"></svg-icon>
+      <input
+        type="text"
+        placeholder="Search patients by name or number"
+        class="search"
+      />
+    </div>
+    <div class="text-18 font-600">
+      {{ hospitalName | uppercase }}
+    </div>
+  </div>
+  <div class="d-flex gap-3 align-items-center">
+    <div class="day-data rounded-0 dropdown w-100">
+      <div
+        class="day d-flex gap-3 align-items-center dropdownbtn w-100"
+        data-bs-toggle="dropdown"
+        data-bs-auto-close="outside"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <svg-icon
+          src="assets/images/svg/bell.svg"
+          style="position: relative"
+        ></svg-icon>
+        <span class="request-number" *ngIf="unreadNotification">
+          {{ unreadNotification > 9 ? 9 + "+" : unreadNotification }}
+        </span>
+      </div>
+
+      <div
+        class="notification dropdown-menu"
+        infiniteScroll
+        [infiniteScrollDistance]="0.2"
+        (scrolled)="onScroll($event)"
+        [scrollWindow]="false"
+      >
+        <div
+          class="notification-header d-flex align-items-center justify-content-between p-3"
+        >
+          <div class="text-16 font-600">
+            {{ unreadNotification }} New Notification
+          </div>
+          <div
+            class="text-16 opacity-80 cursor-pointer"
+            (click)="clearAllNotification()"
+          >
+            Clear all
+          </div>
+        </div>
+        <div>
+          <ng-container *ngFor="let item of notificationList">
+            <div
+              class="box p-3"
+              *ngIf="item?.eventType == 12"
+              [style.background]="item?.isRead ? 'white' : '#FAF9F6'"
+            >
+              <div class="d-flex gap-2 justify-content-between">
+                <div class="d-flex gap-2">
+                  <img
+                    [src]="item?.doctor?.profilePic"
+                    alt=""
+                    *ngIf="item?.doctor?.profilePic"
+                    class="profile-icon"
+                  />
+                  <div class="profile-icon" *ngIf="!item?.doctor?.profilePic">
+                    {{ item?.doctor?.name | nameInitial | uppercase }}
+                  </div>
+                  <div class="text-16 font-600">
+                    {{ item?.title || "N/A" }} <br />
+                  </div>
+                </div>
+
+                <img
+                  src="assets/images/svg/cross.svg"
+                  alt=""
+                  class="opacity-50 cursor-pointer"
+                  (click)="deleteNotification(item)"
+                />
+              </div>
+              <div class="" style="margin-left: 40px">
+                <div class="d-flex gap-3 my-2">
+                  <button class="decline-button" (click)="onRequestList()">
+                    Decline
+                  </button>
+                  <button class="accept-button" (click)="onRequestList()">
+                    Accept
+                  </button>
+                </div>
+                <div class="text-16 opacity-50">
+                  {{ item?.createdAt | nitifcationTime }}
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="box p-3"
+              *ngIf="item?.eventType !== 12"
+              [style.background]="item?.isRead ? 'white' : '#FAF9F6'"
+            >
+              <div class="d-flex gap-2 justify-content-between">
+                <div class="d-flex gap-2">
+                  <img
+                    [src]="contantsIcon?.NOTIFICATION_IMAGES[item?.eventType]"
+                    alt=""
+                  />
+                  <div
+                    class="text-16 font-600"
+                    (click)="readNotification(item)"
+                  >
+                    {{ item?.title }} <br />
+                    <span class="text-16 font-400 opacity-50">{{
+                      item?.createdAt | nitifcationTime
+                    }}</span>
+                  </div>
+                </div>
+
+                <img
+                  src="assets/images/svg/cross.svg"
+                  alt=""
+                  class="opacity-50 cursor-pointer"
+                  (click)="deleteNotification(item)"
+                />
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div class="day-data rounded-0 dropdown w-100">
+      <div class="dropdown">
+        <div
+          class="day d-flex gap-3 align-items-center dropdownbtn w-100 cursor-pointer"
+          data-bs-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <div
+            class="profile-wrapper d-flex justify-content-center align-items-center"
+          >
+            <img loading="lazy" [src]="profilePic" alt="" *ngIf="profilePic" />
+            <span class="text-18 font-600" *ngIf="!profilePic">
+              {{ hospitalName | nameInitial | uppercase }}
+            </span>
+          </div>
+          <svg-icon src="assets/images/svg/downarrow.svg"></svg-icon>
+        </div>
+        <div class="dropdown-menu">
+          <div
+            class="d-flex gap-3 align-items-center border-bottom-style p-24 dropdown-item"
+          >
+            <div
+              class="profile-wrapper d-flex justify-content-center align-items-center"
+            >
+              <img
+                loading="lazy"
+                [src]="profilePic"
+                alt=""
+                *ngIf="profilePic"
+              />
+              <span class="text-18 font-600" *ngIf="!profilePic">
+                {{ hospitalName | nameInitial | uppercase }}
+              </span>
+            </div>
+            <div class="d-flex flex-column gap-2 whitespace-nowrap">
+              <span class="font-600 text-18">{{
+                hospitalName | titlecase
+              }}</span>
+              <span class="text-18">{{ hospitalDetail?.phone }}</span>
+            </div>
+          </div>
+          <div
+            class="w-100 border-bottom-style px-24 py-12 text-18 dropdown-item cursor-pointer"
+            routerLink="/hospital/settings"
+          >
+            {{ "ACCOUNT_SETTINGS" | translate }}
+          </div>
+          <div
+            class="w-100 px-24 py-12 text-18 dropdown-item cursor-pointer"
+            (click)="onLogout()"
+          >
+            {{ "LOG_OUT" | translate }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

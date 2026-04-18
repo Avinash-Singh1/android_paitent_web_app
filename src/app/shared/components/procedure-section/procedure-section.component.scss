@@ -1,0 +1,388 @@
+@use "tools.mediaquery" as *;
+
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+
+@use "variable.scss" as *;
+
+@use "src/styles/components/_components.ngx-pagination.scss" as *;
+
+.main {
+  // margin: 32px;
+  padding: 24px;
+  @include font-sans_pro-regular($font_14);
+
+  @media screen and (max-width: 767px) {
+    @include font-sans_pro-regular(16px);
+    // margin: 32px 0px;
+    padding: 24px 0;
+  }
+
+  .wrapper {
+    .heading {
+      @include font-sans_pro-semibold($font_20);
+
+      @media screen and (max-width: 767px) {
+        @include font-sans_pro-semibold(20px);
+      }
+    }
+
+    .filter {
+      margin-top: 24px;
+      border: 1px solid $border-color;
+      border-radius: 5px;
+      padding: 16px;
+
+      @media screen and (max-width: 767px) {
+        margin-top: 0px;
+        overflow-x: auto;
+        border: none;
+        min-width: 90vw;
+        padding: 0;
+      }
+
+      .filter-heading {
+        @include font-sans_pro-regular($font_14);
+
+        @media screen and (max-width: 767px) {
+          display: none !important;
+        }
+      }
+
+      .letter-section {
+        .letter-box {
+          cursor: pointer;
+          margin-top: 10px;
+          padding: 12px;
+          border: 1px solid $border-color;
+          font-weight: 600;
+        }
+
+        @media screen and (max-width: 767px) {
+          display: none !important;
+        }
+      }
+
+      .specialities {
+        margin: 24px 0 8px 0;
+        flex-wrap: wrap;
+
+        @media screen and (max-width: 767px) {
+          flex-wrap: nowrap;
+        }
+
+        .box {
+          padding: 8px 20px;
+          background: $bright-gray;
+          border-radius: 25px;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    .list-section {
+      .card {
+        margin: 18px 0;
+        border: 1px solid $border-color;
+        padding: 28px;
+
+        @media screen and (max-width: 767px) {
+          padding: 28px 14px;
+        }
+
+        .card-detail {
+          @media screen and (max-width: 576px) {
+            flex-direction: column;
+            gap: 20px;
+          }
+
+          .first-section {
+
+            .profile-icon,
+            .image-section {
+              height: 100px;
+              width: 100px;
+              border: 1px solid $border-color;
+              border-radius: 50%;
+              @include font-sans_pro-semibold($font_20);
+              color: $purple;
+
+              @media screen and (max-width: 767px) {
+                height: 80px;
+                width: 80px;
+                @include font-sans_pro-semibold(20px);
+              }
+
+              img {
+                height: 97px;
+                width: 97px;
+                border-radius: 50%;
+                object-fit: contain;
+
+                @media screen and (max-width: 767px) {
+                  height: 78px;
+                  width: 78px;
+                }
+              }
+            }
+
+            .content {
+              .name {
+                @include font-sans_pro-semibold($font_20);
+
+                @media screen and (max-width: 767px) {
+                  @include font-sans_pro-semibold(20px);
+                }
+              }
+
+              .speciality {
+                opacity: 0.7;
+              }
+
+              .experience {
+                @include font-sans_pro-semibold($font_14);
+                color: rgba(0, 0, 0, 0.8);
+
+                @media screen and (max-width: 767px) {
+                  @include font-sans_pro-semibold(16px);
+                }
+              }
+
+              .rating {
+                grid-area: rating;
+                margin-top: 5px;
+                justify-content: start;
+
+                ::ng-deep {
+                  star-rating {
+                    .star-container {
+                      margin-left: 0;
+
+                      svg {
+                        fill: $green !important;
+                      }
+                    }
+                  }
+                }
+
+                img {
+                  margin-bottom: 10px;
+                  height: 20px;
+                  width: 20px;
+                  display: inline-block;
+                }
+
+                .total {
+                  @include font-sans_pro-semibold($font_14);
+
+                  color: rgba(0, 0, 0, 0.7);
+
+                  @media screen and (max-width: 767px) {
+                    @include font-sans_pro-semibold(16px);
+                  }
+                }
+
+                .star {
+                  @include font-sans_pro-bold($font_14);
+
+                  @media screen and (max-width: 767px) {
+                    @include font-sans_pro-bold(16px);
+                  }
+                }
+
+                .review {
+                  @include font-sans_pro-regular($font_14);
+
+                  color: rgba(0, 0, 0, 0.7);
+
+                  @media screen and (max-width: 767px) {
+                    @include font-sans_pro-regular(16px);
+                  }
+                }
+              }
+
+              .score {
+                border: 1px solid rgba(69, 25, 124, 0.3);
+                border-radius: 5px;
+                padding: 3px 8px;
+
+                @media screen and (max-width: 767px) {
+                  border: none;
+                }
+              }
+
+              .price-box {
+                @include font-sans_pro-semibold($font_14);
+
+                @media screen and (max-width: 767px) {
+                  @include font-sans_pro-semibold(16px);
+                }
+
+                .price {
+                  @include font-sans_pro-regular($font_14);
+
+                  @media screen and (max-width: 767px) {
+                    @include font-sans_pro-regular(16px);
+                  }
+                }
+              }
+            }
+          }
+
+          .second-section {
+            max-height: 150px;
+            overflow-y: auto;
+            padding-right: 10px;
+
+            @media screen and (max-width: 576px) {
+              text-align: center;
+              margin-bottom: 15px;
+              display: none;
+            }
+
+            .time {
+              @include font-sans_pro-semibold($font_14);
+
+              @media screen and (max-width: 767px) {
+                @include font-sans_pro-semibold(16px);
+              }
+
+              p {
+                margin: 0;
+                margin-left: 23px;
+                @include font-sans_pro-regular($font_14);
+
+                @media screen and (max-width: 767px) {
+                  @include font-sans_pro-regular(16px);
+                }
+              }
+            }
+          }
+        }
+
+        .booking {
+
+          //   padding: 4px;
+          button {
+            border: 1px solid $purple;
+            padding: 12px 28px;
+            background: $purple;
+            color: $white;
+
+            @media screen and (max-width: 767px) {
+              padding: 12px 10px;
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.pagination-section {
+  margin: 80px 0px;
+}
+
+:host::ng-deep {
+  .ngx-pagination {
+    @include ngx-pagination($purple, $purple);
+  }
+}
+
+.no-data {
+  margin: 20px 0;
+
+  .first-section {
+    border: 1px solid $border-color;
+    padding: 32px;
+    margin-bottom: 20px;
+
+    h2 {
+      @include font-sans_pro-bold($size: $font_28);
+
+      @media screen and (max-width: 767px) {
+        @include font-sans_pro-bold(24px);
+      }
+    }
+
+    p {
+      @include font-sans_pro-regular($size: $font_20);
+
+      @media screen and (max-width: 767px) {
+        @include font-sans_pro-regular(20px);
+      }
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+
+  @media screen and (max-width: 767px) {
+    display: none;
+  }
+}
+
+::-webkit-scrollbar-track {
+  background: $white;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $purple;
+  border-radius: 20px;
+}
+
+.disable {
+  opacity: 0.5;
+  font-weight: 400 !important;
+}
+
+.selected {
+  color: $white;
+  background: $purple !important;
+}
+
+.seeMore {
+  color: $purple;
+  cursor: pointer;
+  @include font-sans_pro-semibold($font_14);
+  text-align: end;
+  text-decoration: underline;
+
+  @media screen and (max-width: 767px) {
+    @include font-sans_pro-semibold(16px);
+  }
+}
+
+.mobile-hospital-detail {
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: $white;
+  width: 100%;
+  padding: 12px 8px;
+  margin-bottom: 12px;
+}
+
+.search {
+  border: 1px solid $border-color;
+  border-radius: 25px;
+  padding: 13px 16px;
+  background: $white;
+
+  input {
+    border: none;
+    outline: none;
+    padding-left: 8px;
+    @include font-sans_pro-regular(16px);
+  }
+}
+
+::ng-deep {
+  .mat-bottom-sheet-container {
+    padding: 0 !important;
+    border-radius: 20px 20px 0 0px !important;
+  }
+}

@@ -1,0 +1,68 @@
+<div class="day-view">
+  <table>
+    <caption></caption>
+    <thead>
+      <tr>
+        <th class="timing header" (click)="showDoctorList()">
+          
+          <svg-icon
+            src="assets/images/svg/next.svg"
+            *ngIf="!doctorList"
+          ></svg-icon>
+          <svg-icon
+            src="assets/images/svg/previous.svg"
+            *ngIf="doctorList"
+          ></svg-icon>
+        </th>
+        <th class="day-name">{{ showDayname | date : "EEEE d MMM" }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of rows; let i = index">
+        <td class="timing position-relative" [ngClass]="{currentSlot:i == (currentSlot | async)}">
+          {{ row.timing | date : "h:mm a" }}
+          <svg-icon
+            class="position-absolute timepointer svg-icon-purple"
+            src="assets/images/svg/timepointer.svg"
+            *ngIf="i == (currentSlot | async)"
+          ></svg-icon>
+        </td>
+        <td class="position-relative day">
+          <div
+            class="d-flex flex-column gap-1"
+            *ngIf="row.details?.length <= 2"
+          >
+            <ng-container *ngFor="let patient of row.details; let j = index">
+              <div
+                [attr.data.details]="patient | stringify | async"
+                class="day-data rounded-0 event"
+                [ngClass]="[
+                  patient.status | appointmentStatus,
+                  row.details?.length == 2 ? 'multiple' : ''
+                ]"
+              >
+                <span>
+                  {{ patient.patient.patientName | titlecase }}
+                </span>
+              </div>
+            </ng-container>
+          </div>
+          <div class="d-flex w-100" *ngIf="row.details.length > 2">
+            <div
+              class="day-data w-100 rounded-0 single multi-event multiple-appointment"
+              [attr.data-patient-list]="row.details | stringify | async"
+            >
+              <span>
+                {{ row.details.length + "+ Patients" | titlecase }}
+              </span>
+            </div>
+          </div>
+          <div
+            class="dotted-border"
+            *ngIf="!row.details?.length && i == (currentSlot | async)"
+          ></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

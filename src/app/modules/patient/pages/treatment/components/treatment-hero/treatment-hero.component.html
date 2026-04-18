@@ -1,0 +1,120 @@
+<!-- Skeleton placeholder to reserve space before data loads -->
+<div class="hero hero--skeleton" *ngIf="!treatment" aria-hidden="true">
+  <div class="hero__breadcrumb"><div class="hero__breadcrumb-inner"><div class="skeleton-line skeleton-line--sm"></div></div></div>
+  <div class="hero__inner">
+    <div class="hero__content">
+      <div class="skeleton-line skeleton-line--lg"></div>
+      <div class="skeleton-line skeleton-line--md"></div>
+      <div class="skeleton-line skeleton-line--btn"></div>
+      <div class="hero__stats">
+        <div class="hero__stat" *ngFor="let i of [1,2,3,4]"><div class="skeleton-line skeleton-line--stat"></div></div>
+      </div>
+    </div>
+    <aside class="hero__sidebar"><div class="skeleton-box skeleton-box--form"></div></aside>
+  </div>
+</div>
+
+<section class="hero" *ngIf="treatment">
+  <!-- Top Bar: Breadcrumb -->
+  <nav class="hero__breadcrumb" aria-label="Breadcrumb">
+    <div class="hero__breadcrumb-inner">
+      <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li *ngFor="let crumb of breadcrumbs; let i = index; let last = last"
+            class="breadcrumb-item" [class.active]="last"
+            itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a *ngIf="crumb.link" class="breadcrumb-link" [routerLink]="crumb.link" itemprop="item">
+            <svg *ngIf="i === 0" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span itemprop="name">{{ crumb.label }}</span>
+          </a>
+          <span *ngIf="!crumb.link" class="breadcrumb-current" itemprop="name">{{ crumb.label }}</span>
+          <meta itemprop="position" [content]="i + 1" />
+        </li>
+      </ol>
+    </div>
+  </nav>
+
+  <div class="hero__inner">
+    <div class="hero__content">
+      <!-- Title + Subtitle -->
+      <h1 class="hero__title">{{ treatment.title }}</h1>
+      <p class="hero__subtitle" *ngIf="treatment.seoDescription">
+        {{ treatment.seoDescription | slice:0:180 }}{{ treatment.seoDescription?.length > 180 ? '...' : '' }}
+      </p>
+
+      <!-- Call CTA -->
+      <a href="tel:+918810232143" class="hero__call-btn">
+        <span class="hero__call-icon">📞</span> Call Us: 088-1023-2143
+      </a>
+
+      <!-- Stats Bar -->
+      <div class="hero__stats">
+        <div class="hero__stat">
+          <strong class="hero__stat-num">3M+</strong>
+          <span class="hero__stat-label">Happy Patients</span>
+        </div>
+        <div class="hero__stat">
+          <strong class="hero__stat-num">50+</strong>
+          <span class="hero__stat-label">Treatments</span>
+        </div>
+        <div class="hero__stat">
+          <strong class="hero__stat-num">200+</strong>
+          <span class="hero__stat-label">Hospitals</span>
+        </div>
+        <div class="hero__stat">
+          <strong class="hero__stat-num">30+</strong>
+          <span class="hero__stat-label">Cities</span>
+        </div>
+      </div>
+
+      <!-- Trust Icon Cards (PristynCare style) -->
+      <div class="hero__trust-cards">
+        <div class="hero__trust-card">
+          <span class="hero__trust-card-icon">🚗</span>
+          <span class="hero__trust-card-text">Free Cab Facility</span>
+        </div>
+        <div class="hero__trust-card">
+          <span class="hero__trust-card-icon">💳</span>
+          <span class="hero__trust-card-text">No-Cost EMI</span>
+        </div>
+        <div class="hero__trust-card">
+          <span class="hero__trust-card-icon">🛡️</span>
+          <span class="hero__trust-card-text">Insurance Support</span>
+        </div>
+        <div class="hero__trust-card">
+          <span class="hero__trust-card-icon">🏥</span>
+          <span class="hero__trust-card-text">1-day Hospitalization</span>
+        </div>
+        <div class="hero__trust-card">
+          <span class="hero__trust-card-icon">✅</span>
+          <span class="hero__trust-card-text">USFDA-Approved</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lead Capture Sidebar -->
+    <aside class="hero__sidebar">
+      <div class="hero__form-card" *ngIf="!formSubmitted">
+        <p class="hero__form-tag">No Booking Fee</p>
+        <form (ngSubmit)="submitEnquiry()" class="hero__form">
+          <input type="text" [(ngModel)]="enquiryForm.name" name="name"
+                 placeholder="Patient Name" class="hero__form-input" required />
+          <input type="tel" [(ngModel)]="enquiryForm.phone" name="phone"
+                 placeholder="Mobile Number" class="hero__form-input" required
+                 pattern="[0-9]{10}" maxlength="10" />
+          <input type="text" [(ngModel)]="enquiryForm.city" name="city"
+                 [placeholder]="city ? cityLabel : 'Select City'" class="hero__form-input" />
+          <button type="submit" class="hero__form-btn">Book Now</button>
+        </form>
+        <p class="hero__form-rated">We are rated ⭐ 4.8/5</p>
+      </div>
+      <div class="hero__form-card hero__form-card--success" *ngIf="formSubmitted">
+        <div class="hero__form-check">✓</div>
+        <h3 class="hero__form-title">Thank You!</h3>
+        <p class="hero__form-subtitle">Our medical coordinator will contact you shortly.</p>
+        <a [href]="whatsappLink" target="_blank" rel="noopener" class="hero__wa-btn">
+          Chat on WhatsApp for Faster Response
+        </a>
+      </div>
+    </aside>
+  </div>
+</section>

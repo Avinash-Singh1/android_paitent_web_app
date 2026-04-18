@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+Disallow: /auth/
+Disallow: /register/
+Disallow: /profile/
+Disallow: /patient-login
+Disallow: /doctor/
+Disallow: /hospital/
+Disallow: /appointment-booking
+Disallow: /cancel-booking
+Disallow: /confirm-booking
+Disallow: /reschedule-booking
+Disallow: /appointment-completed
+Disallow: /search
+Disallow: /patient/
+Disallow: /*?*page=
+Disallow: /*?*sort=
+
+Sitemap: https://nectarplus.health/sitemap.xml

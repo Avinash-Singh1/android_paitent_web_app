@@ -1,0 +1,114 @@
+<div class="containers">
+  <div class="percetDone w-100"></div>
+  <div class="form d-flex flex-column justify-content-between">
+    <div class="content">
+      <div class="heading">Establishment Timing</div>
+      <p>{{ name }}</p>
+      <div class="wrapper">
+        <p>Days</p>
+        <div class="d-flex gap-3 flex-wrap">
+          <div
+            *ngFor="let data of weekArray; let i = index"
+            class="cursor-pointer text-center"
+            [ngClass]="{
+              selected: data.selected,
+              notSelected: !data.selected,
+              focus: i == currentDay && selectedDay.size
+            }"
+            (click)="onSelectDay(data, i)"
+          >
+            {{ data.name }}
+          </div>
+        </div>
+      </div>
+      <form [formGroup]="hospitalTiming">
+        <ng-container *ngFor="let day of weekArray; let j = index">
+          <form [formArrayName]="day.formControlName" *ngIf="currentDay == j">
+            <ng-container
+              *ngFor="
+                let slot of dayControl(day.formControlName).controls;
+                let i = index
+              "
+            >
+              <div class="mt-4">
+                <label *ngIf="i == 0">Morning</label>
+                <label *ngIf="i == 1">Afternoon</label>
+                <label *ngIf="i == 2">Evening</label>
+                <div class="d-flex data-fields mt-1 w-100" [formGroupName]="i">
+                  <div class="w-50 d-flex flex-column gap-2">
+                    <ng-select
+                      #morningFrom
+                      class="w-100 from"
+                      placeholder="Select timing"
+                      formControlName="from"
+                      (focus)="morningFrom.open()"
+                    >
+                      <ng-option
+                        [value]="item.name"
+                        *ngFor="
+                          let item of timingArray[i]
+                            | timecompare : slot.get('to').value : true
+                        "
+                      >
+                        {{ item.name }}
+                      </ng-option>
+                    </ng-select>
+                    <div
+                      class="error-hint"
+                      *ngIf="dayControl(day.formControlName).controls[i].get('from').errors?.['mustHaveValue'] && dayControl(day.formControlName).controls[i].get('from').touched"
+                    >
+                      *Required
+                    </div>
+                  </div>
+                  <div class="w-50 d-flex flex-column gap-2">
+                    <ng-select
+                      #morningTo
+                      class="w-100 to"
+                      placeholder="Select timing"
+                      formControlName="to"
+                      (focus)="morningTo.open()"
+                    >
+                      <ng-option
+                        [value]="item.name"
+                        *ngFor="
+                          let item of timingArray[i]
+                            | timecompare : slot.get('from').value
+                        "
+                      >
+                        {{ item.name }}
+                      </ng-option>
+                    </ng-select>
+                    <div
+                      class="error-hint"
+                      *ngIf="slot.get('to').errors?.['mustHaveValue'] &&  slot.get('to').touched"
+                    >
+                      *Required
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </form>
+        </ng-container>
+        <div
+          class="mt-4 error-hint"
+          *ngIf="hospitalTiming.status == 'DISABLED'"
+        >
+          Select at least one day.
+        </div>
+        <div
+          class="mt-4 error-hint"
+          *ngIf="this.control[this.weekArray[this.currentDay].formControlName].errors?.['atleatOnetiming'] && submitted"
+        >
+          Select at least one timing for
+          {{ this.weekArray[this.currentDay].name }}.
+        </div>
+      </form>
+    </div>
+
+    <div class="continue">
+      <button class="back" type="button" (click)="back()">Back</button>
+      <button type="button" (click)="onSubmit()">Next</button>
+    </div>
+  </div>
+</div>

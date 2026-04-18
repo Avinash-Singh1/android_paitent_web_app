@@ -1,0 +1,68 @@
+<div class="verify-otp">
+  <div class="heading border-bottom-style">
+    <h2 class="text-14" *ngIf="!isEmailVerify">Verify Mobile</h2>
+    <h2 class="text-14" *ngIf="isEmailVerify">Verify Email</h2>
+  </div>
+  <form [formGroup]="otpForm">
+    <div class="box">
+      <div class="mobile-number">
+        <p>We have sent you an OTP on</p>
+        <div class="d-flex gap-3 align-items-center">
+          <h3 *ngIf="!isEmailVerify">+91 {{ data?.phone }}</h3>
+          <h3 *ngIf="isEmailVerify">{{ isEmailVerify }}</h3>
+          <svg-icon
+            src="assets/images/svg/edit.svg"
+            class="cursor-pointer"
+            (click)="onEdit()"
+          ></svg-icon>
+        </div>
+      </div>
+      <div class="otp-box">
+        <label>OTP</label>
+        <input
+          type="text"
+          placeholder="Please enter the 6 digit OTP here to verify"
+          maxlength="6"
+          formControlName="otp"
+          oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+        />
+        <div
+          class="form-error"
+          *ngIf="(control['otp'].touched || submitted) && control['otp'].errors?.['required']"
+        >
+          Otp is required
+        </div>
+        <div
+          class="form-error"
+          *ngIf="(control['otp'].touched || submitted) && control['otp'].errors?.['minlength'] && 
+          (!control['otp'].errors?.['required'])"
+        >
+          Otp Must be Valid.
+        </div>
+      </div>
+      <div class="message">
+        <div class="message-name">
+          <p>Didn't received OTP? &nbsp;&nbsp;</p>
+          <span *ngIf="resendOtpVlaue" class="text-black">
+            <strong>{{ resendTime }}</strong></span
+          >
+          <span
+            *ngIf="!resendOtpVlaue"
+            class="cursor-pointer"
+            (click)="resendOTP()"
+          >
+            Resend OTP
+          </span>
+        </div>
+        <div class="message-resend" *ngIf="!isEmailVerify">
+          <span class="cursor-pointer" (click)="otpOnCall()"
+            >Get Via call
+          </span>
+        </div>
+      </div>
+      <div class="button">
+        <button (click)="login()">Log In</button>
+      </div>
+    </div>
+  </form>
+</div>

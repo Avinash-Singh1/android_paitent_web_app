@@ -1,0 +1,14 @@
+<h1 class="visually-hidden">Find Best Doctors, Hospitals & Clinics Near You | NectarPlus Health</h1>
+<nectar-search-doctors class="home-section"></nectar-search-doctors>
+<nectar-critical-issues class="home-section"></nectar-critical-issues>
+
+<nectar-top-rated class="home-section" [id]="'C2'"></nectar-top-rated>
+<nectar-top-rated class="home-section" [type]="1" [id]="'C1'"></nectar-top-rated>
+<!-- Sentinel element triggers lazy-render of below-fold sections -->
+<div #belowFoldSentinel style="height:1px;"></div>
+<ng-container *ngIf="showBelowFold">
+  <!-- <nectar-blogs></nectar-blogs> -->
+  <nectar-cities-swiper class="home-section home-section--below-fold"></nectar-cities-swiper>
+  <nectar-client-testimonials class="home-section home-section--below-fold"></nectar-client-testimonials>
+  <nectar-faq class="home-section home-section--below-fold"></nectar-faq>
+</ng-container>

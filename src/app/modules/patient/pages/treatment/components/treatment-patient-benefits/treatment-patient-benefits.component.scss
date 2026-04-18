@@ -1,0 +1,157 @@
+$purple: #45197c;
+$lavender: #f2e8ff;
+
+.why-choose {
+  margin-bottom: 40px;
+
+  &__title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 28px;
+  }
+
+  /* ---------- numbered cards ---------- */
+  &__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+
+  &__card {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    background: #fff;
+    border: 1px solid #e8e0f3;
+    border-radius: 12px;
+    padding: 22px 20px;
+    transition: box-shadow 0.2s;
+
+    &:hover {
+      box-shadow: 0 4px 16px rgba($purple, 0.08);
+    }
+  }
+
+  &__card-num {
+    font-size: 32px;
+    font-weight: 800;
+    color: $purple;
+    line-height: 1;
+    min-width: 44px;
+  }
+
+  &__card-body {
+    flex: 1;
+  }
+
+  &__card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 6px;
+  }
+
+  &__card-desc {
+    font-size: 14px;
+    color: #555;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* ---------- sub-title ---------- */
+  &__sub-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 20px;
+  }
+
+  /* ---------- post-op grid ---------- */
+  &__postop {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  &__postop-item {
+    text-align: center;
+    background: $lavender;
+    border-radius: 12px;
+    padding: 20px 12px;
+  }
+
+  &__postop-icon {
+    font-size: 28px;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  &__postop-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 4px;
+  }
+
+  &__postop-desc {
+    font-size: 12px;
+    color: #666;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* ---------- CTA ---------- */
+  &__cta {
+    text-align: center;
+    background: linear-gradient(135deg, #faf8fd, $lavender);
+    border-radius: 12px;
+    padding: 28px 20px;
+  }
+
+  &__cta-text {
+    font-size: 16px;
+    color: #444;
+    margin: 0 0 14px;
+  }
+
+  &__cta-btn {
+    display: inline-block;
+    background: $purple;
+    color: #fff;
+    padding: 14px 36px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 768px) {
+  .why-choose {
+    &__postop {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .why-choose {
+    &__card {
+      flex-direction: column;
+      gap: 8px;
+    }
+    &__postop {
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+  }
+}

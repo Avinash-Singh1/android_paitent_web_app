@@ -1,0 +1,40 @@
+<section class="services-section w-100">
+  <header
+    class="w-100 heading d-flex justify-content-between gap-40 align-items-center border-bottom-style"
+  >
+    <div class="text-16 font-600">
+      {{ "IMAGES" | translate }}
+    </div>
+    <button class="add-more" (click)="onAddImage()">
+      <svg-icon src="assets/images/svg/add.svg"></svg-icon>
+      <span class="mt-1">
+        {{ "ADD" | translate }}
+      </span>
+    </button>
+  </header>
+
+  <main class="image-container">
+    <div class="row image-row">
+      <div
+        class="image-wrapper col-6 col-lg-4 col-xl-3 px-4"
+        *ngFor="let image of imageList; let i = index"
+      >
+        <img
+          loading="lazy"
+          class="hospital-image border-style"
+          [src]="image.url"
+          alt=""
+        />
+        <button
+          class="delete w-100 bottom-0 position-relative"
+          (click)="onDelete(i, image._id)"
+        >
+          <svg-icon src="assets/images/svg/delete1.svg"></svg-icon>
+          <span class="mt-0-5 required-hint text-18">
+            {{ "DELETE" | translate }}
+          </span>
+        </button>
+      </div>
+    </div>
+  </main>
+</section>

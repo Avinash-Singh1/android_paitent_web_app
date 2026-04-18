@@ -1,0 +1,189 @@
+<div class="doctor-education d-flex flex-column">
+  <div
+    class="heading d-flex justify-content-between gap-40 align-items-center border-bottom-style"
+  >
+    <div class="text-16 font-600">{{ data?.label }}</div>
+    <button class="add-more rounded-circle" (click)="onOpenDialog(false, null)">
+      <svg-icon
+        src="assets/images/svg/add.svg"
+        class="svg-icon-white"
+      ></svg-icon>
+    </button>
+  </div>
+  <div class="listing p-24" *ngIf="data.type == 1">
+    <ng-container *ngFor="let item of educationList">
+      <div
+        class="border-style list-item d-flex justify-content-between gap-6 align-items-center"
+      >
+        <div class="d-flex flex-column gap-2">
+          <span class="text-18 font-600">{{ item.degree }}</span>
+          <span class="text-14"
+            >{{ item.college }}
+            <span *ngIf="item.college && item.year">, </span>
+            {{ item.year }}</span
+          >
+        </div>
+        <button class="edit-button" (click)="onOpenDialog(true, item)">
+          <svg-icon src="assets/images/svg/edit.svg" class="icon"></svg-icon>
+          <span class="text-14">{{ "EDIT" | translate }}</span>
+        </button>
+      </div>
+    </ng-container>
+  </div>
+  <div class="listing p-24" *ngIf="data.type == 2">
+    <ng-container *ngFor="let item of awardsList">
+      <div
+        class="border-style list-item d-flex justify-content-between gap-6 align-items-center"
+      >
+        <div class="d-flex flex-column gap-2">
+          <span class="text-18 font-600">{{ item.name }}</span>
+          <span class="text-14">{{ item.year }}</span>
+        </div>
+        <button class="edit-button" (click)="onOpenDialog(true, item)">
+          <svg-icon src="assets/images/svg/edit.svg" class="icon"></svg-icon>
+          <span class="text-14">{{ "EDIT" | translate }}</span>
+        </button>
+      </div>
+    </ng-container>
+  </div>
+  <div class="listing p-24" *ngIf="data.type == 3">
+    <ng-container *ngFor="let item of medicalRegistration">
+      <div
+        class="border-style list-item d-flex justify-content-between gap-6 align-items-center"
+      >
+        <div class="d-flex flex-column gap-2">
+          <span class="text-18 font-600">{{ item.council }}</span>
+          <span class="text-14"
+            >{{ item.registrationNumber }}
+            <span *ngIf="item.registrationNumber && item.year">, </span>
+            {{ item.year }}</span
+          >
+        </div>
+        <button class="edit-button" (click)="onOpenDialog(true, item)">
+          <svg-icon src="assets/images/svg/edit.svg" class="icon"></svg-icon>
+          <span class="text-14">{{ "EDIT" | translate }}</span>
+        </button>
+      </div>
+    </ng-container>
+  </div>
+  <div class="listing p-24" *ngIf="data.type == 4">
+    <ng-container *ngFor="let item of membershipList">
+      <div
+        class="border-style list-item d-flex justify-content-between gap-6 align-items-center"
+      >
+        <div class="d-flex flex-column gap-2">
+          <span class="text-18 font-600">{{ item.name }}</span>
+        </div>
+        <button class="edit-button" (click)="onOpenDialog(true, item)">
+          <svg-icon src="assets/images/svg/edit.svg" class="icon"></svg-icon>
+          <span class="text-14">{{ "EDIT" | translate }}</span>
+        </button>
+      </div>
+    </ng-container>
+  </div>
+  <div class="listing p-24" *ngIf="data.type == 5">
+    <ng-container *ngFor="let item of servicesList">
+      <div
+        class="border-style list-item d-flex justify-content-between gap-6 align-items-center"
+      >
+        <div class="d-flex flex-column gap-2">
+          <span class="text-14">{{ item.name }}</span>
+        </div>
+        <button class="edit-button delete" (click)="onDeleteModal(item)">
+          <span class="text-14 red-text">{{ "DELETE" | translate }}</span>
+          <svg-icon
+            src="assets/images/svg/delete.svg"
+            class="svg-icon-red"
+          ></svg-icon>
+        </button>
+      </div>
+    </ng-container>
+  </div>
+  <div class="listing p-24" *ngIf="data.type == 9">
+    <ng-container *ngFor="let item of procedureList">
+      <div
+        class="border-style list-item d-flex justify-content-between gap-6 align-items-center"
+      >
+        <div class="d-flex flex-column gap-2">
+          <span class="text-14">{{ item.name }}</span>
+        </div>
+        <button
+          class="edit-button delete"
+          (click)="onDeleteModal(item, 'Procedures')"
+        >
+          <span class="text-14 red-text">{{ "DELETE" | translate }}</span>
+          <svg-icon
+            src="assets/images/svg/delete.svg"
+            class="svg-icon-red"
+          ></svg-icon>
+        </button>
+      </div>
+    </ng-container>
+  </div>
+  <div class="listing p-24" *ngIf="data.type == 6">
+    <ng-container *ngFor="let item of faqsList">
+      <div
+        class="border-style list-item d-flex justify-content-between gap-6 align-items-center"
+      >
+        <div class="d-flex flex-column gap-2">
+          <span class="text-14 font-600">Q. {{ item?.question }}</span>
+          <span class="text-14"> A: {{ item?.answer }}</span>
+        </div>
+        <button class="edit-button" (click)="onOpenDialog(true, item)">
+          <svg-icon src="assets/images/svg/edit.svg" class="icon"></svg-icon>
+          <span class="text-14">{{ "EDIT" | translate }}</span>
+        </button>
+      </div>
+    </ng-container>
+  </div>
+  <div class="listing p-24" *ngIf="data.type == 7">
+    <ng-container *ngFor="let item of videoList; let i = index">
+      <div
+        class="border-style list-item d-flex justify-content-between gap-6 align-items-center"
+      >
+        <div class="d-flex gap-4 align-items-center">
+          <span class="text-14">{{ i + 1 }}</span>
+          <iframe
+            title=""
+            [src]="item?.url | sanitize | async"
+            width="100%"
+            height="100%"
+            allow="fullscreen"
+          ></iframe>
+        </div>
+        <div class="d-flex gap-2">
+          <svg-icon src="assets/images/svg/Access time.svg"></svg-icon>
+          <span class="text-14">{{
+            item.updatedAt | date : "mediumDate"
+          }}</span>
+        </div>
+        <button class="edit-button" (click)="onOpenDialog(true, item)">
+          <span class="text-14">{{ "EDIT" | translate }}</span>
+          <svg-icon src="assets/images/svg/edit.svg" class="icon"></svg-icon>
+        </button>
+      </div>
+    </ng-container>
+  </div>
+  <div class="listing p-24" *ngIf="data.type == 8">
+    <ng-container *ngFor="let item of socialmediaList; let i = index">
+      <div
+        class="border-style list-item d-flex justify-content-between gap-6 align-items-center"
+      >
+        <div class="d-flex gap-4 align-items-center">
+          <img
+            class="social-media"
+            alt=""
+            [src]="item?.socialMediaLogo"
+            onError="this.src='assets/images/svg/Nectar Favicon.svg'"
+          />
+          <span class="text-14">{{ item?.name || "N/A" }}</span>
+        </div>
+
+        <button class="edit-button" (click)="onOpenDialog(true, item)">
+          <span class="text-14">{{ "EDIT" | translate }}</span>
+          <svg-icon src="assets/images/svg/edit.svg" class="icon"></svg-icon>
+        </button>
+      </div>
+    </ng-container>
+  </div>
+</div>

@@ -1,0 +1,239 @@
+<div class="appt">
+  <div class="appt__wrapper">
+    <!-- Header -->
+    <div class="appt__header">
+      <div class="appt__header-left">
+        <span class="appt__header-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </span>
+        <h2 class="appt__title">My Appointments</h2>
+      </div>
+      <button class="appt__filter-btn" [class.appt__filter-btn--disabled]="!totalCount"
+        [matMenuTriggerFor]="totalCount ? appointmentfilter : null" #filterTrigger="matMenuTrigger" type="button" aria-label="Filter appointments">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="6" x2="20" y2="6"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/>
+        </svg>
+        <span class="appt__filter-label">Filter</span>
+      </button>
+    </div>
+
+    <!-- Appointment List -->
+    <ng-container *ngIf="totalCount">
+      <div
+        class="appt__section"
+        *ngFor="
+          let item of yearWiseData
+            | paginate
+              : {
+                  itemsPerPage: payload.size,
+                  currentPage: payload.page,
+                  totalItems: totalCount
+                }
+        "
+      >
+        <!-- Section Label -->
+        <div class="appt__section-label" *ngIf="item?._id !== 0">
+          <span class="appt__section-year">{{ item?._id }}</span>
+        </div>
+        <div class="appt__section-label appt__section-label--upcoming" *ngIf="item?._id == 0">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Upcoming</span>
+        </div>
+
+        <!-- Appointment Cards -->
+        <div class="appt__card" *ngFor="let i of item?.data">
+          <div class="appt__card-body">
+            <!-- Date Badge -->
+            <div class="appt__date">
+              <span class="appt__date-num">{{ i?.date | date : "dd" }}</span>
+              <span class="appt__date-month">{{ i?.date | date : "MMM" }}</span>
+            </div>
+
+            <!-- Details -->
+            <div class="appt__details">
+              <span class="appt__doctor-name">{{ i?.fullName | titlecase }}</span>
+              <span class="appt__time">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                {{ i?.date | date : "EEEE, hh:mm a" }}
+              </span>
+              <span class="appt__location" *ngIf="i?.status == 0">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                {{ i?.establishmentName || "N/A" }}
+              </span>
+              <!-- Status Badges -->
+              <span class="appt__badge appt__badge--cancelled" *ngIf="i?.status == -1">Cancelled</span>
+              <span class="appt__badge appt__badge--completed" *ngIf="i?.status == 1">Completed</span>
+            </div>
+
+            <!-- Actions -->
+            <div class="appt__actions">
+              <button class="appt__btn appt__btn--outline" *ngIf="i?.status == -1" (click)="bookAgain(i)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+                Book Again
+              </button>
+              <button class="appt__btn appt__btn--outline"
+                *ngIf="i?.status == 1 && i?.feedBackGiven == false"
+                (click)="shareFeedback(i)">
+                Give Feedback
+              </button>
+              <button class="appt__btn appt__btn--outline"
+                *ngIf="i?.status == 1 && i?.feedBackGiven == true"
+                routerLink="/profile/feedbacks">
+                View Feedback
+              </button>
+              <button class="appt__btn appt__btn--primary" (click)="viewDetails(i)">
+                View Details
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Pagination -->
+    <div
+      class="appt__pagination"
+      *ngIf="totalCount && totalCount > payload.size"
+    >
+      <pagination-controls
+        class="text-center"
+        [previousLabel]="' '"
+        [nextLabel]="' '"
+        (pageChange)="changingPage($event)"
+        [maxSize]="deviceWidth > 576 ? 7 : 3"
+      ></pagination-controls>
+    </div>
+
+    <!-- Empty State -->
+    <div class="appt__empty" *ngIf="!totalCount">
+      <span class="appt__empty-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+      </span>
+      <span class="appt__empty-text">No Appointments Found</span>
+      <span class="appt__empty-sub">Your upcoming and past appointments will appear here</span>
+    </div>
+  </div>
+</div>
+
+<mat-menu #appointmentfilter class="appointment-filter">
+  <!-- Filter Header -->
+  <div class="filter-header" (click)="$event.stopPropagation()">
+    <div class="filter-header__title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="4" y1="6" x2="20" y2="6"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/>
+      </svg>
+      <span>Filters</span>
+    </div>
+    <div class="filter-header__actions">
+      <button class="filter-header__clear" (click)="onResetForm()" type="button">{{ "CLEAR_FILTER" | translate }}</button>
+      <button class="filter-header__apply" (click)="onFiltering()" type="button">{{ "SAVE" | translate }}</button>
+    </div>
+  </div>
+
+  <form [formGroup]="filterForm" (click)="$event.stopPropagation()">
+    <mat-accordion>
+      <!-- Status Filter -->
+      <mat-expansion-panel (click)="$event.stopPropagation()">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <div class="filter-section-title">
+              <span class="filter-section-title__icon filter-section-title__icon--status">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/>
+                </svg>
+              </span>
+              <span>{{ "FILTER_BY_STATUS" | translate }}</span>
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="filter-radio-group">
+          <label class="filter-radio">
+            <input type="radio" [value]="0" formControlName="status" />
+            <span class="filter-radio__mark"></span>
+            <span class="filter-radio__badge filter-radio__badge--upcoming">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </span>
+            <span class="filter-radio__label">{{ "UPCOMING" | translate }}</span>
+          </label>
+          <label class="filter-radio">
+            <input type="radio" [value]="1" formControlName="status" />
+            <span class="filter-radio__mark"></span>
+            <span class="filter-radio__badge filter-radio__badge--completed">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </span>
+            <span class="filter-radio__label">{{ "COMPLETED" | translate }}</span>
+          </label>
+          <label class="filter-radio">
+            <input type="radio" [value]="-1" formControlName="status" />
+            <span class="filter-radio__mark"></span>
+            <span class="filter-radio__badge filter-radio__badge--cancelled">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </span>
+            <span class="filter-radio__label">{{ "CANCELLED" | translate }}</span>
+          </label>
+        </div>
+      </mat-expansion-panel>
+
+      <!-- Date Filter -->
+      <mat-expansion-panel (click)="$event.stopPropagation()" *ngIf="upcoming">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <div class="filter-section-title">
+              <span class="filter-section-title__icon filter-section-title__icon--date">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+              </span>
+              <span>{{ "FILTER_BY_DATE" | translate }}</span>
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="filter-date-row">
+          <div class="filter-date-field">
+            <label class="filter-date-field__label">{{ "FROM" | translate }}</label>
+            <div class="matdate-input">
+              <input
+                matInput
+                type="text"
+                [matDatepicker]="pickerfrom"
+                placeholder="DD/MM/YYYY"
+                formControlName="from"
+                [max]="filterForm.get('to').value"
+              />
+              <mat-datepicker-toggle
+                class="toggle"
+                matIconSuffix
+                [for]="pickerfrom"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #pickerfrom></mat-datepicker>
+            </div>
+          </div>
+          <div class="filter-date-field">
+            <label class="filter-date-field__label">{{ "TO" | translate }}</label>
+            <div class="matdate-input">
+              <input
+                matInput
+                type="text"
+                [matDatepicker]="pickerto"
+                placeholder="DD/MM/YYYY"
+                formControlName="to"
+                [min]="filterForm.get('from').value"
+              />
+              <mat-datepicker-toggle
+                class="toggle"
+                matIconSuffix
+                [for]="pickerto"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #pickerto></mat-datepicker>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </form>
+</mat-menu>

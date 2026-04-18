@@ -1,0 +1,146 @@
+@use "variable.scss" as *;
+@use "src/styles/elements/_elements.svg.scss" as *;
+
+.day-view {
+  max-height: calc(100vh - 72px);
+  overflow: auto;
+  font-size: 14px;
+
+  table {
+    table-layout: auto;
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid rgba($color: #000000, $alpha: 0.3);
+    border-spacing: 0;
+  }
+
+  width: 100%;
+  height: 100%;
+
+  td {
+    border: 1px solid rgba($color: #000000, $alpha: 0.3);
+    white-space: nowrap;
+    vertical-align: middle;
+    padding: 0;
+    background: $white;
+
+    .dotted-border {
+      border-top: 2px dotted $purple;
+    }
+
+    &.timing {
+      width: 100px !important;
+      padding: 12px 24px;
+      text-align: center;
+
+      .timepointer {
+        left: 4px;
+      }
+    }
+  }
+
+  .timing {
+    width: 100px !important;
+    padding: 12px 24px;
+    text-align: center;
+  }
+
+  .timing.header {
+    color: $faded-text;
+    font-weight: 400;
+    width: 100px !important;
+  }
+
+  .day-name {
+    text-align: center;
+    background: $gray;
+    color: $white;
+  }
+
+  .day-data {
+    text-align: left;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 24px;
+
+    &.multiple {
+      padding: 0 24px !important;
+    }
+
+    &.booked {
+      border-left: 10px solid $pending;
+      background: rgba($color: $pending, $alpha: 0.2);
+    }
+
+    &.cancelled {
+      border-left: 10px solid $red;
+      background: rgba($color: $red, $alpha: 0.2);
+    }
+
+    &.completed {
+      border-left: 10px solid $green;
+      background: rgba($color: $green, $alpha: 0.2);
+    }
+
+  }
+
+  th {
+    background: $white;
+    white-space: nowrap;
+    position: sticky;
+    z-index: 1;
+    top: 0;
+
+    &.day-name {
+      background: $purple;
+      color: $white;
+    }
+  }
+
+  th::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid $border-color;
+    display: block;
+    top: 0px;
+  }
+
+  th::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-bottom: 1px solid $border-color;
+    display: block;
+    bottom: 0px;
+  }
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.dropdown-item,
+.dropdown-menu {
+  padding: 0 !important;
+}
+
+.day {
+  border: none;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-left: 10px solid $gray;
+  background: $white;
+}
+
+.multiple-appointment {
+  border-left: 10px solid $purple;
+
+  background-color: rgba($color: $purple , $alpha: 0.2);
+}

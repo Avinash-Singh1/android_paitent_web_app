@@ -1,0 +1,122 @@
+$purple: #45197c;
+$lavender: #f2e8ff;
+
+.recovery {
+  margin-bottom: 40px;
+
+  &__title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 24px;
+  }
+
+  /* ---------- milestone table ---------- */
+  &__table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+    border: 1px solid #e8e0f3;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 440px;
+
+    thead {
+      background: $lavender;
+
+      th {
+        text-align: left;
+        padding: 14px 18px;
+        font-size: 13px;
+        font-weight: 700;
+        color: $purple;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #f0eaf7;
+      transition: background 0.15s;
+
+      &:last-child { border-bottom: 0; }
+      &:hover { background: #faf8fd; }
+    }
+  }
+
+  &__table-phase {
+    padding: 16px 18px;
+    font-weight: 700;
+    font-size: 14px;
+    color: #1a1a2e;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 160px;
+  }
+
+  &__table-icon {
+    font-size: 18px;
+  }
+
+  &__table-detail {
+    padding: 16px 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #444;
+  }
+
+  /* ---------- success rate bar ---------- */
+  &__success {
+    margin-top: 28px;
+    background: #faf8fd;
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  &__success-bar {
+    width: 100%;
+    height: 12px;
+    background: #e8e0f3;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+
+  &__success-fill {
+    height: 100%;
+    background: linear-gradient(90deg, $purple, #7c3aed);
+    border-radius: 6px;
+    transition: width 0.8s ease;
+  }
+
+  &__success-label {
+    font-size: 15px;
+    color: #333;
+    margin: 0;
+
+    strong { color: $purple; font-size: 18px; }
+  }
+
+  /* ---------- body fallback ---------- */
+  &__body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #444;
+    ul, ol { padding-left: 20px; }
+    li { margin-bottom: 6px; }
+  }
+}
+
+@media (max-width: 480px) {
+  .recovery {
+    &__table-phase {
+      min-width: 120px;
+      font-size: 13px;
+    }
+  }
+}

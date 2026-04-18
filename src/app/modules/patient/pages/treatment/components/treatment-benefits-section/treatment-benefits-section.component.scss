@@ -1,0 +1,80 @@
+$purple: #45197c;
+$lavender: #f2e8ff;
+
+.benefits {
+  margin-bottom: 40px;
+
+  &__title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 20px;
+  }
+
+  // Card Grid
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+  }
+
+  &__card {
+    background: #fff;
+    border: 1px solid #e8e0f3;
+    border-radius: 12px;
+    padding: 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      border-color: $purple;
+      box-shadow: 0 3px 12px rgba($purple, 0.08);
+    }
+  }
+
+  &__card-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    background: $lavender;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__card-text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+    margin: 0;
+  }
+
+  // Body
+  &__body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #444;
+    ul, ol { padding-left: 20px; }
+    li { margin-bottom: 6px; }
+  }
+
+  // Risks
+  &__risks {
+    margin-top: 28px;
+    background: #fff5f5;
+    border: 1px solid #ffdddd;
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+
+  &__risks-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #c84040;
+    margin: 0 0 12px;
+  }
+}

@@ -1,0 +1,104 @@
+@use "variable.scss" as *;
+@use "src/styles/elements/_elements.svg.scss" as *;
+
+.sidebar-settings {
+  font-size: 14px;
+  height: calc(100vh - 144px);
+  background: white;
+  width: 18%;
+
+  border-right: 14px solid #eeeeee;
+
+  @media screen and (max-width: "1024px") {
+    width: 20% !important;
+  }
+
+  .nav-item {
+    font-weight: 600;
+    padding: 16px 20%;
+
+    &.menu-red {
+      color: $red;
+    }
+
+    &.active {
+      background: $purple;
+      color: $white;
+    }
+  }
+}
+
+.router-outlet {
+  width: 82%;
+
+  @media screen and (max-width: "1024px") {
+    width: 80% !important;
+  }
+
+  .heading-container {
+    padding: 27px 24px;
+    background: $white;
+  }
+}
+
+.subheader-wrapper {
+  position: sticky;
+  top: 72px;
+  left: 0;
+  height: 72px;
+  background: white;
+
+  .hamber {
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .pr-5 {
+    padding-right: 3rem;
+  }
+}
+
+.main {
+  min-height: calc(100vh - 144px);
+
+  .settings-sidebar {
+    max-height: calc(100vh - 144px);
+    height: calc(100vh - 144px);
+    overflow: auto;
+    width: 25%;
+    border-right: 14px solid #eeeeee;
+
+    .heading-container {
+      padding: 40px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      background: $white;
+    }
+
+    &::-webkit-scrollbar {
+      display: none !important;
+    }
+
+    .menu-item {
+      background: $bright-gray;
+
+      &.active {
+        background: $purple ;
+        color: $white;
+      }
+
+      &.menu-red {
+        color: $red;
+      }
+    }
+
+    .menu-red.active {
+      background-color: $red !important;
+      color: $white;
+    }
+  }
+}

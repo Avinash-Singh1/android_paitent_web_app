@@ -1,0 +1,41 @@
+@use "variable.scss" as *;
+
+.add-more-edit {
+  input {
+    font-size: 14px;
+    height: 48px;
+    border: 1px solid $border-color;
+    padding: 0 24px;
+    outline: none;
+  }
+
+  .text-area {
+    padding: 12px 24px;
+    border: 1px solid $border-color;
+    outline: none;
+    font-size: 14px;
+  }
+}
+
+:host::ng-deep {
+  .add-more-edit.ng-select .ng-select-container {
+    border: 1px solid $border-color;
+    border-radius: 0 !important;
+    height: 48px !important;
+    padding: 0 24px;
+  }
+
+  .ng-dropdown-panel .ng-dropdown-panel-items {
+    max-height: 200px !important;
+    font-size: 14px !important;
+  }
+
+  .ng-select .ng-select-container .ng-value-container .ng-input>input {
+    padding: 6px 14px !important;
+  }
+
+  .ng-select .ng-select-container .ng-value-container {
+    padding-left: 0 !important;
+    font-size: 14px !important;
+  }
+}

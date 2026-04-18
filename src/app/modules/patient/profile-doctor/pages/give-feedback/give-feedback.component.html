@@ -1,0 +1,338 @@
+<div class="main">
+  <div class="wrapper">
+    <form
+      class="content"
+      *ngIf="!feedbackGiven"
+      [formGroup]="feedbcakForm"
+      (ngSubmit)="submit()"
+    >
+      <h2>
+        How was your appointment experience with {{ docName | titlecase }}?
+      </h2>
+      <p>
+        Your experience will help over 1 lac people choose the right doctor,
+        daily.
+      </p>
+      <div class="field">
+        <div class="d-flex gap-1">
+          <span>Q1.</span>
+          <label>Was the doctor available?<span>*</span></label>
+        </div>
+        <div class="d-flex gap-3 ans">
+          <button
+            type="button"
+            [class.selected]="available == 'Yes'"
+            (click)="available = 'Yes'"
+          >
+            Yes
+          </button>
+          <button
+            type="button"
+            (click)="available = 'No'"
+            [class.selected]="available == 'No'"
+          >
+            No
+          </button>
+        </div>
+        <div *ngIf="!available && submitted == true" class="text-danger ml-30">
+          This field is required.
+        </div>
+      </div>
+      <div class="field">
+        <div class="d-flex gap-1">
+          <span>Q2.</span>
+          <label>For which treatment did you visit?</label>
+        </div>
+        <div class="ans w-75">
+          <ng-select
+            [items]="serviceArray"
+            placeholder="Select Treatment"
+            formControlName="service"
+            bindLabel="name"
+            bindValue="name"
+            [searchable]="false"
+            [multiple]="true"
+          >
+          </ng-select>
+          <!-- <div
+            class="form-error"
+            *ngIf="(f['service'].touched || submitted) && f['service'].errors?.['required']"
+          >
+            This field is required.
+          </div> -->
+        </div>
+      </div>
+      <div class="field">
+        <div class="d-flex gap-1">
+          <span>Q3.</span>
+          <label
+            >How long was your waiting time at the clinic/hospital?<span
+              >*</span
+            ></label
+          >
+        </div>
+        <div class="ans">
+          <div class="d-flex align-items-center">
+            <input
+              type="radio"
+              formControlName="waitTime"
+              id="html"
+              value="Less than 15 minutes"
+            />&nbsp;
+            <label>Less than 15 minutes</label>
+          </div>
+          <div class="d-flex align-items-center">
+            <input
+              type="radio"
+              formControlName="waitTime"
+              id="css"
+              value="15-30 minutes"
+            />&nbsp;
+            <label for="css">15-30 minutes</label>
+          </div>
+
+          <div class="d-flex align-items-center">
+            <input
+              type="radio"
+              formControlName="waitTime"
+              id="javascript"
+              value="30-45 minutes"
+            />&nbsp; <label for="javascript">30-45 minutes</label>
+          </div>
+          <div class="d-flex align-items-center">
+            <input
+              type="radio"
+              formControlName="waitTime"
+              id="js"
+              value="More than 1 hour"
+            />&nbsp;
+            <label for="js">More than 1 hour</label>
+          </div>
+          <div
+            class="form-error"
+            *ngIf="(f['waitTime'].touched || submitted) && f['waitTime'].errors?.['required']"
+          >
+            This field is required.
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="d-flex gap-1">
+          <span>Q4.</span>
+          <label>Would you like to recommend this doctor?<span>*</span></label>
+        </div>
+        <div class="d-flex gap-3 ans">
+          <button
+            type="button"
+            [class.selected]="recommend == 'Yes'"
+            (click)="recommend = 'Yes'"
+          >
+            Yes
+          </button>
+          <button
+            type="button"
+            [class.selected]="recommend == 'No'"
+            (click)="recommend = 'No'"
+          >
+            No
+          </button>
+        </div>
+        <div *ngIf="!recommend && submitted == true" class="text-danger ml-30">
+          This field is required.
+        </div>
+      </div>
+      <div class="field">
+        <div class="d-flex gap-1">
+          <span>Q5.</span>
+          <label>What are you happy about?<span>*</span></label>
+        </div>
+        <div class="ans">
+          <div class="d-flex align-items-center">
+            <input
+              type="checkbox"
+              formArrayName="happyAbout"
+              id="point1"
+              value="Doctor friendliness"
+              class="custom-checkbox green"
+              (change)="onCheckboxChange($event)"
+            />&nbsp;
+            <label>Doctor friendliness</label>
+          </div>
+          <div class="d-flex align-items-center">
+            <input
+              type="checkbox"
+              formArrayName="happyAbout"
+              id="point2"
+              value="Explanation of the health issue"
+              class="custom-checkbox green"
+              (change)="onCheckboxChange($event)"
+            />&nbsp;
+            <label>Explanation of the health issue</label>
+          </div>
+          <div class="d-flex align-items-center">
+            <input
+              type="checkbox"
+              formArrayName="happyAbout"
+              id="point3"
+              value="Treatment satisfaction"
+              class="custom-checkbox green"
+              (change)="onCheckboxChange($event)"
+            />&nbsp;
+            <label>Treatment satisfaction</label>
+          </div>
+          <div class="d-flex align-items-center">
+            <input
+              type="checkbox"
+              formArrayName="happyAbout"
+              id="point4"
+              value="Value for money"
+              class="custom-checkbox green"
+              (change)="onCheckboxChange($event)"
+            />&nbsp;
+            <label>Value for money</label>
+          </div>
+          <div class="d-flex align-items-center">
+            <input
+              type="checkbox"
+              formArrayName="happyAbout"
+              id="point5"
+              value="Wait time"
+              class="custom-checkbox green"
+              (change)="onCheckboxChange($event)"
+            />&nbsp;
+            <label>Wait time</label>
+          </div>
+          <div
+            class="form-error"
+            *ngIf="(f['happyAbout'].touched || submitted) && f['happyAbout'].errors?.['required']"
+          >
+            This field is required.
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="d-flex gap-1">
+          <span>Q6.</span>
+          <label>what was your overall experience?<span>*</span></label>
+        </div>
+        <div class="ans">
+          <div class="d-flex align-items-center">
+            <input
+              type="radio"
+              id="html"
+              formControlName="experience"
+              value="Excellent"
+            />&nbsp;
+            <label>Excellent</label>
+          </div>
+          <div class="d-flex align-items-center">
+            <input
+              type="radio"
+              id="css"
+              formControlName="experience"
+              value="Good"
+            />&nbsp;
+            <label for="css">Good</label>
+          </div>
+          <div class="d-flex align-items-center">
+            <input
+              type="radio"
+              formControlName="experience"
+              id="javascript"
+              value="Not Good"
+            />&nbsp; <label for="javascript">Not Good</label>
+          </div>
+          <div class="d-flex align-items-center">
+            <input
+              type="radio"
+              formControlName="experience"
+              id="javascript"
+              value="Very Bad"
+            />&nbsp; <label for="javascript">Very Bad</label>
+          </div>
+
+          <div
+            class="form-error"
+            *ngIf="(f['experience'].touched || submitted) && f['experience'].errors?.['required']"
+          >
+            This field is required.
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="d-flex gap-1">
+          <span>Q6.</span>
+          <label
+            >Tell us about your experience with the doctor.<span>*</span></label
+          >
+        </div>
+        <div class="ans">
+          <p>
+            eg. Share relevant stories which made you appreciate 'doctor
+            friendliness'
+          </p>
+          <p>1/100 minimum</p>
+          <textarea
+            formControlName="comment"
+            class="w-100"
+            maxlength="500"
+            cols="30"
+            rows="5"
+            placeholder="Start type here..."
+            oninput="this.value = this.value.replace(/^ $/,'');"
+          ></textarea>
+          <div
+            class="form-error"
+            *ngIf="(f['comment'].touched || submitted) && f['comment'].errors?.['required']"
+          >
+            This field is required.
+          </div>
+        </div>
+      </div>
+
+      <div class="info">
+        <div class="contents">
+          <span>Info:</span> All patient stories go under strict moderation
+          process before publishing to check abusive language, threats,
+          superlative comments on medical abilities and so on.
+        </div>
+      </div>
+      <hr />
+      <div class="d-flex gap-2 align-items-center">
+        <input
+          type="checkbox"
+          class="custom-checkbox green"
+          formControlName="checkbox"
+        />
+        <div>Keep my feedback story anonymous</div>
+        <img loading="lazy" src="assets/images/svg/info1.svg" alt="image" />
+      </div>
+      <div>
+        <button type="submit" class="submit">Submit</button>
+      </div>
+    </form>
+
+    <div class="d-flex justify-content-center" *ngIf="feedbackGiven">
+      <div class="mt-4 text-center mx-5 submitFeedback">
+        <img
+          src="assets/images/svg/green-check.svg"
+          alt=""
+          height="192"
+          width="192"
+        />
+        <h2>Thank you for sharing your story!</h2>
+        <p class="mt-2">
+          Your feedback is under moderation. We will notify you once moderation
+          is complete. You can also check the status at
+          <span routerLink="/profile/feedbacks">My Feedback</span>
+        </p>
+        <button class="my-4" routerLink="/profile">
+          <img loading="lazy" src="assets/images/svg/back.svg" alt="" /> &nbsp;
+          Back to Profile
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

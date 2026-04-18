@@ -1,0 +1,22 @@
+<div class="main d-flex">
+  <div class="profile-sidebar">
+    <div class="heading border-bottom-style">
+      {{ "PROFILE_SETTINGS" | translate }}
+    </div>
+    <div class="d-flex flex-column gap-2 p-24">
+      <ng-container *ngFor="let menu of profileMenu">
+        <div
+          class="px-24 py-16 bg-bright-gray text-18 font-600 cursor-pointer"
+          [routerLink]="menu.routerLink"
+          routerLinkActive="active-link"
+          [ngClass]="{ 'text-red': menu.red }"
+        >
+          {{ menu.label }}
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="router-outlet">
+    <router-outlet></router-outlet>
+  </div>
+</div>

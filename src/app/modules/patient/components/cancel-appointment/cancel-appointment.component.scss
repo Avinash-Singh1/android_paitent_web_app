@@ -1,0 +1,184 @@
+@use "tools.mediaquery" as *;
+
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+
+@use "variable.scss" as *;
+
+
+.cancel-booking {
+  //   padding: 0 0 14px;
+
+  background-color: #e2e2e2;
+
+  &__wrapper {
+    background-color: $white;
+    min-height: calc(100vh - 140px);
+    max-width: 486px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: auto;
+    padding: 31px 0px;
+
+    @media screen and (max-width: 767px) {
+      padding: 80px 0px;
+    }
+
+    &__name {
+      padding: 0 31px;
+      display: flex;
+      gap: 9px;
+      align-items: center;
+      margin-bottom: 17px;
+
+      img {
+        border-radius: 50%;
+        height: 72px;
+        width: 72px;
+        object-fit: cover;
+      }
+
+      h2 {
+        @include font-sans_pro-semibold($size: 14px);
+        margin: 0;
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-semibold($size: 16px);
+        }
+      }
+
+      p {
+        @include font-sans_pro-regular($size: 14px);
+        margin: 0;
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-regular($size: 16px);
+        }
+      }
+    }
+
+    &__timings {
+      padding: 0px 31px;
+
+      &__details {
+        display: flex;
+        padding-top: 17px;
+        justify-content: space-between;
+        border-top: 1px solid $border-color;
+        flex-wrap: wrap;
+        gap: 15px;
+
+        .date {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+
+          span {
+            @include font-sans_pro-regular($size: 14px);
+
+            @media screen and (max-width: 767px) {
+              @include font-sans_pro-regular($size: 16px);
+            }
+          }
+
+          p {
+            margin: 0;
+            @include font-sans_pro-semibold($size: 14px);
+
+            @media screen and (max-width: 767px) {
+              @include font-sans_pro-semibold($size: 16px);
+            }
+          }
+        }
+
+        .time {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+
+          span {
+            @include font-sans_pro-regular($size: 14px);
+
+            @media screen and (max-width: 767px) {
+              @include font-sans_pro-regular($size: 16px);
+            }
+          }
+
+          p {
+            margin: 0;
+            @include font-sans_pro-semibold($size: 14px);
+
+            @media screen and (max-width: 767px) {
+              @include font-sans_pro-semibold($size: 16px);
+            }
+          }
+        }
+      }
+    }
+
+    .light-line {
+      margin: 30px 0 16px;
+      opacity: 0.1;
+    }
+
+    .cancel-booking-box {
+      padding: 0 31px;
+      padding-bottom: 200px;
+
+      h1 {
+        @include font-sans_pro-semibold($size: 24px);
+        color: $red;
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-semibold($size: 24px);
+        }
+      }
+
+      .details {
+        margin-bottom: 24px;
+
+        h3 {
+          @include font-sans_pro-regular($size: 14px);
+          color: rgba(0, 0, 0, 0.7);
+          margin: 0;
+
+          @media screen and (max-width: 767px) {
+            @include font-sans_pro-regular($size: 16px);
+          }
+        }
+
+        h5 {
+          @include font-sans_pro-semibold($size: 14px);
+          margin: 0;
+
+          @media screen and (max-width: 767px) {
+            @include font-sans_pro-semibold($size: 16px);
+          }
+        }
+      }
+    }
+
+    .button {
+      button {
+        background: transparent;
+        width: fit-content;
+        height: 48px;
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        @include font-sans_pro-regular($size: 14px);
+        border: 1px solid $border-color;
+        border-radius: 8px;
+        align-items: center;
+        padding: 0 10px;
+        margin-top: 20px;
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-regular($size: 16px);
+        }
+      }
+    }
+  }
+}

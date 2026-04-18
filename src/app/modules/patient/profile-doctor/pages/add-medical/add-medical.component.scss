@@ -1,0 +1,117 @@
+@use "tools.mediaquery" as *;
+
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+
+@use "variable.scss" as *;
+
+
+.main {
+  @include font-sans_pro-regular(14px);
+
+  @media screen and (max-width: 767px) {
+    @include font-sans_pro-regular(16px);
+  }
+
+  .wrapper {
+    background: $bright-gray;
+    padding: 60px 100px;
+
+    .box {
+      button {
+        border: none;
+        padding: 17px 54px;
+        background: $white;
+        border-radius: 8px;
+        @include font-sans_pro-regular(14px);
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-regular(16px);
+        }
+      }
+    }
+  }
+
+  .content {
+    padding: 24px;
+
+    .field {
+      input {
+        padding: 12px 15px;
+        background: $white;
+        border: 1px solid $border-color;
+        border-radius: 5px;
+      }
+    }
+
+    .record {
+      p {
+        @include font-sans_pro-regular(14px);
+        opacity: 0.6;
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-regular(16px);
+        }
+      }
+
+      label {
+        @include font-sans_pro-regular(14px);
+        opacity: 0.8;
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-regular(16px);
+        }
+      }
+
+      input[type="radio"] {
+        height: 20px;
+        width: 20px;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        accent-color: $black;
+      }
+    }
+  }
+}
+
+.cancel {
+  padding: 13px 33px;
+  color: $purple;
+  border: 1px solid $border-color;
+  background: $white;
+  @include font-sans_pro-semibold(14px);
+
+  @media screen and (max-width: 767px) {
+    @include font-sans_pro-semibold(16px);
+  }
+}
+
+.submit {
+  color: $white;
+  background: $purple;
+}
+
+:host::ng-deep {
+  .matdate-input {
+    // height: 48px;
+    border-radius: 5px;
+    position: relative;
+
+    .toggle {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+    }
+
+    input {
+      border: none;
+      border-radius: 5px;
+      width: 90%;
+      padding: 0 12px;
+      outline: none;
+      font-size: 18px;
+      text-overflow: ellipsis;
+    }
+  }
+}

@@ -1,0 +1,103 @@
+@use "tools.mediaquery" as *;
+
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+@use "variable.scss" as *;
+
+
+.privacy-policy-section {
+  .wrapper {
+
+    // position: sticky;
+    // top: 135px;
+    // width: 100%;
+    // z-index: 2;
+    // border-bottom: 1px solid $border-color;
+    // background: $orange;
+    @media screen and (max-width: 767px) {
+      background: $white;
+      top: 0;
+      color: $black;
+      margin-top: 80px;
+      position: static;
+    }
+
+    .heading {
+      max-width: $content-max-width;
+      margin: auto;
+      padding: 40px 0;
+
+      @media screen and (max-width: 767px) {
+        max-width: $content-sm-max-width;
+        padding: 15px 0;
+      }
+
+      h2 {
+        margin: 0;
+        @include font-sans_pro-bold($size: 28px);
+        color: $purple;
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-bold($size: 24px);
+        }
+      }
+    }
+  }
+
+  .content {
+    max-width: $content-max-width;
+    margin: auto;
+    padding: 20px 0;
+
+    @media screen and (max-width: 767px) {
+      max-width: $content-sm-max-width;
+      padding: 20px 0;
+    }
+
+    li,
+    p {
+      margin: 0;
+      word-break: break-word;
+      @include font-sans_pro-regular($size: 14px);
+
+      @media screen and (max-width: 767px) {
+        @include font-sans_pro-regular($size: 16px);
+      }
+    }
+
+    label {
+      color: $purple;
+      word-break: break-word;
+      @include font-sans_pro-semibold($size: 20px);
+
+      @media screen and (max-width: 767px) {
+        @include font-sans_pro-semibold($size: 18px);
+      }
+    }
+
+    span {
+      word-break: break-word;
+      @include font-sans_pro-semibold($size: 14px);
+
+      @media screen and (max-width: 767px) {
+        @include font-sans_pro-semibold($size: 16px);
+      }
+    }
+
+    li {
+      list-style-type: disc;
+    }
+  }
+}
+
+.text-purple {
+  @include font-sans_pro-semibold($size: 14px);
+  color: $purple;
+  word-break: break-word;
+}
+
+.d-block {
+  display: block;
+}

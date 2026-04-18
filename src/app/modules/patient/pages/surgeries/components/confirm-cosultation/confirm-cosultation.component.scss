@@ -1,0 +1,58 @@
+@use "tools.mediaquery" as *;
+
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+
+@use "variable.scss" as *;
+
+section {
+  padding: 100px 75px;
+  @media screen and (max-width: 767px) {
+    padding: 20px 15px;
+  }
+
+  .box {
+    padding: 36px 28px;
+    border: 1px solid $border-color;
+    max-width: 210px;
+    @media screen and (max-width: 767px) {
+      padding: 10px;
+    }
+  }
+
+  button {
+    background: $purple;
+    color: $white;
+    padding: 13px 64px;
+    border-radius: 5px;
+    border: 1px solid $border-color;
+  }
+}
+.margin-y-40 {
+  margin: 60px 0;
+}
+.arrows {
+  @media screen and (max-width: 767px) {
+    display: none;
+  }
+}
+
+.text-32 {
+  @media screen and (max-width: 767px) {
+    font-size: 24px !important;
+  }
+}
+
+.text-18 {
+  @media screen and (max-width: 767px) {
+    font-size: 16px !important;
+  }
+}
+.margin-top-bottom {
+  margin: 3rem 0;
+  @media screen and (max-width: 767px) {
+    margin: 1rem 0;
+  }
+}

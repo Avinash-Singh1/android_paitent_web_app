@@ -1,0 +1,39 @@
+<div class=" search d-flex banner_main_box ">
+      <div class=" big-card search_container">
+            <div class="serch_section">
+                  <form class="d-flex align-items-center search-parent position-relative" (submit)="onSearchSubmit($event)">
+                        <input 
+                              type="search" 
+                              placeholder="Search Your Medicine Name" 
+                              #searchInput 
+                              class="form-control"
+                              style="border: none;" 
+                              (input)="onSearch($event)"
+                              (keyup.enter)="onSearchSubmit()"
+                              [(ngModel)]="searchQuery"
+                              name="search"
+                        >
+                        <button 
+                              type="submit" 
+                              class="search-btn"
+                              [disabled]="!searchQuery || searchQuery.trim().length === 0"
+                              aria-label="Search"
+                        >
+                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path d="M14.2939 12.5786H13.3905L13.0703 12.2699C14.1162 11.0663 14.7656 9.49337 14.7656 7.76823C14.7656 4.02365 11.7418 1 8.00005 1C4.25827 1 1.23438 4.02365 1.23438 7.76823C1.23438 11.5128 4.25827 14.5365 8.00005 14.5365C9.72466 14.5365 11.2968 13.8872 12.5 12.8414L12.8084 13.1616V14.0653L17.8147 19.0633L19.2922 17.5851L14.2939 12.5786ZM8.00005 12.5786C5.33732 12.5786 3.19154 10.4321 3.19154 7.76823C3.19154 5.10441 5.33732 2.95788 8.00005 2.95788C10.6628 2.95788 12.8086 5.10441 12.8086 7.76823C12.8086 10.4321 10.6628 12.5786 8.00005 12.5786Z" fill="#45197C"/>
+                              </svg>
+                        </button>
+                  </form>
+                  <div *ngIf="showSuggestions && suggestions.length > 0" class="suggestions">
+                        <ul>
+                              <li *ngFor="let suggestion of suggestions" class="m-0"
+                                    (click)="goToProduct(suggestion._id, suggestion.name)">
+                                    <img loading="lazy" [src]="suggestion.images?.[0]?.url || suggestion.image" alt="" height="24" width="24"> {{ suggestion.name | truncate:50}} <span>
+                                    </span>
+                              </li>
+                        </ul>
+                  </div>
+            </div>
+
+      </div>
+</div>

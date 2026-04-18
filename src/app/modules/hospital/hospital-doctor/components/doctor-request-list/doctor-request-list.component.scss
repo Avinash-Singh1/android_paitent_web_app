@@ -1,0 +1,134 @@
+@use "variable.scss" as *;
+@use "src/styles/components/_components.ngx-pagination.scss" as *;
+
+.establishment-request {
+  .heading {
+    background: $blue-violet;
+    border-bottom: 1px solid $lavender;
+    color: $white;
+    text-align: center;
+    padding: 24px;
+  }
+
+  .request-table {
+    max-width: 100%;
+    width: 100%;
+    overflow: auto;
+    min-height: 40vh !important;
+
+    table {
+      width: 100%;
+      overflow: auto;
+      font-size: 14px;
+
+      th {
+        color: $white;
+        background: $blue-violet;
+        padding: 12px 24px;
+        white-space: nowrap;
+      }
+
+      td {
+        padding: 12px 24px;
+        border-bottom: 1px solid $border-color;
+
+        button {
+          &.view {
+            background: $purple;
+            color: $white;
+          }
+        }
+
+        &.profile-image {
+          img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid $border-color;
+          }
+        }
+      }
+
+      .profile-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: $bright-gray;
+        border: 1px solid $border-color;
+
+        img {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+        }
+      }
+    }
+
+    .status-dropdown,
+    .status {
+      padding: 8px 24px;
+      border: 1px solid $border-color;
+      border-radius: 4px;
+      background: $white;
+      text-align: center;
+
+      &.rejected {
+        background: $light-pink !important;
+        color: $red !important;
+      }
+    }
+  }
+}
+
+::ng-deep {
+  .request {
+    &.dropdown {
+      width: 158px;
+    }
+
+    .dropdown-menu {
+      padding: 0 !important;
+
+      .dropdown-item {
+        border-bottom: 1px solid $border-color;
+        padding: 12px 24px;
+        font-size: 14px !important;
+        --bs-dropdown-link-active-bg: #eee !important;
+        --bs-dropdown-link-active-color: #000 !important;
+
+        &:last-child {
+          border-bottom: 0 !important;
+          border-radius: 0 0 5px 5px;
+          color: $red;
+          background: $light-pink !important;
+          --bs-dropdown-link-active-bg: $red !important;
+          --bs-dropdown-link-active-color: $light-pink !important;
+        }
+
+        &:first-child {
+          border-radius: 5px 5px 0 0;
+        }
+      }
+    }
+  }
+
+  //   .establishment-request {
+  .request.mdc-dialog__content {
+    padding: 0 !important;
+    color: $black !important;
+    // min-height: 40vh !important;
+  }
+
+  //   }
+}
+
+:host::ng-deep {
+  .pagination-section {
+    margin: 0 auto;
+
+    .ngx-pagination {
+      margin-bottom: 0 !important;
+      @include ngx-pagination($purple, $purple);
+    }
+  }
+}

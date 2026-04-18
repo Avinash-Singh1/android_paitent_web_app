@@ -1,0 +1,303 @@
+<div class="signup-wrapper">
+  <div class="text-wrapper">
+    <h3>Join Our Network of Trusted Healthcare Facilities</h3>
+    <p>
+      Join NectarPlus.Health to enhance your professional presence, streamline
+      your practice, and provide exceptional care to your patients. Start your
+      journey with us today.
+    </p>
+  </div>
+  <div class="signup-inner">
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+      <div class="header">
+        <h3>Join as a doctors</h3>
+        <p>Already a Account ? <a [routerLink]="['/auth/doctors/login']">Login</a></p>
+      </div>
+      <div class="form">
+        <div class="form-group">
+          <!-- <label class="main required">Name</label> -->
+          <div class="input-group ">
+            <select class="form-control" style="padding-right: 4px;" name="des" id="des" formControlName="title"
+              label="Title">
+              <!-- <option value=""  >Title</option> -->
+              <option value="" disabled selected> Title</option>
+              <option value="Dr.">Dr.</option>
+              <option value="Mr.">Mr.</option>
+              <option value="Ms.">Ms.</option>
+              <option value="Mrs.">Mrs.</option>
+            </select>
+            <input type="text" class="form-control" formControlName="name" placeholder="Full Name*" />
+          </div>
+        </div>
+        <div *ngIf="signupForm.controls['title'].invalid && signupForm.controls['title'].touched" class="text-danger">
+          Title is required
+        </div>
+        <div *ngIf="signupForm.controls['name'].invalid && signupForm.controls['name'].touched" class="text-danger">
+          Full name is required (min 3 characters)
+        </div>
+        <div class="form-group">
+          <!-- <label class="main required">Gender</label> -->
+          <div class="form-check form-check-inline">
+            <input formControlName="gender" class="form-check-input" type="radio" name="gender" id="male"
+              value="male" />
+            <label class="form-check-label" for="male">Male</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gender" formControlName="gender" id="female"
+              value="female" />
+            <label class="form-check-label" for="female">Female</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gender" formControlName="gender" id="other"
+              value="other" />
+            <label class="form-check-label" for="other">Other</label>
+          </div>
+        </div>
+        <div *ngIf="signupForm.controls['gender'].invalid && signupForm.controls['gender'].touched" class="text-danger">
+          Gender is required
+        </div>
+        <div class="form-group" for="select-Years of Experience">
+          <select class="form-control" formControlName="specialization">
+            <option selected value="" disabled>Select Specialization</option>
+            <option [value]='specialization._id' *ngFor="let specialization of specializationList">
+              {{specialization.name}}</option>
+          </select>
+        </div>
+        <div *ngIf="signupForm.controls['specialization'].invalid && signupForm.controls['specialization'].touched"
+          class="text-danger">
+          Specialization is required
+        </div>
+        <div formGroupName="education">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Education Degree*" formControlName="degree" />
+          </div>
+          <div *ngIf="signupForm.get('education.degree').invalid && signupForm.get('education.degree').touched"
+            class="text-danger">
+            Degree is required
+          </div>
+          <!-- College Input -->
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="College*" formControlName="college" />
+          </div>
+          <div *ngIf="signupForm.get('education.college').invalid && signupForm.get('education.college').touched"
+            class="text-danger">
+            College is required
+          </div>
+          <!-- Year Input -->
+          <div class="form-group">
+            <input 
+              type="text" 
+              class="form-control" 
+              placeholder="College Year*" 
+              formControlName="year"
+            />
+          </div>
+          
+          <div *ngIf="signupForm.get('education.year')?.invalid && signupForm.get('education.year')?.touched" class="text-danger">
+            <span *ngIf="signupForm.get('education.year')?.errors?.['required']">Year is required.</span>
+            <span *ngIf="signupForm.get('education.year')?.errors?.['invalidYear']">
+              {{ signupForm.get('education.year')?.errors?.['invalidYear'] }}
+            </span>
+          </div>
+          
+        </div>
+        <div class="form-group" for="select-Education">
+          <select class="form-control" formControlName="yearsOfExperience">
+            <option selected value="" disabled>Select experience year</option>
+            <option [value]='year.value' *ngFor="let year of experinenceYear">{{year.label}}</option>
+          </select>
+        </div>
+        <div
+          *ngIf="signupForm.controls['yearsOfExperience'].invalid && signupForm.controls['yearsOfExperience'].touched"
+          class="text-danger">
+          Experience is required 
+        </div>
+
+        
+
+        <div class="form-group outer-div">
+          <!-- <label for="state">State</label> -->
+          <ng-select 
+            style="border: none; padding: 0px;" 
+            class="form-control custom-input inner-div"
+            [items]="states" 
+            bindLabel="name" 
+            [clearable]="true" 
+            (change)="onStateChange($event)" 
+            placeholder="Select State" 
+            formControlName="state">
+          </ng-select>
+        </div>
+        <div *ngIf="signupForm.controls['state'].invalid && signupForm.controls['state'].touched" class="text-danger">
+          State is required
+        </div>
+
+      
+        <div class="form-group outer-div">
+          <!-- <label for="city">City</label> -->
+          <ng-select 
+            [items]="cities" 
+            bindLabel="name" 
+            [clearable]="true" 
+            [disabled]="isCityDisabled"
+           
+            placeholder="Select City" 
+            formControlName="city">
+          </ng-select>
+        </div>
+        <div *ngIf="signupForm.controls['city'].invalid && signupForm.controls['city'].touched" class="text-danger">
+          City is required
+        </div>
+
+         
+          
+        
+        
+        <!-- <div class="form-group">
+          <label for="city">City</label>
+          <input type="text" 
+                 class="form-control custom-input" 
+                 placeholder="City" 
+                 formControlName="city" 
+                 [matAutocomplete]="auto"
+                 (input)="onCitySearch($event)" />
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let city of filteredCities" [value]="city">
+              {{ city }}
+            </mat-option>
+          </mat-autocomplete>
+        </div> -->
+        
+
+
+        <div class="form-group">
+          <div class="input-group">
+            <div class="input-group-prepend" >
+              <span style="border: none; background-color:#ffffff;color: #7a7d7f;font-size: large;" class="input-group-text">+91</span>
+            </div>
+            <input type="text" class="form-control" formControlName="phoneNumber" maxlength="10"
+              placeholder="Phone No*" />
+          </div>
+        </div>
+        <div *ngIf="signupForm.controls['phoneNumber'].invalid && signupForm.controls['phoneNumber'].touched"
+          class="text-danger">
+          Enter a valid 10-digit phone number
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" formControlName="emailAddress" placeholder="Email Address*" autocomplete="off" />
+        </div>
+        <div *ngIf="signupForm.controls['emailAddress'].invalid && signupForm.controls['emailAddress'].touched"
+          class="text-danger">
+          Enter a valid email address
+        </div>
+        <div class="form-group position-relative">
+          <input type="password" [type]="isPasswordVisibleconfirm1 ? 'text' : 'password'" class="form-control"
+            formControlName="password" placeholder="Password*" autocomplete="off"/>
+          <div class="toggle-password" (click)="togglePasswordVisibilityconfirm1()"
+            [style]="signupForm.controls['password'].invalid && signupForm.controls['password'].touched? 'position: absolute; right: 10px; top: 52%; transform: translateY(-50%); cursor: pointer;' : 'position: absolute; right: 10px; top: 55%; transform: translateY(-50%); cursor: pointer;' ">
+            <img
+              [src]="isPasswordVisibleconfirm1 ? 'assets/images/svg/eye-open.svg' : 'assets/images/svg/eye-closed.svg'"
+              alt="Toggle Password Visibility" />
+          </div>
+        </div>
+        <div *ngIf="signupForm.controls['password'].invalid && signupForm.controls['password'].touched"
+          class="text-danger">
+          Password is required (min 6 characters)
+        </div>
+
+
+
+        <div class="form-group position-relative">
+          <input type="password" [type]="isPasswordVisibleconfirm2 ? 'text' : 'password'" class="form-control"
+            placeholder="Confirm Password*" formControlName="confirmPassword" autocomplete="off"/>
+
+          <div class="toggle-password" (click)="togglePasswordVisibilityconfirm2()"
+            [style]="signupForm.controls['confirmPassword'].invalid && signupForm.controls['confirmPassword'].touched? 'position: absolute; right: 10px; top: 52%; transform: translateY(-50%); cursor: pointer;' : 'position: absolute; right: 10px; top: 55%; transform: translateY(-50%); cursor: pointer;' ">
+            <img
+              [src]="isPasswordVisibleconfirm2 ? 'assets/images/svg/eye-open.svg' : 'assets/images/svg/eye-closed.svg'"
+              alt="Toggle Password Visibility" />
+          </div>
+        </div>
+        <div
+          *ngIf="signupForm.controls['confirmPassword'].hasError('mismatch') && signupForm.controls['confirmPassword'].touched"
+          class="text-danger">
+          Passwords do not match
+        </div>
+        <div class="form-group">
+          <div class="form-check form-check-inline">
+            <input style="width: 17px; height: 17px;border-color: #45197c;border-width: 3px;" formControlName="consent"
+              class="form-check-input" type="checkbox" id="consent" value="consent" />
+            <label class="form-check-label" style="padding-top: 1px;" for="consent">By Signing up, I agree to <a
+                (click)="openDialog(true)">terms & condition</a></label>
+          </div>
+        </div>
+        <div *ngIf="signupForm.controls['consent'].invalid && signupForm.controls['consent'].touched"
+          class="text-danger">
+          You must accept the terms and conditions
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary btn-block">
+            Continue
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <img loading="lazy" src="./assets/images/doctor.png" class="doctor-fixed-b" />
+  <!-- <img loading="lazy" src="./assets/images/signup-img-fixed.png" class="fixed-rb" /> -->
+  <div class="fixed-rb">
+    <div class="circle-1"></div>
+    <div class="circle-2"></div>
+  </div>
+  <div class="clearfix"></div>
+</div>
+
+
+
+
+
+
+<!-- OTP Verification Modal -->
+
+<div id="otpModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="otpModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="otpModalLabel">OTP Verification</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal('otpModal')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="color: green;
+          font-size: 15px;">Enter the OTP sent to your registered phone number:</p>
+        <p style="font-size: 25px;
+          padding-top: 10px;
+          padding-bottom: 10px;"><strong>{{signupForm.get('phoneNumber')?.value}}</strong></p>
+        <form [formGroup]="otpForm" (ngSubmit)="onVerifyOtp()">
+          <div class="form-group">
+            <label for="otpCode" style="padding-bottom: 10px;
+            font-weight: bold;">OTP</label>
+            <input id="otpCode" type="text" class="form-control" formControlName="otpCode"
+              placeholder="Please enter the 6 digit OTP here to verify" maxlength="6" />
+            <div style="text-align: left;"
+              *ngIf="otpForm.controls['otpCode'].invalid && otpForm.controls['otpCode'].touched" class="text-danger">
+              Please enter a valid 6-digit OTP.
+            </div>
+          </div>
+          <p class="text-center" style="text-align: left;
+          display: flex;
+          padding-top: 15px;
+          padding-bottom: 10px;
+          font-size: 15px;
+          padding-left: 2px">Didn't receive the OTP? <a href="javascript:void(0);" (click)="resendOtp()"
+              style="padding-left: 5px; color: #45197c;">Resend OTP</a></p>
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary" style="    background-color: #45197c; width: 97%;">Verify
+              OTP</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

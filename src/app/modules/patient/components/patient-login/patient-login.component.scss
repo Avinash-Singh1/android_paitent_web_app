@@ -1,0 +1,250 @@
+@use "tools.mediaquery" as *;
+
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+
+@use "variable.scss" as *;
+
+
+.appointment-booking {
+  //   padding: 0 0 14px;
+  background-color: #e2e2e2;
+
+  &__wrapper {
+    background-color: $white;
+    min-height: calc(100vh - 140px);
+    max-width: 486px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: auto;
+    padding: 31px 0px;
+
+    @media screen and (max-width: 767px) {
+      padding: 80px 0px;
+    }
+
+    &__name {
+      padding: 0 31px;
+      display: flex;
+      gap: 9px;
+      align-items: center;
+      margin-bottom: 17px;
+
+      img {
+        border-radius: 50%;
+        height: 72px;
+        width: 72px;
+        object-fit: cover;
+      }
+
+      h2 {
+        @include font-sans_pro-semibold($size: 18px, $lineheight: 23px);
+        margin: 0;
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-semibold(16px);
+        }
+      }
+
+      p {
+        @include font-sans_pro-regular($size: 18px, $lineheight: 23px);
+        margin: 0;
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-regular(16px);
+        }
+      }
+    }
+
+    &__timings {
+      padding: 0px 31px;
+
+      &__details {
+        display: flex;
+        padding-top: 17px;
+        justify-content: space-between;
+        border-top: 1px solid $border-color;
+        flex-wrap: wrap;
+        gap: 15px;
+
+        .date {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+
+          span {
+            @include font-sans_pro-regular($size: 18px, $lineheight: 23px);
+
+            @media screen and (max-width: 767px) {
+              @include font-sans_pro-regular(16px);
+            }
+          }
+
+          p {
+            margin: 0;
+            @include font-sans_pro-semibold($size: 18px, $lineheight: 23px);
+
+            @media screen and (max-width: 767px) {
+              @include font-sans_pro-semibold(16px);
+            }
+          }
+        }
+
+        .time {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+
+          span {
+            @include font-sans_pro-regular($size: 18px, $lineheight: 23px);
+
+            @media screen and (max-width: 767px) {
+              @include font-sans_pro-regular(16px);
+            }
+          }
+
+          p {
+            margin: 0;
+            @include font-sans_pro-semibold($size: 18px, $lineheight: 23px);
+
+            @media screen and (max-width: 767px) {
+              @include font-sans_pro-semibold(16px);
+            }
+          }
+        }
+      }
+    }
+
+    .light-line {
+      margin: 30px 0 16px;
+      opacity: 0.1;
+    }
+
+    &__patient-details {
+      padding: 0 31px;
+
+      h3 {
+        @include font-sans_pro-semibold($size: 18px, $lineheight: 23px);
+        margin: 0;
+        margin-top: 20px;
+      }
+
+      p {
+        @include font-sans_pro-regular($size: 16px, $lineheight: 20px);
+        margin: 0;
+        margin-top: 15px;
+      }
+
+      &__selection {
+        margin-top: 16px;
+      }
+
+      &__data {
+        p {
+          @include font-sans_pro-regular($size: 18px, $lineheight: 20px);
+          opacity: 0.7;
+          margin: 0;
+          margin-top: 8px;
+
+          @media screen and (max-width: 767px) {
+            @include font-sans_pro-regular(16px);
+          }
+        }
+
+        label {
+          margin-top: 30px;
+          display: block;
+          @include font-sans_pro-regular($size: 18px, $lineheight: 23px);
+
+          @media screen and (max-width: 767px) {
+            @include font-sans_pro-regular(16px);
+          }
+        }
+
+        input {
+          background: $white;
+          border: 1px solid rgba(0, 0, 0, 0.4);
+          border-radius: 5px;
+          width: 100%;
+          box-sizing: border-box;
+          margin-top: 6px;
+          height: 48px;
+          padding-left: 20px;
+          @include font-sans_pro-regular($size: 18px, $lineheight: 23px);
+
+          @media screen and (max-width: 767px) {
+            margin-top: 5px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.submit {
+  margin-top: 25px;
+
+  button {
+    background: $purple;
+    width: 100%;
+    height: 48px;
+    @include font-sans_pro-bold($size: 16px, $lineheight: 21px);
+    color: $white;
+    border: none;
+  }
+}
+
+.otp-section {
+  h2 {
+    margin: 0;
+    margin-top: 8px;
+    @include font-sans_pro-semibold($size: 18px, $lineheight: 21px);
+
+    @media screen and (max-width: 767px) {
+      @include font-sans_pro-semibold(16px);
+    }
+  }
+
+  label,
+  .not-received {
+    margin-top: 18px;
+    @include font-sans_pro-regular($size: 16px, $lineheight: 20px);
+    opacity: 0.6;
+  }
+
+  hr {
+    margin: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.5);
+  }
+
+  input {
+    width: 100%;
+    margin-top: 8px;
+    border: none;
+
+    ::placeholder {
+      @include font-sans_pro-regular($size: 16px, $lineheight: 20px);
+      opacity: 0.6;
+    }
+
+    outline: none;
+  }
+
+  input:focus {
+    border: none;
+  }
+
+  .get-call {
+    @include font-sans_pro-semibold($size: 16px, $lineheight: 20px);
+    color: $purple;
+  }
+}
+
+.edit {
+  height: 18px;
+  width: 18px;
+  position: relative;
+  top: 6px;
+}

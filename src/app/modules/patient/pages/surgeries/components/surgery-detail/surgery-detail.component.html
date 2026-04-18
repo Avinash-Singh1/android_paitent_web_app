@@ -1,0 +1,242 @@
+<!-- ══════════ HERO SECTION ══════════ -->
+<section class="sd-hero">
+  <div class="sd-hero__inner">
+    <div class="sd-hero__content">
+      <h1 class="sd-hero__title">
+        {{ surgeryDetail?.title }} Cost in {{ city_id ? (city_id | titlecase) : 'India' }}
+      </h1>
+      <p class="sd-hero__subtitle">
+        Discover the latest in surgical procedures, recovery timelines, and transparent pricing — all in one place.
+      </p>
+
+      <!-- Cost Cards -->
+      <div class="sd-hero__costs" *ngIf="surgeryDetail?.components?.length">
+        <div class="sd-cost-card sd-cost-card--low">
+          <div class="sd-cost-card__icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke="currentColor" stroke-width="2"/><path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="sd-cost-card__label">Lowest Cost</span>
+          <span class="sd-cost-card__price">₹1,25,500</span>
+          <span class="sd-cost-card__note">approx.</span>
+        </div>
+        <div class="sd-cost-card sd-cost-card--avg">
+          <div class="sd-cost-card__icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <span class="sd-cost-card__label">Average Cost</span>
+          <span class="sd-cost-card__price">₹1,75,000</span>
+          <span class="sd-cost-card__note">approx.</span>
+        </div>
+        <div class="sd-cost-card sd-cost-card--high">
+          <div class="sd-cost-card__icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="sd-cost-card__label">Highest Cost</span>
+          <span class="sd-cost-card__price">₹2,50,000</span>
+          <span class="sd-cost-card__note">approx.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop Enquiry Form -->
+    <div class="sd-hero__form">
+      <nectar-enquiry [city]="city_id" [surgeryTitle]="surgeryDetail?.title"
+        [popular_sergury_Data]="popular_sergury"></nectar-enquiry>
+    </div>
+  </div>
+</section>
+
+<!-- Mobile Enquiry Form -->
+<section class="sd-mobile-form">
+  <nectar-enquiry [city]="city_id" [surgeryTitle]="surgeryDetail?.title"
+    [popular_sergury_Data]="popular_sergury"></nectar-enquiry>
+</section>
+
+<!-- ══════════ STATS BAR ══════════ -->
+<section class="sd-stats">
+  <div class="sd-stats__inner">
+    <div class="sd-stats__item" *ngFor="let item of reviewratting">
+      <span class="sd-stats__value">{{ item.rating }}</span>
+      <span class="sd-stats__label">{{ item.title }}</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ DOCTORS LISTING ══════════ -->
+<section class="sd-doctors">
+  <doctor-surgerdetails-list [id]="surgeryId" [city]="city_id"></doctor-surgerdetails-list>
+</section>
+
+<!-- ══════════ COST FACTORS ══════════ -->
+<section class="sd-factors">
+  <div class="sd-factors__inner">
+    <h2 class="sd-factors__title">
+      {{ surgeryDetail?.title }} Cost Factors in {{ city_id ? (city_id | titlecase) : 'India' }}
+    </h2>
+    <p class="sd-factors__subtitle">
+      Understanding the various factors that influence the cost of {{ surgeryDetail?.title }} treatment can help you make an informed decision.
+    </p>
+    <div class="sd-factors__content" *ngFor="let component of surgeryDetail?.components">
+      <div class="sd-factors__text" [innerHTML]="sanitizedDescription(component?.description)"></div>
+      <div class="sd-factors__images" *ngIf="component.sno !== 1 && component?.image?.length">
+        <img loading="lazy" [src]="item" (click)="viewImage(item)" [alt]="surgeryDetail?.title"
+          *ngFor="let item of component?.image" class="sd-factors__img" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ OVERVIEW FAQ ══════════ -->
+<section class="sd-overview" *ngIf="faqOverviewArray?.length > 0">
+  <div class="sd-overview__inner">
+    <h2 class="sd-overview__title">Overview</h2>
+    <div class="sd-overview__grid">
+      <mat-accordion *ngFor="let item of faqOverviewArray; let i = index">
+        <mat-expansion-panel class="sd-overview__panel">
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ item?.question }}</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p class="sd-overview__answer">
+            {{ item.answer | slice: 0:(isExpanded[i] ? undefined : 150) }}
+            <span *ngIf="item.answer.length > 150">
+              ...
+              <button class="sd-overview__toggle" (click)="toggleReadMore(i)">
+                {{ isExpanded[i] ? 'Read Less' : 'Read More' }}
+              </button>
+            </span>
+          </p>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ COST BREAKDOWN TABLE ══════════ -->
+<section class="sd-table-section">
+  <div class="sd-table-section__inner">
+    <h2 class="sd-table-section__title">Cost Breakdown</h2>
+    <div class="sd-table-wrap">
+      <table class="sd-table">
+        <thead>
+          <tr>
+            <th>Service / Factor</th>
+            <th>Description</th>
+            <th>Estimated Cost (INR)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of compersion">
+            <td>{{ item.Servicefactor }}</td>
+            <td>{{ item.Description }}</td>
+            <td class="sd-table__cost">{{ item.EstimatedCostINR }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ NECTAR VS OTHERS ══════════ -->
+<section class="sd-compare">
+  <div class="sd-compare__inner">
+    <h2 class="sd-compare__title">Nectar Plus vs Others</h2>
+    <p class="sd-compare__subtitle">See why thousands of patients choose NectarPlus for their surgical needs.</p>
+    <div class="sd-compare__grid">
+      <div class="sd-compare__card" *ngFor="let surgery of surgeries">
+        <span class="sd-compare__feature">{{ surgery.feature }}</span>
+        <div class="sd-compare__row">
+          <div class="sd-compare__col sd-compare__col--nectar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>{{ surgery.nectarPlus }}</span>
+          </div>
+          <div class="sd-compare__col sd-compare__col--other">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>{{ surgery.otherProviders }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ WHY CHOOSE NECTAR ══════════ -->
+<section class="sd-why">
+  <div class="sd-why__inner">
+    <h2 class="sd-why__title">Why Choose NectarPlus Health?</h2>
+    <p class="sd-why__subtitle">
+      Experience world-class surgical care with transparent pricing, expert surgeons, and dedicated post-operative support.
+    </p>
+    <div class="sd-why__cards">
+      <div class="sd-why__card" *ngFor="let a of cardscontent">
+        <div class="sd-why__card-icon">
+          <img loading="lazy" [src]="a.Image" [alt]="a.title" />
+        </div>
+        <h3 class="sd-why__card-title">{{ a.title }}</h3>
+        <p class="sd-why__card-text">{{ a.SubTitle }}</p>
+      </div>
+    </div>
+    <div class="sd-why__cta">
+      <button class="sd-why__btn" (click)="myformroute()">Enquire Now</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ TREATMENT GUIDE CROSS-LINK ══════════ -->
+<section class="sd-treatment-link" *ngIf="surgeryDetail?.isPublished">
+  <div class="sd-treatment-link__inner">
+    <h3 class="sd-treatment-link__title">
+      📖 Comprehensive {{ surgeryDetail?.title }} Treatment Guide
+    </h3>
+    <p class="sd-treatment-link__text">
+      Explore our in-depth treatment guide covering symptoms, diagnosis, procedure details, recovery timeline, success rates, and cost breakdown.
+    </p>
+    <a class="sd-treatment-link__btn"
+       [routerLink]="['/', city_id || 'delhi', 'treatment', surgeryDetail?.departmentId?.slug || 'general-surgery', surgeryId]">
+      Read Full Treatment Guide →
+    </a>
+  </div>
+</section>
+
+<!-- ══════════ FAQ — Desktop ══════════ -->
+<nectar-surgery-faq [type]="'surgery'" [id]="surgeryId" class="sd-faq-desktop"></nectar-surgery-faq>
+
+<!-- ══════════ FAQ — Mobile ══════════ -->
+<section class="sd-faq-mobile">
+  <div class="sd-faq-mobile__inner">
+    <h2 class="sd-faq-mobile__title">Frequently Asked Questions</h2>
+    <p class="sd-faq-mobile__subtitle">
+      Get answers to the most common questions about {{ surgeryDetail?.title }}.
+    </p>
+    <mat-accordion *ngFor="let item of faqArray; let i = index">
+      <mat-expansion-panel class="sd-faq-mobile__panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ item?.question }}</mat-panel-title>
+        </mat-expansion-panel-header>
+        <p class="sd-faq-mobile__answer">
+          {{ item.answer | slice: 0:(isExpanded[i] ? undefined : 100) }}
+          <span *ngIf="item.answer.length > 100">
+            ...
+            <button class="sd-faq-mobile__toggle" (click)="toggleReadMore(i)">
+              {{ isExpanded[i] ? 'Read Less' : 'Read More' }}
+            </button>
+          </span>
+        </p>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</section>
+
+<!-- ══════════ SEO LINKS ══════════ -->
+<div class="sd-seo-links" *ngIf="linkArray?.length">
+  <p *ngFor="let a of linkArray">
+    <a [href]="a.url">{{ a.title }}</a>
+  </p>
+</div>
+
+<!-- ══════════ WHATSAPP FAB ══════════ -->
+<a class="sd-whatsapp" [href]="whatsappLink" target="_blank" (click)="setdigitalSCript()">
+  <img loading="lazy" src="assets/images/svg/whatsapp.svg" alt="WhatsApp" />
+</a>
+
+<!-- ══════════ MOBILE STICKY FOOTER ══════════ -->
+<div class="sd-mobile-footer" (click)="openBottomSheet()">Enquire Now</div>

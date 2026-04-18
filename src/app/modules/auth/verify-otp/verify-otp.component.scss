@@ -1,0 +1,98 @@
+@use "tools.mediaquery" as *;
+
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+
+@use "variable.scss" as *;
+
+
+.verify-otp {
+  .heading {
+    padding: 20px 32px;
+
+    h2 {
+      @include font-sans_pro-regular($size: 14px);
+      margin: 0;
+    }
+  }
+
+  .box {
+    padding: 32px;
+
+    .mobile-number {
+      p {
+        @include font-sans_pro-regular($size: 14px);
+        margin: 0;
+        color: $green;
+      }
+
+      h3 {
+        @include font-sans_pro-semibold($size: 28px);
+        margin: 0;
+      }
+    }
+
+    .otp-box {
+      label {
+        display: block;
+        @include font-sans_pro-regular($size: 14px);
+        opacity: 0.5;
+        margin-top: 18px;
+      }
+
+      input {
+        border: 1px solid $border-color;
+        height: 48px;
+        padding: 0 24px;
+        width: 100%;
+        margin-top: 18px;
+        outline: none;
+        @include font-sans_pro-regular($size: 14px);
+        text-overflow: ellipsis;
+      }
+    }
+
+    .message {
+      margin-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+
+      @media screen and (max-width: 576px) {
+        flex-direction: column;
+      }
+
+      p {
+        @include font-sans_pro-regular($size: 14px);
+        margin: 0;
+        opacity: 0.5;
+      }
+
+      span {
+        color: $purple;
+        @include font-sans_pro-regular($size: 14px);
+        opacity: 1;
+        font-weight: 600;
+      }
+
+      .message-name {
+        display: flex;
+      }
+    }
+
+    .button {
+      margin-top: 20px;
+
+      button {
+        width: 100%;
+        background: $purple;
+        height: 48px;
+        color: $white;
+        border: none;
+        @include font-sans_pro-semibold($size: 14px);
+      }
+    }
+  }
+}

@@ -1,0 +1,506 @@
+<div class="about-section">
+  <div class="about-section__wrapper">
+    <div class="text-16 font-600 hospital-list">Hospital List</div>
+    <div class="about-section__wrapper__cards" *ngFor="let item of aboutData?.establishmentmaster; let j = index; trackBy: trackByIndex">
+      <div class="about-section__wrapper__cards__details">
+        <div>
+          <div class="address"
+            *ngIf="item?.consultationFees | validFee">
+            <div class="heading">
+              <img loading="lazy" src="assets/images/svg/location.svg" alt="" />
+              <h2>Address</h2>
+            </div>
+            <p *ngIf="
+                item?.address?.landmark &&
+                item?.address?.locality &&
+                item?.address?.city
+              ">
+              {{ item?.address?.landmark }}
+              {{ item?.address?.locality | titlecase }},
+              {{ item?.address?.city | titlecase }}
+              {{ item?.address?.pincode }}
+            </p>
+            <p *ngIf="
+                !item?.address?.landmark &&
+                !item?.address?.locality &&
+                item?.address?.city
+              ">
+              {{ item?.address?.city | titlecase }}
+              {{ item?.address?.pincode }}
+            </p>
+            <p *ngIf="
+                !item?.address?.landmark &&
+                !item?.address?.locality &&
+                !item?.address?.city
+              ">
+
+            </p>
+          </div>
+          <div
+            *ngIf="item?.consultationFees | validFee"
+            class="get-direction cursor-pointer" (click)="openGoogleMaps(item)">
+            Get Direction
+            <img loading="lazy" src="assets/images/svg/location_arrow.svg" alt="" />
+          </div>
+          <!-- <div class="name">
+            <h2 (click)="viewHospital(item)" class="cursor-pointer">
+              {{ item?.name }}
+            </h2>
+          </div> -->
+          <h2 class="name">
+            <a
+              class="hospital-link"
+              [routerLink]="['/', getCity(item), 'hospital', item?.profileSlug]"
+            >
+              {{ item?.name }}
+            </a>
+          </h2>
+
+          <!-- <div class="name">
+            <a
+              class="hospital-link"
+              [routerLink]="['/', getCity(item), 'hospital', item?.profileSlug]"
+            >
+              {{ item?.name }}
+            </a>
+          </div> -->
+
+          <div class="rating">
+            <span class="type"> {{ item?.hospitalType[j] || "" }} </span>&nbsp;&nbsp;&nbsp;
+            <br class="rating-break" />
+            <star-rating [rating]="item?.rating" [step]="0.1" [showHalfStars]="true" [readOnly]="true"></star-rating>
+            <span class="star">
+              {{ (item?.rating | number : "1.1") || "0.0" }}
+            </span>
+            <span class="total"> /5 </span>
+            <span class="review" *ngIf="item?.totalreviews <= 1">({{ item?.totalreviews || 0 }} review)</span>
+            <span class="review" *ngIf="item?.totalreviews > 1">({{ item?.totalreviews || 0 }} reviews)</span>
+          </div>
+          <div class="images-price">
+            <div class="images d-flex flex-wrap gap-3">
+              <ng-container *ngFor="let i of item?.images; let j = index; trackBy: trackByIndex">
+                <img loading="lazy" *ngIf="j < 3" class="cursor-pointer" [src]="i?.url" alt="hospital-images" height="64" width="64"
+                  (click)="viewImage(item?.images, j)" />
+              </ng-container>
+            </div>
+            <div class="price-box">
+
+              <div class="in-clinic d-flex flex-column">
+                <span
+                  *ngIf="item?.consultationFees | validFee"
+                  class="font-600 text-16 d-flex p-2" style="width: 76px; height: 45px;">
+                  <img loading="lazy" src="assets/images/inclinickblue.png" alt="consultation" class="me-1">
+                  ₹{{ item?.consultationFees }}
+                </span>
+                <p
+                  *ngIf="item?.consultationFees | validFee">
+                </p>
+
+              </div>
+
+              <!-- Video Consultation Fees -->
+              <div class="video d-flex flex-column">
+                <span
+                  *ngIf="item?.videoConsultationFees | validFee"
+                  class="font-600 text-16 d-flex p-2" style="width: 76px; height: 45px;">
+                  <img loading="lazy" src="assets/images/videogrey.png" height="16" width="16" alt="video consultation" class="me-1 ">
+                  ₹{{ item?.videoConsultationFees }}
+                </span>
+                <p
+                  *ngIf="item?.videoConsultationFees | validFee">
+                </p>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="d-flex flex-column justify-content-between">
+          <div class="desktop-timing-card">
+            <div class="desktop-timing-card__header">
+              <img loading="lazy" src="assets/images/svg/Access time.svg" alt="" />
+              <span>Consultation Timings</span>
+            </div>
+            <div class="desktop-timing-card__body">
+              <div class="desktop-timing-card__slot" *ngFor="let i of item?.establishmenttiming; trackBy: trackByIndex">
+                <ng-container *ngIf="i?.day && (i?.morning || i?.afternoon || i?.evening)">
+                  <div class="desktop-timing-card__day">{{ i?.day | titlecase }}</div>
+                  <div class="desktop-timing-card__times">
+                    <span class="desktop-timing-card__chip" *ngIf="i?.morning">{{ i?.morning }}</span>
+                    <span class="desktop-timing-card__chip" *ngIf="i?.afternoon">{{ i?.afternoon }}</span>
+                    <span class="desktop-timing-card__chip" *ngIf="i?.evening">{{ i?.evening }}</span>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="button" [style.opacity]="
+              item?.isActive && aboutData?.claimProfile ? '1' : '0.5'
+            ">
+            <button (click)="
+                item?.isActive && aboutData?.claimProfile
+                  ? bookAppoint(item)
+                  : ''
+              " [ngClass]="(aboutData?.consultationFees | validFee) ? '' : 'newclass'">
+              Book Appoinment
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- mobile responsive design -->
+
+      <div class="py-2 mt-2 mobile-view">
+        <div class="mobile-detail-parent">
+          <div class="d-flex gap-2">
+            <div class="hospital-profile-pic" *ngIf="aboutData?.consultationType !='video'">
+              <img loading="lazy" [src]="item?.profilePic" alt="" *ngIf="item?.profilePic" width="60" height="60" [routerLink]="['/', getCity(item), 'hospital', item?.profileSlug]" />
+              <div *ngIf="!item?.profilePic"
+                class="d-flex justify-content-center align-items-center text-18 font-600 h-100 border-grey rounded-circle"
+                style="width: 60px"
+                [routerLink]="['/', getCity(item), 'hospital', item?.profileSlug]">
+                {{ item?.name | nameInitial | uppercase }}
+              </div>
+            </div>
+            <div class="hospital-profile-pic" *ngIf="aboutData?.consultationType =='video'">
+              <img loading="lazy" [src]="aboutData?.profilePic" alt="" width="60" height="60" [routerLink]="['/', getCity(item), 'hospital', item?.profileSlug]" />
+            </div>
+            <div>
+              <p class="m-0 text-16 font-600 cursor-pointer" (click)="viewHospital(item)" [routerLink]="['/', getCity(item), 'hospital', item?.profileSlug]">
+                {{ item?.name }}
+              </p>
+              <div class="text-16 font-400">
+                {{ item?.hospitalType[j] || "" }}
+              </div>
+              <div class="text-16 font-600">
+                {{ item?.address?.locality | titlecase }}
+                {{item?.address?.locality ? ',' :''}}
+                {{ item?.address?.city | titlecase }}
+                {{ item?.address?.pincode }}
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between mt-2">
+            <div>
+              <div class="d-flex align-items-center">
+                <star-rating [rating]="item?.rating" [step]="0.1" [showHalfStars]="true"
+                  [readOnly]="true"></star-rating>
+                <span class="font-600 text-16 text-green">
+                  {{ (item?.rating | number : "1.1") || "0.0" }}
+                </span>
+                <span class="font-600 text-16 opacity-70"> /5 </span>
+              </div>
+              <div class="font-600 text-16 opacity-70">
+                ({{ item?.totalreviews || 0 }} reviews)
+              </div>
+            </div>
+
+
+
+            <span
+              *ngIf="item?.consultationFees | validFee"
+              class="font-600 text-16 d-flex p-2">
+              <img loading="lazy" src="assets/images/inclinickblue.png" alt="consultation" class="me-1">
+              ₹{{ item?.consultationFees }} <br>
+
+            </span>
+
+            <!-- Video Consultation Fees -->
+            <span
+              *ngIf="item?.videoConsultationFees | validFee"
+              class="font-600 text-16 d-flex p-2">
+              <img loading="lazy" src="assets/images/videogrey.png" alt="video consultation" height="16" width="16" class="me-1 ">
+              ₹{{ item?.videoConsultationFees }} <br>
+
+            </span>
+
+          </div>
+        </div>
+
+        <!-- timing section -->
+
+        <div class="mobile-timing-card">
+          <div class="mobile-timing-card__header">
+            <img loading="lazy" src="assets/images/svg/Access time.svg" alt="" height="18" width="18" />
+            <span>Consultation Timings</span>
+          </div>
+          <div class="mobile-timing-card__body">
+            <div class="mobile-timing-card__slot" *ngFor="let i of item?.establishmenttiming; trackBy: trackByIndex">
+              <ng-container *ngIf="i?.day && (i?.morning || i?.afternoon || i?.evening)">
+                <div class="mobile-timing-card__day">{{ i?.day | titlecase }}</div>
+                <div class="mobile-timing-card__times">
+                  <span class="mobile-timing-card__chip" *ngIf="i?.morning">{{ i?.morning }}</span>
+                  <span class="mobile-timing-card__chip" *ngIf="i?.afternoon">{{ i?.afternoon }}</span>
+                  <span class="mobile-timing-card__chip" *ngIf="i?.evening">{{ i?.evening }}</span>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3 py-2" *ngIf="item?.images.length">
+          <div class="text-16 font-600">
+            <img loading="lazy" src="assets/images/svg/gallery.svg" alt="" />
+            Hospital Photo
+          </div>
+          <div class="d-flex gap-3 mt-2">
+            <ng-container *ngFor="let i of item?.images; let j = index; trackBy: trackByIndex">
+              <div *ngIf="j < 4" class="border-grey border-radius-5">
+                <img loading="lazy" class="cursor-pointer" [src]="i?.url" alt="hospital-images" height="50" width="50"
+                  (click)="viewImage(item?.images, j)" style="border-radius: 5px" />
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="mt-3 py-2 d-flex gap-4 justify-content-between">
+          <button class="mobile-book-appointment" [style.opacity]="
+              item?.isActive && aboutData?.claimProfile ? '1' : '0.5'
+            " (click)="
+              item?.isActive && aboutData?.claimProfile
+                ? openBottomSheet(item)
+                : ''
+            " [ngClass]="(aboutData?.consultationFees | validFee) ? '' : 'newclass'">
+            Book Appointment
+          </button>
+          <button class="mobile-get-direction" (click)="openGoogleMaps(item)"
+            *ngIf="!(aboutData?.consultationType === 'video') || aboutData?.videoConsultationFees === null">
+            Get Direction
+            <svg-icon src="assets/images/svg/location_arrow.svg"></svg-icon>
+          </button>
+        </div>
+      </div>
+      <!------ONLY VIDEO CONSLTAION HOSPITAL------>
+
+      <!------ONLY VIDEO CONSLTAION HOSPITAL------>
+
+
+    </div>
+    <div class="about-section__wrapper__doctor">
+      <h2>About {{ aboutData?.fullName }}</h2>
+
+      <!-- <p>
+        {{ aboutData?.about | slice: 0:(isExpanded ? undefined : 200) }}
+        <span *ngIf="aboutData?.about?.length > 200">
+          ..
+          <button class="primary" color="primary" (click)="toggleReadMore()">
+            {{ isExpanded ? 'Read Less' : 'Read More' }}
+          </button>
+        </span>
+      </p> -->
+      <p>
+        <span [class.collapsed]="!isExpanded" style="white-space: pre-line;">
+          {{ aboutData?.about }}
+        </span>
+
+        <span *ngIf="aboutData?.about?.length > 200">
+          <button class="primary" color="primary" (click)="toggleReadMore()">
+            {{ isExpanded ? 'Read Less' : 'Read More' }}
+          </button>
+        </span>
+      </p>
+
+
+      <div class="about-section__wrapper__doctor__details" *ngIf="!isMobileView">
+        <div class="grid-item" *ngIf="aboutData?.specialization?.length">
+          <h2>
+            <img loading="lazy" src="assets/images/doctor-details/star.svg" alt="" class="image_wrapper" />
+            Specialisations
+          </h2>
+          <div class="list">
+            <p *ngFor="let i of aboutData?.specialization; trackBy: trackByName">
+              <a
+                style="cursor: pointer;"
+                [routerLink]="['/', formatName(cityName), formatName(i.slug)]"
+                class="specialization-link"
+              >
+                {{ i.name }}
+              </a>
+            </p>
+          </div>
+        </div>
+        <div class="grid-item" *ngIf="aboutData?.education?.length">
+          <h2>
+            <img loading="lazy" src="assets/images/doctor-details/college-graduation.svg" alt=""
+              class="image_wrapper" />
+            Education
+          </h2>
+          <div class="list">
+            <p *ngFor="let i of aboutData?.education; trackBy: trackByIndex">
+              <span>{{ i?.degree }}</span>
+              <span *ngIf="i?.college">- {{ i?.college }}</span>
+              <span *ngIf="i?.year">- {{ i?.year }}</span>
+            </p>
+          </div>
+        </div>
+        <div class="grid-item" *ngIf="aboutData?.award?.length">
+          <h2>
+            <img loading="lazy" src="assets/images/doctor-details/medal.svg" alt="" class="image_wrapper" />
+            Awards and Recognitions
+          </h2>
+          <div class="list">
+            <p *ngFor="let i of aboutData?.award; trackBy: trackByName">{{ i?.name }}</p>
+          </div>
+        </div>
+        <div class="grid-item" *ngIf="aboutData?.medicalRegistration?.length">
+          <h2>
+            <img loading="lazy" src="assets/images/doctor-details/form.svg" alt="" class="image_wrapper" />
+            Registrations
+          </h2>
+          <div class="list">
+            <p *ngFor="let i of aboutData?.medicalRegistration; trackBy: trackByIndex">
+              {{ i?.registrationNumber }} {{ i?.council || "N/A" }},
+              {{ i?.year }}
+            </p>
+          </div>
+        </div>
+        <div class="grid-item" *ngIf="aboutData?.membership?.length">
+          <h2>
+            <img loading="lazy" src="assets/images/doctor-details/premium.svg" alt="" class="image_wrapper" />
+            Membership
+          </h2>
+          <div class="list">
+            <p *ngFor="let i of aboutData?.membership; trackBy: trackByName">
+              {{ i?.name }}
+            </p>
+          </div>
+        </div>
+        <div class="grid-item">
+          <h2>
+            <img loading="lazy" src="assets/images/doctor-details/purple-member2.svg" alt="" class="image_wrapper" />
+            Certificates
+          </h2>
+        </div>
+      </div>
+      <div class="accordion-mobile-only" *ngIf="isMobileView">
+        <div class="accordion" id="accordionExample">
+          <div class="accordion-item" *ngIf="aboutData?.service?.length">
+            <h2 class="accordion-header m-0">
+              <button class="accordion-button" [class.collapsed]="openPanel !== 'service'" type="button"
+                (click)="togglePanel('service')" [attr.aria-expanded]="openPanel === 'service'">
+                <img loading="lazy" src="assets/images/doctor-details/purple-service.svg" alt="" /> Services
+              </button>
+            </h2>
+            <div class="accordion-collapse" [class.collapse]="openPanel !== 'service'" [class.show]="openPanel === 'service'">
+              <div class="accordion-body">
+                <div class="list">
+                  <a *ngFor="let i of aboutData?.service; trackBy: trackByName"
+                    class="service_link list-item-link"
+                    [routerLink]="['/', formatName(city), formatName(i.name)]"
+                    [routerLinkActive]="'active'">
+                    <img loading="lazy" src="assets/images/serviceCheck.svg" alt="" />
+                    <span>{{ i?.name || "N/A" }}</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" *ngIf="aboutData?.specialization?.length">
+            <h2 class="accordion-header m-0">
+              <button class="accordion-button" [class.collapsed]="openPanel !== 'specialization'" type="button"
+                (click)="togglePanel('specialization')" [attr.aria-expanded]="openPanel === 'specialization'">
+                <img loading="lazy" src="assets/images/svg/Specialty-Icon.svg" alt="" /> Specialisations
+              </button>
+            </h2>
+            <div class="accordion-collapse" [class.collapse]="openPanel !== 'specialization'" [class.show]="openPanel === 'specialization'">
+              <div class="accordion-body">
+                <div class="list">
+                  <a *ngFor="let i of aboutData?.specialization; trackBy: trackByName"
+                    class="specialization-link list-item-link"
+                    [routerLink]="['/', formatName(cityName), formatName(i.slug)]">
+                    <img loading="lazy" src="assets/images/serviceCheck.svg" alt="" />
+                    <span>{{ i?.name || "N/A" }}</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" *ngIf="aboutData?.education?.length">
+            <h2 class="accordion-header m-0">
+              <button class="accordion-button" [class.collapsed]="openPanel !== 'education'" type="button"
+                (click)="togglePanel('education')" [attr.aria-expanded]="openPanel === 'education'">
+                <img loading="lazy" src="assets/images/doctor-details/purple-education.svg" alt="" /> Education
+              </button>
+            </h2>
+            <div class="accordion-collapse" [class.collapse]="openPanel !== 'education'" [class.show]="openPanel === 'education'">
+              <div class="accordion-body">
+                <div class="list">
+                  <p *ngFor="let i of aboutData?.education; trackBy: trackByIndex" class="text-16 font-400 d-flex gap-2">
+                    <span class="purple-dot"></span> {{ i?.degree }} -
+                    {{ i?.college }} - {{ i?.year }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" *ngIf="aboutData?.medicalRegistration?.length">
+            <h2 class="accordion-header m-0">
+              <button class="accordion-button" [class.collapsed]="openPanel !== 'registration'" type="button"
+                (click)="togglePanel('registration')" [attr.aria-expanded]="openPanel === 'registration'">
+                <img loading="lazy" src="assets/images/doctor-details/purpl-spec.svg" alt="" /> Registrations
+              </button>
+            </h2>
+            <div class="accordion-collapse" [class.collapse]="openPanel !== 'registration'" [class.show]="openPanel === 'registration'">
+              <div class="accordion-body">
+                <div class="list">
+                  <p *ngFor="let i of aboutData?.medicalRegistration; trackBy: trackByIndex" class="text-16 font-400 d-flex gap-2">
+                    <span class="purple-dot"></span>{{ i?.registrationNumber }}
+                    {{ i?.council || "N/A" }}, {{ i?.year }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" *ngIf="aboutData?.award?.length">
+            <h2 class="accordion-header m-0">
+              <button class="accordion-button" [class.collapsed]="openPanel !== 'award'" type="button"
+                (click)="togglePanel('award')" [attr.aria-expanded]="openPanel === 'award'">
+                <img loading="lazy" src="assets/images/doctor-details/purple-award.svg" alt="" /> Awards and Recognitions
+              </button>
+            </h2>
+            <div class="accordion-collapse" [class.collapse]="openPanel !== 'award'" [class.show]="openPanel === 'award'">
+              <div class="accordion-body">
+                <div class="list">
+                  <p *ngFor="let i of aboutData?.award; trackBy: trackByName" class="text-16 font-400 d-flex gap-2">
+                    <span class="purple-dot"></span> {{ i?.name }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" *ngIf="aboutData?.membership?.length">
+            <h2 class="accordion-header m-0">
+              <button class="accordion-button" [class.collapsed]="openPanel !== 'membership'" type="button"
+                (click)="togglePanel('membership')" [attr.aria-expanded]="openPanel === 'membership'">
+                <img loading="lazy" src="assets/images/doctor-details/purple-member.svg" alt="" /> Membership
+              </button>
+            </h2>
+            <div class="accordion-collapse" [class.collapse]="openPanel !== 'membership'" [class.show]="openPanel === 'membership'">
+              <div class="accordion-body">
+                <div class="list">
+                  <p *ngFor="let i of aboutData?.membership; trackBy: trackByName" class="text-16 font-400 d-flex gap-2">
+                    <span class="purple-dot"></span> {{ i?.name }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header m-0">
+              <button class="accordion-button" [class.collapsed]="openPanel !== 'certificates'" type="button"
+                (click)="togglePanel('certificates')" [attr.aria-expanded]="openPanel === 'certificates'">
+                <img loading="lazy" src="assets/images/doctor-details/purple-member2.svg" width="34" alt="" /> Certificates
+              </button>
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

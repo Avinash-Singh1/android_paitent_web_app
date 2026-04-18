@@ -1,0 +1,120 @@
+<section *ngIf="data.type !== 'medical'">
+  <div class="heading">
+    <h2>Share this {{ data?.name }}</h2>
+  </div>
+  <div class="platforms d-flex flex-wrap gap-4">
+    <span
+      class="span cursor-pointer"
+      mat-fab
+      shareButton="whatsapp"
+      [url]="url"
+    >
+      <img
+        loading="lazy"
+        src="assets/images/svg/whatsapp.svg"
+        alt=""
+        height="50"
+        width="50"
+      />
+    </span>
+    <span class="span cursor-pointer" mat-fab shareButton="email" [url]="url">
+      <img
+        loading="lazy"
+        src="assets/images/svg/mail.svg"
+        alt=""
+        height="50"
+        width="50"
+      />
+    </span>
+
+    <span
+      class="span cursor-pointer"
+      mat-fab
+      shareButton="facebook"
+      [url]="url"
+    >
+      <img
+        loading="lazy"
+        src="assets/images/svg/facebook.svg"
+        alt=""
+        height="50"
+        width="50"
+      />
+    </span>
+
+    <span class="span cursor-pointer" shareButton="linkedin" [url]="url">
+      <img
+        loading="lazy"
+        src="assets/images/svg/linkdn.svg"
+        alt=""
+        height="50"
+        width="50"
+      />
+    </span>
+
+    <span class="span cursor-pointer" shareButton="twitter" [url]="url">
+      <img
+        src="assets/images/Twitter-Logo-for-Share-page.png"
+        alt=""
+        height="50"
+        width="50"
+      />
+    </span>
+    <span class="span cursor-pointer" shareButton="pinterest" [url]="url">
+      <img
+        src="assets/images/svg/pinterest.svg"
+        alt=""
+        height="50"
+        width="50"
+      />
+    </span>
+  </div>
+  <div class="link">
+    <p>Or copy link</p>
+    <div class="link-wrapper d-flex justify-content-between">
+      <span>{{ url }}</span>
+      <div class="copy cursor-pointer" (click)="copyText(url)">Copy</div>
+    </div>
+  </div>
+</section>
+
+<div *ngIf="data?.type == 'medical'" class="medical">
+  <div class="title">
+    <h2 class="m-0">Share Medical Report</h2>
+  </div>
+  <div class="px-5 py-4 d-flex gap-5">
+    <div>
+      <span
+        class="span cursor-pointer"
+        mat-fab
+        shareButton="whatsapp"
+        [url]="data?.url"
+      >
+        <img
+          src="assets/images/svg/whatsapp.svg"
+          alt=""
+          height="60"
+          width="60"
+        />
+      </span>
+      <p class="text-18 mt-2">WhatsApp</p>
+    </div>
+    <div class="text-center">
+      <span
+        class="span cursor-pointer"
+        mat-fab
+        shareButton="email"
+        [url]="data?.url"
+      >
+        <img
+          loading="lazy"
+          src="assets/images/svg/mail.svg"
+          alt=""
+          height="60"
+          width="60"
+        />
+      </span>
+      <p class="text-18 mt-2">Email</p>
+    </div>
+  </div>
+</div>

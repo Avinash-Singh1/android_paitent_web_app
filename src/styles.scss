@@ -1,0 +1,765 @@
+/* You can add global styles to this file, and also import other style files */
+
+@use "css-star-rating/scss/star-rating" as *;
+@use "variable.scss" as *;
+@use "src/styles/elements/_elements.svg.scss" as *;
+@use "src/styles/modern-medical-saas.theme.scss" as *;
+@use "src/styles/_responsive-global.scss" as *;
+
+// CSS imports (plain CSS, not Sass)
+@import "@ng-select/ng-select/themes/default.theme.css";
+@import "tippy.js/dist/tippy.css";
+
+// ── Utility: screen-reader only (visually hidden but accessible) ──
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+// ── Font-face declarations (must be in global CSS to prevent FOUT) ──
+// Fallback font with size-adjust to match Source Sans Pro metrics,
+// preventing layout shift when the web font loads
+@font-face {
+  font-family: 'Source Sans Pro Fallback';
+  src: local('Arial');
+  size-adjust: 100.3%;
+  ascent-override: 105%;
+  descent-override: 29%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('/assets/fonts/sans_pro2/SourceSansPro-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('/assets/fonts/sans_pro2/SourceSansPro-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('/assets/fonts/sans_pro2/SourceSansPro-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Global overflow prevention */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: clip;
+  height: 100%;
+  // Prevent font-size inflation on landscape
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  // Use auto for scroll-behavior so programmatic scrollTo works instantly on navigation.
+  // Smooth scrolling for anchor links is handled via JS where needed.
+  scroll-behavior: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Source Sans Pro", "Source Sans Pro Fallback", sans-serif !important;
+  height: 100%;
+  overflow-x: clip;
+  max-width: 100%; // Fixed: was 100vw which causes scrollbar offset
+  // Responsive base font-size
+  font-size: clamp(14px, 3.5vw, 16px);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, video, iframe {
+  max-width: 100%;
+  height: auto;
+  display: block; // Prevent inline whitespace gap
+}
+
+// Image CLS prevention: contain intrinsic size
+img[width][height] {
+  aspect-ratio: attr(width) / attr(height);
+}
+
+// SVG icons inline
+svg-icon {
+  display: inline-flex;
+  align-items: center;
+  
+  svg {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.container, .container-fluid {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+
+.modal-backdrop{
+  display: none !important;
+}
+::selection {
+  background-color: #45197C;
+  color: white;
+}
+
+.form-error {
+  margin-top: 5px;
+  color: $red;
+}
+
+.gap-6 {
+  gap: 24px;
+}
+
+.w-70 {
+  width: 70%;
+}
+
+.w-30 {
+  width: 30%;
+}
+
+.border-red {
+  border: 1px solid $red;
+}
+
+.forward-arrow {
+  transform: rotate(180deg);
+}
+
+.heading-label {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.sub-heading-label {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.border-top {
+  border-top: 1px solid rgba($color: #000000, $alpha: 0.3);
+}
+
+.border-left {
+  border-left: 1px solid rgba($color: #000000, $alpha: 0.3);
+}
+
+.border-right {
+  border-right: 1px solid rgba($color: #000000, $alpha: 0.3);
+}
+
+button {
+  cursor: pointer;
+  outline: none;
+}
+
+.w-fit {
+  width: fit-content;
+}
+
+.pl-9 {
+  padding-left: 2rem;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.border-faded {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.subheader-label {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.opacity-70 {
+  opacity: 0.7;
+}
+
+.opacity-80 {
+  opacity: 0.8;
+}
+
+.text-12 {
+  font-size: 12px;
+}
+
+.text-14 {
+  font-size: 14px;
+  line-height: normal;
+}
+
+.text-18 {
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.font-400 {
+  font-weight: 400;
+}
+
+.font-500 {
+  font-weight: 500;
+}
+
+.font-600 {
+  font-weight: 600 !important;
+}
+
+.text-24 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.p-24 {
+  padding: 24px;
+}
+
+.p-32 {
+  padding: 32px;
+}
+
+.white-button,
+.gray-button {
+  padding: 8px 24px;
+  border-radius: 5px;
+}
+
+.gray-button {
+  border: 1px solid rgba($color: $purple, $alpha: 0.3);
+  background: $purple;
+  font-weight: 600;
+  color: $white;
+}
+
+.white-button {
+  border: 1px solid rgba($color: $black, $alpha: 0.3);
+  background: $white;
+}
+
+.violet-button {
+  background: $blue-violet;
+  color: $white;
+  padding: 16px;
+  border-radius: 5px;
+  border: none;
+}
+
+.required-hint {
+  color: red;
+}
+
+.py-24 {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.border-style {
+  border: 1px solid $border-color;
+}
+
+.border-bottom-style {
+  border-bottom: 1px solid $border-color;
+}
+
+.rounded-5px {
+  border-radius: 5px;
+}
+
+.text-green {
+  color: $green;
+}
+
+.text-red {
+  color: $red;
+}
+
+.text-32 {
+  font-size: 1.75rem;
+  line-height: 2rem;
+}
+
+.text-16 {
+  font-size: 1rem;
+}
+
+.text-blue-violet {
+  color: $blue-violet;
+}
+
+.owlCarousal {
+  .owl-carousel .owl-stage-outer {
+    overflow: hidden !important;
+  }
+}
+
+.custom-checkbox {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+  border: 1px solid $border-color;
+  border-radius: 2px;
+}
+
+.custom-checkbox:checked::before {
+  content: url("assets/images/svg/checkmark.svg");
+  display: block;
+  color: $white;
+  text-align: center;
+  font-size: 24px;
+  font-style: normal;
+}
+
+.custom-checkbox:checked {
+  background-color: $blue-violet !important;
+}
+
+.custom-checkbox.black:checked {
+  background-color: $black !important;
+}
+
+.custom-checkbox.green:checked {
+  background-color: $green !important;
+}
+
+.px-24 {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.outline-none {
+  outline: none;
+}
+
+.border-top-style {
+  border-top: 1px solid $border-color;
+}
+
+.border-left-style {
+  border-left: 1px solid $border-color;
+}
+
+.gap-40 {
+  gap: 40px;
+}
+
+.w-33 {
+  width: 33%;
+}
+
+.w-15 {
+  width: 15%;
+}
+
+.m-72 {
+  margin: 72px;
+}
+
+.mt-144 {
+  margin-top: 144px;
+}
+
+.py-16 {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.bg-bright-gray {
+  background: $bright-gray;
+}
+
+.bg-gray {
+  background: $gray !important;
+}
+
+.text-white {
+  color: $white !important;
+}
+
+.ng-select.ng-select-focused {
+  &:not(.ng-select-opened)>.ng-select-container {
+    border-color: rgba(0, 0, 0, 0.3) !important;
+    box-shadow: none !important;
+  }
+}
+
+:root {
+  .ng-select .ng-arrow {
+    display: none !important;
+  }
+
+  .ng-select .ng-arrow-wrapper {
+    height: 20px;
+    width: 20px;
+    background-image: url("assets/images/svg/downarrow.svg") !important;
+    background-repeat: no-repeat;
+    margin-top: 12px;
+  }
+
+  .ng-select-opened .ng-arrow-wrapper {
+    transform: rotate(180deg) !important;
+    margin-bottom: 12px !important;
+    margin-top: 0px !important;
+    margin-right: 8px;
+  }
+
+  .ng-select {
+    font-size: 14px;
+
+    .ng-placeholder {
+      color: rgba($color: #000000, $alpha: 0.7) !important;
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: 16px;
+    }
+  }
+
+  .ng-dropdown-panel-items {
+    font-size: 14px;
+
+    .ng-option {
+      border-bottom: 1px solid $border-color !important;
+    }
+  }
+}
+
+.p-12 {
+  padding: 12px;
+}
+
+.py-12 {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.z-1001 {
+  z-index: 1001;
+}
+
+.left-0 {
+  left: 0;
+}
+
+.right-0 {
+  right: 0 !important;
+}
+
+.bottom-100 {
+  bottom: 300px !important;
+}
+
+.whitespace-nowrap {
+  white-space: nowrap;
+}
+
+.error-hint {
+  color: $red;
+  font-size: 14px !important;
+}
+
+.h-48 {
+  height: 48px;
+}
+
+.line-through {
+  // text-decoration: line-through !important;
+  // font-weight: 400 !important;
+}
+
+.mat-pseudo-checkbox-checked.mat-pseudo-checkbox-minimal::after,
+.mat-pseudo-checkbox-indeterminate.mat-pseudo-checkbox-minimal::after {
+  color: $blue-violet !important;
+}
+
+.mdc-list-item--selected .mdc-list-item__primary-text {
+  color: $blue-violet !important;
+}
+
+.w-10 {
+  width: 10%;
+  min-width: 115px !important;
+}
+
+.mr-24 {
+  margin-right: 24px;
+}
+
+.w-80 {
+  width: 80%;
+}
+
+.visibility-hidden {
+  visibility: hidden !important;
+}
+
+
+.tippy-content {
+  background: $white !important;
+  padding: 0;
+  color: $black !important;
+}
+
+.border-bottom-white {
+  border-bottom: 1px solid $white;
+}
+
+.img-fit-contain {
+  object-fit: contain;
+}
+
+.italic {
+  font-style: italic !important;
+}
+
+.sm-flex-col {
+  @media screen and (max-width: 767px) {
+    flex-direction: column;
+  }
+}
+
+// ============================================
+// RESPONSIVE UTILITY OVERRIDES
+// ============================================
+
+// Fix fixed-width utility classes on mobile
+@media screen and (max-width: 767px) {
+  .w-70, .w-80 { width: 100% !important; }
+  .w-30 { width: 100% !important; }
+  .w-33 { width: 100% !important; }
+  .gap-6 { gap: 16px; }
+  .gap-40 { gap: 20px; }
+  .m-72 { margin: 16px; }
+  .mt-144 { margin-top: 0; }
+  .p-24 { padding: 16px; }
+  .p-32 { padding: 16px; }
+  .px-24 { padding-left: 16px; padding-right: 16px; }
+  .py-24 { padding-top: 16px; padding-bottom: 16px; }
+  .mr-24 { margin-right: 12px; }
+  .pl-9 { padding-left: 1rem; }
+}
+
+// Fix dialog widths on mobile
+@media screen and (max-width: 767px) {
+  .mat-mdc-dialog-container {
+    max-width: 95vw !important;
+    margin: 0 auto;
+  }
+}
+
+// Ensure all loaders use safe viewport width
+.loader-container {
+  width: 100% !important;
+  max-width: 100vw;
+}
+
+.search-bottom-sheet {
+  min-height: 92vh !important;
+  height: 92vh;
+  padding: 0 !important;
+  border-radius: 20px 20px 0 0 !important;
+  overflow: hidden !important;
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.12) !important;
+
+  .mat-bottom-sheet-container {
+    max-height: 100vh !important;
+    padding: 0 !important;
+    border-radius: 20px 20px 0 0 !important;
+    overflow: hidden;
+  }
+}
+
+/* Surgery enquiry bottom sheet */
+.enq-sheet-panel {
+  .mat-bottom-sheet-container {
+    padding: 0 !important;
+    border-radius: 18px 18px 0 0 !important;
+    overflow: hidden !important;
+    max-height: 85vh !important;
+    box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.12) !important;
+  }
+}
+
+.h-72 {
+  height: 72px;
+}
+
+.red-text {
+  color: $red;
+}
+
+.pending-text {
+  color: $pending;
+}
+
+.border-bottom-pending {
+  border-bottom: 1px solid rgba($color: $pending, $alpha: 0.3);
+}
+
+.border-bottom-cancelled {
+  border-bottom: 1px solid rgba($color: $red, $alpha: 0.3);
+}
+
+.border-bottom-completed {
+  border-bottom: 1px solid rgba($color: $green, $alpha: 0.3);
+}
+
+.line-clamp-1 {
+  -webkit-line-clamp: 1;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+}
+
+.line-clamp-2 {
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+}
+
+.bg-purple {
+  background-color: $purple;
+}
+
+.pt-6 {
+  padding-top: 1.5rem !important;
+}
+
+
+.breadcrumb {
+  background: $white;
+
+  a {
+    font-size: 14px;
+    color: $black;
+    text-decoration: none;
+
+    &:hover {
+      cursor: pointer;
+      color: inherit !important; // Prevents blue color on hover
+      text-decoration: none !important; // Removes underline on hover
+    }
+  }
+
+  span {
+    color: $purple;
+  }
+}
+
+// toaster position
+.toast-top-right {
+  position: fixed !important;
+  right: 0;
+  bottom: 0;
+}
+
+
+/* Add custom loader GIF */
+.custom-loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
+.custom-loader img {
+  width: 100px; /* Adjust size as needed */
+  height: auto;
+}
+
+/* fallback */
+// @font-face { 
+//   font-family: 'Material Icons';
+//   font-style: normal;
+//   font-weight: 400;
+//   src: url("/assets/fonts/sans_pro2/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2") format('woff2');
+//   font-display: swap;
+// }
+
+
+// .material-icons {
+//   font-family: 'Material Icons';
+//   font-weight: normal;
+//   font-style: normal;
+//   font-size: 24px;
+//   line-height: 1;
+//   letter-spacing: normal;
+//   text-transform: none;
+//   display: inline-block;
+//   white-space: nowrap;
+//   word-wrap: normal;
+//   direction: ltr;
+//   -webkit-font-feature-settings: 'liga';
+//   -webkit-font-smoothing: antialiased;
+
+// =============================================
+// Homepage section animations & progressive loading
+// =============================================
+.home-section {
+  display: block;
+  opacity: 1;
+}
+
+.home-section--below-fold {
+  animation: fadeInUp 0.5s ease-out both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ===== Booking Dialog Panel =====
+.yespost .mdc-dialog__surface,
+.yespost .mat-mdc-dialog-surface {
+  border-radius: 16px !important;
+  overflow: hidden;
+}
+.yespost .mat-mdc-dialog-container .mdc-dialog__surface {
+  padding: 0 !important;
+}
+
+// }

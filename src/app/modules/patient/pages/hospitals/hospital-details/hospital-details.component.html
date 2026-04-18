@@ -1,0 +1,409 @@
+<!-- ===== SEARCH BAR (Desktop Sticky — Homepage-style) ===== -->
+<div class="search-wrap" role="search" aria-label="Search doctors and hospitals">
+  <nectar-global-search [type]="'scroll'"></nectar-global-search>
+</div>
+
+<!-- ===== DESKTOP SCROLL HEADER (appears on scroll) ===== -->
+<div class="desktop-scroll-header desktop-only" *ngIf="scrollTop > 100 && hospitalDetail">
+  <div class="desktop-scroll-header__inner">
+    <div class="desktop-scroll-header__left">
+      <div class="desktop-scroll-header__avatar">
+        <div class="desktop-scroll-header__initials" *ngIf="!hospitalDetail?.profilePic">
+          {{ hospitalDetail?.name | nameInitial | uppercase }}
+        </div>
+        <img loading="lazy" [src]="hospitalDetail?.profilePic" [alt]="hospitalDetail?.name"
+             *ngIf="hospitalDetail?.profilePic" width="36" height="36" />
+      </div>
+      <div class="desktop-scroll-header__info">
+        <span class="desktop-scroll-header__name">
+          {{ hospitalDetail?.name | titlecase }}
+        </span>
+        <span class="desktop-scroll-header__type">
+          {{ hospitalDetail?.hospitalType | titlecase }}
+        </span>
+      </div>
+    </div>
+    <div class="desktop-scroll-header__right">
+      <button class="desktop-scroll-header__cta" (click)="scrollToBooking()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 002 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z" fill="currentColor"/></svg>
+        Book Appointment
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MOBILE SCROLL HEADER (appears on scroll) ===== -->
+<div class="mobile-scroll-header mobile-only" *ngIf="scrollTop > 100">
+  <div class="mobile-scroll-header__left">
+    <img loading="lazy" src="assets/images/svg/back.svg" alt="Go back" height="22" width="22"
+         (click)="locations.back()" class="cursor-pointer" />
+    <div class="mobile-scroll-header__hospital">
+      <div class="mobile-scroll-header__avatar">
+        <div class="mobile-scroll-header__initials" *ngIf="!hospitalDetail?.profilePic">
+          {{ hospitalDetail?.name | nameInitial | uppercase }}
+        </div>
+        <img loading="lazy" [src]="hospitalDetail?.profilePic" [alt]="hospitalDetail?.name"
+             *ngIf="hospitalDetail?.profilePic" width="34" height="34" />
+      </div>
+      <div class="mobile-scroll-header__info">
+        <span class="mobile-scroll-header__name">
+          {{ hospitalDetail?.name | titlecase }}
+        </span>
+        <span class="mobile-scroll-header__type">
+          {{ hospitalDetail?.hospitalType | titlecase }}
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex gap-3 align-items-center">
+    <img loading="lazy" src="assets/images/svg/search-icon-black.svg" alt="Search" height="22" width="22"
+         class="cursor-pointer" (click)="openBottomSheet()" />
+  </div>
+</div>
+
+<!-- ===== MOBILE HEADER (Default / Not Scrolled) ===== -->
+<div class="d-flex align-items-center justify-content-between p-3 mobile-header mobile-only"
+     *ngIf="scrollTop <= 100">
+  <div class="d-flex gap-3 align-items-center">
+    <div class="d-flex gap-2">
+      <button class="bras_button" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
+              aria-controls="offcanvasWithBothOptions" aria-label="Open menu">
+        <svg-icon src="assets/images/svg/hamber.svg" class="cursor-pointer"></svg-icon>
+      </button>
+      <svg-icon src="assets/images/svg/logo.svg" routerLink="/" class="d-flex cursor-pointer" style="width: 155px"></svg-icon>
+    </div>
+  </div>
+  <div class="share-doctor d-flex gap-3 align-items-center">
+    <img loading="lazy" src="assets/images/svg/search-icon-black.svg" alt="Search" height="24" width="24"
+         class="cursor-pointer" (click)="openBottomSheet()" />
+  </div>
+</div>
+
+<div class="main">
+  <!-- ===== BREADCRUMB ===== -->
+  <nav class="breadcrumb-nav mt-3 mt-md-4" aria-label="Breadcrumb">
+    <ol class="breadcrumb-list">
+      <li class="breadcrumb-item">
+        <a routerLink="/" class="breadcrumb-link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Home</span>
+        </a>
+      </li>
+      <li class="breadcrumb-item" *ngIf="meta_city">
+        <a class="breadcrumb-link"
+           [routerLink]="['/', commonService.replaceSpaceWithHyphen(meta_city)]"
+           (click)="eventService.broadcastEvent('clear-speciality', true)">
+          {{ meta_city | titlecase }}
+        </a>
+      </li>
+      <li class="breadcrumb-item" *ngIf="meta_city && hospitalDetail?.hospitalType">
+        <a class="breadcrumb-link"
+           [routerLink]="['/', commonService.replaceSpaceWithHyphen(meta_city), listingRouteSlug]">
+          {{ typePluralDisplayName }}
+        </a>
+      </li>
+      <li class="breadcrumb-item" *ngIf="hospitalDetail?.hospitalType && hospitalDetail?.address?.locality">
+        <a class="breadcrumb-link"
+           [routerLink]="['/', commonService.replaceSpaceWithHyphen(meta_city), listingRouteSlug, commonService.replaceSpaceWithHyphen(hospitalDetail?.address?.locality)]">
+          {{ hospitalDetail?.address?.locality }}
+        </a>
+      </li>
+      <li class="breadcrumb-item active" *ngIf="hospitalDetail?.name">
+        <span class="breadcrumb-current">{{ hospitalDetail?.name }}</span>
+      </li>
+    </ol>
+  </nav>
+
+  <!-- ===== HERO SECTION — ABOVE THE FOLD ===== -->
+  <div class="page-layout">
+    <div class="page-layout__content">
+      <section class="hero-card">
+        <div class="hero-card__accent" aria-hidden="true"></div>
+        <div class="hero-card__top">
+          <div class="hero-card__avatar">
+            <div
+              class="profile-icons d-flex align-items-center justify-content-center"
+              *ngIf="!hospitalDetail?.profilePic"
+            >
+              {{ hospitalDetail?.name | nameInitial | uppercase }}
+            </div>
+            <img loading="lazy" [src]="hospitalDetail?.profilePic"
+              [alt]="hospitalDetail?.name"
+              *ngIf="hospitalDetail?.profilePic"
+            />
+            <!-- Mobile rating badge on avatar (CSS-responsive) -->
+            <div class="hero-card__rating-badge" *ngIf="hospitalDetail?.rating">
+              <svg-icon src="assets/images/svg/stars.svg"></svg-icon>
+              <span class="font-600">{{ (hospitalDetail?.rating | number:'1.1-1') || '0.0' }}</span>
+            </div>
+          </div>
+
+          <div class="hero-card__info">
+            <h1 class="hero-card__name">
+              {{ hospitalDetail?.name | titlecase }}
+              <span *ngIf="doc_fullName" class="hero-card__doctor-name">({{ doc_fullName }})</span>
+              <span
+                class="hero-card__claim cursor-pointer"
+                (click)="openLoginDialog()"
+                *ngIf="hospitalDetail?.claimedProfile"
+              >
+                <small>Claim Profile</small>
+              </span>
+            </h1>
+
+            <div class="hero-card__type-row">
+              <span class="hero-card__type">{{ hospitalDetail?.hospitalType | titlecase }}</span>
+              <span class="hero-card__spec" *ngIf="doc_spec">&bull; {{ doc_spec }}</span>
+            </div>
+
+            <!-- Desktop rating (CSS-responsive) -->
+            <div class="hero-card__rating">
+              <star-rating
+                [rating]="hospitalDetail?.rating || 0"
+                [step]="0.1"
+                [showHalfStars]="true"
+                [readOnly]="true"
+              ></star-rating>
+              <span class="hero-card__rating-value">{{ (hospitalDetail?.rating | number:'1.1-1') || 0 }}</span>
+              <span class="hero-card__rating-max">/5</span>
+              <span class="hero-card__review-count" *ngIf="hospitalDetail?.reviews > 0">
+                ({{ hospitalDetail?.reviews }} {{ hospitalDetail?.reviews === 1 ? 'review' : 'reviews' }})
+              </span>
+            </div>
+
+            <!-- Address -->
+            <div class="hero-card__address" *ngIf="hospitalDetail?.address?.locality || hospitalDetail?.address?.city">
+              <img loading="lazy" src="assets/images/svg/location.svg" alt="" height="16" width="16" loading="lazy" />
+              <span>
+                {{ hospitalDetail?.address?.locality }}{{ hospitalDetail?.address?.locality && hospitalDetail?.address?.city ? ', ' : '' }}{{ hospitalDetail?.address?.city }}
+              </span>
+            </div>
+
+            <!-- Get Direction link (desktop, CSS-responsive) -->
+            <div
+              class="hero-card__direction cursor-pointer"
+              (click)="gService.redirectToGoogleMaps(
+                hospitalDetail?.location?.coordinates?.[1] || 28.6448,
+                hospitalDetail?.location?.coordinates?.[0] || 77.216721
+              )"
+            >
+              Get Direction &rarr;
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== TRUST SIGNALS ===== -->
+        <div class="trust-row">
+          <div class="trust-chip" *ngIf="hospitalDetail?.claimProfile">
+            <img loading="lazy" src="assets/images/svg/stars.svg" alt="" height="14" width="14" loading="lazy" />
+            <span>Verified {{ hospitalDetail?.hospitalType | titlecase }}</span>
+          </div>
+          <div class="trust-chip" *ngIf="hospitalDetail?.doctorCount">
+            <span>{{ hospitalDetail?.doctorCount }} {{ hospitalDetail?.doctorCount === 1 ? 'Doctor' : 'Doctors' }}</span>
+          </div>
+          <div class="trust-chip" *ngIf="hospitalDetail?.bedCount">
+            <img loading="lazy" src="assets/images/svg/beds.svg" alt="" height="14" width="14" loading="lazy" />
+            <span>{{ hospitalDetail?.bedCount?.toLocaleString() }} Beds</span>
+          </div>
+          <div class="trust-chip" *ngIf="hospitalDetail?.ambulanceCount">
+            <img loading="lazy" src="assets/images/svg/ambulance.svg" alt="" height="14" width="14" loading="lazy" />
+            <span>{{ hospitalDetail?.ambulanceCount?.toLocaleString() }} Ambulance</span>
+          </div>
+          <div class="trust-chip" *ngIf="hospitalDetail?.images?.length >= 2">
+            <span>{{ hospitalDetail?.images?.length }} Photos</span>
+          </div>
+        </div>
+
+        <!-- ===== HERO CTA BUTTONS (Mobile, shown via CSS) ===== -->
+        <div class="hero-cta hero-cta--mobile">
+          <button class="cta-primary" (click)="scrollToBooking()">
+            Book Appointment – Slots Filling Fast
+          </button>
+          <a class="cta-secondary"
+            href="tel:+918810232143">
+            Call {{ hospitalDetail?.hospitalType | titlecase }} Instantly
+          </a>
+        </div>
+
+        <!-- ===== HERO CTA BUTTONS (Desktop inline, shown via CSS) ===== -->
+        <div class="hero-cta hero-cta--desktop">
+          <button class="cta-primary" (click)="scrollToBooking()">
+            Book Appointment – Slots Filling Fast
+          </button>
+          <a class="cta-secondary"
+            href="tel:+918810232143">
+            Call {{ hospitalDetail?.hospitalType | titlecase }} Instantly
+          </a>
+        </div>
+
+        <!-- Social links (desktop, CSS-responsive) -->
+        <div class="hero-card__social" *ngIf="hospitalDetail?.social?.length">
+          <a
+            [href]="item?.url"
+            target="_blank"
+            rel="noopener"
+            *ngFor="let item of hospitalDetail?.social; trackBy: trackByIndex"
+          >
+            <img loading="lazy"  loading="lazy"
+              [src]="item?.socialmedias?.logo"
+              alt="Social"
+              height="24"
+              width="24"
+            />
+          </a>
+        </div>
+
+        <!-- Beds/Ambulance row (mobile, CSS-responsive) -->
+        <div class="hero-card__stats-mobile">
+          <span class="beds d-flex gap-2">
+            <img loading="lazy" src="assets/images/svg/beds.svg" alt="" />
+            {{ hospitalDetail?.bedCount?.toLocaleString() || 0 }} Beds
+          </span>
+          <span class="beds d-flex gap-2">
+            <img loading="lazy" src="assets/images/svg/ambulance.svg" alt="" />
+            {{ hospitalDetail?.ambulanceCount?.toLocaleString() || 0 }} Ambulance
+          </span>
+        </div>
+      </section>
+
+      <!-- ===== TAB NAVIGATION ===== -->
+      <div class="second-section">
+        <ul>
+          <li
+            *ngFor="let item of tabContent; let i = index; trackBy: trackByName"
+            [ngClass]="{ active: selected == i }"
+            (click)="tabChange(i)"
+          >
+            <span>
+              {{ item.name }}<span class="count" *ngIf="item?.count">&nbsp;({{ item.count }})</span>
+            </span>
+          </li>
+        </ul>
+
+        <!-- ===== TAB CONTENT SECTIONS (each inside elevated card) ===== -->
+        <div class="about" *ngIf="selected == 0 && this.hospitalId">
+          <div class="section-card">
+            <nectar-doctor-about-section [id]="hospitalId" [hospitalData]="hospitalDetail"></nectar-doctor-about-section>
+          </div>
+          <div class="section-card">
+            <nectar-services-section
+              [tab]="0"
+              [id]="hospitalId"
+              [type]="'hospital'"
+              [city]="hospitalDetail?.address?.city"
+              [services]="servicesList"
+            ></nectar-services-section>
+          </div>
+          <div class="section-card">
+            <nectar-speciality-section
+              [tab]="0"
+              [id]="hospitalId"
+              [name]="hospitalDetail?.name"
+              [address]="hospitalDetail?.address"
+              (valueChange)="tabChange(3)"
+              (dataEvent)="receiveDocSpec($event)"
+            ></nectar-speciality-section>
+          </div>
+          <div class="section-card">
+            <nectar-faq-section [tab]="0" [id]="hospitalId" [type]="'hospital'"></nectar-faq-section>
+          </div>
+          <div class="section-card">
+            <nectar-videos-section [tab]="0" [id]="hospitalId" [type]="'hospital'"></nectar-videos-section>
+          </div>
+          <div class="section-card">
+            <nectar-review-section
+              [tab]="0"
+              [type]="'hospital'"
+              [id]="hospitalId"
+              [name]="hospitalDetail?.name"
+              (valueChange)="tabChange(6)"
+            ></nectar-review-section>
+          </div>
+        </div>
+        <div class="procedures section-card" *ngIf="selected == 2">
+          <nectar-procedure-section
+            [id]="hospitalId"
+            [name]="hospitalDetail?.name"
+            [address]="hospitalDetail?.address"
+          ></nectar-procedure-section>
+        </div>
+        <div class="section-card" *ngIf="selected == 3">
+          <nectar-services-section
+            [tab]="0"
+            [id]="hospitalId"
+            [type]="'hospital'"
+            [services]="servicesList"
+          ></nectar-services-section>
+        </div>
+        <div class="doctors section-card" *ngIf="selected == 1">
+          <nectar-speciality-section
+            [id]="hospitalId"
+            [name]="hospitalDetail?.name"
+            [address]="hospitalDetail?.address"
+          ></nectar-speciality-section>
+        </div>
+        <div class="faq-tab section-card" *ngIf="selected == 4">
+          <nectar-faq-section [id]="hospitalId" [type]="'hospital'"></nectar-faq-section>
+        </div>
+        <div class="video-tab section-card" *ngIf="selected == 5">
+          <nectar-videos-section [id]="hospitalId" [type]="'hospital'"></nectar-videos-section>
+        </div>
+        <div class="review-tab section-card" *ngIf="selected == 6">
+          <nectar-review-section
+            [tab]="1"
+            [type]="'hospital'"
+            [id]="hospitalId"
+            [name]="hospitalDetail?.name"
+          ></nectar-review-section>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== STICKY SIDEBAR (Desktop only via CSS) ===== -->
+    <aside class="sidebar-sticky">
+      <div class="sidebar-card">
+        <div class="sidebar-card__header">
+          Book Appointment
+        </div>
+        <div class="sidebar-card__body">
+          <div class="sidebar-card__hospital-name">{{ hospitalDetail?.name | titlecase }}</div>
+          <div class="sidebar-card__location" *ngIf="hospitalDetail?.address?.locality">
+            {{ hospitalDetail?.address?.locality }}
+          </div>
+          <div class="sidebar-card__reassurance">
+            <div class="reassurance-item">
+              <span class="reassurance-icon">&#10003;</span> Instant Slots booking
+            </div>
+            <div class="reassurance-item">
+              <span class="reassurance-icon">&#10003;</span> Instant confirmation
+            </div>
+            <div class="reassurance-item">
+              <span class="reassurance-icon">&#10003;</span> Free cancellation
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- ===== MOBILE STICKY BOTTOM CTA BAR (CSS-based responsive, browser-safe) ===== -->
+<div class="mobile-cta-bar" *ngIf="hospitalDetail">
+  <a class="mobile-cta-bar__call"
+    href="tel:+918810232143">
+    Call Now
+  </a>
+  <button class="mobile-cta-bar__book" (click)="scrollToBooking()">
+    Book Appointment
+  </button>
+</div>
+
+<nectar-seo-content
+  *ngIf="hospitalDetail?.specialization"
+  [allowDescription]="false"
+  [data]="hospitalDetail?.specialization"
+  [city]="hospitalDetail?.address?.city"
+  [search]="hospitalDetail?.specialization | formatarray : 'name'"
+  [HospitalURLS]="HospitalURLS"
+></nectar-seo-content>

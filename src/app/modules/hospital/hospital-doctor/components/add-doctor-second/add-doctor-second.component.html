@@ -1,0 +1,100 @@
+<main class="add-doctor-first h-100">
+  <div class="border-bottom-style px-24 py-3 font-600 text-24">
+    {{ "ADD_NEW_DOCTOR" | translate }}
+  </div>
+  <div class="main-content d-flex flex-column justify-content-between">
+    <mat-dialog-content class="add-doctor-second">
+      <form class="d-flex flex-column gap-6" [formGroup]="doctorDetailForm">
+        <div class="form-item non-editable">
+          <label>
+            {{ "FULL_NAME" | translate }} <span class="required-hint">*</span>
+          </label>
+          <input
+            class="form-input"
+            type="text"
+            oninput="this.value = this.value.replace(/\D/,'')"
+            placeholder="{{ 'FULL_NAME' | translate }}"
+            formControlName="fullName"
+          />
+        </div>
+
+        <div class="form-item non-editable">
+          <label
+            >{{ "MOBILE_NUMBER" | translate }}
+            <span class="required-hint">*</span></label
+          >
+          <input
+            class="form-input"
+            type="text"
+            placeholder="{{ 'MOBILE_NUMBER' | translate }}"
+            formControlName="phone"
+          />
+        </div>
+        <div class="form-item non-editable">
+          <label>{{ "EMAIL" | translate }}</label>
+          <input
+            class="form-input"
+            type="text"
+            placeholder="{{ 'EMAIL' | translate }}"
+            formControlName="email"
+          />
+        </div>
+        <div class="form-item">
+          <label
+            >{{ "SPECIALITY" | translate }}<span class="required-hint">*</span>
+          </label>
+          <ng-select
+            formControlName="specility"
+            class="specialisation"
+            [items]="specializationList"
+            bindLabel="name"
+            bindValue="_id"
+            [multiple]="true"
+            [closeOnSelect]="false"
+            [searchable]="true"
+            placeholder="Select specialisation"
+            [dropdownPosition]="'top'"
+          ></ng-select>
+          <div
+            class="error-hint"
+            *ngIf="control['specility'].errors?.['required'] && control['specility'].touched"
+          >
+            Speciality is required.
+          </div>
+        </div>
+        <div class="form-item">
+          <label
+            >{{ "CONSULTATION_FEES" | translate
+            }}<span class="required-hint">*</span>
+          </label>
+          <input
+            class="form-input"
+            type="text"
+            placeholder="{{ 'CONSULTATION_FEES' | translate }}"
+            formControlName="consultationFees"
+            maxlength="5"
+            oninput="this.value = this.value.replace(/\D/,'')"
+          />
+          <div
+            class="error-hint"
+            *ngIf="control['consultationFees'].errors?.['required'] && control['consultationFees'].touched"
+          >
+            Consultation Fees required.
+          </div>
+        </div>
+      </form>
+    </mat-dialog-content>
+    <mat-dialog-actions class="add-doctor-second">
+      <div
+        class="d-flex justify-content-end gap-4 align-items-center w-100 border-top-style px-24 py-3 position-absolute"
+      >
+        <button class="cancel" (click)="matdialogRef.close()">
+          {{ "BACK" | translate }}
+        </button>
+        <button class="next" (click)="onSubmit()">
+          {{ "SUBMIT" | translate }}
+        </button>
+      </div>
+    </mat-dialog-actions>
+  </div>
+</main>

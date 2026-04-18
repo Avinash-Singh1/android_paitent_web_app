@@ -1,0 +1,37 @@
+@use "variable.scss" as *;
+@use "src/styles/elements/_elements.svg.scss" as *;
+
+.sidenav {
+  max-width: 300px;
+  background: $purple;
+  height: 100vh !important;
+  overflow: auto;
+
+  .blank-header {
+    height: 72px;
+  }
+
+  svg-icon {
+    svg {
+      path {
+        fill: $white !important;
+      }
+    }
+  }
+
+  .active,
+  .menuitem:hover {
+    background: $white !important;
+    color: $black;
+
+    svg {
+      path {
+        fill: $black !important;
+      }
+    }
+  }
+
+  .logo-wrapper {
+    padding: 1rem .5rem 1rem 1rem;
+  }
+}

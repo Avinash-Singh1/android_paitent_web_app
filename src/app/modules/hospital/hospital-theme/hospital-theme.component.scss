@@ -1,0 +1,34 @@
+@use "variable.scss" as *;
+@use "src/styles/elements/_elements.svg.scss" as *;
+
+:host::ng-deep {
+  .mat-drawer.hospital-theme {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 300px !important;
+    height: 100vh !important;
+    background: $bright-gray;
+  }
+
+  .mat-drawer-backdrop.mat-drawer-shown {
+    background: transparent !important;
+  }
+
+  .drawer-container {
+    max-height: 100vh !important;
+    min-height: 100vh !important;
+  }
+
+  .mat-drawer-container {
+    background: white !important;
+  }
+
+  .toggle-icon {
+    svg {
+      path {
+        fill: $white !important;
+      }
+    }
+  }
+}

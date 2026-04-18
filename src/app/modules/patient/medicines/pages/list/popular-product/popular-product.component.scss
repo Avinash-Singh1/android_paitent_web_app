@@ -1,0 +1,488 @@
+/* =============================================
+   POPULAR PRODUCT — Modern Healthcare Product Grid
+   ============================================= */
+
+$purple: #45197c;
+$purple-l: rgba(69, 25, 124, 0.06);
+$ff: "Source Sans Pro", system-ui, -apple-system, sans-serif;
+$r: 16px;
+$r-sm: 10px;
+$shadow-hover: 0 10px 32px rgba(69, 25, 124, 0.14);
+$ease: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+
+/* ── Wrapper ── */
+.pp {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+
+  @media (min-width: 768px) {
+    padding: 0 24px;
+  }
+}
+
+.pp__layout {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+}
+
+.pp__main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Section Title ── */
+.pp__section-title {
+  text-align: center;
+  padding: 0 0 28px;
+
+  h2 {
+    font-family: $ff;
+    font-size: clamp(22px, 3vw, 28px);
+    font-weight: 700;
+    color: #111;
+    margin: 0 0 4px;
+    letter-spacing: -0.3px;
+  }
+
+  p {
+    font-family: $ff;
+    font-size: 14px;
+    color: #888;
+    margin: 0;
+  }
+}
+
+/* ── Header / Tabs ── */
+.pp__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0 18px;
+  flex-wrap: wrap;
+}
+
+.pp__heading {
+  font-family: $ff;
+  font-size: 22px;
+  font-weight: 700;
+  color: #111;
+  margin: 0;
+}
+
+.pp__tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.pp__tab {
+  font-family: $ff;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 18px;
+  border-radius: 20px;
+  border: 1.5px solid #e0e0e0;
+  background: #fff;
+  color: #555;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all $ease;
+
+  &:hover {
+    border-color: $purple;
+    color: $purple;
+  }
+
+  &--active {
+    background: $purple;
+    color: #fff;
+    border-color: $purple;
+  }
+}
+
+/* ── Loading / Error / Empty ── */
+.pp__loading {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.pp__spinner {
+  width: 38px;
+  height: 38px;
+  border: 3px solid #eee;
+  border-top-color: $purple;
+  border-radius: 50%;
+  animation: ppSpin 0.7s linear infinite;
+}
+
+.pp__error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  background: #fff0f0;
+  border: 1px solid #fdd;
+  border-radius: $r-sm;
+  color: #c62828;
+  font-family: $ff;
+  font-size: 14px;
+  margin: 16px 0;
+}
+
+.pp__empty {
+  text-align: center;
+  padding: 60px 20px;
+
+  img {
+    width: 72px;
+    height: 72px;
+    opacity: 0.3;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-family: $ff;
+    font-size: 17px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 6px;
+  }
+
+  p {
+    font-family: $ff;
+    font-size: 13px;
+    color: #999;
+    margin: 0;
+  }
+}
+
+/* ── Product Grid ── */
+.pp__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+
+  @media (min-width: 600px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  @media (min-width: 992px) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+
+  @media (min-width: 1280px) {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+  }
+}
+
+/* ── Product Card ── */
+.pc {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #ebebeb;
+  border-radius: $r;
+  overflow: hidden;
+  text-decoration: none !important;
+  color: inherit;
+  height: 100%;
+  transition: transform $ease, box-shadow $ease, border-color $ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: $shadow-hover;
+    border-color: rgba($purple, 0.22);
+    text-decoration: none !important;
+    color: inherit;
+
+    .pc__img {
+      transform: scale(1.07);
+    }
+
+    .pc__cta {
+      background: $purple;
+      color: #fff;
+      border-color: $purple;
+    }
+  }
+}
+
+.pc__img-area {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #fafbfc 0%, #f3f5f8 100%);
+  padding: 28px 16px;
+  min-height: 170px;
+  overflow: hidden;
+
+  @media (max-width: 480px) {
+    padding: 20px 12px;
+    min-height: 135px;
+  }
+}
+
+.pc__img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  transition: transform 0.35s ease;
+  mix-blend-mode: multiply;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.05));
+
+  @media (max-width: 480px) {
+    width: 90px;
+    height: 90px;
+  }
+}
+
+.pc__badge-type {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-family: $ff;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 5px;
+  background: rgba($purple, 0.08);
+  color: $purple;
+}
+
+.pc__badge-off {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: $ff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 5px;
+  background: #ff4757;
+  color: #fff;
+}
+
+/* ── Card Body ── */
+.pc__body {
+  display: flex;
+  flex-direction: column;
+  padding: 14px 14px 16px;
+  flex: 1;
+  gap: 5px;
+
+  @media (max-width: 480px) {
+    padding: 10px 10px 12px;
+    gap: 4px;
+  }
+}
+
+.pc__name {
+  font-family: $ff;
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
+  line-height: 1.4;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  @media (max-width: 480px) {
+    font-size: 13px;
+  }
+}
+
+.pc__rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 2px 0;
+}
+
+.pc__star {
+  color: #f5a623;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.pc__star-val {
+  font-family: $ff;
+  font-size: 12px;
+  font-weight: 700;
+  color: #333;
+}
+
+.pc__star-count {
+  font-family: $ff;
+  font-size: 11px;
+  color: #999;
+}
+
+.pc__brand {
+  font-family: $ff;
+  font-size: 12px;
+  color: #888;
+  margin: 0;
+
+  @media (max-width: 480px) {
+    font-size: 11px;
+  }
+}
+
+.pc__brand-name {
+  font-weight: 600;
+  color: $purple;
+}
+
+.pc__spacer {
+  flex: 1;
+}
+
+/* ── Price ── */
+.pc__price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.pc__final {
+  font-family: $ff;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111;
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+  }
+}
+
+.pc__mrp {
+  font-family: $ff;
+  font-size: 13px;
+  color: #aaa;
+  text-decoration: line-through;
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
+}
+
+/* ── CTA ── */
+.pc__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 10px;
+  padding: 9px 0;
+  border: 1.5px solid rgba($purple, 0.18);
+  border-radius: $r-sm;
+  font-family: $ff;
+  font-size: 13px;
+  font-weight: 600;
+  color: $purple;
+  background: $purple-l;
+  transition: all $ease;
+  text-align: center;
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+    padding: 8px 0;
+  }
+}
+
+/* ── View More ── */
+.pp__more {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0 24px;
+}
+
+.pp__more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 36px;
+  border: 2px solid $purple;
+  border-radius: $r-sm;
+  background: #fff;
+  color: $purple;
+  font-family: $ff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all $ease;
+
+  &:hover {
+    background: $purple;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba($purple, 0.2);
+  }
+}
+
+/* ── Filter Overlay ── */
+.pp__filter-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1000;
+  display: flex;
+  animation: ppFade 0.25s ease;
+}
+
+.pp__filter-drawer {
+  width: 85%;
+  max-width: 340px;
+  background: #fff;
+  height: 100%;
+  overflow-y: auto;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+  animation: ppSlide 0.3s ease;
+}
+
+/* ── Animations ── */
+@keyframes ppSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ppFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ppSlide {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}

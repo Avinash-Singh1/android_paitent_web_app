@@ -1,0 +1,230 @@
+@use './src/styles/settings/settings.colors' as *;
+@use './src/styles/tools/tools.typography' as *;
+@use './src/styles/tools/tools.mediaquery' as *;
+
+$tile-heading-text-sizes: [24, 28];
+$tile-para-text-sizes: [16, 16];
+$tile-testimonial-para-sizes: [16, 18];
+
+@mixin simple-banner-component($type: header) {
+	/* Styling for the rich text in the simple banner  */
+
+	* {
+		@if ($type == header) {
+			@include font-typold-medium($size: [35, 50], $lineheight: [30px, 53px]);
+		} @else {
+			@include font-minion-regular($size: [24, 30], $lineheight: [35px, 45px]);
+		}
+	}
+}
+
+@mixin rich-text__tile-grid() {
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		margin-bottom: 0;
+		@include font-proxima-medium($size: $tile-heading-text-sizes);
+	}
+
+	p {
+		@include font-proxima-light($size: $tile-para-text-sizes);
+	}
+}
+
+@mixin feature-content-header {
+
+	strong {
+		color: $color-red-dark;
+		@include font-proxima-bold(15);
+	}
+}
+
+@mixin feature-content($color: $color-red-dark) {
+
+	strong {
+		color: $color;
+		@include font-proxima-bold(15);
+	}
+}
+
+@mixin rich-text__tile-grid__quote() {
+	color: $color-gray-dark;
+
+	p {
+		@include font-proxima-light($size: $tile-testimonial-para-sizes);
+	}
+
+	strong {
+		color: $color-red-dark;
+		@include font-proxima-bold(15);
+		@include mq-breakpoint-md() {
+			@include font-proxima-bold(20);
+		}
+	}
+}
+
+@mixin alternating-overlay($size: [18, 20], $lineheight: 22px, $font: proxima) {
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p,
+	strong,
+	span {
+		margin: 0;
+		@if ($font==proxima) {
+			@include font-proxima-light($size: $size, $lineheight: $lineheight);
+		} @else {
+			@include font-typold-medium($size: $size, $lineheight: $lineheight);
+		}
+	}
+}
+
+@mixin white-overlay($size: [16], $lineheight: 22px, $font: proxima) {
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p,
+	strong,
+	span {
+		@if ($font==proxima) {
+			@include font-proxima-light($size: $size, $lineheight: $lineheight);
+		} @else {
+			@include font-typold-book($size: $size, $lineheight: $lineheight);
+		}
+	}
+}
+
+@mixin card-overlay($size: [16], $lineheight: 22px, $font: proxima) {
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p,
+	strong,
+	span {
+		@if ($font==proxima) {
+			@include font-proxima-light($size: $size, $lineheight: $lineheight);
+		} @else {
+			@include font-typold-book($size: $size, $lineheight: $lineheight);
+		}
+	}
+}
+
+@mixin tile-overlay($size: [16], $lineheight: 22px, $font: proxima) {
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p,
+	strong,
+	span {
+		@if ($font==proxima) {
+			@include font-proxima-light($size: $size, $lineheight: $lineheight);
+		} @else {
+      margin: 20px 0;
+			@include font-typold-book($size: $size, $lineheight: $lineheight);
+		}
+	}
+}
+
+@mixin gray-overlay($size: [16], $lineheight: 22px, $font: proxima) {
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p,
+	strong,
+	span {
+		@if ($font==proxima) {
+			@include font-proxima-light($size: $size, $lineheight: $lineheight);
+		} @else {
+			@include font-typold-book($size: $size, $lineheight: $lineheight);
+		}
+	}
+}
+
+@mixin numbered-overlay($size: [16], $lineheight: 22px, $font: proxima) {
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p,
+	strong,
+	span {
+		@if ($font==proxima) {
+			@include font-proxima-light($size: $size, $lineheight: $lineheight);
+		} @else {
+			@include font-typold-book($size: $size, $lineheight: $lineheight);
+		}
+	}
+
+	p:last-of-type {
+		margin-bottom: 0;
+	}
+}
+
+@mixin numbered-gray($size: [40], $lineheight: 40px, $font: proxima) {
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p,
+	strong,
+	span {
+		@if ($font==proxima) {
+			@include font-proxima-light($size: $size, $lineheight: $lineheight);
+		} @else {
+			@include font-typold-medium($size: $size, $lineheight: $lineheight);
+		}
+	}
+}
+
+@mixin numbered-gray($size: [40], $lineheight: 40px, $font: proxima) {
+	@include font-typold-medium($size: $size, $lineheight: $lineheight);
+}
+
+@mixin card($size: [40], $lineheight: 40px, $font: proxima) {
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p,
+	strong,
+	span {
+		@if ($font==proxima) {
+			@include font-proxima-light($size: $size, $lineheight: $lineheight);
+		} @else {
+			@include font-typold-medium($size: $size, $lineheight: $lineheight);
+		}
+	}
+}

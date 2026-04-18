@@ -1,0 +1,65 @@
+<section class="faq" *ngIf="!(tab == 0 && !apiData?.length)"
+  [ngClass]="{ 'border-bottom-style': tab == 0, 'pt-6': tab == 0 }">
+  <div class="faq__wrapper" *ngIf="apiData.length">
+    <div class="faq__header">
+      <h2 *ngIf="apiData?.length">
+        <span class="faq__header-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" fill="#45197c"/>
+          </svg>
+        </span>
+        Frequently Asked Questions
+      </h2>
+    </div>
+
+    <!-- Desktop View -->
+    <div class="faq__desktop">
+      <div class="faq__item" *ngFor="let item of apiData; let i = index; let last = last"
+           [class.faq__item--last]="last">
+        <div class="faq__item-question" (click)="toggleDesktopFaq(i)">
+          <span class="faq__q-badge">Q</span>
+          <span class="faq__q-text">{{ item?.question }}</span>
+          <span class="faq__chevron" [class.faq__chevron--open]="desktopExpanded[i]">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" fill="currentColor"/>
+            </svg>
+          </span>
+        </div>
+        <div class="faq__item-answer" [class.faq__item-answer--visible]="desktopExpanded[i]">
+          <span class="faq__a-badge">A</span>
+          <span class="faq__a-text">{{ item?.answer }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile View -->
+    <div class="faq__mobile">
+      <mat-accordion *ngFor="let item of apiData; let i = index" multi>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title class="faq__question">
+              <span class="faq__q-badge">Q</span>
+              <span class="faq__text">{{ item?.question }}</span>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="faq__answer">
+            <span class="faq__a-badge">A</span>
+            <div class="faq__answer-body">
+              <span>{{ item.answer | slice: 0:(isExpanded[i] ? undefined : 150) }}</span>
+              <span *ngIf="item.answer.length > 150 && !isExpanded[i]">
+                ... <button class="faq__read-more" (click)="toggleReadMore(i)">Read More</button>
+              </span>
+              <span *ngIf="item.answer.length > 150 && isExpanded[i]">
+                <button class="faq__read-more" (click)="toggleReadMore(i)">Read Less</button>
+              </span>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+
+  <div *ngIf="!apiData.length" class="faq__empty">
+    <p>No FAQ's Found</p>
+  </div>
+</section>

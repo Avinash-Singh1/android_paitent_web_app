@@ -1,0 +1,20 @@
+<div class="d-flex flex-column text-18 delete-appointment">
+  <div class="heading p-24 border-bottom-style text-24 font-600">
+    {{ data.heading }}
+  </div>
+  <div class="content p-24 border-bottom-style">
+    {{ data.message }}
+  </div>
+  <div class="confirmation d-flex justify-content-end gap-6 p-24">
+    <button class="white-button" (click)="matdialogRef.close()">
+      {{ "CANCEL" | translate }}
+    </button>
+    <button
+      *ngIf="data?.type !== 'patient'"
+      class="red-button"
+      (click)="onDelete()"
+    >
+      {{ "DELETE" | translate }}
+    </button>
+  </div>
+</div>

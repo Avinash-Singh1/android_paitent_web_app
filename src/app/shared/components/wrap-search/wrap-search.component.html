@@ -1,0 +1,318 @@
+<div class="input-text">
+  <div class="input-text__container d-flex align-items-center">
+    <img
+      loading="lazy"
+      src="assets/images/svg/location.svg"
+      alt=""
+      class="icon"
+    />
+    <input
+      class="input-box"
+      type="text"
+      placeholder="Search City, Pincode"
+      #location
+      (keydown)="search($event)"
+      [matAutocomplete]="landmark"
+      (input)="onCitySearch($event)"
+      (blur)="validateCity($event)"
+    />
+    <img
+      src="assets/images/svg/cross.svg"
+      alt=""
+      class="me-3"
+      *ngIf="location.value"
+      (click)="closeSuggestion('location')"
+    />
+    <mat-autocomplete #landmark="matAutocomplete" class="my-4 city-dropdown">
+      <!-- Use my location (plain div to avoid mat-autocomplete selection overwrite) -->
+      <div class="city-action-option mat-mdc-option mdc-list-item" (mousedown)="$event.preventDefault(); useMyLocation()">
+        <div class="d-flex align-items-center gap-3">
+          <span class="city-action-icon city-action-icon--gps">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0013 3.06V1h-2v2.06A8.994 8.994 0 003.06 11H1v2h2.06A8.994 8.994 0 0011 20.94V23h2v-2.06A8.994 8.994 0 0020.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" fill="currentColor"/>
+            </svg>
+          </span>
+          <span class="city-action-text">Use my location</span>
+        </div>
+      </div>
+      <!-- Cities -->
+      <ng-container *ngIf="filteredCities.length">
+        <mat-option *ngFor="let city of filteredCities; trackBy: trackByName" [value]="city.name" (onSelectionChange)="onCitySelect($event)">
+          <div class="d-flex align-items-center gap-3">
+            <span class="city-icon city-icon--city">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M15 11V5l-3-3-3 3v2H3v14h18V11h-6zm-8 8H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5V9h2v2zm6 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm6 12h-2v-2h2v2zm0-4h-2v-2h2v2z" fill="currentColor"/>
+              </svg>
+            </span>
+            <div class="city-name">{{ city.name }}</div>
+          </div>
+        </mat-option>
+      </ng-container>
+    </mat-autocomplete>
+  </div>
+  <span>|</span>
+  <div class="input-text__container d-flex align-items-center box1">
+    <img
+      loading="lazy"
+      src="assets/images/svg/search-icon-black.svg"
+      alt=""
+      class="icon"
+    />
+    <input
+      class="input-box"
+      type="text"
+      placeholder="Search Doctor, clinics, hospitals, etc."
+      #symptoms
+      (keydown)="search($event)"
+      [matAutocomplete]="auto"
+      (input)="getSuggestionList($event)"
+      (focus)="onSearchFocus()"
+    />
+    <img
+      src="assets/images/svg/cross.svg"
+      alt=""
+      class="me-3"
+      *ngIf="symptoms.value"
+      (click)="closeSuggestion('symptomps')"
+    />
+    <mat-autocomplete #auto="matAutocomplete" class="my-4 search-dropdown">
+
+      <!-- Loading spinner -->
+      <mat-option *ngIf="isSearching" disabled class="search-state">
+        <div class="d-flex align-items-center justify-content-center gap-2 py-2">
+          <div class="search-spinner"></div>
+          <span class="text-14 text-muted">Searching...</span>
+        </div>
+      </mat-option>
+
+      <!-- Did you mean? -->
+      <mat-option *ngIf="didYouMean && !isSearching" class="did-you-mean-option" (click)="applyDidYouMean()">
+        <div class="did-you-mean">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/>
+          </svg>
+          <span>Did you mean: <strong>{{ didYouMean }}</strong>?</span>
+        </div>
+      </mat-option>
+
+      <!-- No results -->
+      <mat-option *ngIf="noResults && !isSearching && symptoms.value.length > 2 && !didYouMean" disabled class="search-state">
+        <div class="d-flex flex-column align-items-center py-3">
+          <span class="text-14 text-muted">No results found for "{{ symptoms.value }}"</span>
+          <span class="text-12 text-muted mt-1">Try a different search term</span>
+        </div>
+      </mat-option>
+
+      <!-- Recent Searches -->
+      <mat-optgroup
+        *ngIf="recentSearches.length && !isSearching && !doctorsOptions.length && !hospitalsOptions.length && !servicesOptions.length && !specialityOptions.length && !clinicOptions.length"
+      >
+        <label class="suggestion-category">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z" fill="currentColor"/>
+          </svg>
+          Recent Searches
+        </label>
+        <mat-option *ngFor="let term of recentSearches; trackBy: trackByIndex" [value]="term" (click)="selectRecentSearch(term)">
+          <div class="d-flex align-items-center gap-3">
+            <span class="suggestion-icon suggestion-icon--recent">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z" fill="currentColor"/>
+              </svg>
+            </span>
+            <div class="suggestion-name">{{ term }}</div>
+          </div>
+        </mat-option>
+      </mat-optgroup>
+
+      <!-- Speciality Options -->
+      <mat-optgroup *ngIf="filteredSpecialities.length && !isSearching">
+        <label class="suggestion-category">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM10 4h4v2h-4V4zm6 11h-3v3h-2v-3H8v-2h3v-3h2v3h3v2z" fill="currentColor"/>
+          </svg>
+          Specialities
+        </label>
+        <mat-option
+          [value]="item?.name"
+          *ngFor="let item of filteredSpecialities; trackBy: trackByName"
+          (click)="onSuggestionSelected(item, 'speciality')"
+        >
+          <div *ngIf="item?.name" class="d-flex align-items-center gap-3">
+            <span class="suggestion-icon suggestion-icon--search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/>
+              </svg>
+            </span>
+            <span class="suggestion-name" [innerHTML]="item?.name | highlightSearch:searchTerm"></span>
+            <span class="suggestion-badge">Speciality</span>
+          </div>
+        </mat-option>
+      </mat-optgroup>
+
+      <!-- Service Options -->
+      <mat-optgroup *ngIf="filteredServices.length && !isSearching">
+        <label class="suggestion-category">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2v14H3v3c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V2l-1.5 1.5zM19 19c0 .55-.45 1-1 1s-1-.45-1-1v-3H8V5h11v14z" fill="currentColor"/>
+          </svg>
+          Services
+        </label>
+        <mat-option
+          [value]="item?.name"
+          *ngFor="let item of filteredServices; trackBy: trackByName"
+          (click)="onSuggestionSelected(item, 'service')"
+        >
+          <div *ngIf="item?.name" class="d-flex align-items-center gap-3">
+            <span class="suggestion-icon suggestion-icon--search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/>
+              </svg>
+            </span>
+            <span class="suggestion-name" [innerHTML]="item?.name | highlightSearch:searchTerm"></span>
+            <span class="suggestion-badge suggestion-badge--service">Service</span>
+          </div>
+        </mat-option>
+      </mat-optgroup>
+
+      <!-- Doctors -->
+      <mat-optgroup *ngIf="filteredDoctors.length && !isSearching">
+        <label class="suggestion-category">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="currentColor"/>
+          </svg>
+          Doctors
+        </label>
+        <mat-option *ngFor="let item of filteredDoctors; let i = index; trackBy: trackByName" [value]="item?.name || ''" (click)="onSuggestionSelected(item, 'doctor')">
+          <div class="d-flex align-items-center gap-3 suggestion-entity">
+            <img [src]="item?.profilePic" alt="" *ngIf="item?.profilePic" class="suggestion-avatar" />
+            <div class="suggestion-avatar suggestion-avatar--initials" *ngIf="!item?.profilePic">
+              {{ item?.name | nameInitial | uppercase }}
+            </div>
+            <div class="suggestion-info">
+              <div class="suggestion-name" *ngIf="!atlasResults?.doctors?.[i]?.highlights?.length" [innerHTML]="item?.name | highlightSearch:searchTerm"></div>
+              <div class="suggestion-name" *ngIf="atlasResults?.doctors?.[i]?.highlights?.length">
+                <ng-container *ngIf="atlasResults.doctors[i].highlights | hasHighlightPath:'fullName' as hasName">
+                  <ng-container *ngFor="let hl of atlasResults.doctors[i].highlights">
+                    <ng-container *ngIf="hl.path === 'fullName'">
+                      <ng-container *ngFor="let t of hl.texts">
+                        <mark *ngIf="t.type === 'hit'" class="highlight-hit">{{ t.value }}</mark>
+                        <span *ngIf="t.type !== 'hit'">{{ t.value }}</span>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+                <span *ngIf="!(atlasResults.doctors[i].highlights | hasHighlightPath:'fullName')" [innerHTML]="item?.name | highlightSearch:searchTerm"></span>
+              </div>
+              <div class="suggestion-sub">{{ (item?.specialization?.[0] | titlecase) || '' }}</div>
+            </div>
+            <svg class="suggestion-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" fill="currentColor"/>
+            </svg>
+          </div>
+        </mat-option>
+      </mat-optgroup>
+
+      <!-- Hospitals -->
+      <mat-optgroup *ngIf="filteredHospitals.length && !isSearching">
+        <label class="suggestion-category">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z" fill="currentColor"/>
+          </svg>
+          Hospitals
+        </label>
+        <mat-option *ngFor="let item of filteredHospitals; trackBy: trackByName" [value]="item?.name || ''" (click)="onSuggestionSelected(item, 'hospital')">
+          <div class="d-flex align-items-center gap-3 suggestion-entity">
+            <img [src]="item?.profilePic" alt="" *ngIf="item?.profilePic" class="suggestion-avatar" />
+            <div class="suggestion-avatar suggestion-avatar--initials" *ngIf="!item?.profilePic">
+              {{ item?.name | nameInitial | uppercase }}
+            </div>
+            <div class="suggestion-info">
+              <div class="suggestion-name" [innerHTML]="item?.name | highlightSearch:searchTerm"></div>
+              <div class="suggestion-sub">{{ (item?.address?.locality || 'N/A' | titlecase) || '' }}</div>
+            </div>
+            <svg class="suggestion-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" fill="currentColor"/>
+            </svg>
+          </div>
+        </mat-option>
+      </mat-optgroup>
+
+      <!-- Clinics -->
+      <mat-optgroup *ngIf="filteredClinics.length && !isSearching">
+        <label class="suggestion-category">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z" fill="currentColor"/>
+          </svg>
+          Clinics
+        </label>
+        <mat-option *ngFor="let item of filteredClinics; trackBy: trackByName" [value]="item?.name || ''" (click)="onSuggestionSelected(item, 'clinic')">
+          <div class="d-flex align-items-center gap-3 suggestion-entity">
+            <img [src]="item?.profilePic" alt="" *ngIf="item?.profilePic" class="suggestion-avatar" />
+            <div class="suggestion-avatar suggestion-avatar--initials" *ngIf="!item?.profilePic">
+              {{ item?.name | nameInitial | uppercase }}
+            </div>
+            <div class="suggestion-info">
+              <div class="suggestion-name" [innerHTML]="item?.name | highlightSearch:searchTerm"></div>
+              <div class="suggestion-sub">{{ (item?.address?.locality || 'N/A' | titlecase) || '' }}</div>
+            </div>
+            <svg class="suggestion-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" fill="currentColor"/>
+            </svg>
+          </div>
+        </mat-option>
+      </mat-optgroup>
+
+      <!-- Quick search links -->
+      <ng-container *ngIf="symptoms.value.length > 3 && !isSearching">
+        <mat-option
+          [value]="symptoms.value"
+          (click)="searchByType('doctor')"
+          class="suggestion-quick"
+        >
+          <div class="d-flex align-items-center gap-3">
+            <span class="suggestion-icon suggestion-icon--search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/>
+              </svg>
+            </span>
+            <span class="text-14">Search doctors for <strong>"{{ symptoms.value }}"</strong></span>
+          </div>
+        </mat-option>
+        <mat-option
+          [value]="symptoms.value"
+          (click)="searchByType('hospital')"
+          class="suggestion-quick"
+        >
+          <div class="d-flex align-items-center gap-3">
+            <span class="suggestion-icon suggestion-icon--search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/>
+              </svg>
+            </span>
+            <span class="text-14">Search hospitals for <strong>"{{ symptoms.value }}"</strong></span>
+          </div>
+        </mat-option>
+        <mat-option
+          [value]="symptoms.value"
+          (click)="searchByType('hospital')"
+          class="suggestion-quick"
+        >
+          <div class="d-flex align-items-center gap-3">
+            <span class="suggestion-icon suggestion-icon--search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/>
+              </svg>
+            </span>
+            <span class="text-14">Search clinics for <strong>"{{ symptoms.value }}"</strong></span>
+          </div>
+        </mat-option>
+      </ng-container>
+    </mat-autocomplete>
+  </div>
+  <!-- Find Doctor Button -->
+  <button class="button_search" (click)="findDoctor()" type="button">
+    <img loading="lazy" src="assets/images/search-icon-white.svg" alt="Search" width="18" height="18" />
+    <span class="button_search__label">Find Doctor</span>
+  </button>
+</div>

@@ -1,0 +1,99 @@
+<section class="confirm-booking">
+  <div class="confirm-booking__wrapper">
+    <div class="confirm-booking__wrapper__name">
+      <div>
+        <img
+          class="cursor-pointer"
+          (click)="viewDoctor()"
+          [src]="doctorDetail?.doctorPic"
+          alt=""
+        />
+      </div>
+      <div>
+        <h2 class="cursor-pointer" (click)="viewDoctor()">
+          {{ doctorDetail?.fullname || "N/A" }}
+        </h2>
+        <p>
+          {{ (doctorDetail?.specialization | formatarray : "name") || "N/A" }}
+        </p>
+      </div>
+    </div>
+    <div class="line-sec">
+      <hr class="light-line" />
+    </div>
+    <div class="confirm-booking__wrapper__name hospital">
+      <div>
+        <img
+          class="cursor-pointer"
+          [src]="details?.establishment?.pic"
+          alt=""
+          (click)="viewHospital()"
+        />
+      </div>
+      <div>
+        <h2 class="cursor-pointer" (click)="viewHospital()">
+          {{ details?.establishment?.name }}
+        </h2>
+
+        <p>
+          {{ details?.establishment?.address?.locality }} ,
+          {{ details?.establishment?.address?.city }}&nbsp;
+          {{ details?.establishment?.address?.pincode }}
+        </p>
+        <h4>Get Direction</h4>
+      </div>
+    </div>
+    <hr class="light-line" />
+
+    <div class="main-data">
+      <div class="confirm">
+        <img loading="lazy" src="assets/images/svg/Check.svg" alt="" />
+        <h4>Appointment Completed</h4>
+      </div>
+      <div class="data">
+        <h5>Your appointment ID - {{ details?.appointmentId }}</h5>
+        <!-- <h5>We have sent you sms to confirmation</h5> -->
+        <div class="text-18 font-600 mt-2">Appointment completion date</div>
+        <div class="text-18 mt-2">
+          {{ details?.date | date : "d MMM , y, h:mm a" }}
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="details">
+          <h3>Pateint Name</h3>
+          <h5>{{ details?.fullName }}</h5>
+        </div>
+        <div
+          class="details d-flex flex-wrap gap-3 justify-content-between align-items-center"
+        >
+          <div>
+            <h3>Mobile Number</h3>
+            <h5>+91{{ details?.phone }}</h5>
+          </div>
+          <div>
+            <button class="share" (click)="shareFeedback()">
+              Share Feedback
+            </button>
+          </div>
+        </div>
+        <!-- <div class="button">
+            <button (click)="cancelBooking()">
+              <img loading="lazy"src="assets/images/svg/corss_black.svg" alt="" />
+              Cancel Appointment
+            </button>
+            <button (click)="redschduleAppoinment()">
+              <img loading="lazy"src="assets/images/Schedule.svg" alt="" />
+              Reschedule Appointment
+            </button>
+          </div> -->
+      </div>
+      <div class="button">
+        <button (click)="backToProfile()">
+          <img loading="lazy" src="assets/images/svg/back.svg" alt="" />
+          Back to Profile
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

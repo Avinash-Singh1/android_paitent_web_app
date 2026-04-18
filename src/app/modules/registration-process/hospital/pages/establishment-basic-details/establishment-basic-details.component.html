@@ -1,0 +1,52 @@
+<div class="containers">
+  <div class="percetDone visibility-hidden"></div>
+  <form
+    class="form d-flex flex-column justify-content-between"
+    [formGroup]="establishmentBasicDetails"
+    (ngSubmit)="onSubmit()"
+  >
+    <div class="content">
+      <div class="heading">Establishment Basic Details</div>
+      <div class="wrapper">
+        <div class="fields">
+          <label for="">Establishment Name<span>*</span> </label>
+          <nectar-form-field>
+            <input
+              nectarError
+              controlName="Establishment Name"
+              class="w-100"
+              type="text"
+              name=""
+              id=""
+              placeholder="Establishment Name"
+              formControlName="fullName"
+              oninput="this.value = this.value.replace(/^\s/,'').replace(/(?<=\s|^)[a-z]/g, (match) => match.toUpperCase());"
+              maxlength="100"
+            />
+          </nectar-form-field>
+        </div>
+        <div class="fields">
+          <label for="">Hospital Type<span>*</span> </label>
+          <nectar-form-field>
+            <ng-select
+              nectarError
+              controlName="Hospital type"
+              #hospitalType1
+              class=""
+              [items]="hospitalType"
+              bindLabel="name"
+              bindValue="_id"
+              placeholder="Select hospital type"
+              formControlName="hospitalType"
+              (focus)="hospitalType1.open()"
+            ></ng-select>
+          </nectar-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="continue">
+      <div></div>
+      <button type="submit">Next</button>
+    </div>
+  </form>
+</div>

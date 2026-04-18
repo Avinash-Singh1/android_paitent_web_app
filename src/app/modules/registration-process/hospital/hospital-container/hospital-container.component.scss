@@ -1,0 +1,14 @@
+@use "variable.scss" as *;
+
+
+section {
+  display: flex;
+  justify-content: center;
+  background: $bright-gray;
+}
+
+.warapper {
+  @media screen and (max-width: 767px) {
+    width: 100%;
+  }
+}

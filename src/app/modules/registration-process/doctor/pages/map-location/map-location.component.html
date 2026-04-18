@@ -1,0 +1,166 @@
+<div class="containers">
+  <div class="percetDone"></div>
+  <form
+    class="form d-flex flex-column justify-content-between"
+    [formGroup]="address"
+    (ngSubmit)="onSubmit()"
+  >
+    <div class="content">
+      <div class="heading d-flex justify-content-between align-items-center">
+        <span> Map Location </span>
+        <button
+          *ngIf="editAddress"
+          class="clear"
+          [style.opacity]="address?.status !== 'INVALID' ? '1' : '0.5'"
+          (click)="onClearAddress()"
+        >
+          Clear Address
+        </button>
+      </div>
+      <p>{{ name }}</p>
+      <div class="wrapper">
+        <div class="wrapper-data">
+          <div class="field">
+            <label for="">Street Address<span>*</span></label>
+            <nectar-form-field>
+              <input
+                nectarError
+                controlName="Street Address"
+                type="text"
+                class="form-input w-100"
+                placeholder="Street Address"
+                formControlName="landmark"
+                oninput="this.value = this.value.replace(/^\s/,'').replace(/[^\w /,\.\-]$/g, '').replace(/(?<=\s|^)[a-z]/g, (match) => match.toUpperCase());"
+                [matAutocomplete]="landmark"
+                (input)="onSearch($event, 'predicationList')"
+              />
+            </nectar-form-field>
+            <mat-autocomplete #landmark="matAutocomplete">
+              <mat-option
+                *ngFor="let place of predicationList"
+                (click)="onSelectPlace(place, 1)"
+              >
+                {{ place.description }}
+              </mat-option>
+            </mat-autocomplete>
+          </div>
+          <div class="field">
+            <label for="">Landmark</label>
+            <nectar-form-field>
+              <input
+                nectarError="Landmark"
+                type="text"
+                class="form-input w-100"
+                placeholder="Landmark"
+                formControlName="locality"
+                oninput="this.value = this.value.replace(/[^\w /,\-]$/g, '').replace(/^ $/,'').replace(/(?<=\s|^)[a-z]/g, (match) => match.toUpperCase());"
+              />
+            </nectar-form-field>
+          </div>
+        </div>
+        <div class="wrapper-data">
+          <div class="field">
+            <label for="">City<span>*</span></label>
+            <nectar-form-field>
+              <input
+                nectarError
+                controlName="City"
+                type="text"
+                class="form-input w-100"
+                placeholder="City"
+                formControlName="city"
+                oninput="this.value = this.value.replace(/[^\w /,\-]$/g, '').replace(/^ $/,'').replace(/(?<=\s|^)[a-z]/g, (match) => match.toUpperCase());"
+                (input)="onSearch($event, 'predicationCityList')"
+                [matAutocomplete]="city"
+              />
+            </nectar-form-field>
+            <mat-autocomplete #city="matAutocomplete">
+              <mat-option
+                *ngFor="let place of predicationCityList"
+                (click)="onSelectPlace(place, 2)"
+              >
+                {{ place.description }}
+              </mat-option>
+            </mat-autocomplete>
+          </div>
+          <div class="field">
+            <label for="">State<span>*</span></label>
+            <nectar-form-field>
+              <ng-select
+                nectarError
+                controlName="State"
+                #state
+                [items]="stateList"
+                class="w-100"
+                bindLabel="name"
+                bindValue="_id"
+                placeholder="Select state"
+                formControlName="state"
+                (focus)="state.open()"
+                (change)="onSelectState()"
+              >
+              </ng-select>
+            </nectar-form-field>
+          </div>
+        </div>
+        <div class="wrapper-data">
+          <div class="field">
+            <label for="">Pincode<span>*</span></label>
+            <nectar-form-field>
+              <input
+                nectarError
+                controlName="Pincode"
+                maxlength="6"
+                type="text"
+                class="form-input w-100"
+                placeholder="Pincode"
+                formControlName="pincode"
+                oninput="this.value = this.value.replace(/^[\D]$/g, '');"
+              />
+            </nectar-form-field>
+          </div>
+          <div class="field">
+            <label for="">Country<span>*</span></label>
+            <ng-select
+              [readonly]="true"
+              [items]="countryList"
+              bindLabel="name"
+              bindValue="_id"
+              placeholder="Select country"
+              formControlName="country"
+              class="w-100"
+            >
+            </ng-select>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-section mt-4">
+        <p>Map View</p>
+        <nectar-google-maps
+          [zoom]="zoom"
+          [lat]="control['location'].get('coordinates').value[1]"
+          [lng]="control['location'].get('coordinates').value[0]"
+          [markerDragable]="markerDragable"
+          class="google-maps"
+          (mapClicked)="onMapClicked($event)"
+          (markerDrag)="onMarkerDrag($event)"
+        ></nectar-google-maps>
+      </div>
+      <div class="text-18 font-400 mt-3">
+        Add your Google business address by typing your profile name in the
+        Street address box or you may put address manually.
+        <a
+          href="https://www.youtube.com/@nectarplushealth/playlists"
+          target="_blank"
+          >Watch Video</a
+        >
+      </div>
+    </div>
+
+    <div class="continue">
+      <button type="button" class="back" (click)="back()">Back</button>
+      <button type="submit">Next</button>
+    </div>
+  </form>
+</div>

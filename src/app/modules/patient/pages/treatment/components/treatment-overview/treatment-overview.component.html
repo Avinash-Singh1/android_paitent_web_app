@@ -1,0 +1,43 @@
+<section id="overview" class="overview" *ngIf="treatment">
+  <h2 class="overview__title">What is {{ treatment.title }}?</h2>
+
+  <div class="overview__layout">
+    <!-- Main content -->
+    <div class="overview__main">
+      <!-- Rich HTML Description -->
+      <div class="overview__body" *ngIf="treatment.description" [innerHTML]="sanitize(treatment.description)"></div>
+
+      <!-- Component Sections (CMS blocks) -->
+      <div *ngIf="treatment.components?.length">
+        <div class="overview__component" *ngFor="let comp of treatment.components">
+          <h3 class="overview__subtitle" *ngIf="comp.title">{{ comp.title }}</h3>
+          <div class="overview__body" *ngIf="comp.description" [innerHTML]="sanitize(comp.description)"></div>
+          <div class="overview__images" *ngIf="comp.image?.length">
+            <img *ngFor="let img of comp.image" [src]="img" [alt]="comp.title" class="overview__img" loading="lazy"
+                 width="640" height="360" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Facts Sidebar -->
+    <aside class="overview__sidebar" *ngIf="quickFacts.length">
+      <div class="overview__facts-card">
+        <h3 class="overview__facts-heading">Key Facts</h3>
+        <div class="overview__fact-row" *ngFor="let fact of quickFacts">
+          <span class="overview__fact-icon">{{ fact.icon }}</span>
+          <div class="overview__fact-content">
+            <span class="overview__fact-label">{{ fact.label }}</span>
+            <span class="overview__fact-value">{{ fact.value }}</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- When is it Needed -->
+  <div class="overview__when" *ngIf="treatment.whenNeeded">
+    <h3 class="overview__subtitle">When is {{ treatment.title }} Needed?</h3>
+    <div class="overview__body" [innerHTML]="sanitize(treatment.whenNeeded)"></div>
+  </div>
+</section>

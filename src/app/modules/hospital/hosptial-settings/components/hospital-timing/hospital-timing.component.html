@@ -1,0 +1,86 @@
+<section class="services-section w-100">
+  <header
+    class="w-100 heading d-flex justify-content-between gap-40 align-items-center border-bottom-style"
+  >
+    <div class="text-16 font-600">
+      {{ "TIMING" | translate }}
+    </div>
+    <button
+      class="add-more"
+      (click)="onAddTiming()"
+      [ngClass]="{ 'visibility-hidden': timing.length }"
+    >
+      <svg-icon src="assets/images/svg/add.svg"></svg-icon>
+      <span class="mt-1">
+        {{ "ADD" | translate }}
+      </span>
+    </button>
+  </header>
+  <main class="p-24 d-flex flex-column gap-3">
+    <ng-container *ngFor="let time of timing">
+      <div
+        class="p-24 border-style d-flex justify-content-between align-items-center"
+      >
+        <div class="d-flex align-items-center gap-40 text-18">
+          <span
+            class="text-24 font-600 whitespace-nowrap"
+            style="line-height: 40px"
+          >
+            {{ time.day | replace : "To" : "-" | async | titlecase }}
+          </span>
+          <div class="d-flex slot-timing align-items-center text-18 flex-wrap">
+            <div class="morning" *ngIf="time.morning">
+              <div class="d-flex align-items-center gap-4 mb-1">
+                <span class="font-600">{{ "MORNING" | translate }}</span>
+
+                <img
+                  loading="lazy"
+                  src="assets/images/svg/sunrise.svg"
+                  alt=""
+                />
+              </div>
+              <span class="opacity-75">
+                {{ time.morning | replace : "to" : "-" | async }}
+              </span>
+            </div>
+            <div class="afternoon" *ngIf="time.afternoon">
+              <div class="d-flex align-items-center gap-4 mb-1">
+                <span class="font-600">{{ "AFTERNOON" | translate }}</span>
+                <img
+                  loading="lazy"
+                  src="assets/images/svg/afternoon.svg"
+                  alt=""
+                />
+              </div>
+              <span class="opacity-75">
+                {{ time.afternoon | replace : "to" : "-" | async }}
+              </span>
+            </div>
+            <div class="evening" *ngIf="time.evening">
+              <div class="d-flex align-items-center gap-4 mb-1">
+                <span class="font-600">{{ "EVENING" | translate }}</span>
+                <img
+                  loading="lazy"
+                  src="assets/images/svg/night-mode.svg"
+                  alt=""
+                />
+              </div>
+              <span class="opacity-75">
+                {{ time.evening | replace : "to" : "-" | async }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="d-flex justify-content-between align-items-center gap-2 py-12 px-24 border-style cursor-pointer rounded-1"
+          (click)="onAddTiming(true)"
+        >
+          <svg-icon src="assets/images/svg/edit.svg"></svg-icon>
+          <span class="mt-1">
+            {{ "EDIT" | translate }}
+          </span>
+        </div>
+      </div>
+    </ng-container>
+  </main>
+</section>

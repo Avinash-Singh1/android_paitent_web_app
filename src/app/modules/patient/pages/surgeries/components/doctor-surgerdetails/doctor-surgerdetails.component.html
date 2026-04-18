@@ -1,0 +1,31 @@
+<div class="conatiner-fluid g-0 mt-4">
+    <div class="row">
+        <h2 class="fw-bold m-0" *ngIf="doctorsCount > 0 || city=='India' ">
+            Top {{ id | replaceHyphen }} Doctor's for {{ id }} Treatment in {{ city || 'India' }}
+        </h2>
+        <h2 *ngIf="doctorsCount < 0">Doctor is not avilable here</h2>
+    </div>
+    <div class="row">
+        <section class="top-rated">
+            <div class="">
+                <div class="top-rated__container__carousel-section">
+                    <div class="owlCarousal top-rated__container__carousel-section__data" [id]="id">
+                        <nectar-doctorsurgreycard class="d-flex flex-column" [city]="city" [surgeriesname]="id"
+                            (emitDoctorCount)="updateDoctorCount($event)"
+                            style="width: -webkit-fill-available;"></nectar-doctorsurgreycard>
+                    </div>
+                    <div class="row d-flex justify-content-center"
+                        *ngIf="doctorsCount > 0 || city=='India'">
+                        <button class="buttton_section" (click)="viewDoctor(type === 0 ? 'dental' : 'orthopedist')">
+                            View all Doctor
+                        </button>
+                    </div>
+
+
+                </div>
+            </div>
+        </section>
+
+
+    </div>
+</div>

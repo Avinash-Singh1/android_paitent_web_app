@@ -1,0 +1,785 @@
+@use "sass:color";
+// ============================================================
+// Calendar View – Mobile-First Responsive Design
+// Breakpoints: 576 → 768 → 1024 → 1121 → 1440
+// Base styles = smallest screens (320 px+)
+// ============================================================
+
+@use "tools.mediaquery" as *;
+@use "tools.typography" as *;
+@use "settings.containers" as *;
+@use "variable.scss" as *;
+
+// ── Badges ────────────────────────────────────────────────────
+.badge {
+  font-size: inherit;
+
+  &.badge-primary,
+  &.badge-success,
+  &.badge-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+// ── Card wrapper ────────────────────────────────────────────────
+.calendar-view {
+  padding: 0.625rem 0.75rem; // 10px 12px – tighter mobile base
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+
+  .hero-card__accent {
+    height: 4px;
+    background: linear-gradient(90deg, $purple 0%, #7c3aed 40%, #a78bfa 70%, #e8dff5 100%);
+    border-radius: 0;
+    margin: -0.625rem -0.75rem 0.5rem; // pull to card edges
+
+    @media (min-width: 768px) {
+      height: 5px;
+      border-radius: 0.75rem 0.75rem 0 0; // match card border-radius on desktop
+      margin: -0.875rem -0.625rem 0.625rem;
+    }
+
+    @media (min-width: 1121px) {
+      margin: -1rem -0.75rem 0.75rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    padding: 0.875rem 0.625rem; // 14px 10px
+  }
+
+  @media (min-width: 1121px) {
+    padding: 1rem 0.75rem; // 16px 12px
+  }
+
+  // ── Grid ────────────────────────────────────────────────────
+  &__grid-view {
+    display: grid;
+    grid-template-columns: 1fr; // single-column on mobile
+    gap: 0.5rem; // tighter on mobile
+
+    @media (min-width: 768px) {
+      gap: 1rem;
+    }
+
+    @media (min-width: 992px) {
+      grid-template-columns: 36% 64%;
+    }
+
+    @media (min-width: 1121px) {
+      gap: 5px;
+    }
+
+    // ── Details (image + doctor info) ───────────────────
+    &__details {
+      display: flex;
+      gap: 0.625rem; // 10px mobile – tighter
+      min-width: 0; // prevent flex overflow
+
+      @media (min-width: 577px) {
+        gap: 1rem; // 16px
+      }
+
+      @media (min-width: 768px) {
+        gap: 1.25rem; // 20px
+      }
+
+      // ── Image ─────────────────────────────────────────
+      &__image-section {
+        flex-shrink: 0;
+
+        .profile-icon,
+        img {
+          height: 4rem; // 64px on mobile – compact
+          width: 4rem;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 1px solid rgba(0, 0, 0, 0.08);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+          max-width: 100%;
+
+          @media (min-width: 577px) {
+            height: 5rem; // 80px
+            width: 5rem;
+          }
+
+          @media (min-width: 768px) {
+            height: 5.625rem; // 90px
+            width: 5.625rem;
+          }
+        }
+      }
+
+      // ── Doctor Section ────────────────────────────────
+      &__doctor-section {
+        width: 100%;
+        min-width: 0; // prevent text overflow in flex
+
+        // ── Star Rating (tablet+ only) ──────────────
+        .rating {
+          display: none;
+
+          @media (min-width: 768px) {
+            display: flex;
+            margin-top: 5px;
+            justify-content: start;
+          }
+
+          ::ng-deep {
+            star-rating {
+              .star-container {
+                margin-left: 0;
+
+                svg {
+                  fill: $green !important;
+                }
+              }
+            }
+          }
+
+          img {
+            margin-bottom: 10px;
+            height: 20px;
+            width: 20px;
+            display: inline-block;
+          }
+
+          .total {
+            @include font-sans_pro-semibold(16px); // mobile/tablet base
+
+            color: rgba(0, 0, 0, 0.7);
+
+            @media (min-width: 1025px) {
+              @include font-sans_pro-semibold(14px);
+            }
+          }
+
+          .star {
+            color: $green;
+            @include font-sans_pro-semibold(16px);
+
+            @media (min-width: 1025px) {
+              @include font-sans_pro-semibold(14px);
+            }
+          }
+
+          .review {
+            @include font-sans_pro-regular(16px);
+            white-space: nowrap;
+            color: rgba(0, 0, 0, 0.7);
+
+            @media (min-width: 1025px) {
+              @include font-sans_pro-regular(14px);
+            }
+          }
+        }
+
+        // ── Price / Rating chips ───────────────────
+        .doctor-details-price {
+          display: flex;
+          align-items: center;
+          gap: 0.375rem; // 6px mobile – tighter
+          flex-wrap: wrap;
+          margin: 2px 0;
+
+          @media (min-width: 768px) {
+            gap: 0.75rem; // 12px
+            margin: 4px 0;
+          }
+
+          .price-box {
+            display: inline-flex; // visible on all screens
+            color: $black;
+            align-items: center;
+            gap: 4px;
+            padding: 0.125rem 0.5rem;
+            border-radius: 5px;
+            @include font-sans_pro-semibold(12px);
+
+            @media (min-width: 577px) {
+              @include font-sans_pro-semibold(13px);
+              gap: 6px;
+              padding: 0.25rem 0.625rem;
+              border-radius: 6px;
+            }
+
+            @media (min-width: 768px) {
+              @include font-sans_pro-semibold(16px);
+            }
+
+            @media (min-width: 1025px) {
+              @include font-sans_pro-semibold(14px);
+            }
+
+            &--clinic {
+              background: rgba(#45197c, 0.06);
+            }
+
+            &--video {
+              background: rgba(0, 128, 0, 0.06);
+            }
+
+            .price {
+              color: $black;
+              opacity: 0.5;
+              @include font-sans_pro-regular(16px);
+              margin-right: 5px;
+
+              @media (min-width: 1025px) {
+                @include font-sans_pro-regular(14px);
+              }
+            }
+          }
+
+          .rating-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(0, 128, 0, 0.08);
+            border-radius: 1.25rem;
+            padding: 2px 8px 2px 5px;
+
+            @media (min-width: 768px) {
+              display: none; // desktop uses star-rating instead
+            }
+
+            img {
+              width: 0.875rem;
+              height: 0.875rem;
+            }
+
+            &__value {
+              @include font-sans_pro-bold(13px);
+              color: $green;
+            }
+
+            &__max {
+              @include font-sans_pro-regular(12px);
+              color: rgba(0, 0, 0, 0.5);
+            }
+          }
+
+          .score {
+            border-radius: 6px;
+            padding: 2px 6px; // mobile base
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            align-items: center;
+            background: none;
+
+            @media (min-width: 768px) {
+              padding: 0.25rem 0.625rem;
+              background: rgba(#45197c, 0.06);
+            }
+
+            img {
+              width: 1rem; // 16px mobile
+              height: 1rem;
+
+              @media (min-width: 768px) {
+                width: 1.25rem; // 20px
+                height: 1.25rem;
+              }
+            }
+
+            p {
+              color: $purple;
+              @include font-sans_pro-semibold(14px);
+              margin: 0;
+            }
+          }
+        }
+
+        // ── Name + Verified Tick ────────────────────
+        .name {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          margin-bottom: 0;
+
+          a {
+            text-decoration: none;
+            color: inherit;
+            min-width: 0;
+            overflow: hidden;
+            max-width: calc(100% - 24px);
+          }
+
+          h2 {
+            @include font-sans_pro-bold($size: 14px); // mobile base – compact
+            margin: 0;
+            line-height: 1.25;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            @media (min-width: 577px) {
+              @include font-sans_pro-bold($size: 16px);
+            }
+
+            @media (min-width: 1025px) {
+              @include font-sans_pro-bold($size: 18px);
+            }
+          }
+
+          .verified-tick {
+            width: 1rem;
+            height: 1rem;
+            flex-shrink: 0;
+            margin: 0;
+          }
+        }
+
+        // ── Education ───────────────────────────────────
+        .education-line {
+          @include font-sans_pro-regular($size: 12px); // compact mobile
+          color: rgba(0, 0, 0, 0.55);
+          margin: 1px 0;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 14rem; // 224px mobile
+
+          @media (min-width: 577px) {
+            @include font-sans_pro-regular($size: 13px);
+            max-width: 17.5rem; // 280px
+          }
+
+          @media (min-width: 1025px) {
+            @include font-sans_pro-regular($size: 13px);
+            max-width: 21.25rem; // 340px
+          }
+        }
+
+        // ── Experience ──────────────────────────────────
+        .experience-tag {
+          display: inline-flex;
+          align-items: center;
+          gap: 3px;
+          @include font-sans_pro-semibold($size: 12px); // compact mobile
+          color: rgba(0, 0, 0, 0.6);
+          margin: 2px 0;
+          padding: 1px 0;
+
+          @media (min-width: 577px) {
+            @include font-sans_pro-semibold($size: 13px);
+            gap: 4px;
+            margin: 4px 0;
+          }
+
+          svg {
+            flex-shrink: 0;
+            color: rgba(0, 0, 0, 0.4);
+          }
+
+          @media (min-width: 1025px) {
+            @include font-sans_pro-semibold($size: 13px);
+          }
+        }
+
+        // ── Generic paragraphs ────────────────────────
+        p {
+          @include font-sans_pro-regular($size: 12px); // compact mobile
+          color: rgba(0, 0, 0, 0.65);
+          margin: 0;
+
+          @media (min-width: 577px) {
+            @include font-sans_pro-regular($size: 13px);
+            margin: 1px 0;
+          }
+
+          @media (min-width: 1025px) {
+            @include font-sans_pro-regular($size: 13px);
+          }
+        }
+
+        // ── Address heading ──────────────────────────
+        h4 {
+          display: block;
+          color: rgba(0, 0, 0, 0.8);
+          @include font-sans_pro-regular($size: 14px);
+          margin: 0.5rem 0 0;
+
+          @media (min-width: 768px) {
+            @include font-sans_pro-regular($size: 16px);
+            margin: 0.75rem 0 0;
+          }
+
+          @media (min-width: 1025px) {
+            @include font-sans_pro-regular($size: 14px);
+          }
+        }
+
+        // ── Desktop-only info (hidden on mobile – hospital-card handles it) ──
+        .desktop-only-info {
+          display: none;
+
+          @media (min-width: 768px) {
+            display: block;
+          }
+        }
+
+        // ── Get Directions link ─────────────────────
+        .get-direction {
+          display: inline-flex;
+          align-items: center;
+          gap: 3px;
+          @include font-sans_pro-semibold($size: 12px);
+          margin: 0.125rem 0 0;
+          color: $purple;
+          text-decoration: none;
+          transition: opacity 0.2s ease;
+          min-height: 2.5rem; // 40px touch target
+
+          @media (min-width: 577px) {
+            @include font-sans_pro-semibold($size: 13px);
+            gap: 4px;
+            min-height: 2.75rem; // 44px touch target
+          }
+
+          &:hover {
+            opacity: 0.7;
+          }
+
+          @media (min-width: 768px) {
+            display: inline-flex; // re-enable on desktop
+            @include font-sans_pro-semibold($size: 13px);
+            margin: 0.375rem 0 0;
+            min-height: auto;
+          }
+
+          @media (min-width: 1025px) {
+            @include font-sans_pro-semibold($size: 13px);
+          }
+        }
+      }
+    }
+
+    // ── Calendar Cards (tablet+ only) ─────────────────
+    &__calendar {
+      display: none;
+
+      @media (min-width: 768px) {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      &__cards {
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        max-width: 82px;
+        min-width: 82px;
+        border-radius: 0.5rem;
+        padding: 0.5rem 0.625rem;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: $purple;
+          border-color: $purple;
+
+          .cal-day,
+          .cal-date,
+          .cal-slots {
+            color: $white;
+          }
+        }
+
+        &.is-today {
+          border-color: rgba(#45197c, 0.3);
+          background: rgba(#45197c, 0.03);
+        }
+
+        &.disabled {
+          opacity: 0.4;
+          pointer-events: none;
+        }
+
+        .cal-day {
+          display: block;
+          @include font-sans_pro-semibold($size: 13px);
+          color: $black;
+          margin-bottom: 2px;
+        }
+
+        .cal-date {
+          display: block;
+          @include font-sans_pro-regular($size: 12px);
+          color: rgba(0, 0, 0, 0.55);
+          margin-bottom: 6px;
+        }
+
+        .cal-slots {
+          display: block;
+          @include font-sans_pro-semibold($size: 12px);
+          color: $green;
+
+          &--none {
+            color: #e52264;
+          }
+        }
+      }
+    }
+  }
+}
+
+.profile-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @include font-sans_pro-bold($size: 28px);
+  color: $purple;
+  background: rgba(#45197c, 0.06);
+  border-radius: 50%;
+}
+
+// ── Hospital Card (mobile only) ─────────────────────────
+.hospital-card {
+  display: block;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fafafa;
+  padding: 0.5rem 0.75rem;
+  margin-top: 0.375rem;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  &__name {
+    @include font-sans_pro-semibold(15px);
+    color: $black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 65%;
+  }
+
+  &__change {
+    @include font-sans_pro-semibold(13px);
+    color: $purple;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    min-height: 2.75rem; // 44px touch target
+    padding: 0.5rem;
+
+    &:active {
+      opacity: 0.7;
+    }
+  }
+
+  &__address {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    @include font-sans_pro-regular(13px);
+    color: #787878;
+    margin-bottom: 0.625rem;
+  }
+
+  &__address-icon {
+    flex-shrink: 0;
+  }
+
+  &__fees {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__fee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    @include font-sans_pro-semibold(14px);
+    color: $black;
+    background: rgba(#45197c, 0.06);
+    padding: 0.25rem 0.625rem;
+    border-radius: 6px;
+
+    svg {
+      flex-shrink: 0;
+    }
+
+    &--video {
+      background: rgba(0, 128, 0, 0.06);
+    }
+  }
+}
+
+// ── Appointment Slider (mobile only) ────────────────────
+.appointment-slider {
+  display: block;
+  margin-top: 0.5rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+
+  &__track {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  &__card {
+    flex-shrink: 0;
+    min-width: 5.5rem; // 88px
+    border-radius: 0.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 0.625rem;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    min-height: 2.75rem; // 44px touch target
+
+    &:active {
+      background: rgba(#45197c, 0.04);
+      border-color: rgba(#45197c, 0.2);
+    }
+
+    &--empty {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+  }
+
+  &__day {
+    display: block;
+    @include font-sans_pro-regular(13px);
+    color: rgba(0, 0, 0, 0.7);
+    white-space: nowrap;
+    margin-bottom: 4px;
+  }
+
+  &__slots {
+    display: block;
+    @include font-sans_pro-semibold(13px);
+    color: $green;
+
+    &--none {
+      color: #e52264;
+    }
+  }
+}
+
+// ── Book Appointment Button (mobile only) ─────────────
+.mobile-book-appointment {
+  display: block;
+  margin-top: 0.5rem;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+
+  &__btn {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: none;
+    border-radius: 0.625rem;
+    background: $purple;
+    @include font-sans_pro-semibold($size: 15px);
+    color: $white;
+    height: 2.625rem; // 42px – touch-friendly
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+
+    &:active {
+      transform: scale(0.98);
+      background: color.adjust(#45197c, $lightness: -5%);
+    }
+
+    &--disabled {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    svg {
+      flex-shrink: 0;
+    }
+  }
+}
+
+// ── Scrollbar hide ──────────────────────────────────────
+::-webkit-scrollbar {
+  display: none !important;
+}
+
+// ── Bottom sheet ────────────────────────────────────────
+::ng-deep {
+  .mat-bottom-sheet-container {
+    padding: 0 !important;
+    border-radius: 1.25rem 1.25rem 0 0 !important;
+  }
+}
+
+.text-purple {
+  color: $purple;
+}
+
+#icon-desktop-view {
+  display: none;
+
+  @media (min-width: 577px) {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1.5625rem;
+  }
+}
+
+
+.truncate-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 12.5rem; // 200px
+  display: inline-block;
+}
+
+.address-box-item {
+  @include font-sans_pro-regular(14px);
+  opacity: 0.8;
+  margin: 0;
+  color: #787878;
+}
+
+.specialization-link {
+  margin-right: 1px;
+  color: black;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+.specialization-link2 {
+  color: black;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

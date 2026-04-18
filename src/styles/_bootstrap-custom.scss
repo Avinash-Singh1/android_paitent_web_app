@@ -1,0 +1,65 @@
+// ===========================================
+// SELECTIVE BOOTSTRAP IMPORTS
+// Only import modules actually used in the app
+// Full bootstrap.min.css = 270KB → this = ~80-90KB
+// ===========================================
+
+// 1. Configuration (required by all other modules)
+@use "bootstrap/scss/functions" as *;
+@use "bootstrap/scss/variables" as *;
+@use "bootstrap/scss/variables-dark" as *;
+@use "bootstrap/scss/maps" as *;
+@use "bootstrap/scss/mixins" as *;
+
+// 2. Root (CSS custom properties)
+@use "bootstrap/scss/root" as *;
+
+// 3. Reboot (normalize/reset — needed for consistent base styles)
+@use "bootstrap/scss/reboot" as *;
+
+// 4. Typography
+@use "bootstrap/scss/type" as *;
+
+// 5. Images (responsive images)
+@use "bootstrap/scss/images" as *;
+
+// 6. Layout (heavily used: container, row, col-*)
+@use "bootstrap/scss/containers" as *;
+@use "bootstrap/scss/grid" as *;
+
+// 7. Forms (form-control, form-group, etc.)
+@use "bootstrap/scss/forms" as *;
+
+// 8. Buttons (btn, btn-primary, etc.)
+@use "bootstrap/scss/buttons" as *;
+
+// 9. Transitions
+@use "bootstrap/scss/transitions" as *;
+
+// 10. Components actually used in templates:
+@use "bootstrap/scss/dropdown" as *;       // dropdown-item, dropdown-menu
+@use "bootstrap/scss/button-group" as *;   // btn-group
+@use "bootstrap/scss/card" as *;           // card component
+@use "bootstrap/scss/accordion" as *;      // accordion (23 uses)
+@use "bootstrap/scss/modal" as *;          // modal (28 uses)
+@use "bootstrap/scss/close" as *;          // close button (used in modals)
+
+// 11. Utilities API (d-flex, gap, text-center, m-*, p-*, w-100, etc.)
+// This is the MOST used part of Bootstrap in this app
+@use "bootstrap/scss/utilities" as *;
+@use "bootstrap/scss/utilities/api" as *;
+
+// NOT imported (saves ~150KB+):
+// - nav, navbar (using custom navigation)
+// - breadcrumb (using custom)
+// - pagination (using custom)
+// - badge, alert, progress, list-group
+// - toasts (using ngx-toastr)
+// - tooltip (using tippy.js)
+// - popover (using tippy.js)
+// - carousel (using ngx-owl-carousel)
+// - spinners (using custom)
+// - offcanvas
+// - placeholders
+// - helpers (visually-hidden, etc. — uncomment if needed)
+// - tables (uncomment if needed)

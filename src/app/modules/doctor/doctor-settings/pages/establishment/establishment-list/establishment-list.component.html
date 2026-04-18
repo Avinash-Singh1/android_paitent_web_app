@@ -1,0 +1,177 @@
+<div class="main">
+  <div
+    class="heading d-flex font-600 align-items-center justify-content-between"
+  >
+    <span class="text-16 font-600"> {{ "ESTABLISHMENT" | translate }} </span>
+    <div class="d-flex gap-4 align-items-center">
+      <button
+        class="position-relative request-button d-flex align-items-center justify-content-center"
+        (click)="onOpenRequestDialog()"
+        [ngClass]="{ 'py-12': !totalRequest }"
+      >
+        <svg-icon src="assets/images/svg/info.svg"></svg-icon>
+        <span>{{ "REQUEST" | translate }}</span>
+        <span class="request-number" *ngIf="totalRequest">
+          {{ totalRequest > 9 ? 9 + "+" : totalRequest }}
+        </span>
+      </button>
+      <button
+        class="add-more rounded-circle"
+        (click)="onAddEstablishment(null, 0)"
+      >
+        <svg-icon
+          src="assets/images/svg/add.svg"
+          class="svg-icon-white"
+        ></svg-icon>
+      </button>
+    </div>
+  </div>
+  <div class="content d-flex flex-column gap-4">
+    <div class="owner-establishment" *ngIf="ownEstablishment.length">
+      <div class="d-flex flex-column gap-3">
+        <div class="">{{ "OWN_A_ESTABLISHMENT" | translate }}</div>
+        <div class="d-flex flex-column gap-2">
+          <ng-container
+            *ngFor="let establishment of ownEstablishment; let i = index"
+          >
+            <div
+              class="establishment-list d-flex justify-content-between align-items-center w-100 border rounded-1"
+            >
+              <div class="d-flex align-items-center gap-3 w-50">
+                <div
+                  class="border image-container d-flex justify-content-center align-items-center"
+                >
+                  <img
+                    [src]="establishment.hospitalData?.profilePic"
+                    *ngIf="establishment.hospitalData?.profilePic"
+                    alt=""
+                  />
+                  <img
+                    alt=""
+                    src="assets/images/svg/Nectar Favicon.svg"
+                    *ngIf="!establishment.hospitalData?.profilePic"
+                  />
+                </div>
+                <div class="d-flex flex-column gap-2">
+                  <span class="text-16 font-600 line-clamp-2">{{
+                    establishment?.hospitalData?.name
+                  }}</span>
+                  <span>{{ establishment?.hospitalTypeData ?? "N/A" }}</span>
+                  <span
+                    class="link font-600"
+                    (click)="
+                      googleMaps.redirectToGoogleMaps(
+                        establishment?.hospitalData.location.coordinates[1],
+                        establishment?.hospitalData.location.coordinates[0]
+                      )
+                    "
+                    >{{ "GET_DIRECTION" | translate }}</span
+                  >
+                </div>
+              </div>
+              <div
+                class="toggle-back"
+                [ngClass]="{ opened: establishment.isActive }"
+              >
+                <div
+                  class="rounde-div cursor-pointer"
+                  [ngClass]="{ opened: establishment.isActive }"
+                  (click)="onChangeStatus(establishment, 'ownEstablishment', i)"
+                ></div>
+              </div>
+              <div class="">
+                <button
+                  class="white-button"
+                  (click)="onAddEstablishment(establishment, 1, true)"
+                >
+                  <svg-icon src="assets/images/svg/edit.svg"> </svg-icon>
+                  <span class="ms-1">
+                    {{ "EDIT" | translate }}
+                  </span>
+                </button>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div class="visit-establishment" *ngIf="visitEstablishment.length">
+      <div class="d-flex flex-column gap-3">
+        <div class="">{{ "VISIT_A_ESTABLISHMENT" | translate }}</div>
+        <div class="d-flex flex-column gap-2">
+          <ng-container
+            *ngFor="let establishment of visitEstablishment; let i = index"
+          >
+            <div
+              class="establishment-list d-flex justify-content-between align-items-center w-100 border rounded-1"
+            >
+              <div class="d-flex align-items-center gap-3 w-50">
+                <div
+                  class="border image-container d-flex justify-content-center align-items-center"
+                >
+                  <img
+                    [src]="establishment.hospitalData?.profilePic"
+                    *ngIf="establishment.hospitalData?.profilePic"
+                    alt=""
+                  />
+                  <img
+                    alt=""
+                    src="assets/images/svg/Nectar Favicon.svg"
+                    *ngIf="!establishment.hospitalData?.profilePic"
+                  />
+                </div>
+                <div class="d-flex flex-column gap-2">
+                  <span class="text-16 font-600 line-clamp-2">{{
+                    establishment?.hospitalData?.name
+                  }}</span>
+                  <span>{{ establishment?.hospitalTypeData ?? "N/A" }}</span>
+                  <span
+                    class="link font-600"
+                    (click)="
+                      googleMaps.redirectToGoogleMaps(
+                        establishment?.hospitalData.location.coordinates[1],
+                        establishment?.hospitalData.location.coordinates[0]
+                      )
+                    "
+                    >{{ "GET_DIRECTION" | translate }}</span
+                  >
+                </div>
+              </div>
+              <div
+                class="toggle-back"
+                [ngClass]="{ opened: establishment.isActive }"
+              >
+                <div
+                  class="rounde-div cursor-pointer"
+                  [ngClass]="{ opened: establishment.isActive }"
+                  (click)="
+                    onChangeStatus(establishment, 'visitEstablishment', i)
+                  "
+                ></div>
+              </div>
+              <div class="">
+                <button
+                  class="white-button"
+                  (click)="onAddEstablishment(establishment, 0, true)"
+                >
+                  <svg-icon src="assets/images/svg/edit.svg"></svg-icon>
+                  <span class="ms-1">
+                    {{ "EDIT" | translate }}
+                  </span>
+                </button>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div
+      class="text-center"
+      *ngIf="
+        !ownEstablishment.length && !visitEstablishment.length && apiCalled
+      "
+    >
+      {{ "NO_ESTABLISHMENT_FOUND" | translate }}
+    </div>
+  </div>
+</div>

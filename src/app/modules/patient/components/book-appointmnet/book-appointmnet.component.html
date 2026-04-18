@@ -1,0 +1,223 @@
+<section class="appointment-booking">
+  <div class="appointment-booking__wrapper">
+    <!-- Step Indicator -->
+    <div class="step-indicator">
+      <div class="step-indicator__step active">
+        <div class="step-indicator__circle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/>
+          </svg>
+        </div>
+        <span>Booking Details</span>
+      </div>
+      <div class="step-indicator__line"></div>
+      <div class="step-indicator__step">
+        <div class="step-indicator__circle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M9 16.17L4.83 12l1.42-1.41L9 13.34l8.24-8.24L18.66 6.5 9 16.17z" fill="currentColor"/>
+          </svg>
+        </div>
+        <span>Confirmation</span>
+      </div>
+    </div>
+
+    <!-- Doctor Info Section -->
+    <div class="section-label">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#45197c"/>
+      </svg>
+      <span>Doctor Information</span>
+    </div>
+    <div class="appointment-booking__wrapper__name">
+      <div>
+        <img loading="lazy" [src]="doctorDetail?.doctorPic" alt="Doctor" class="cursor-pointer" (click)="viewDoctor()" />
+      </div>
+      <div>
+        <h2 class="cursor-pointer" (click)="viewDoctor()">
+          {{ doctorDetail?.fullname || "N/A" }}
+        </h2>
+        <p>
+          {{ (doctorDetail?.specialization | formatarray : "name") || "N/A" }}
+        </p>
+        <p>{{ doctorDetail?.address || "N/A" }}</p>
+      </div>
+    </div>
+    <hr class="light-line" />
+    <div *ngIf="this.appoitmentType==1">
+      <div class="section-label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" fill="#45197c"/>
+        </svg>
+        <span>Hospital Details</span>
+      </div>
+      <div class="appointment-booking__wrapper__name hospital">
+        <div>
+          <img loading="lazy" class="cursor-pointer" [src]="details?.hospital?.profilePic" alt="Hospital" (click)="viewHospital()" />
+        </div>
+        <div>
+          <h2 (click)="viewHospital()" class="cursor-pointer">
+            {{ details?.name }}
+          </h2>
+          <p>
+            {{ details?.address?.locality }} , {{ details?.address?.city }}&nbsp;
+            {{ details?.address?.pincode }}
+          </p>
+          <h4 class="cursor-pointer" (click)="openGoogleMaps(details)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#45197c"/>
+            </svg>
+            Get Direction
+          </h4>
+        </div>
+      </div>
+    </div>
+    <div class="section-label">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" fill="#45197c"/>
+      </svg>
+      <span>Schedule</span>
+    </div>
+    <div class="appointment-booking__wrapper__timings">
+      <div class="appointment-booking__wrapper__timings__details">
+        <div class="date">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM9 10H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z" fill="#45197c" opacity="0.7"/>
+          </svg>
+          <span>On</span>
+          <p>{{ timing?.date }}</p>
+        </div>
+        <div class="time">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" fill="#45197c" opacity="0.7"/>
+          </svg>
+          <span>At</span>
+          <p>{{ timing?.time?.time }}</p>
+        </div>
+      </div>
+    </div>
+    <hr class="light-line" />
+    <div class="appointment-booking__wrapper__patient-details">
+      <div class="section-label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 0h-4V4h4v2z" fill="#45197c"/>
+        </svg>
+        <span>Consultation Type</span>
+      </div>
+      <div class="appointment-booking__wrapper__patient-details__selection">
+        <div class="consultation-card" [class.active]="appoitmentType == '1'" (click)="getAppoinmentType('1')" *ngIf="doctorDetail?.consultationFees | validFee">
+          <input type="radio" id="in-clinic" name="appointment-type" value="1" [checked]="appoitmentType == '1'" />
+          <div class="card-icon card-icon--clinic">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="card-content">
+            <label for="in-clinic" class="cursor-pointer">In-Clinic Appointment</label>
+            <span class="card-subtitle">Visit the doctor at clinic</span>
+          </div>
+          <span class="card-fee">&#8377;{{ doctorDetail?.consultationFees }}</span>
+        </div>
+        <div class="consultation-card" [class.active]="appoitmentType == '2'" (click)="getAppoinmentType('2')" *ngIf="doctorDetail?.videoConsultationFees | validFee">
+          <input type="radio" id="video" name="appointment-type" value="2" [checked]="appoitmentType == '2'" />
+          <div class="card-icon card-icon--video">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="card-content">
+            <label for="video" class="cursor-pointer">Video Consultation</label>
+            <span class="card-subtitle">Consult online via video call</span>
+          </div>
+          <span class="card-fee">&#8377;{{ doctorDetail?.videoConsultationFees }}</span>
+        </div>
+      </div>
+      <div class="section-label" style="margin-top: 24px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#45197c"/>
+        </svg>
+        <span>Patient Details</span>
+      </div>
+      <p>This appointment is for:</p>
+      <div class="appointment-booking__wrapper__patient-details__selection">
+        <div class="patient-card" [class.active]="type == 'self'" (click)="getType('self')">
+          <input type="radio" id="self" name="appointment-booking" value="self" [checked]="type == 'self'" />
+          <label *ngIf="patientDetail?.fullName" for="self" class="cursor-pointer">{{
+            patientDetail?.fullName || "N/A" | titlecase
+            }}</label>
+          <input [(ngModel)]="customName" [disabled]="patientProfielName!='' && patientProfielName!=null" (ngModelChange)="onNameChange($event)" *ngIf="!patientDetail?.fullName" type="text" placeholder="Please enter your name here." />
+        </div>
+        <div class="patient-card" [class.active]="type == 'other'" (click)="getType('other')">
+          <input type="radio" id="other" name="appointment-booking" value="other" [checked]="type == 'other'" />
+          <label for="other" class="cursor-pointer">Someone else</label>
+        </div>
+      </div>
+      <div class="appointment-booking__wrapper__patient-details__data">
+        <form [formGroup]="bookingForm">
+          <h2>Please provide your information</h2>
+          <div class="name" *ngIf="type == 'self'">
+            <label>Full Name<span>*</span></label>
+            <input type="text" placeholder="Full Name" formControlName="name" />
+          </div>
+          <div class="name" *ngIf="type == 'other'">
+            <label>Patient's Full Name<span>*</span></label>
+            <input type="text" placeholder="Enter Patient's Full Name" formControlName="patientName" maxlength="30" />
+            <div class="form-error"
+              *ngIf="(control['patientName'].touched || submitted) && control['patientName'].errors?.['required']">
+              Please enter patient's name.
+            </div>
+          </div>
+          <div class="mobile">
+            <label>Mobile Number<span>*</span></label>
+            <input type="text" placeholder="Mobile Number" [value]="'+91 ' + patientDetail?.phone" disabled />
+          </div>
+          <div class="mobile" *ngIf="type == 'other'" style="position: relative">
+            <label>Patient's Mobile<span>*</span></label>
+            <input type="text" placeholder="Enter Patient's Mobile" maxlength="10" formControlName="phone"
+              oninput="this.value = this.value.replace(/\D/g, '').replace(/^0/,'');" style="padding-left: 49px" />
+            <span class="countryCode">+91 </span>
+            <div *ngIf="bookingForm.get('phone')?.errors">
+              <div class="form-error"
+                *ngIf="(control['phone'].touched || submitted) && control['phone'].errors?.['required']">
+                Please enter patient's phone number.
+              </div>
+              <div class="form-error" *ngIf="(control['phone'].touched || submitted) && control['phone'].errors?.['minlength'] 
+                && (!control['phone'].errors?.['required']) && (!control['phone'].errors?.['pattern'])">
+                Please enter valid phone number.
+              </div>
+            </div>
+          </div>
+          <div class="email">
+            <label>Email ID</label>
+            <input type="text" maxlength="256" placeholder="Enter your email (optional)" formControlName="email" />
+            <div *ngIf="bookingForm.get('email')?.errors">
+              <span class="form-error"
+                *ngIf="(control['email']?.errors?.['email'] || control['email']?.errors?.['pattern']) && (control['email'].touched || submitted)">
+                Please enter a valid email address
+              </span>
+            </div>
+          </div>
+          <div class="submit">
+            <button (click)="confirmBooking()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" fill="white"/>
+              </svg>
+              Confirm Booking
+            </button>
+          </div>
+          <div class="details">
+            <div class="details__note">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" fill="#999"/>
+              </svg>
+              <p>Updates will be sent to +91{{ patientDetail?.phone }}</p>
+            </div>
+            <p class="details__terms">
+              By booking this appointment, you agree to Nectar
+              <a>Terms and Conditions</a>.
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

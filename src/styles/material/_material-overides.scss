@@ -1,0 +1,17 @@
+@use 'src/styles/tools/tools.mediaquery' as *;
+
+@mixin materialDialogOverrides() {
+
+	.mat-dialog {
+
+		&-my-account-forgot-password {
+			width: 90%;
+			height: 90%;
+
+			@include mq-breakpoint-sm() {
+				width: 500px !important;
+				height: auto;
+			}
+		}
+	}
+}

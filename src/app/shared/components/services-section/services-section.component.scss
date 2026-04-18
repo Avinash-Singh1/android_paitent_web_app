@@ -1,0 +1,152 @@
+// @import "tools.mediaquery";
+
+// @import "settings.colors";
+
+// @import "tools.typography";
+
+// @import "settings.containers";
+
+// @import "variable.scss";
+
+
+// .services {
+//   padding: $pad_0 $pad_24 $pad_24;
+
+//   @media screen and (max-width: 767px) {
+//     padding: 18px 0;
+//   }
+
+//   h2 {
+//     @include font-sans_pro-semibold($size: 22px);
+
+//     @media screen and (max-width: 767px) {
+//       @include font-sans_pro-semibold($size: 20px);
+//     }
+//   }
+
+//   &__container {
+//     display: grid;
+//     grid-template-columns: 1fr 1fr 1fr;
+
+//     @media screen and (max-width: 576px) {
+//       grid-template-columns: 1fr;
+//     }
+
+//     .list {
+//       .data {
+//         @include font-sans_pro-regular($size: 14px);
+
+//         @media screen and (max-width: 767px) {
+//           @include font-sans_pro-regular($size: 16px);
+//         }
+//       }
+//     }
+//   }
+// }
+// .service_link {
+//   display: block;  /* Ensures it behaves like a div */
+//   cursor: pointer; /* Adds pointer behavior like the div */
+//   text-decoration: none; /* Removes default underline */
+//   color: inherit; /* Keeps the same text color */
+//  /* Adjust for better spacing */
+// }
+
+
+// .view-buttons {
+//   display: none;
+
+//   @media screen and (max-width: 767px) {
+//     margin-top: 15px;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//   }
+
+//   button {
+//     @include font-sans_pro-semibold(16px);
+//     border-radius: 8px;
+//     border: 1px solid $border-color;
+//     padding: 8px 16px;
+//     background: $white;
+//     width: 135px;
+//   }
+// }
+
+@use "tools.mediaquery" as *;
+@use "tools.typography" as *;
+@use "settings.containers" as *;
+@use "variable.scss" as *;
+
+.services {
+  padding: $pad_0 $pad_24 $pad_24;
+
+  @media screen and (max-width: 767px) {
+    padding: 0;
+  }
+
+  h2 {
+    @include font-sans_pro-semibold($size: 22px);
+    @media screen and (max-width: 767px) {
+      margin-bottom: 6px;
+    }
+  }
+
+  &__container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    margin-top: 1rem;
+
+    @media screen and (max-width: 992px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media screen and (max-width: 576px) {
+      grid-template-columns: 1fr;
+      gap: 0;
+      margin-top: 0.5rem;
+    }
+
+    .list {
+      .service {
+        @include font-sans_pro-regular($size: 14px);
+      }
+    }
+  }
+
+  .placeholder {
+    .placeholder-block {
+      height: 40px;
+      border-radius: 6px;
+      background: rgba(200, 200, 200, 0.3);
+      backdrop-filter: blur(4px);
+      animation: shimmer 2s infinite linear;
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+}
+
+.service_link {
+  display: block;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s ease;
+  &:hover { color: #45197c; }
+}
+
+.desktop-only {
+  display: grid;
+
+  @media screen and (max-width: 767px) {
+    display: none !important;
+  }
+}

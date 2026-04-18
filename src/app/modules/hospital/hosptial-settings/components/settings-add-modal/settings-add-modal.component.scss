@@ -1,0 +1,67 @@
+@use "variable.scss" as *;
+
+.settings-add {
+  .form-item {
+    .form-input {
+      height: 52px;
+      padding: 0 24px;
+      border: 1px solid $border-color;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .textarea-input {
+      padding: 12px 24px;
+      border: 1px solid $border-color;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .error-hint {
+      margin-top: -4px !important;
+    }
+  }
+
+  button {
+    border: 1px solid $border-color;
+    font-size: 14px;
+    width: 120px;
+    padding: 12px 0;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    .mt-0-5 {
+      margin-top: 2px;
+    }
+
+    &.cancel {
+      background: $white;
+    }
+
+    &.save {
+      background: $purple;
+      color: $white;
+    }
+
+    &.delete {
+      border-color: $red !important;
+      color: $red;
+      background: $white;
+    }
+  }
+}
+
+::ng-deep {
+  .mdc-dialog__actions.settings-add {
+    padding: 0 !important;
+  }
+
+  .mdc-dialog__content.settings-add {
+    color: $black !important;
+    font-size: 14px !important;
+    font-family: "Source Sans Pro", sans-serif !important;
+  }
+}

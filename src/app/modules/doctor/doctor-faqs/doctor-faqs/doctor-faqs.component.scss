@@ -1,0 +1,137 @@
+.menu-list li:not(.exclude-menu) a img {
+  transition: filter 0.3s ease; /* Smooth transition */
+}
+
+.menu-list li:not(.exclude-menu) a:hover img {
+  filter: invert(100%);
+}
+
+.modal {
+  background: rgba(0, 0, 0, 0.5);
+}
+// .modal.show .modal-dialog {
+//   width: 900px;
+
+//   @media only screen and (max-width: 768px) {
+//     width: 100%;
+//   }
+// }
+.modal-header {
+  position: relative;
+  h5 {
+    margin: 0;
+  }
+}
+.modal-header .close {
+  padding: 1rem 1rem;
+  margin: -1rem -1rem -1rem auto;
+  padding: 0;
+  background-color: transparent;
+  border: 0;
+  // float: right;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: 0.5;
+  position: absolute;
+  top: 25px;
+  right: 32px;
+}
+.modal h5 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1;
+}
+.faq-screen {
+  //   padding: 24px;
+}
+
+.faq-grid-item {
+  width: 100%;
+  //   max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #b3b3b3;
+
+  .grid-item-col {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    padding: 24px;
+    flex-direction: column;
+    text-align: left;
+    width: 85%;
+
+    p {
+      line-height: 1.4;
+      margin-bottom: 0;
+
+      &.question {
+        font-weight: 600;
+      }
+    }
+
+    @media only screen and (max-width: 768px) {
+      width: 100%;
+    }
+    @media only screen and (max-width: 600px) {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+  .video-edit {
+    display: flex;
+    svg,
+    img {
+      width: 24px;
+      height: 24px;
+      margin-right: 5px;
+    }
+    &:hover {
+      background-color: #45197c;
+      border-color: #45197c;
+
+      svg path {
+        fill: #fff;
+      }
+    }
+  }
+
+  &::after {
+    content: "";
+    display: table;
+  }
+  @media only screen and (max-width: 768px) {
+    width: 95%;
+  }
+  @media only screen and (max-width: 600px) {
+    flex-direction: column;
+    padding-bottom: 20px;
+  }
+}
+.form-inline {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+.btn-link {
+  text-decoration: none;
+}
+.colz {
+  padding-right: 20px;
+}
+
+.modal-backdrop {
+  display: none !important;
+}
+.btn-primary {
+  background-color: #45197c;
+  border-color: #45197c;
+
+  &:hover {
+    opacity: 0.5;
+  }
+}

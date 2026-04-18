@@ -1,0 +1,138 @@
+<!-- ========== Modern Register Tabs ========== -->
+<div class="auth-tabs" *ngIf="signup">
+  <a class="auth-tabs__tab" [routerLink]="routes[userType].login" routerLinkActive="auth-tabs__tab--active">Login</a>
+  <a class="auth-tabs__tab" [routerLink]="routes[userType].register" routerLinkActive="auth-tabs__tab--active">Register</a>
+  <span class="auth-tabs__info" *ngIf="userType == 2 && deviceWidth > 576">
+    <a class="auth-tabs__link" routerLink="/auth/patient/login">Not a doctor?</a>
+  </span>
+</div>
+
+<!-- ========== Modern Register Form ========== -->
+<section class="auth-form" *ngIf="signup">
+  <div class="auth-form__header">
+    <h2 class="auth-form__title">Create Account</h2>
+    <p class="auth-form__subtitle">Join thousands on their journey to better health</p>
+  </div>
+
+  <form [formGroup]="signupForm" (ngSubmit)="submit()" class="auth-form__body" autocomplete="off">
+
+    <!-- ── Full Name ── -->
+    <div class="auth-form__field">
+      <label class="auth-form__label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Full Name
+      </label>
+      <div class="auth-form__input-group" [class.auth-form__input-group--doctor]="userType == 2">
+        <span class="auth-form__prefix auth-form__prefix--dr" *ngIf="userType == 2">Dr.</span>
+        <input class="auth-form__input" type="text" placeholder="Enter your full name" formControlName="fullName"
+          maxlength="50"
+          oninput="this.value = this.value.replace(/^ $/,'');"
+          (keypress)="cValidator.alphabetOnly($event)" />
+      </div>
+      <div class="auth-form__error"
+        *ngIf="(control['fullName'].touched || submitted) && control['fullName'].errors?.['required']">
+        Please enter your full name
+      </div>
+    </div>
+
+    <!-- ── Mobile Number ── -->
+    <div class="auth-form__field">
+      <label class="auth-form__label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        Mobile Number
+      </label>
+      <div class="auth-form__input-group">
+        <span class="auth-form__prefix">+91</span>
+        <input class="auth-form__input" type="text" maxlength="10" placeholder="Enter 10-digit mobile number"
+          formControlName="phone"
+          oninput="this.value = this.value.replace(/\D/g, '').replace(/^0/,'');" />
+      </div>
+      <div class="auth-form__error"
+        *ngIf="(control['phone'].touched || submitted) && control['phone'].errors?.['required']">
+        Please enter your mobile number
+      </div>
+      <div class="auth-form__error"
+        *ngIf="(control['phone'].touched || submitted) && control['phone'].errors?.['minlength']">
+        Please enter a valid 10-digit number
+      </div>
+    </div>
+
+    <!-- ── Create Password ── -->
+    <div class="auth-form__field">
+      <label class="auth-form__label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Create Password
+      </label>
+      <div class="auth-form__input-group auth-form__input-group--password">
+        <input class="auth-form__input" [type]="showPassword ? 'text' : 'password'" placeholder="Min. 6 characters"
+          formControlName="password" />
+        <button type="button" class="auth-form__eye" (click)="showPassword = !showPassword" tabindex="-1">
+          <svg *ngIf="!showPassword" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <svg *ngIf="showPassword" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
+      </div>
+      <div class="auth-form__error"
+        *ngIf="(control['password'].touched || submitted) && control['password'].errors?.['required']">
+        Please create a password
+      </div>
+      <div class="auth-form__error"
+        *ngIf="(control['password'].touched || submitted) && control['password'].errors?.['minlength'] && !control['password'].errors?.['required']">
+        Password must be at least 6 characters
+      </div>
+      <!-- Password strength -->
+      <div class="auth-form__strength" *ngIf="signupForm.get('password')?.value?.length > 0">
+        <div class="auth-form__strength-bars">
+          <span class="auth-form__strength-bar" [class.auth-form__strength-bar--weak]="signupForm.get('password')?.value?.length >= 1"></span>
+          <span class="auth-form__strength-bar" [class.auth-form__strength-bar--medium]="signupForm.get('password')?.value?.length >= 6"></span>
+          <span class="auth-form__strength-bar" [class.auth-form__strength-bar--strong]="signupForm.get('password')?.value?.length >= 10"></span>
+        </div>
+        <span class="auth-form__strength-label"
+          [class.auth-form__strength-label--weak]="signupForm.get('password')?.value?.length < 6"
+          [class.auth-form__strength-label--medium]="signupForm.get('password')?.value?.length >= 6 && signupForm.get('password')?.value?.length < 10"
+          [class.auth-form__strength-label--strong]="signupForm.get('password')?.value?.length >= 10">
+          {{ signupForm.get('password')?.value?.length < 6 ? 'Weak' : (signupForm.get('password')?.value?.length < 10 ? 'Good' : 'Strong') }}
+        </span>
+      </div>
+    </div>
+
+    <!-- ── Terms & Conditions (Doctor only) ── -->
+    <div class="auth-form__terms" *ngIf="userType == 2">
+      <label class="auth-form__checkbox">
+        <input type="checkbox" formControlName="permission" (change)="openDialog(false)" />
+        <span class="auth-form__checkbox-mark"></span>
+        <span>By signing up, I agree to</span>
+      </label>
+      <a class="auth-form__terms-link" (click)="openDialog(true)">terms & conditions</a>
+    </div>
+
+    <!-- ── SMS Note (Patient) ── -->
+    <p class="auth-form__note" *ngIf="userType != 2">
+      <span class="auth-form__note-star">*</span>
+      You may receive SMS updates from Nectar
+    </p>
+
+    <!-- ── Submit Button ── -->
+    <button type="submit" class="auth-form__submit"
+      [class.auth-form__submit--disabled]="!control['permission'].value && userType == 2">
+      Create Account
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+
+    <!-- ── Already have account ── -->
+    <p class="auth-form__switch">
+      Already have an account?
+      <a [routerLink]="routes[userType].login" class="auth-form__switch-link">Sign In</a>
+    </p>
+  </form>
+</section>
+
+<!-- ========== Mobile doctor redirect ========== -->
+<div class="auth-form__mobile-redirect" *ngIf="userType != 2 && deviceWidth < 576 && signup">
+  Are you a doctor?
+  <a routerLink="/auth/doctors/register" class="auth-form__switch-link">Register</a>
+</div>
+
+<!-- ========== OTP Verification ========== -->
+<div *ngIf="!signup">
+  <nectar-verify-otp [patientSignup]="userType == 1 ? true : false"></nectar-verify-otp>
+</div>

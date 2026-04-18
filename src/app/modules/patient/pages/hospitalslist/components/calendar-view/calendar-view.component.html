@@ -1,0 +1,405 @@
+<section class="calendar-view">
+  <div class="calendar-view__grid-view">
+    <div class="calendar-view__grid-view__details">
+      <!-- <div
+        class="calendar-view__grid-view__details__image-section cursor-pointer"
+        (click)="viewDoctor()"
+      >
+        <div class="profile-icon" *ngIf="!data?.profilePic">
+          {{ data?.fullName | nameInitial | uppercase }}
+        </div>
+       
+        <img
+          [src]="data?.profilePic || ''"
+          [alt]="data?.fullName"
+          *ngIf="data?.profilePic"
+        />
+      </div> -->
+      <a
+      class="calendar-view__grid-view__details__image-section cursor-pointer"
+      [routerLink]="doctorLink"
+      (click)="eventService.broadcastEvent('view-doctor', true)"
+    >
+      <div class="profile-icon" *ngIf="!data?.profilePic">
+        {{ data?.fullName | nameInitial | uppercase }}
+      </div>
+
+      <img
+        [src]="data?.profilePic || ''"
+        [alt]="data?.fullName"
+        *ngIf="data?.profilePic"
+        [attr.loading]="index === 0 ? 'eager' : 'lazy'"
+        [attr.fetchpriority]="index === 0 ? 'high' : 'auto'"
+        height="24" width="24"
+      />
+    </a>
+
+
+      <div class="calendar-view__grid-view__details__doctor-section">
+        <div class="name" style="display: flex;">
+          <!-- <h2 (click)="viewDoctor()" class="cursor-pointer m-0">
+            {{ (data?.fullName | titlecase) || "N/A" | truncate:20}}
+          </h2> -->
+          <a   [routerLink]="doctorLink"
+          (click)="eventService.broadcastEvent('view-doctor', true)"
+          >
+              <h2 class="cursor-pointer m-0 truncate-text text-black">
+                {{ (data?.fullName | titlecase) || "N/A" }}
+              </h2>
+          </a>
+        
+          
+          <img
+            loading="lazy"
+            src="assets/images/svg/verified_tick.svg"
+            alt="img"
+          />
+        </div>
+        <!-- <p *ngIf="data?.specialization?.length && this.data?.address?.city">
+          <a
+            *ngFor="let spec of data.specialization"
+            [routerLink]="['/', formatCity(this.data?.address?.city), formatSpecialization(spec.name)]"
+            class="specialization-link"
+          >
+            {{ spec.name }}
+          </a>
+        </p> -->
+
+
+        <!-- <p *ngIf="data?.specialization?.length && this.data?.address?.city">
+          <ng-container *ngFor="let spec of data.specialization; let i = index">
+            <a
+              [routerLink]="['/', formatCity(this.data?.address?.city), formatSpecialization(spec.name)]"
+              class="specialization-link2"
+            >
+              {{ spec.name }}
+            </a><span *ngIf="i !== data.specialization.length - 1">, </span>
+          </ng-container>
+        </p> -->
+        
+        <p *ngIf="data?.specialization?.length && this.data?.address?.city">
+          <ng-container *ngFor="let spec of data.specialization; let i = index">
+            <a
+              [routerLink]="['/', formatCity(this.data?.address?.city), formatSpecialization(spec.name)]"
+              class="specialization-link2"
+            >
+              {{ spec.name }}
+            </a>
+            <span *ngIf="i !== data.specialization.length - 1">, </span>
+          </ng-container>
+        </p>
+
+       
+        
+        
+        <!-- <p>
+          {{ data?.education?.[0]?.degree || "N/A" }}
+        </p> -->
+
+        <p *ngFor="let edu of data?.education" class="truncate-text">
+          {{ edu.degree || "N/A" }},&nbsp;
+        </p>
+        
+
+        
+        
+        <!-- <p>
+          {{ (data?.specialization | formatarray : "name") || "N/A" }}
+        </p> -->
+        <p *ngIf="data?.experience">
+          {{ data?.experience || 0 }} Years Experience Overall
+        </p>
+        <p *ngIf="!data?.experience">N/A</p>
+        <!-- <div class="rating">
+          <star-rating
+            [rating]="data?.rating || 0"
+            [step]="0.1"
+            [showHalfStars]="true"
+            [readOnly]="true"
+          ></star-rating>
+          <span class="star">
+            {{ (data?.rating | number : "1.1") || "0.0" }}
+          </span>
+          <span class="total"> &nbsp;/5 </span>
+          <span class="review" *ngIf="data?.totalReview <= 1"
+            >({{ data?.totalReview || 0 }} review)</span
+          >
+          <span class="review" *ngIf="data?.totalReview > 1"
+            >({{ data?.totalReview || 0 }} reviews)</span
+          >
+        </div> -->
+
+        
+        <div class="doctor-details-price">
+          <div class="score" style="background-color: #e1c5e1;">
+            <img
+              loading="lazy"
+              src="assets/images/homepage/thumbs-up.svg"
+              alt=""
+            />
+            <p>{{ (data?.recommended | number : ".0-1") || 0 }}%</p>
+          </div>
+          <div class="price-box" *ngIf="data?.consultationFees | validFee" style="background-color: #e1c5e1;padding-left: 2px;padding-right: 2px;padding-top: 3px;padding-bottom: 3px;border-radius: 4px; width: 90px;">
+            <span class="badge badge-primary"  >
+              <svg width="16" height="13" viewBox="0 0 16 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.2 13C6.36569 13 6.5 12.8657 6.5 12.7V8.8C6.5 8.63431 6.63431 8.5 6.8 8.5H9.2C9.36569 8.5 9.5 8.63431 9.5 8.8V12.7C9.5 12.8657 9.63431 13 9.8 13H12.95C13.1157 13 13.25 12.8657 13.25 12.7V7.3C13.25 7.13431 13.3843 7 13.55 7H14.7182C14.9932 7 15.1233 6.66094 14.9189 6.47701L8.20069 0.430621C8.0866 0.327939 7.9134 0.327938 7.79931 0.43062L1.0811 6.47701C0.876734 6.66094 1.00684 7 1.28179 7H2.45C2.61569 7 2.75 7.13431 2.75 7.3V12.7C2.75 12.8657 2.88431 13 3.05 13H6.2Z" fill="#45197C" />
+              </svg>
+            </span>
+            &#8377;{{ data?.consultationFees }} <br />
+          </div>
+          <div class="price-box" *ngIf="data?.videoConsultationFees | validFee" style="background-color: rgb(156, 231, 156);padding-left: 2px;padding-right: 2px;padding-top: 2px;padding-bottom: 2px;border-radius: 4px; width: 90px">
+            <span class="badge badge-success"  >
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <rect width="18" height="18" fill="url(#pattern0_491_3389)" />
+                <defs>
+                  <pattern id="pattern0_491_3389" patternContentUnits="objectBoundingBox" width="1" height="1">
+                    <use xlink:href="#image0_491_3389" transform="scale(0.00195312)" />
+                  </pattern>
+                  <image
+                    id="image0_491_3389"
+                    width="512"
+                    height="512"
+                    xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAMAAADDpiTIAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAqxQTFRFAAAAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICA7pdMugAAAOR0Uk5TAAIjTW6LprrL293NwLKTd1tVVqe7zNjPv6+UdlgzCBdTkMfz//vVo2cqATeF0umdUQspgN73swUGyeZ+DXn4nyYM7PyhJOH6kRAxyOpi+cEuYV71B6LXJRTtQiffXyvl/nE27i1152YWTOAVtiwyhtEvf2CwQ3pKyuQ+XK0efYji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"
+                  />
+                </defs>
+              </svg>
+            </span>
+            &#8377;{{ data?.videoConsultationFees }} <br/> 
+          </div>
+          <div class="d-flex gap-1" *ngIf="deviceWidth < 767" style="
+          background: #c6dfbe;
+          padding: 7px;
+          border-radius: 6px;
+      ">
+            <img loading="lazy" src="assets/images/svg/stars.svg" alt="" />
+            <div class="text-18 font-600">
+              <span class="text-green">
+                {{ (data?.rating | number : "1.1") || "0.0" }}</span>
+              <span class="opacity-70">/5</span>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- <h4 *ngIf="data?.address?.locality && data?.address?.city">
+          {{ data?.address?.locality }}, {{ data?.address?.city }}
+          {{ data?.address?.pincode }}
+        </h4>
+        <h4 *ngIf="data?.address?.locality && !data?.address?.city">
+          {{ data?.address?.locality }}
+        </h4>
+        <h4 *ngIf="!data?.address?.locality && data?.address?.city">
+          {{ data?.address?.city }}
+          {{ data?.address?.pincode }}
+        </h4>
+        <h4 *ngIf="!data?.address?.locality && !data?.address?.city">N/A</h4> -->
+
+        <!-- New Code  -->
+        <a
+        *ngIf="data?.address?.city"
+        class="specialization-link2"
+        [routerLink]="getAddressRoute(data)"
+      >
+        <p *ngIf="data?.address?.locality && data?.address?.city">
+          {{ data?.address?.locality }}, {{ data?.address?.city }}
+          {{ data?.address?.pincode }}
+        </p>
+        <p *ngIf="data?.address?.locality && !data?.address?.city">
+          {{ data?.address?.locality }}
+        </p>
+        <p *ngIf="!data?.address?.locality && data?.address?.city">
+          {{ data?.address?.city }} {{ data?.address?.pincode }}
+        </p>
+        <p *ngIf="!data?.address?.locality && !data?.address?.city">N/A</p>
+        </a>
+
+        <p *ngIf="data?.specialization?.length && this.data?.address?.city && deviceWidth > 767">
+          <span class="truncate-text">
+            {{ formatName(data?.establishmentName, 30) | titlecase }}
+          </span>
+        </p>
+      
+      
+        <!-- New Code  -->
+
+        <!-- <div
+          class="get-direction cursor-pointer"
+          (click)="
+        gService.redirectToGoogleMaps(
+          data?.pinLocation?.coordinates?.[1] || 28.6448,
+          data?.pinLocation?.coordinates?.[0] || 77.216721
+        )
+      "
+        >
+          Get Direction
+          <img
+            loading="lazy"
+            src="assets/images/svg/location_arrow.svg"
+            alt=""
+          />
+        </div> -->
+        
+          <a 
+            class="get-direction cursor-pointer"
+            [href]="'https://www.google.com/maps?q=' + (data?.pinLocation?.coordinates?.[1] || 28.6448) + ',' + (data?.pinLocation?.coordinates?.[0] || 77.216721)"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Get Direction
+            <img
+              loading="lazy"
+              src="assets/images/svg/location_arrow.svg"
+              alt=""
+            />
+          </a>
+
+       
+      </div>
+    </div>
+
+    <!-- mobile view hospital card -->
+
+    <div class="hospital-card">
+    
+
+    
+
+
+      <!-- testing the ..... -->
+      <div class="address-box">
+        <p class="address-box-item" *ngIf="data?.address?.locality && data?.address?.city">
+          {{ (data?.address?.locality + ', ' + data?.address?.city) | truncate: 35 }}
+        </p>
+        <p class="address-box-item" *ngIf="data?.address?.locality && !data?.address?.city">
+          {{ data?.address?.locality | truncate: 35 }}
+        </p>
+        <p class="address-box-item" *ngIf="!data?.address?.locality && data?.address?.city">
+          {{ data?.address?.city | truncate: 35 }}
+        </p>
+        <p class="address-box-item" *ngIf="!data?.address?.locality && !data?.address?.city">N/A</p>
+      </div>
+      
+      
+
+      <!-- <div class="text-16 font-600 d-flex justify-content-between">
+        {{ formatName(data?.establishmentName, 30) | titlecase }}
+        <div
+          class="font-400 text-purple"
+          *ngIf="data?.establishmentMaster?.length > 1"
+          (click)="changeClinic()"
+        >
+          Change Clinic
+          <img loading="lazy" src="assets/images/Vector.png" alt="" />
+        </div>
+      </div> -->
+
+      <!-- <div class="text-16 font-600 d-flex justify-content-between">
+        {{ formatName(data?.establishmentName, 30) | titlecase }}
+        <div
+          class="font-400 text-purple"
+          (click)="data?.establishmentMaster?.length > 1 ? changeClinic() : null"
+          [style.pointer-events]="data?.establishmentMaster?.length > 1 ? 'auto' : 'none'"
+          [style.opacity]="data?.establishmentMaster?.length > 1 ? '1' : '0.5'"
+        >
+          Change Clinic
+          <img loading="lazy" src="assets/images/Vector.png" alt="" />
+        </div>
+      </div> -->
+    
+
+      <div class="text-16 font-600 d-flex justify-content-between">
+        <span class="truncate-text">
+          {{ formatName(data?.establishmentName, 30) | titlecase }}
+        </span>
+        <div
+          class="font-400 text-purple"
+          (click)="data?.establishmentMaster?.length > 1 ? changeClinic() : null"
+          [style.pointer-events]="data?.establishmentMaster?.length > 1 ? 'auto' : 'none'"
+          [style.opacity]="data?.establishmentMaster?.length > 1 ? '1' : '0.5'"
+        >
+          Change Clinic
+          <img loading="lazy" src="assets/images/Vector.png" alt="" />
+        </div>
+      </div>
+      
+      
+
+      <div class="flex-container d-flex ">
+        <div class="text-16 font-600 d-flex gap-2 mt-1" *ngIf="data?.consultationFees | validFee" style="margin-right: 6px;">
+          <span  class="badge badge-primary"  >
+            <svg width="16" height="15" viewBox="0 0 16 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6.2 13C6.36569 13 6.5 12.8657 6.5 12.7V8.8C6.5 8.63431 6.63431 8.5 6.8 8.5H9.2C9.36569 8.5 9.5 8.63431 9.5 8.8V12.7C9.5 12.8657 9.63431 13 9.8 13H12.95C13.1157 13 13.25 12.8657 13.25 12.7V7.3C13.25 7.13431 13.3843 7 13.55 7H14.7182C14.9932 7 15.1233 6.66094 14.9189 6.47701L8.20069 0.430621C8.0866 0.327939 7.9134 0.327938 7.79931 0.43062L1.0811 6.47701C0.876734 6.66094 1.00684 7 1.28179 7H2.45C2.61569 7 2.75 7.13431 2.75 7.3V12.7C2.75 12.8657 2.88431 13 3.05 13H6.2Z" fill="#45197C" />
+            </svg>
+          </span>
+          &#8377;{{ data?.consultationFees }} <br />
+        </div>
+        <div class="text-16 font-600 d-flex gap-2 mt-1" *ngIf="data?.videoConsultationFees | validFee">
+           <img loading="lazy" style="width: 20px; margin-left: 0px;" alt="videoicon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAMAAADDpiTIAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAqxQTFRFAAAAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICAAICA7pdMugAAAOR0Uk5TAAIjTW6LprrL293NwLKTd1tVVqe7zNjPv6+UdlgzCBdTkMfz//vVo2cqATeF0umdUQspgN73swUGyeZ+DXn4nyYM7PyhJOH6kRAxyOpi+cEuYV71B6LXJRTtQiffXyvl/nE27i1152YWTOAVtiwyhtEvf2CwQ3pKyuQ+XK0efYji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"/>
+           <span style="margin-left: 7px;"> &#8377;{{ data?.videoConsultationFees }}</span>   <br />
+        </div>
+      </div>
+
+    </div>
+
+    
+
+    <!-- appointment slider for mobile -->
+
+    <div class="appointment-slider" style="overflow: auto">
+      <div class="d-flex gap-3">
+        <div
+          class="box whitespace-nowrap cursor-pointer"
+          *ngFor="let item of data?.appointmentCounts"
+          (click)="appoinmentDetail(item?.date, item?.remainingSlots)"
+        >
+          <div class="text-16 font-400">
+            {{
+              checkTodayDate(item?.date)
+                ? "Today"
+                : (item?.date | date : "EE, MMM dd")
+            }}
+          </div>
+          <div
+            class="text-green text-16 font-400 whitespace-nowrap"
+            [class.text-danger]="!item?.remainingSlots"
+          >
+            {{ item?.remainingSlots || 0 }}
+            appts
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- book aapointment button for mobile  -->
+
+    <div
+      class="mobile-book-appointment"
+      [style.opacity]="data?.isActive ? '1' : '0.5'"
+      (click)="data?.isActive ? appoinmentDetail(null, 1) : ''"
+    >
+      <button class="w-100">Book Appointment</button>
+    </div>
+<!--calender view date here -->
+    <div class="calendar-view__grid-view__calendar">
+      <div
+        class="calendar-view__grid-view__calendar__cards"
+        *ngFor="let item of data?.appointmentCounts"
+        [ngClass]="{ disabled: !item?.remainingSlots }"
+        (click)="appoinmentDetail(item?.date, item?.remainingSlots)"
+      >
+        <p>
+          {{
+            checkTodayDate(item?.date) ? "Today" : (item?.date | date : "EE")
+          }}
+        </p>
+        <p>
+          {{ item?.date | date : "MMM dd" }}
+        </p>
+        <p class="appts">
+          {{ item?.remainingSlots || 0 }}<br />
+          appts
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

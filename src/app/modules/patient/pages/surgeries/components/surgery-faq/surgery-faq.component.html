@@ -1,0 +1,31 @@
+<section class="faq">
+  <div class="faq__wrapper">
+    <div class="content_section">
+      <h2 class="text-center fw-bold">Frequently Asked Questions</h2>
+      <p class="w-75 text-center">Is composed of bones and cartilage that form the face and the cranium, which surrounds
+        the brain. You can feel
+        the bones of the cranium on top of the skull. The 5 bones that form the bottom, or base, of the cranium also
+        form the eye socket, roof of the nasal cavity,</p>
+    </div>
+    <div class="faq__wrapper__content">
+      <div class="faq__questions-container">
+        <mat-accordion *ngFor="let item of questionArray; let i = index">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>{{ item?.question }}</mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>
+              {{ item.answer | slice: 0:(isExpanded[i] ? undefined : 150) }}
+              <span *ngIf="item.answer.length > 150">
+                ...
+                <button color="primary" (click)="toggleReadMore(i)">
+                  {{ isExpanded[i] ? 'Read Less' : 'Read More' }}
+                </button>
+              </span>
+            </p>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,44 @@
+@use './theme-base' as *;
+
+@use './theme-mgroup' as *;
+
+@use 'src/styles/settings/settings.typography' as *;
+
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '~@angular/material/theming' as *;
+// Plus imports for other components in your app.
+
+$typography-config: mat-typography-config(
+	$font-family: $font-proxima
+);
+
+@include angular-material-typography($typography-config);
+
+@include mat-core($typography-config);
+
+// primary theme palette...
+$base-primary: mat-palette($base-palette);
+$base-warn: mat-palette($mat-red);
+$base-theme: mat-light-theme($base-primary, $base-warn);
+
+
+// custom theme palettes...
+$base-mgroup: mat-palette($mgroup-palette);
+$mgroup-theme: mat-light-theme($base-mgroup, $base-warn);
+
+// custom theme palettes...
+$base-mgroup-black: mat-palette($mgroup-palette-grey);
+$mgroup-theme-black: mat-light-theme($mgroup-palette-grey, $base-warn);
+
+
+@include angular-material-theme($base-theme);
+
+// CUSTOM THEME CLASS
+// Material components contained in the following classed containers will inherit the custom theme
+
+.theme-black {
+	// Material components will inherit the Pergo material theme
+	@include angular-material-theme($mgroup-theme-black);
+}

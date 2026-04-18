@@ -1,0 +1,48 @@
+<main>
+  <div
+    class="subheader-wrapper d-flex justify-content-between align-items-center gap-5 w-100 border-bottom-style"
+  >
+    <div class="heading d-flex align-items-center h-100">
+      <div class="hamber">
+        <button class="svg-icon-button" (click)="openSidenav()">
+          <svg-icon
+            src="assets/images/svg/hamber.svg"
+            class="cursor-pointer"
+          ></svg-icon>
+        </button>
+      </div>
+      <span class="text-24 font-600">{{ "SETTINGS" | translate }}</span>
+    </div>
+  </div>
+  <div class="d-flex settings-container">
+    <div class="sidebar-settings">
+      <div class="nav-item border-bottom-style cursor-pointer active text-16">
+        {{ "SETTINGS" | translate }}
+      </div>
+    </div>
+    <div class="router-outlet">
+      <div class="main d-flex">
+        <div class="settings-sidebar">
+          <div class="heading-container text-16 border-bottom-style">
+            {{ "HOSPITAL_SETTINGS" | translate }}
+          </div>
+          <div class="d-flex flex-column gap-2 p-24">
+            <ng-container *ngFor="let menu of settingsMenu">
+              <div
+                class="menu-item px-24 py-16 text-18 font-600 cursor-pointer"
+                [routerLink]="menu.routerLink"
+                routerLinkActive="active"
+                [ngClass]="{ 'menu-red': menu.red }"
+              >
+                {{ menu.label }}
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <div class="router-outlet">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

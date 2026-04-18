@@ -1,0 +1,33 @@
+<nectar-subheader>
+  <span subheader-part1 class="text-24 font-600">{{ "Settings" }}</span>
+</nectar-subheader>
+
+<div class="d-flex settings-container">
+  <div class="sidebar-settings">
+    <div
+      class="nav-item border-bottom-style cursor-pointer"
+      routerLink="profile"
+      routerLinkActive="active"
+    >
+      <svg-icon
+        src="assets/images/svg/Profile Setting-icon.svg"
+        class="me-2"
+      ></svg-icon>
+      {{ "PROFILE_SETTINGS" | translate }}
+    </div>
+    <div
+      class="nav-item border-bottom-style cursor-pointer"
+      routerLink="establishment"
+      routerLinkActive="active"
+    >
+      <svg-icon
+        src="assets/images/svg/Establishment-icon.svg"
+        class="me-2"
+      ></svg-icon>
+      {{ "ESTABLISHMENT" | translate }}
+    </div>
+  </div>
+  <div class="router-outlet">
+    <router-outlet></router-outlet>
+  </div>
+</div>

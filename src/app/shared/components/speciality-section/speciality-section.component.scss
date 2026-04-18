@@ -1,0 +1,500 @@
+@use "tools.mediaquery" as *;
+
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+
+@use "variable.scss" as *;
+
+@use "src/styles/components/_components.ngx-pagination.scss" as *;
+
+.main {
+  padding: 24px;
+  @include font-sans_pro-regular($font_14);
+
+  @media screen and (max-width: 767px) {
+    padding: 24px 0px;
+  }
+
+  .wrapper {
+    .heading {
+      @include font-sans_pro-semibold($font_20);
+    }
+
+    .filter {
+      margin-top: 24px;
+      border: 1px solid $border-color;
+      border-radius: 5px;
+      padding: 16px;
+
+      @media screen and (max-width: 767px) {
+        margin-top: 12px;
+        overflow-x: auto;
+        border: none;
+        min-width: 90vw;
+        padding: 0;
+        border-radius: 0;
+        border-bottom: 1px solid $border-color;
+        padding-bottom: 10px;
+      }
+
+      .filter-heading {
+        @include font-sans_pro-regular($font_14);
+
+        @media screen and (max-width: 767px) {
+          display: none;
+        }
+      }
+
+      .specialities {
+        margin: 12px 0 8px 0;
+        flex-wrap: wrap;
+
+        @media screen and (max-width: 767px) {
+          flex-wrap: nowrap;
+          white-space: nowrap;
+          gap: 8px !important;
+          margin: 8px 0 4px 0;
+        }
+
+        .box {
+          padding: 8px 20px;
+          background: $bright-gray;
+          border-radius: 25px;
+          @include font-sans_pro-regular($font_14);
+          transition: all 0.2s ease;
+          cursor: pointer;
+          border: 1px solid transparent;
+
+          @media screen and (max-width: 767px) {
+            padding: 6px 16px;
+            @include font-sans_pro-regular(13px);
+          }
+
+          &:hover {
+            border-color: rgba(69, 25, 124, 0.3);
+          }
+        }
+
+        .selected {
+          color: $white;
+          background: $purple;
+          border-color: $purple;
+          box-shadow: 0 2px 8px rgba(69, 25, 124, 0.3);
+        }
+      }
+    }
+
+    .list-section {
+      margin: 18px 0;
+
+      .card {
+        border: 1px solid $border-color;
+        padding: 28px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        transition: box-shadow 0.2s ease;
+
+        &:hover {
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        @media screen and (max-width: 767px) {
+          padding: 16px;
+          border-radius: 12px;
+          margin-bottom: 12px;
+        }
+
+        .card-detail {
+          @media screen and (max-width: 576px) {
+            flex-direction: column;
+            gap: 8px;
+            justify-content: flex-start !important;
+          }
+
+          .first-section {
+
+            .profile-icon,
+            .image-section {
+              height: 100px;
+              width: 100px;
+              border: 1px solid $border-color;
+              border-radius: 50%;
+              @include font-sans_pro-semibold($font_20);
+              color: $purple;
+              flex-shrink: 0;
+
+              @media screen and (max-width: 767px) {
+                height: 70px;
+                width: 70px;
+              }
+
+              img {
+                height: 99px;
+                width: 99px;
+                border-radius: 50%;
+                object-fit: contain;
+
+                @media screen and (max-width: 767px) {
+                  height: 68px;
+                  width: 68px;
+                }
+              }
+            }
+
+            .content {
+              .name {
+                @include font-sans_pro-semibold($font_20);
+
+                @media screen and (max-width: 767px) {
+                  @include font-sans_pro-semibold(16px);
+                }
+
+                a {
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 4px;
+                  white-space: nowrap;
+                  text-decoration: none;
+                  color: black;
+
+                  img {
+                    flex-shrink: 0;
+                    width: 18px;
+                    height: 18px;
+
+                    @media screen and (max-width: 767px) {
+                      width: 16px;
+                      height: 16px;
+                    }
+                  }
+
+                  &:hover {
+                    color: $purple;
+                  }
+                }
+              }
+
+              .speciality {
+                opacity: 0.7;
+
+                @media screen and (max-width: 767px) {
+                  @include font-sans_pro-regular(13px);
+                }
+              }
+
+              .experience {
+                @include font-sans_pro-semibold($font_14);
+                color: rgba(0, 0, 0, 0.8);
+
+                @media screen and (max-width: 767px) {
+                  @include font-sans_pro-semibold(13px);
+                }
+              }
+
+              .rating {
+                grid-area: rating;
+                margin-top: 5px;
+                justify-content: start;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+
+                @media screen and (max-width: 767px) {
+                  margin-top: 4px;
+                }
+
+                ::ng-deep {
+                  star-rating {
+                    .star-container {
+                      margin-left: 0;
+
+                      svg {
+                        fill: $green !important;
+                      }
+                    }
+
+                    @media screen and (max-width: 767px) {
+                      .star-container svg {
+                        width: 16px !important;
+                        height: 16px !important;
+                      }
+                    }
+                  }
+                }
+
+                img {
+                  margin-bottom: 10px;
+                  height: 20px;
+                  width: 20px;
+                  display: inline-block;
+                }
+
+                .total {
+                  @include font-sans_pro-semibold($font_14);
+                  color: rgba(0, 0, 0, 0.7);
+
+                  @media screen and (max-width: 767px) {
+                    @include font-sans_pro-semibold(12px);
+                  }
+                }
+
+                .star {
+                  @include font-sans_pro-bold($font_14);
+
+                  @media screen and (max-width: 767px) {
+                    @include font-sans_pro-bold(12px);
+                  }
+                }
+
+                .review {
+                  @include font-sans_pro-regular($font_14);
+                  color: rgba(0, 0, 0, 0.7);
+
+                  @media screen and (max-width: 767px) {
+                    @include font-sans_pro-regular(11px);
+                  }
+                }
+              }
+
+              .score {
+                border: 1px solid rgba(69, 25, 124, 0.3);
+                border-radius: 5px;
+                padding: 3px 8px;
+                @include font-sans_pro-semibold($font_14);
+
+                @media screen and (max-width: 767px) {
+                  border: 1px solid rgba(69, 25, 124, 0.2);
+                  border-radius: 4px;
+                  padding: 2px 6px;
+                  @include font-sans_pro-semibold(12px);
+                }
+              }
+
+              .price-box {
+                @include font-sans_pro-semibold($font_14);
+
+                @media screen and (max-width: 767px) {
+                  @include font-sans_pro-semibold(13px);
+                }
+
+                .price {
+                  @include font-sans_pro-regular($font_14);
+
+                  @media screen and (max-width: 767px) {
+                    @include font-sans_pro-regular(12px);
+                  }
+                }
+              }
+            }
+          }
+
+          .second-section {
+            max-height: 150px;
+            overflow-y: auto;
+            padding-right: 10px;
+
+            @media screen and (max-width: 767px) {
+              text-align: center;
+              margin-bottom: 15px;
+              display: none;
+            }
+
+            .time {
+              @include font-sans_pro-semibold($font_14);
+
+              p {
+                margin: 0;
+                margin-left: 23px;
+                @include font-sans_pro-regular($font_14);
+              }
+            }
+          }
+        }
+
+        .booking {
+          margin-left: 110px;
+          margin-top: 10px;
+
+          @media screen and (max-width: 576px) {
+            margin-left: 0px;
+            margin-top: 8px;
+          }
+
+          .wait-time {
+            background: rgba(0, 128, 0, 0.1);
+            border-radius: 100px;
+            padding: 5px 10px;
+
+            @media screen and (max-width: 767px) {
+              padding: 5px;
+              display: none !important;
+            }
+
+            span {
+              color: $green;
+            }
+          }
+
+          .book-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #45197c 0%, #6b3fa0 100%);
+            color: $white;
+            @include font-sans_pro-semibold(14px);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(69, 25, 124, 0.3);
+            letter-spacing: 0.3px;
+
+            svg {
+              flex-shrink: 0;
+            }
+
+            &:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 6px 20px rgba(69, 25, 124, 0.4);
+              background: linear-gradient(135deg, #3a1169 0%, #5e3590 100%);
+            }
+
+            &:active {
+              transform: translateY(0);
+              box-shadow: 0 2px 8px rgba(69, 25, 124, 0.3);
+            }
+
+            &--disabled {
+              opacity: 0.5;
+              cursor: not-allowed;
+
+              &:hover {
+                transform: none;
+                box-shadow: 0 4px 14px rgba(69, 25, 124, 0.3);
+                background: linear-gradient(135deg, #45197c 0%, #6b3fa0 100%);
+              }
+            }
+
+            @media screen and (max-width: 767px) {
+              padding: 14px 16px;
+              width: 100%;
+              border-radius: 12px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.pagination-section {
+  margin: 80px 0px;
+}
+
+:host::ng-deep {
+  .ngx-pagination {
+    @include ngx-pagination($purple, $purple);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+
+  @media screen and (max-width: 767px) {
+    display: none;
+  }
+}
+
+::-webkit-scrollbar-track {
+  background: $white;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $purple;
+  border-radius: 20px;
+}
+
+.seeMore {
+  color: $purple;
+  cursor: pointer;
+  @include font-sans_pro-semibold($font_14);
+  text-align: end;
+  text-decoration: underline;
+}
+
+.mobile-hospital-detail {
+  display: none;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #fafafa;
+  width: 100%;
+  padding: 12px 14px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+
+  @media screen and (max-width: 767px) {
+    display: block;
+  }
+
+  > div {
+    margin-bottom: 4px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .mobile-timing {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+    .timing-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+      flex-wrap: nowrap;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .timing-day {
+      @include font-sans_pro-semibold(13px);
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+
+      img {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+      }
+    }
+
+    .timing-slots {
+      @include font-sans_pro-regular(13px);
+      color: rgba(0, 0, 0, 0.7);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+
+
+::ng-deep {
+  .mat-bottom-sheet-container {
+    padding: 0 !important;
+    border-radius: 20px 20px 0 0px !important;
+  }
+}

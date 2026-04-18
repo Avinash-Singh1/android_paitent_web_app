@@ -1,0 +1,16 @@
+@use 'src/styles/tools/tools.typography' as *;
+
+@mixin please-configure() {
+
+	.please-configure {
+		padding: 10px 20px;
+
+		.icon- {
+			margin-right: 5px;
+		}
+
+		strong {
+			@include font-proxima-regular($size: 14px);
+		}
+	}
+}

@@ -1,0 +1,276 @@
+<!-- <ng-container *ngIf="deviceWidth > 767; else mobileView">
+  <nectar-header></nectar-header>
+  <router-outlet></router-outlet>
+  <nectar-footer></nectar-footer>
+</ng-container>
+
+<ng-template #mobileView>
+<mat-drawer-container [hasBackdrop]="true" *ngIf="deviceWidth < 767">
+  <mat-drawer [autoFocus]="false" #matdrawer [mode]="'over'" class="w-60" style="max-height: 100vh; min-height: 100vh">
+    <div class="m-3">
+      <div class="py-3 d-flex align-items-center justify-content-between">
+        <div class="d-flex gap-2 align-items-center">
+          <div class="hamber">
+            <svg-icon src="assets/images/svg/hamber.svg" class="cursor-pointer"></svg-icon>
+          </div>
+          <svg-icon src="assets/images/svg/logo.svg" routerLink="/" class="d-flex cursor-pointer" (click)="onClose(1)"
+            style="width: 155px"></svg-icon>
+        </div>
+        <svg-icon src="assets/images/svg/back.svg" (click)="onClose(1)" class="cursor-pointer"></svg-icon>
+      </div>
+      <div class="my-2">
+
+          <ng-container *ngFor="let i of menus; let j = index">
+
+            <div class="d-flex gap-2 align-items-center tabs" *ngIf="j != 3 && j != 4">
+              <img loading="lazy" [src]="i?.icon" alt="" />
+              <div [routerLink]="i?.route" (click)="onClose(1)" class="cursor-pointer">
+                {{ i?.name }}
+              </div>
+            </div>
+
+            <div class="d-flex gap-2 align-items-center tabs" *ngIf="j == 3">
+              <img loading="lazy" [src]="i?.icon" alt="" />
+              <div class="cursor-pointer">
+              <a href="https://doctor.nectarplus.health/" target="_blank" rel="noopener noreferrer">
+                  {{ i?.name }}
+                </a>
+              </div>
+            </div>
+
+            <ng-container *ngIf="j == 4">
+              <div class="d-flex justify-content-between align-items-center tabs"
+                [ngClass]="{'highlight-practice': i?.name === 'List your practice for Free'}">
+                <div class="d-flex gap-2">
+                  <img loading="lazy" [src]="i?.icon" alt="" />
+                  <div class="cursor-pointer" [routerLink]="i?.route" (click)="onClose(1)">
+                    {{ i?.name }}
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+          
+          
+      </div>
+    </div>
+  </mat-drawer>
+  <mat-drawer [autoFocus]="false" #matdrawer1 [mode]="'over'" class="w-60" [position]="'end'">
+    <div class="logged-items">
+      <div class="d-flex align-items-center gap-3 p-3">
+        <img loading="lazy" src="assets/images/svg/back.svg" (click)="onClose(2)" alt="" class="cursor-pointer"
+          style="transform: rotate(180deg)" />
+        <div class="profile-icon border-grey" *ngIf="!userData?.patient?.profilePic">
+          {{ userData?.fullName | nameInitial | uppercase }}
+        </div>
+        <img loading="lazy" [src]="userData?.patient?.profilePic" alt="" height="52" width="52"
+          class="rounded-circle img-fit-contain border-grey" *ngIf="userData?.patient?.profilePic" />
+        <div class="d-flex flex-column gap-2">
+          <div class="text-18 font-600">
+            {{ (userData?.fullName | titlecase) || "" }}
+          </div>
+          <div class="text-18">+91{{ userData?.phone || 0 }}</div>
+        </div>
+      </div>
+
+      <div style="border: 1px solid rgba(0, 0, 0, 0.3)"></div>
+      <div class="p-3">
+        <div class="d-flex gap-2 py-2 cursor-pointer" (click)="onClose(2)" routerLink="/profile">
+          <img loading="lazy" src="assets/images/svg/appointments.svg" alt="" height="20" width="20" loading="lazy" />
+          <div class="text-18">My Appointments</div>
+        </div>
+
+        <div class="d-flex gap-2 py-2 cursor-pointer" routerLink="/profile/medical-reports" (click)="onClose(2)">
+          <img loading="lazy" src="assets/images/svg/medical-report 1.svg" alt="" height="20" width="20" loading="lazy" />
+          <div class="text-18">My Medical Reports</div>
+        </div>
+        <div class="d-flex gap-2 py-2 cursor-pointer" routerLink="/profile/feedbacks" (click)="onClose(2)">
+          <img loading="lazy" src="assets/images/svg/feedback 1.svg" alt="" height="20" width="20" loading="lazy" />
+          <div class="text-18">My Feedback</div>
+        </div>
+        <div class="d-flex gap-2 py-2 cursor-pointer" routerLink="/profile/personal-info" (click)="onClose(2)">
+          <img loading="lazy" src="assets/images/svg/person.svg" alt="" height="20" width="20" loading="lazy" />
+          <div class="text-18">Personal Information</div>
+        </div>
+        <div class="d-flex gap-2 py-2 cursor-pointer" routerLink="/profile/settings" (click)="onClose(2)">
+          <img loading="lazy" src="assets/images/svg/settings.svg" alt="" height="20" width="20" />
+          <div class="text-18">Settings</div>
+        </div>
+        <div class="d-flex gap-2 py-2 cursor-pointer" (click)="logout(); onClose(2)">
+          <img loading="lazy" src="assets/images/svg/Logout.svg" alt="" height="20" width="20" />
+          <div class="text-18 text-red">Logout</div>
+        </div>
+      </div>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content class="drawer-container">
+    <div class="">
+      <nectar-header></nectar-header>
+      <router-outlet></router-outlet>
+      <nectar-footer></nectar-footer>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>
+</ng-template> -->
+
+<div class="themes-container">
+  <div class="main-layout">
+    <nectar-header></nectar-header>
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+    <nectar-footer></nectar-footer>
+  </div>
+
+  <mat-drawer-container [hasBackdrop]="true" class="mobile-drawer-container">
+    <mat-drawer [autoFocus]="false" #matdrawer mode="over" class="w-60 mobile-sidebar">
+      <div class="sidebar">
+        <!-- ── Header ── -->
+        <div class="sidebar__header">
+          <svg-icon src="assets/images/svg/logo.svg" routerLink="/" class="sidebar__logo d-flex cursor-pointer"
+            (click)="onClose(1)" style="width: 140px"></svg-icon>
+          <button class="sidebar__close" (click)="onClose(1)" aria-label="Close menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- ── Navigation ── -->
+        <nav class="sidebar__nav" aria-label="Main navigation">
+          <ng-container *ngFor="let i of menus; let j = index">
+            <!-- Primary nav items (doctors, surgeries, medicines) -->
+            <a class="sidebar__link" *ngIf="j < 3"
+               [routerLink]="i?.route" (click)="onClose(1)">
+              <span class="sidebar__icon">
+                <img loading="lazy" [src]="i?.icon" alt="" width="22" height="22" />
+              </span>
+              <span class="sidebar__label">{{ i?.name }}</span>
+              <svg class="sidebar__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </a>
+
+            <!-- CTA: List your practice -->
+            <a class="sidebar__cta" *ngIf="j === 3"
+               href="https://doctor.nectarplus.health/" target="_blank" rel="noopener noreferrer" (click)="onClose(1)">
+              <svg class="sidebar__cta-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+              <span>{{ i?.name }}</span>
+            </a>
+          </ng-container>
+        </nav>
+
+        <!-- ── Divider ── -->
+        <hr class="sidebar__divider" />
+
+        <!-- ── Footer links ── -->
+        <div class="sidebar__footer">
+          <ng-container *ngFor="let i of menus; let j = index">
+            <a class="sidebar__footer-link" *ngIf="j > 3"
+               [routerLink]="i?.route" (click)="onClose(1)">
+              <span class="sidebar__footer-icon">
+                <img loading="lazy" [src]="i?.icon" alt="" width="18" height="18" />
+              </span>
+              <span>{{ i?.name }}</span>
+            </a>
+          </ng-container>
+        </div>
+      </div>
+    </mat-drawer>
+
+    <mat-drawer [autoFocus]="false" #matdrawer1 mode="over" class="w-60 mobile-sidebar" position="end">
+      <div class="profile-sidebar">
+        <!-- Header with user info -->
+        <div class="profile-sidebar__header">
+          <button class="profile-sidebar__back" (click)="onClose(2)" type="button" aria-label="Close">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+            </svg>
+          </button>
+          <div class="profile-sidebar__user" (click)="onClose(2)" routerLink="/profile/personal-info">
+            <div class="profile-sidebar__avatar" *ngIf="!userData?.patient?.profilePic">
+              {{ userData?.fullName | nameInitial | uppercase }}
+            </div>
+            <img [src]="userData?.patient?.profilePic" alt="" class="profile-sidebar__avatar-img"
+              *ngIf="userData?.patient?.profilePic" />
+            <div class="profile-sidebar__user-info">
+              <span class="profile-sidebar__name">{{ (userData?.fullName | titlecase) || "" }}</span>
+              <span class="profile-sidebar__phone">+91{{ userData?.phone || 0 }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation items -->
+        <nav class="profile-sidebar__nav">
+          <a class="profile-sidebar__item" (click)="onClose(2)" routerLink="/profile" routerLinkActive="profile-sidebar__item--active" [routerLinkActiveOptions]="{exact: true}">
+            <span class="profile-sidebar__icon profile-sidebar__icon--appointments">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+            </span>
+            <span class="profile-sidebar__label">My Appointments</span>
+            <svg class="profile-sidebar__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+
+          <a class="profile-sidebar__item" (click)="onClose(2)" routerLink="/profile/medical-reports" routerLinkActive="profile-sidebar__item--active">
+            <span class="profile-sidebar__icon profile-sidebar__icon--reports">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+              </svg>
+            </span>
+            <span class="profile-sidebar__label">Medical Reports</span>
+            <svg class="profile-sidebar__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+
+          <a class="profile-sidebar__item" (click)="onClose(2)" routerLink="/profile/feedbacks" routerLinkActive="profile-sidebar__item--active">
+            <span class="profile-sidebar__icon profile-sidebar__icon--feedback">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+              </svg>
+            </span>
+            <span class="profile-sidebar__label">My Feedback</span>
+            <svg class="profile-sidebar__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+
+          <a class="profile-sidebar__item" (click)="onClose(2)" routerLink="/profile/personal-info" routerLinkActive="profile-sidebar__item--active">
+            <span class="profile-sidebar__icon profile-sidebar__icon--personal">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+              </svg>
+            </span>
+            <span class="profile-sidebar__label">Personal Information</span>
+            <svg class="profile-sidebar__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+
+          <a class="profile-sidebar__item" (click)="onClose(2)" routerLink="/profile/settings" routerLinkActive="profile-sidebar__item--active">
+            <span class="profile-sidebar__icon profile-sidebar__icon--settings">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+              </svg>
+            </span>
+            <span class="profile-sidebar__label">Settings</span>
+            <svg class="profile-sidebar__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </nav>
+
+        <!-- Logout -->
+        <div class="profile-sidebar__footer">
+          <a class="profile-sidebar__item profile-sidebar__item--logout" (click)="logout(); onClose(2)">
+            <span class="profile-sidebar__icon profile-sidebar__icon--logout">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+              </svg>
+            </span>
+            <span class="profile-sidebar__label">Logout</span>
+          </a>
+        </div>
+      </div>
+    </mat-drawer>
+    <mat-drawer-content class="drawer-content"></mat-drawer-content>
+  </mat-drawer-container>
+</div>

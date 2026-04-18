@@ -1,0 +1,385 @@
+@use "sass:color";
+@use "tools.mediaquery" as *;
+@use "tools.typography" as *;
+@use "settings.containers" as *;
+@use "variable.scss" as *;
+
+// ── Design tokens ──
+$footer-bg: #1a0e35;
+$footer-accent-from: #6b3fa0;
+$footer-accent-to: #45197c;
+$footer-text: rgba(255, 255, 255, 0.65);
+$footer-text-hover: #ffffff;
+$footer-heading: #ffffff;
+$footer-border: rgba(255, 255, 255, 0.1);
+$footer-input-bg: rgba(255, 255, 255, 0.08);
+
+// ── Root ──
+.footer {
+  background: $footer-bg;
+  color: $footer-text;
+  width: 100%;
+  position: relative;
+}
+
+// ── Gradient accent bar ──
+.footer-accent {
+  height: 3px;
+  background: linear-gradient(90deg, $footer-accent-from, $footer-accent-to, $footer-accent-from);
+}
+
+// ── Inner container ──
+.footer-inner {
+  max-width: $content-max-width;
+  margin: 0 auto;
+  padding: 48px 24px 24px;
+  box-sizing: border-box;
+
+  @media screen and (min-width: 768px) {
+    max-width: $content-sm-max-width;
+  }
+
+  @media screen and (min-width: 1024px) {
+    max-width: $content-max-width;
+  }
+}
+
+// ── Divider ──
+.footer-divider {
+  border: none;
+  border-top: 1px solid $footer-border;
+  margin: 32px 0;
+}
+
+// ═══════════════════════════════
+//  TOP: Brand + Newsletter
+// ═══════════════════════════════
+.footer-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+
+  @media screen and (max-width: 767px) {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    text-align: center;
+  }
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  @media screen and (max-width: 767px) {
+    align-items: center;
+  }
+}
+
+.footer-logo {
+  height: 28px;
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+}
+
+.footer-tagline {
+  @include font-sans_pro-regular($size: 14px);
+  color: $footer-text;
+  line-height: 1.6;
+  max-width: 360px;
+  margin: 0;
+
+  @media screen and (max-width: 767px) {
+    max-width: 100%;
+  }
+}
+
+// ── Newsletter ──
+.footer-newsletter {
+  @media screen and (max-width: 767px) {
+    text-align: center;
+  }
+
+  &__title {
+    @include font-sans_pro-semibold($size: 18px);
+    color: $footer-heading;
+    margin: 0 0 8px;
+  }
+
+  &__desc {
+    @include font-sans_pro-regular($size: 14px);
+    color: $footer-text;
+    margin: 0 0 16px;
+  }
+
+  &__form {
+    display: flex;
+    gap: 0;
+    max-width: 420px;
+
+    @media screen and (max-width: 767px) {
+      max-width: 100%;
+    }
+  }
+
+  &__input {
+    flex: 1;
+    padding: 12px 16px;
+    background: $footer-input-bg;
+    border: 1px solid $footer-border;
+    border-right: none;
+    border-radius: 8px 0 0 8px;
+    color: #fff;
+    @include font-sans_pro-regular($size: 14px);
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    &:focus {
+      border-color: $footer-accent-from;
+      background: rgba(255, 255, 255, 0.12);
+    }
+  }
+
+  &__btn {
+    padding: 12px 24px;
+    background: $purple;
+    color: #fff;
+    border: none;
+    border-radius: 0 8px 8px 0;
+    @include font-sans_pro-semibold($size: 14px);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s, transform 0.1s;
+
+    &:hover {
+      background: color.adjust($purple, $lightness: 8%);
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+}
+
+// ═══════════════════════════════
+//  LINK COLUMNS (Desktop)
+// ═══════════════════════════════
+.footer-links {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+
+  @media screen and (max-width: 767px) {
+    display: none;
+  }
+}
+
+.footer-col {
+  &__title {
+    @include font-sans_pro-semibold($size: 14px);
+    color: $footer-heading;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 16px;
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    li a {
+      @include font-sans_pro-regular($size: 14px);
+      color: $footer-text;
+      text-decoration: none;
+      transition: color 0.2s, padding-left 0.2s;
+      display: inline-block;
+
+      &:hover {
+        color: $footer-text-hover;
+        padding-left: 4px;
+      }
+    }
+  }
+}
+
+// ═══════════════════════════════
+//  ACCORDION (Mobile)
+// ═══════════════════════════════
+.footer-accordion {
+  display: none;
+
+  @media screen and (max-width: 767px) {
+    display: block;
+  }
+
+  &__item {
+    border-bottom: 1px solid $footer-border;
+
+    &:first-child {
+      border-top: 1px solid $footer-border;
+    }
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 16px 0;
+    background: none;
+    border: none;
+    color: $footer-heading;
+    @include font-sans_pro-semibold($size: 15px);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+
+    span {
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  &__chevron {
+    color: $footer-text;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+
+    &.rotated {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+
+    &.open {
+      max-height: 300px;
+    }
+
+    a {
+      display: block;
+      padding: 10px 0 10px 12px;
+      @include font-sans_pro-regular($size: 14px);
+      color: $footer-text;
+      text-decoration: none;
+      transition: color 0.2s;
+
+      &:hover,
+      &:active {
+        color: $footer-text-hover;
+      }
+    }
+  }
+}
+
+// ═══════════════════════════════
+//  SOCIAL LINKS
+// ═══════════════════════════════
+.footer-social {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  @media screen and (max-width: 767px) {
+    justify-content: center;
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    transition: background 0.2s, transform 0.2s;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.18);
+      transform: translateY(-2px);
+    }
+
+    img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+  }
+
+  &--desktop {
+    @media screen and (max-width: 767px) {
+      display: none;
+    }
+  }
+
+  &--mobile {
+    display: none;
+    margin-top: 8px;
+
+    @media screen and (max-width: 767px) {
+      display: flex;
+    }
+  }
+}
+
+// ═══════════════════════════════
+//  BOTTOM BAR
+// ═══════════════════════════════
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @media screen and (max-width: 767px) {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  &__links {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    a {
+      @include font-sans_pro-regular($size: 13px);
+      color: $footer-text;
+      text-decoration: none;
+      transition: color 0.2s;
+
+      &:hover {
+        color: $footer-text-hover;
+      }
+    }
+  }
+
+  &__sep {
+    color: $footer-border;
+    font-size: 13px;
+  }
+}
+
+.footer-copyright {
+  @include font-sans_pro-regular($size: 13px);
+  color: $footer-text;
+  margin: 0;
+  cursor: pointer;
+}
+
+// ── Reset anchor styles ──
+.footer a {
+  color: inherit;
+  text-decoration: none;
+}

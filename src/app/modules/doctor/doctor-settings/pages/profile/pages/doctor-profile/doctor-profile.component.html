@@ -1,0 +1,138 @@
+<div class="main-profile text-18">
+  <div class="heading border-bottom-style font-600 text-16">
+    {{ "PROFILE" | translate }}
+  </div>
+  <form class="main-form" [formGroup]="profileForm" (ngSubmit)="submitForm()">
+    <!-- component changes -->
+    <div class="d-flex flex-column gap-40">
+      <div class="d-flex gap-2 align-items-center">
+        <div class="center">
+          <div
+            class="form-input d-flex align-items-center justify-content-center"
+          >
+            <div class="preview">
+              <img
+                alt=""
+                class="image-container"
+                id="file-ip-1-preview"
+                *ngIf="control['profilePic'].value"
+                [src]="control['profilePic'].value"
+              />
+              <span *ngIf="!control['profilePic'].value">{{
+                control["fullName"].value | nameInitial | uppercase
+              }}</span>
+            </div>
+            <div class="ms-3">
+              <label for="file-ip-1" class="cursor change-photo font-600"
+                >Change Photo</label
+              >
+              <input
+                type="file"
+                id="file-ip-1"
+                accept="image/png, image/jpeg,image/jpg"
+                (change)="onFileUpload($event)"
+              />
+            </div>
+          </div>
+
+          <div
+            class="text-danger mt-2"
+            *ngIf="control['profilePic'].touched && control['profilePic'].errors?.['required'] "
+          >
+            Profile Picture is required.
+          </div>
+        </div>
+      </div>
+      <div class="d-flex gap-40 w-100">
+        <div class="break-flex d-flex gap-2 flex-column w-50">
+          <label
+            >{{ "FULL_NAME" | translate }}
+            <span class="required-hint">*</span></label
+          >
+          <input
+            type="text"
+            class="w-100"
+            placeholder="Enter name"
+            formControlName="fullName"
+            maxlength="500"
+          />
+          <div
+            class="text-danger"
+            *ngIf="(control['fullName'].touched) && control['fullName'].errors?.['required']"
+          >
+            Please enter name.
+          </div>
+        </div>
+
+        <div class="break-flex d-flex gap-2 flex-column w-50">
+          <label
+            >{{ "SPECIALIZATION" | translate }}
+            <span class="required-hint">*</span></label
+          >
+          <ng-select
+            class="specialisation"
+            formControlName="specialization"
+            [items]="specializationList"
+            bindLabel="name"
+            bindValue="_id"
+            [multiple]="true"
+            [closeOnSelect]="false"
+            [searchable]="true"
+            placeholder="Select specialisation"
+          ></ng-select>
+          <div
+            class="text-danger"
+            *ngIf="(control['specialization'].touched) && control['specialization'].errors?.['required']"
+          >
+            Please select specialization.
+          </div>
+        </div>
+        
+      </div>
+      <div class="d-flex gap-40 w-100">
+        <div class="d-flex gap-2 flex-column w-50">
+          <label
+            >{{ "EXPERIENCE" | translate }}
+            <span class="required-hint">*</span></label
+          >
+          <ng-select
+            class="experience"
+            formControlName="experience"
+            [items]="experinenceYear"
+            bindLabel="label"
+            bindValue="value"
+            placeholder="Select experience year"
+            dropdownPosition="top"
+          ></ng-select>
+          <div
+            class="text-danger"
+            *ngIf="(control['experience'].touched) && control['experience'].errors?.['required']"
+          >
+            Please select experience.
+          </div>
+        </div>
+        <div class="w-50"></div>
+      </div>
+      <div class="d-flex gap-2 flex-column">
+        <label
+          >{{ "ABOUT_ME" | translate }}
+          <span class="required-hint">*</span></label
+        >
+        <textarea
+          class="aboutme-area"
+          formControlName="about"
+          rows="5"
+        ></textarea>
+        <div
+          class="text-danger"
+          *ngIf="(control['about'].touched) && control['about'].errors?.['required']"
+        >
+          Please enter about me .
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="updateProfile">Save</button>
+      </div>
+    </div>
+  </form>
+</div>

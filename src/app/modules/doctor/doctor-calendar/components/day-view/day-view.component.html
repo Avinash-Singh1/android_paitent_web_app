@@ -1,0 +1,42 @@
+<div class="day-view">
+  <table>
+    <caption></caption>
+    <thead>
+      <tr>
+        <th class="timing header">{{ "TIME" | translate }}</th>
+        <th class="current-day day-name">
+          {{ showDayname | date : "EEEE d MMM" }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of rows; let i = index">
+        <td
+          class="timing position-relative"
+          [ngClass]="{ currentSlot: i == (currentSlot | async) }"
+        >
+          {{ row.timing | date : "h:mm a" }}
+          <svg-icon
+            class="position-absolute timepointer svg-icon-purple"
+            src="assets/images/svg/timepointer.svg"
+            *ngIf="i == (currentSlot | async)"
+          ></svg-icon>
+        </td>
+        <td class="position-relative">
+          <div
+            *ngIf="row.details?.fullName"
+            [attr.data.details]="row.details | stringify | async"
+            [ngClass]="row.details.status | appointmentStatus"
+            class="day-data rounded-0"
+          >
+            {{ row.details.fullName | titlecase }}
+          </div>
+          <div
+            class="dotted-border"
+            *ngIf="!row.details?.fullName && i == (currentSlot | async)"
+          ></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

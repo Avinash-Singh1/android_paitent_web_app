@@ -1,0 +1,19 @@
+@use "variable.scss" as *;
+
+.delete-profile {
+  font-size: 14px;
+
+  .heading {
+    padding: 40px 24px;
+  }
+
+  .confirm-button {
+    font-size: 16px;
+    font-weight: 600;
+    padding: 16px 24px;
+    background: $red;
+    max-width: 224px;
+    color: $white;
+    border: none;
+  }
+}

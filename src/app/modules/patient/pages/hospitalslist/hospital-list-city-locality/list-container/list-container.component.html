@@ -1,0 +1,187 @@
+<!-- ═══════════════════════════════════════════════════════════════════
+     DESKTOP STICKY SEARCH BAR — matches doctor-details header
+     ═══════════════════════════════════════════════════════════════════ -->
+<div class="hl-search-wrap" role="search" aria-label="Search doctors and hospitals">
+  <div class="hl-search-wrap__inner">
+    <nectar-wrap-search></nectar-wrap-search>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SKELETON LOADER — Progressive loading with shimmer animation
+     ═══════════════════════════════════════════════════════════════════ -->
+<section class="hl" *ngIf="isLoading">
+  <nectar-hospital-card-skeleton [count]="3"></nectar-hospital-card-skeleton>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     ACTUAL CONTENT — Modern healthcare card list with infinite scroll
+     ═══════════════════════════════════════════════════════════════════ -->
+<section class="hl hl--loaded" *ngIf="!isLoading"
+  infiniteScroll
+  [infiniteScrollDistance]="1.5"
+  [infiniteScrollThrottle]="200"
+  [scrollWindow]="true"
+  [immediateCheck]="true"
+  [alwaysCallback]="true"
+  (scrolled)="onScroll(1)">
+  <!-- Page header -->
+  <div class="hl__header">
+    <span class="hl__header-badge">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 19 20.1 19 19V5C21 3.9 20.1 3 19 3ZM17 13H13V17H11V13H7V11H11V7H13V11H17V13Z" fill="currentColor"/></svg>
+      Popular Hospitals
+    </span>
+    <h1 class="hl__header-title" *ngIf="!isSpecialtyView">{{totalCount}} Best Popular Hospital in {{ capitalizeWords(city) }}</h1>
+    <h1 class="hl__header-title" *ngIf="isSpecialtyView">{{totalCount}} Best {{ specialtyHospitalType }} in {{ capitalizeWords(city) }}</h1>
+    <p class="hl__header-subtitle" *ngIf="totalCount">
+      Showing <strong>{{ hospitalList.length }}</strong> of <strong>{{ totalCount }}</strong> healthcare providers
+    </p>
+  </div>
+
+  <!-- Breadcrumb -->
+  <nav class="hl__breadcrumb" aria-label="Breadcrumb">
+    <ol class="hl__breadcrumb-list">
+      <li class="hl__breadcrumb-item">
+        <a routerLink="/" class="hl__breadcrumb-link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Home</span>
+        </a>
+      </li>
+      <li class="hl__breadcrumb-item" *ngIf="payload.city">
+        <a class="hl__breadcrumb-link"
+           [routerLink]="['/', payload.city]">
+          {{ capitalizeWords(payload.city) }}
+        </a>
+      </li>
+      <li class="hl__breadcrumb-item">
+        <a class="hl__breadcrumb-link"
+           [routerLink]="['/', payload.city, 'hospitals']">
+          Hospitals
+        </a>
+      </li>
+      <li class="hl__breadcrumb-item hl__breadcrumb-item--active" *ngIf="payload.locality">
+        <span class="hl__breadcrumb-current">{{ capitalizeWords(payload.locality) }}</span>
+      </li>
+      <li class="hl__breadcrumb-item hl__breadcrumb-item--active" *ngIf="isSpecialtyView">
+        <span class="hl__breadcrumb-current">{{ specialtyHospitalType }}</span>
+      </li>
+    </ol>
+  </nav>
+
+  <!-- Hospital cards -->
+  <ng-container *ngFor="let item of hospitalList; trackBy: trackByHospitalId; let idx = index">
+    <article class="hl__card" [class.hl__card--first]="idx === 0" itemscope itemtype="https://schema.org/Hospital">
+      <!-- Card top: hospital info row -->
+      <div class="hl__card-top">
+        <!-- Avatar -->
+        <div class="hl__card-avatar" (click)="viewHospital(item)">
+          <div class="hl__card-avatar-fallback" *ngIf="!item?.profilePic">
+            {{ item?.name | nameInitial | uppercase }}
+          </div>
+          <img loading="lazy" *ngIf="item?.profilePic"
+            [attr.loading]="idx === 0 ? 'eager' : 'lazy'"
+            [attr.fetchpriority]="idx === 0 ? 'high' : 'auto'"
+            [src]="item?.profilePic"
+            [alt]="item?.name"
+            width="72" height="72"
+            itemprop="image" />
+        </div>
+
+        <!-- Info block -->
+        <div class="hl__card-info">
+          <h3 class="hl__card-name" itemprop="name">
+            <a [routerLink]="['/', item?.address?.city?.split(' ').join('-')?.toLowerCase(), getTypeSlug(item), item?.establishmentProfileSlug]" itemprop="url">
+              {{ item?.name | titlecase }}
+            </a>
+          </h3>
+          <div class="hl__card-type" *ngIf="item?.hospitalType?.length">
+            {{ item?.hospitalType[0]?.name | titlecase }}
+          </div>
+          <!-- Tags row -->
+          <div class="hl__card-tags">
+            <span class="hl__tag hl__tag--location">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22S19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor"/></svg>
+              {{ item?.address?.locality || '' }}{{ item?.address?.locality && item?.address?.city ? ', ' : '' }}{{ item?.address?.city || 'N/A' }}
+            </span>
+            <span class="hl__tag" *ngIf="item?.totalBed">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 13C8.66 13 10 11.66 10 10C10 8.34 8.66 7 7 7C5.34 7 4 8.34 4 10C4 11.66 5.34 13 7 13ZM19 7H11V14H3V5H1V20H3V17H21V20H23V11C23 8.79 21.21 7 19 7Z" fill="currentColor"/></svg>
+              {{ item?.totalBed?.toLocaleString() || 0 }} Beds
+            </span>
+            <span class="hl__tag" *ngIf="item?.ambulance">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 18.5C18.83 18.5 19.5 17.83 19.5 17C19.5 16.17 18.83 15.5 18 15.5C17.17 15.5 16.5 16.17 16.5 17C16.5 17.83 17.17 18.5 18 18.5ZM19.5 9.5L21.46 12H17V9.5H19.5ZM6 18.5C6.83 18.5 7.5 17.83 7.5 17C7.5 16.17 6.83 15.5 6 15.5C5.17 15.5 4.5 16.17 4.5 17C4.5 17.83 5.17 18.5 6 18.5ZM20 8H17V4H3C1.9 4 1 4.9 1 6V17H3C3 18.66 4.34 20 6 20S9 18.66 9 17H15C15 18.66 16.34 20 18 20S21 18.66 21 17H23V12L20 8Z" fill="currentColor"/></svg>
+              {{ item?.ambulance?.toLocaleString() || 0 }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Stats block (desktop) -->
+        <div class="hl__card-stats">
+          <div class="hl__card-rating">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"/></svg>
+            <span>{{ (item?.rating | number : "1.1-1") || "0.0" }}</span>
+          </div>
+          <div class="hl__card-stat-row" *ngIf="item?.totalBed">
+            <span class="hl__card-stat-val">{{ item?.totalBed?.toLocaleString() }}</span>
+            <span class="hl__card-stat-label">Beds</span>
+          </div>
+          <div class="hl__card-stat-row" *ngIf="item?.ambulance">
+            <span class="hl__card-stat-val">{{ item?.ambulance?.toLocaleString() }}</span>
+            <span class="hl__card-stat-label">Ambulance</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile rating -->
+      <div class="hl__card-mobile-rating">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"/></svg>
+        <span>{{ (item?.rating | number : "1.1-1") || "0.0" }}<small>/5</small></span>
+      </div>
+
+      <!-- Doctor cards carousel -->
+      <div class="hl__doc-section" *ngIf="item?.docList?.length">
+        <div class="hl__doc-section-header">
+          <span class="hl__doc-count">{{ item?.docList?.length }} Doctor{{ item?.docList?.length > 1 ? 's' : '' }} Available</span>
+        </div>
+        <owl-carousel-o [options]="customOptions" #owlCar>
+          <ng-container *ngFor="let doc of item?.docList; let j = index; trackBy: trackByIndex">
+            <ng-template class="slide" carouselSlide [width]="280">
+              <nectar-doc-card [data]="doc" [establishmentId]="item._id"></nectar-doc-card>
+            </ng-template>
+          </ng-container>
+        </owl-carousel-o>
+      </div>
+
+      <!-- Calendar section -->
+      <ng-container *ngIf="item?.topDoc?.length">
+        <div class="hl__calendar" *ngFor="let doc of item?.topDoc; trackBy: trackByIndex">
+          <nectar-calendar-view [data]="doc"></nectar-calendar-view>
+        </div>
+      </ng-container>
+    </article>
+  </ng-container>
+
+  <!-- Empty state -->
+  <div class="hl__empty" *ngIf="!isLoading && !hospitalList.length">
+    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" opacity="0.3"><path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 19 20.1 19 19V5C21 3.9 20.1 3 19 3ZM17 13H13V17H11V13H7V11H11V7H13V11H17V13Z" fill="currentColor"/></svg>
+    <h3>No Hospitals Found</h3>
+    <p>Try adjusting your search or filters to find results.</p>
+  </div>
+
+  <!-- Loading more indicator -->
+  <div class="hl__load-more" *ngIf="isLoadingMore">
+    <div class="hl__load-more-spinner"></div>
+    <span>Loading more hospitals...</span>
+  </div>
+
+  <!-- End of list -->
+  <div class="hl__end" *ngIf="!isLoadingMore && hospitalList.length >= totalCount && hospitalList.length > 0">
+    <span>You've reached the end</span>
+  </div>
+</section>
+
+<!-- SEO Related Links -->
+<nectar-hospital-seo-links
+  *ngIf="!isLoading && hospitalList.length"
+  [city]="payload?.city"
+  [locality]="payload?.locality"
+></nectar-hospital-seo-links>

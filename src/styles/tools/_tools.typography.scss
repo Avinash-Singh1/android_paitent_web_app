@@ -1,0 +1,123 @@
+@use 'settings/settings.typography' as *;
+
+@use 'tools/tools.fonts-units' as *;
+
+@use 'tools/tools.mediaquery' as *;
+
+* {
+	-webkit-font-smoothing: antialiased;
+}
+
+// ========================== PRIVATE BASE MIXINS
+@mixin font-sans-base($size, $lineheight, $spacing, $family) {
+	font-family: map-get($font-families, $family);
+	font-size: if(type_of($size)==string, $size, rem($size));
+	line-height: $lineheight;
+	letter-spacing: $spacing;
+}
+
+@mixin typeBreakpointSizes($size, $lineheight, $spacing, $family) {
+	$sizes: max(length($size), length($lineheight));
+
+	@for $i from 1 through $sizes {
+		$lh: if(length($lineheight) >=$i,
+				nth($lineheight, $i),
+				nth($lineheight, $i - 1));
+		$fs: if(length($size) >=$i, nth($size, $i), nth($size, $i - 1));
+
+		@if ($i ==1) {
+			@include font-sans-base($fs, $lh, $spacing, $family);
+		}
+
+		@if ($i ==2) {
+			@include mq-breakpoint-lg() {
+				@include font-sans-base($fs, $lh, $spacing, $family);
+			}
+		}
+
+		@if ($i ==3) {
+			@include mq-breakpoint-xl() {
+				@include font-sans-base($fs, $lh, $spacing, $family);
+			}
+		}
+	}
+}
+
+@mixin font-sans_pro-light($size: [16], $lineheight: 1.5, $spacing: 0.45px) {
+	font-weight: 300;
+
+	@include typeBreakpointSizes($size,
+		$lineheight,
+		$spacing,
+		$family: 'sans_pro'
+	);
+}
+
+@mixin font-sans_pro-regular($size: [16], $lineheight: 1.5, $spacing: 0.45px) {
+	font-weight: 400;
+
+	@include typeBreakpointSizes($size,
+		$lineheight,
+		$spacing,
+		$family: 'sans_pro'
+	);
+}
+
+@mixin font-sans_pro-medium($size: [16], $lineheight: 1.5, $spacing: 0.45px) {
+	font-weight: 500;
+
+	@include typeBreakpointSizes($size,
+		$lineheight,
+		$spacing,
+		$family: 'sans_pro'
+	);
+}
+
+@mixin font-sans_pro-semibold($size: [16], $lineheight: 1.5, $spacing: 0.45px) {
+	font-weight: 600;
+
+	@include typeBreakpointSizes($size,
+		$lineheight,
+		$spacing,
+		$family: 'sans_pro'
+	);
+}
+
+@mixin font-sans_pro-bold($size: [16], $lineheight: 1.5, $spacing: 0.45px) {
+	font-weight: 700;
+
+	@include typeBreakpointSizes($size,
+		$lineheight,
+		$spacing,
+		$family: 'sans_pro'
+	);
+}
+
+
+
+@mixin font-inherit() {
+	font-family: inherit;
+	font-size: inherit;
+	font-weight: inherit;
+	line-height: inherit;
+	letter-spacing: inherit;
+}
+
+/** USAGE
+	> font-size is converted into rem units
+
+.class-name {
+	@include font-gotham-light($size: [12px or 12], $lineheight: [number]);
+}
+
+...converts to....
+
+.class-name {
+	font-weight: 300;
+	font-family: 'Gotham', Helvetica, sans-serif;
+	font-size: .75rem;
+	line-height: 2;
+	letter-spacing: .45px;
+}
+
+ */

@@ -1,0 +1,46 @@
+<div class="d-flex flex-column">
+  <div class="month-view">
+    <table class="calendar-table table">
+      <caption class="p-0"></caption>
+      <thead>
+        <tr class="font-400">
+          <th class="">{{ "SUN" | translate }}</th>
+          <th>{{ "MON" | translate }}</th>
+          <th>{{ "TUE" | translate }}</th>
+          <th>{{ "WED" | translate }}</th>
+          <th>{{ "THU" | translate }}</th>
+          <th>{{ "FRI" | translate }}</th>
+          <th>{{ "SAT" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let week of weeks">
+          <td
+            *ngFor="let day of week"
+            class="calendar-day"
+            [ngClass]="{
+              'past-date': day.prevMonth || day.nextMonth,
+              'event-appointment': day?.details?.length,
+              today:
+                (day.date | date : 'dd/MM/yyyy') ==
+                (today | date : 'dd/MM/yyyy')
+            }"
+            [attr.data.patient.list]="day.details | stringify | async"
+          >
+            <div class="calendar-day-header d-flex flex-column justify-content-between h-100">
+              <div class="d-flex justify-content-end">
+                <strong>{{ day.date | date : "d" }}</strong>
+              </div>
+              <div class="d-flex  w-fit ">
+                <span class="fs-10">
+                  {{ day.appointments ? day.appointments : "" }}
+                </span>
+                <span *ngIf="day.appointments" class="fs-10"> {{ "APPTS" | translate }}</span>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<div class="sidenav border-right">
+  <div class="blank-header"></div>
+  <div class="d-flex logo-wrapper justify-content-between align-items-center">
+    <svg-icon
+      src="assets/images/svg/hospital-nectar-logo.svg"
+      class="svg-icon-white me-2"
+    ></svg-icon>
+    <ng-content></ng-content>
+  </div>
+  <div class="d-flex flex-column text-white">
+    <ng-container *ngFor="let menu of menuList">
+      <div
+        class="menuitem p-24 d-flex align-items-center gap-6 cursor-pointer outline-none"
+        [routerLink]="menu.routerLink"
+        routerLinkActive="active"
+        (click)="onToggle()"
+      >
+        <svg-icon [src]="menu.icon"></svg-icon>
+        <span class="text-18 font-600 my-auto">{{ menu.label }}</span>
+      </div>
+    </ng-container>
+  </div>
+</div>

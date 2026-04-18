@@ -1,0 +1,31 @@
+@use "variable.scss" as *;
+
+.services-section {
+  max-height: calc(100vh - 144px);
+  min-height: calc(100vh - 144px);
+  overflow: auto;
+  font-size: 14px;
+
+  .heading {
+    padding: 30px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: $white;
+  }
+
+  button {
+    border: 1px solid $border-color;
+    padding: 8px 12px;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: 4px;
+
+    &.add-more {
+      background: $white;
+    }
+  }
+}

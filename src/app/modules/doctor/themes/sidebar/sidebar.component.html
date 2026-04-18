@@ -1,0 +1,47 @@
+<div class="side-menu mobileMenu">
+  <ul>
+    <ng-container *ngFor="let menu of menuList">
+      <li>
+        <a [routerLink]="menu.routerLink" (click)="onToggle()">
+          <svg-icon [src]="menu.icon" class="side-menu-icon"></svg-icon>
+          <span>{{ menu.label }}</span>
+        </a>
+      </li>
+    </ng-container>
+  </ul>
+</div>
+
+<!-- <div class="sidenav d-flex flex-column justify-content-between">
+  <div class="">
+    <div class="d-flex flex-column">
+      <div class="p-3 h-72 d-flex align-items-center justify-content-end">
+        <ng-content select="[cancel-button]"></ng-content>
+      </div>
+      <div class="h-72 d-flex align-items-center px-24">
+        <svg-icon src="assets/images/svg/nectar-doctorlogo.svg"></svg-icon>
+      </div>
+    </div>
+
+    <div class="d-flex flex-column">
+      <ng-container *ngFor="let menu of menuList">
+        <div
+          class="menuitem p-24 d-flex align-items-center gap-6 cursor-pointer outline-none"
+          [routerLink]="menu.routerLink"
+          (click)="onToggle()"
+          routerLinkActive="active-link"
+        >
+          <svg-icon [src]="menu.icon"></svg-icon>
+          <span class="text-18 font-600 my-auto">{{ menu.label }}</span>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <button
+    class="log-out-button d-flex align-items-center gap-6 w-100 p-24"
+    (click)="onLogout()"
+  >
+    <svg-icon src="assets/images/svg/Logout.svg"></svg-icon>
+    <span class="red-text">Logout</span>
+  </button>
+</div> -->

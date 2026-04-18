@@ -1,0 +1,72 @@
+<!-- Breadcrumb -->
+<nav class="ts-breadcrumb" aria-label="Breadcrumb">
+  <div class="ts-breadcrumb__inner">
+    <a routerLink="/">Home</a>
+    <span class="ts-breadcrumb__sep">/</span>
+    <a *ngIf="city" [routerLink]="'/' + city">{{ cityLabel }}</a>
+    <span *ngIf="city" class="ts-breadcrumb__sep">/</span>
+    <a [routerLink]="['/', city || 'delhi', 'treatment']">Treatments</a>
+    <ng-container *ngIf="treatment?.departmentId?.name">
+      <span class="ts-breadcrumb__sep">/</span>
+      <a [routerLink]="['/', city || 'delhi', 'treatment', department || treatment.departmentId.slug]">{{ treatment.departmentId.name }}</a>
+    </ng-container>
+    <span class="ts-breadcrumb__sep">/</span>
+    <a [routerLink]="parentLink">{{ treatment?.title }}</a>
+    <span class="ts-breadcrumb__sep">/</span>
+    <span>{{ subtopicLabel }}</span>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="ts-hero">
+  <div class="ts-hero__inner">
+    <h1 class="ts-hero__title">
+      {{ treatment?.title }} — {{ subtopicLabel }}
+      <span *ngIf="city"> in {{ cityLabel }}</span>
+    </h1>
+    <p class="ts-hero__subtitle" *ngIf="treatment?.seoDescription">
+      {{ treatment.seoDescription }}
+    </p>
+  </div>
+</section>
+
+<!-- Content -->
+<div class="ts-content" *ngIf="subtopicContent">
+  <div class="ts-content__main">
+    <div class="ts-content__body" [innerHTML]="sanitize(subtopicContent)"></div>
+
+    <!-- Cost info if cost subtopic -->
+    <div class="ts-cost-box" *ngIf="subtopic === 'cost' && (treatment?.costRange?.min || treatment?.costRange?.max)">
+      <h2>Estimated Cost</h2>
+      <div class="ts-cost-box__row">
+        <span>Minimum</span>
+        <strong>₹{{ treatment.costRange.min | number }}</strong>
+      </div>
+      <div class="ts-cost-box__row">
+        <span>Maximum</span>
+        <strong>₹{{ treatment.costRange.max | number }}</strong>
+      </div>
+    </div>
+
+    <!-- Back link -->
+    <a class="ts-back" [routerLink]="parentLink">
+      ← Back to {{ treatment?.title }}
+    </a>
+  </div>
+
+  <aside class="ts-content__sidebar">
+    <div class="ts-sidebar-card">
+      <h3>Need Help?</h3>
+      <p>Get expert guidance for {{ treatment?.title }}</p>
+      <a [href]="whatsappLink" target="_blank" class="ts-sidebar-card__btn">
+        WhatsApp Now
+      </a>
+    </div>
+  </aside>
+</div>
+
+<!-- No content fallback -->
+<div class="ts-empty" *ngIf="!subtopicContent && treatment">
+  <p>Content for this subtopic is coming soon.</p>
+  <a [routerLink]="parentLink">← Back to {{ treatment?.title }}</a>
+</div>

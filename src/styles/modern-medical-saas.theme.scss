@@ -1,0 +1,387 @@
+/**
+ * Modern Medical SaaS Design System
+ * Inspired by: Linear, Apple Health, Stripe
+ * 
+ * Core Principles:
+ * - Trust through clarity and simplicity
+ * - Generous whitespace reduces cognitive load
+ * - Depth via shadows, not borders
+ * - Fluid micro-interactions (0.2s ease-out)
+ * - Dark mode via CSS custom properties
+ */
+
+// ============================================
+// COLOR SYSTEM
+// ============================================
+
+:root {
+  // Brand Colors
+  --color-primary: #45197C;
+  --color-primary-light: #6B3FA0;
+  --color-primary-lighter: #9969CC;
+  --color-primary-lightest: #F0E8FF;
+  
+  // Semantic Colors
+  --color-success: #7ED321;
+  --color-warning: #FFA500;
+  --color-error: #FF6B6B;
+  --color-info: #90E0EF;
+  
+  // Neutral Colors (Light Mode)
+  --color-bg-primary: #FFFFFF;
+  --color-bg-secondary: #F9FAFB;
+  --color-bg-tertiary: #F3F4F6;
+  
+  --color-text-primary: #1F2937;
+  --color-text-secondary: #6B7280;
+  --color-text-tertiary: #9CA3AF;
+  
+  --color-border-light: #E5E7EB;
+  --color-border-medium: #D1D5DB;
+  
+  // Shadow System (inspired by Stripe)
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  // Hover/Active Shadows
+  --shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.15);
+  --shadow-active: 0 8px 16px rgba(0, 0, 0, 0.1);
+  
+  // Animation/Transition Durations
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
+  --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+// Dark Mode Support
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg-primary: #111827;
+    --color-bg-secondary: #1F2937;
+    --color-bg-tertiary: #374151;
+    
+    --color-text-primary: #F3F4F6;
+    --color-text-secondary: #D1D5DB;
+    --color-text-tertiary: #9CA3AF;
+    
+    --color-border-light: #374151;
+    --color-border-medium: #4B5563;
+    
+    --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+  }
+}
+
+// ============================================
+// SPACING SYSTEM (8px base)
+// ============================================
+
+:root {
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+}
+
+// ============================================
+// TYPOGRAPHY SYSTEM
+// ============================================
+
+:root {
+  --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+  
+  // Font Scales
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 32px;
+  
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  // Line Heights
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+}
+
+// ============================================
+// BORDER RADIUS
+// ============================================
+
+:root {
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+}
+
+// ============================================
+// Z-INDEX SCALE
+// ============================================
+
+:root {
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-offcanvas: 1040;
+  --z-modal-backdrop: 1050;
+  --z-modal: 1060;
+  --z-popover: 1070;
+  --z-tooltip: 1080;
+}
+
+// ============================================
+// REUSABLE COMPONENT STYLES
+// ============================================
+
+// Modern Card Component
+.card-modern {
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-lg);
+  border: none;
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-lg);
+  transition: box-shadow var(--duration-base) var(--ease-out),
+              transform var(--duration-base) var(--ease-out),
+              border-color var(--duration-base) var(--ease-out);
+  
+  &:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+  
+  &:active {
+    box-shadow: var(--shadow-sm);
+    transform: translateY(0);
+  }
+}
+
+// Modern Button
+.btn-modern {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--duration-base) var(--ease-out);
+  outline: none;
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  
+  // Primary Variant
+  &.btn-primary {
+    background: var(--color-primary);
+    color: white;
+    
+    &:hover:not(:disabled) {
+      background: var(--color-primary-light);
+    }
+  }
+  
+  // Secondary Variant
+  &.btn-secondary {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    border-color: var(--color-border-light);
+    
+    &:hover:not(:disabled) {
+      background: var(--color-bg-tertiary);
+      border-color: var(--color-border-medium);
+    }
+  }
+  
+  // Ghost Variant
+  &.btn-ghost {
+    background: transparent;
+    color: var(--color-primary);
+    
+    &:hover:not(:disabled) {
+      background: var(--color-primary-lightest);
+    }
+  }
+}
+
+// Modern Input
+.input-modern {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  transition: all var(--duration-base) var(--ease-out);
+  
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-lightest);
+  }
+  
+  &:hover:not(:focus) {
+    border-color: var(--color-border-medium);
+  }
+}
+
+// Modern Badge
+.badge-modern {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  background: var(--color-primary-lightest);
+  color: var(--color-primary);
+  border: none;
+  
+  &.badge-success {
+    background: rgba(126, 211, 33, 0.1);
+    color: var(--color-success);
+  }
+  
+  &.badge-warning {
+    background: rgba(255, 165, 0, 0.1);
+    color: var(--color-warning);
+  }
+  
+  &.badge-error {
+    background: rgba(255, 107, 107, 0.1);
+    color: var(--color-error);
+  }
+}
+
+// Modern Divider
+.divider-modern {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: var(--space-md) 0;
+}
+
+// ============================================
+// UTILITY CLASSES
+// ============================================
+
+.transition-smooth {
+  transition: all var(--duration-base) var(--ease-out);
+}
+
+.transition-fast {
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.transition-slow {
+  transition: all var(--duration-slow) var(--ease-out);
+}
+
+.shadow-hover {
+  transition: box-shadow var(--duration-base) var(--ease-out);
+  
+  &:hover {
+    box-shadow: var(--shadow-hover);
+  }
+}
+
+// Whitespace increase (+20%)
+.space-generous {
+  margin: var(--space-lg) 0;
+  padding: var(--space-lg);
+  gap: var(--space-lg);
+}
+
+// Focus indicator (accessible)
+.focus-ring {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+// Loading skeleton
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-secondary) 25%,
+    var(--color-bg-tertiary) 50%,
+    var(--color-bg-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Empty state styles
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3xl);
+  text-align: center;
+  color: var(--color-text-secondary);
+  
+  svg {
+    width: 96px;
+    height: 96px;
+    margin-bottom: var(--space-lg);
+    opacity: 0.6;
+  }
+  
+  h3 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--space-sm) 0;
+  }
+  
+  p {
+    margin: 0;
+    font-size: var(--font-size-sm);
+  }
+}

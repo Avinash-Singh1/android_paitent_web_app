@@ -1,0 +1,154 @@
+<div class="d-flex flex-column text-18 edit-appointment">
+  <div class="border-bottom px-24 py-3 text-24 font-600">{{ heading }}</div>
+
+  <form [formGroup]="editAppointmentForm" (ngSubmit)="onSubmit()">
+    <mat-dialog-content class="edit-appointment-modal"
+      ><div class="form">
+        <div class="row gy-4">
+          <div class="form-item col-12 col-md-6 d-flex flex-column gap-2">
+            <label class="faded-label"
+              >{{ "PATIENT_NAME" | translate
+              }}<span class="required-hint">*</span></label
+            >
+            <input
+              class="form-item-input"
+              placeholder="Enter patient name"
+              formControlName="fullName"
+            />
+          </div>
+          <div class="form-item col-12 col-md-6 d-flex flex-column gap-2">
+            <label class="faded-label"
+              >{{ "PATIENT_ID" | translate
+              }}<span class="required-hint">*</span></label
+            >
+            <input
+              class="form-item-input"
+              placeholder="Enter patient id"
+              formControlName="patientId"
+            />
+          </div>
+          <div class="form-item col-12 col-md-6 d-flex flex-column gap-2">
+            <label class="faded-label"
+              >{{ "MOBILE_NUMBER" | translate
+              }}<span class="required-hint">*</span></label
+            >
+            <input
+              class="form-item-input"
+              placeholder="Enter mobile number"
+              formControlName="phone"
+            />
+          </div>
+          <div class="form-item col-12 col-md-6 d-flex flex-column gap-2">
+            <label class="faded-label">{{ "EMAIL_ID" | translate }}</label>
+            <input
+              class="form-item-input"
+              placeholder="Enter email id"
+              formControlName="email"
+            />
+          </div>
+        </div>
+        <div class="py-24 d-flex flex-column gap-2">
+          <div class="">{{ "SCHEDULED_ON" | translate }}</div>
+          <div class="row gy-3">
+            <div class="col-12 col-md-4 d-flex flex-column gap-2">
+              <div class="matdate-input d-flex">
+                <input
+                  matInput
+                  class="w-90"
+                  type="text"
+                  formControlName="date"
+                  [min]="today"
+                  [max]="maxDate"
+                  [matDatepicker]="picker"
+                  (dateChange)="getTodayAppointment($event.value)"
+                />
+                <mat-datepicker-toggle
+                  class="toggle"
+                  matIconSuffix
+                  [for]="picker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker
+                  #picker
+                  [dateClass]="disableDay"
+                ></mat-datepicker>
+              </div>
+              <div
+                class="error-hint"
+                *ngIf="control['date'].errors?.['required'] && (submitted || control['date'].touched)"
+              >
+                Date is required
+              </div>
+            </div>
+            <div class="col-12 col-md-4 d-flex flex-column gap-2">
+              <div class="d-flex gap-2 align-items-center">
+                <span>{{ "AT" | translate }}</span>
+                <ng-select
+                  class="w-100"
+                  [items]="
+                    timingArray | avaliableSlot : bookedSlot : date | async
+                  "
+                  bindLabel="label"
+                  bindValue="label"
+                  placeholder="Time"
+                  formControlName="time"
+                ></ng-select>
+              </div>
+              <div
+                class="error-hint"
+                *ngIf="control['time'].errors?.['required'] && (submitted || control['time'].touched)"
+              >
+                Time is required
+              </div>
+            </div>
+            <div class="col-12 col-md-4 d-flex gap-2 align-items-center">
+              <span>{{ "FOR" | translate }}</span>
+              <ng-select
+                class="w-100"
+                [items]="timespendArray"
+                bindLabel="label"
+                bindValue="id"
+                placeholder="Time Spend"
+                formControlName="timespend"
+              ></ng-select>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex flex-column gap-2">
+          <div class="">
+            {{ "NOTES" | translate }} <span class="required-hint">*</span>
+          </div>
+          <textarea
+            class="notes-area"
+            name=""
+            id=""
+            cols="50"
+            rows="3"
+            placeholder="Add note"
+            formControlName="notes"
+          ></textarea>
+          <div
+            class="error-hint"
+            *ngIf="control['notes'].errors?.['required'] && (submitted || control['notes'].touched)"
+          >
+            Notes is required
+          </div>
+        </div>
+      </div></mat-dialog-content
+    >
+
+    <mat-dialog-actions>
+      <div class="border-top d-flex w-100 justify-content-end gap-6 p-24">
+        <button
+          class="white-button"
+          type="button"
+          (click)="matdialogRef.close()"
+        >
+          {{ "CANCEL" | translate }}
+        </button>
+        <button class="gray-button" type="submit">
+          {{ "SAVE" | translate }}
+        </button>
+      </div>
+    </mat-dialog-actions>
+  </form>
+</div>

@@ -1,0 +1,288 @@
+<div class="search-results-page">
+
+  <!-- ── Hero Search Bar ───────────────────────────── -->
+  <section class="search-hero">
+    <div class="search-hero__container">
+      <div class="search-hero__input-wrap" [class.focused]="searchFocused">
+        <mat-icon class="search-hero__icon">search</mat-icon>
+        <input
+          type="text"
+          class="search-hero__input"
+          placeholder="Search doctors, hospitals, specializations, services..."
+          [value]="query"
+          (input)="onSearchInput($event)"
+          (keydown)="onSearchKeydown($event)"
+          (focus)="searchFocused = true"
+          (blur)="searchFocused = false"
+          autofocus
+        />
+        <button
+          *ngIf="query"
+          class="search-hero__clear"
+          (click)="clearSearch()"
+          aria-label="Clear search"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <!-- Type filter pills -->
+      <div class="filter-pills" *ngIf="query">
+        <button
+          class="filter-pill"
+          [class.active]="type === 'all'"
+          (click)="filterByType('all')"
+        ><mat-icon>dashboard</mat-icon> All</button>
+        <button
+          class="filter-pill"
+          [class.active]="type === 'doctor'"
+          (click)="filterByType('doctor')"
+        ><mat-icon>person</mat-icon> Doctors</button>
+        <button
+          class="filter-pill"
+          [class.active]="type === 'hospital'"
+          (click)="filterByType('hospital')"
+        ><mat-icon>local_hospital</mat-icon> Hospitals</button>
+        <button
+          class="filter-pill"
+          [class.active]="type === 'specialization'"
+          (click)="filterByType('specialization')"
+        ><mat-icon>medical_services</mat-icon> Specializations</button>
+        <button
+          class="filter-pill"
+          [class.active]="type === 'service'"
+          (click)="filterByType('service')"
+        ><mat-icon>healing</mat-icon> Services</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="results-wrap">
+
+    <!-- ── Skeleton Loader ─────────────────────────── -->
+    <div class="skeleton-wrap" *ngIf="isLoading">
+      <div class="skeleton-card" *ngFor="let i of [1,2,3,4,5,6]">
+        <div class="skeleton-avatar"></div>
+        <div class="skeleton-body">
+          <div class="skeleton-line lg"></div>
+          <div class="skeleton-line md"></div>
+          <div class="skeleton-line sm"></div>
+        </div>
+        <div class="skeleton-btn"></div>
+      </div>
+    </div>
+
+    <!-- ── No Results ──────────────────────────────── -->
+    <div class="empty-block" *ngIf="!isLoading && noResults && query">
+      <div class="empty-block__visual">
+        <mat-icon class="empty-block__icon">search_off</mat-icon>
+      </div>
+      <h2 class="empty-block__title">No results for "{{ query }}"</h2>
+      <p class="empty-block__sub">Try checking the spelling or using different keywords.</p>
+
+      <!-- Did you mean -->
+      <div class="dym" *ngIf="didYouMean">
+        Did you mean
+        <a class="dym__link" (click)="applyDidYouMean()">{{ didYouMean }}</a>?
+      </div>
+
+      <!-- Related searches -->
+      <div class="related" *ngIf="relatedSearches.length > 0">
+        <h4 class="related__heading">Related Searches</h4>
+        <div class="related__tags">
+          <button
+            *ngFor="let term of relatedSearches"
+            class="related__tag"
+            (click)="applyRelatedSearch(term)"
+          >{{ term }}</button>
+        </div>
+      </div>
+
+      <!-- City-based specializations from DB -->
+      <div class="popular" *ngIf="citySpecializations.length > 0">
+        <h4 class="popular__heading">Popular Specializations{{ city ? ' in ' + (city | titlecase) : '' }}</h4>
+        <div class="popular__grid">
+          <a *ngFor="let spec of citySpecializations" class="popular__card"
+             [routerLink]="['/' + commonService.replaceSpaceWithHyphen(city || 'delhi'), commonService.replaceSpaceWithHyphen(spec.name)]">
+            <mat-icon>medical_services</mat-icon><span>{{ spec.name }}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Results ─────────────────────────────────── -->
+    <ng-container *ngIf="!isLoading && !noResults && query">
+
+      <div class="results-header">
+        <p class="results-header__count">
+          <strong>{{ totalDoctors }}</strong> result{{ totalDoctors !== 1 ? 's' : '' }}
+          for "<strong>{{ query }}</strong>"
+          <span *ngIf="city"> in <strong>{{ city | titlecase }}</strong></span>
+        </p>
+
+        <!-- Inline related searches -->
+        <div class="related related--inline" *ngIf="relatedSearches.length > 0">
+          <span class="related__label">Related:</span>
+          <button
+            *ngFor="let term of relatedSearches"
+            class="related__tag related__tag--sm"
+            (click)="applyRelatedSearch(term)"
+          >{{ term }}</button>
+        </div>
+      </div>
+
+      <!-- Specializations -->
+      <section class="section" *ngIf="filteredSpecializations.length > 0">
+        <div class="section__head">
+          <mat-icon class="section__icon">medical_services</mat-icon>
+          <h3 class="section__title">Specializations</h3>
+        </div>
+        <div class="chip-list">
+          <a
+            *ngFor="let item of filteredSpecializations"
+            class="chip"
+            (click)="navigateToResult(item, 'specialization')"
+          >
+            <mat-icon class="chip__icon">local_hospital</mat-icon>
+            <span class="chip__label">{{ item.name }}</span>
+            <span class="chip__badge">{{ item.count }}</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Services -->
+      <section class="section" *ngIf="filteredServices.length > 0">
+        <div class="section__head">
+          <mat-icon class="section__icon">healing</mat-icon>
+          <h3 class="section__title">Services</h3>
+        </div>
+        <div class="chip-list">
+          <a
+            *ngFor="let item of filteredServices"
+            class="chip chip--service"
+            (click)="navigateToResult(item, 'service')"
+          >
+            <mat-icon class="chip__icon">check_circle</mat-icon>
+            <span class="chip__label">{{ item.name }}</span>
+            <span class="chip__badge">{{ item.count }}</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Doctors -->
+      <section class="section" *ngIf="filteredDoctors.length > 0">
+        <div class="section__head">
+          <mat-icon class="section__icon">person</mat-icon>
+          <h3 class="section__title">Doctors</h3>
+        </div>
+        <div class="card-list">
+          <div
+            *ngFor="let doc of filteredDoctors; trackBy: trackByDoctorId"
+            class="doc-card"
+            (click)="navigateToResult(doc, 'doctor')"
+          >
+            <div class="doc-card__avatar">
+              <img
+                [src]="doc.profilePic"
+                [alt]="doc.name"
+                loading="lazy"
+                (error)="$any($event.target).src = 'assets/images/default-doctor.png'"
+              />
+              <span class="doc-card__verified" title="Verified">
+                <mat-icon>verified</mat-icon>
+              </span>
+            </div>
+            <div class="doc-card__body">
+              <h4 class="doc-card__name">
+                <ng-container *ngIf="hasHighlightFor(doc, 'fullName'); else plainName">
+                  <ng-container *ngFor="let hl of doc.highlights">
+                    <ng-container *ngIf="hl.path === 'fullName'">
+                      <ng-container *ngFor="let t of hl.texts">
+                        <mark *ngIf="t.type === 'hit'">{{ t.value }}</mark>
+                        <span *ngIf="t.type !== 'hit'">{{ t.value }}</span>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+                <ng-template #plainName>{{ doc.name }}</ng-template>
+              </h4>
+              <p class="doc-card__spec" *ngIf="doc.specialization?.length">
+                {{ doc.specialization.join(' · ') }}
+              </p>
+              <p class="doc-card__loc" *ngIf="doc.address?.locality || doc.address?.city">
+                <mat-icon>location_on</mat-icon>
+                {{ doc.address.locality ? doc.address.locality + ', ' : '' }}{{ doc.address.city }}
+              </p>
+            </div>
+            <button class="doc-card__btn">
+              View Profile
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Hospitals -->
+      <section class="section" *ngIf="filteredHospitals.length > 0">
+        <div class="section__head">
+          <mat-icon class="section__icon">domain</mat-icon>
+          <h3 class="section__title">Hospitals & Clinics</h3>
+        </div>
+        <div class="card-list">
+          <div
+            *ngFor="let h of filteredHospitals"
+            class="hosp-card"
+            (click)="navigateToResult(h, 'hospital')"
+          >
+            <div class="hosp-card__icon-wrap">
+              <mat-icon>local_hospital</mat-icon>
+            </div>
+            <div class="hosp-card__body">
+              <h4 class="hosp-card__name">{{ h.name }}</h4>
+              <p class="hosp-card__loc" *ngIf="h.address?.locality || h.address?.city">
+                <mat-icon>location_on</mat-icon>
+                {{ h.address?.locality ? h.address.locality + ', ' : '' }}{{ h.address?.city }}
+              </p>
+            </div>
+            <button class="hosp-card__btn">
+              View
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- City-based specializations (results view) -->
+      <div class="popular" *ngIf="citySpecializations.length > 0">
+        <h4 class="popular__heading">Popular Specializations{{ city ? ' in ' + (city | titlecase) : '' }}</h4>
+        <div class="popular__grid">
+          <a *ngFor="let spec of citySpecializations" class="popular__card"
+             [routerLink]="['/' + commonService.replaceSpaceWithHyphen(city || 'delhi'), commonService.replaceSpaceWithHyphen(spec.name)]">
+            <mat-icon>medical_services</mat-icon><span>{{ spec.name }}</span>
+          </a>
+        </div>
+      </div>
+
+    </ng-container>
+
+    <!-- ── Empty state (no query) ──────────────────── -->
+    <div class="empty-block empty-block--start" *ngIf="!query && !isLoading">
+      <div class="empty-block__visual">
+        <mat-icon class="empty-block__icon">manage_search</mat-icon>
+      </div>
+      <h2 class="empty-block__title">Find the right care, fast</h2>
+      <p class="empty-block__sub">Search for doctors, hospitals, specializations, or health services above.</p>
+
+      <!-- City-based specializations (empty state) -->
+      <div class="popular" *ngIf="citySpecializations.length > 0">
+        <h4 class="popular__heading">Popular Specializations{{ city ? ' in ' + (city | titlecase) : '' }}</h4>
+        <div class="popular__grid">
+          <a *ngFor="let spec of citySpecializations" class="popular__card"
+             [routerLink]="['/' + commonService.replaceSpaceWithHyphen(city || 'delhi'), commonService.replaceSpaceWithHyphen(spec.name)]">
+            <mat-icon>medical_services</mat-icon><span>{{ spec.name }}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,82 @@
+<!-- Subtopic Links -->
+<section class="related__subtopics" *ngIf="subtopics">
+  <h3 class="related__subtitle">Explore More</h3>
+  <div class="related__subtopics-grid">
+    <a *ngIf="subtopics.cost"
+       [routerLink]="['/', city || 'delhi', 'treatment', department, slug, 'cost']"
+       (click)="scrollToTop()"
+       class="related__subtopic-card">
+      <span>💰</span> Cost Guide
+    </a>
+    <a *ngIf="subtopics.recovery"
+       [routerLink]="['/', city || 'delhi', 'treatment', department, slug, 'recovery']"
+       (click)="scrollToTop()"
+       class="related__subtopic-card">
+      <span>🏥</span> Recovery Guide
+    </a>
+    <a *ngIf="subtopics.procedure"
+       [routerLink]="['/', city || 'delhi', 'treatment', department, slug, 'procedure']"
+       (click)="scrollToTop()"
+       class="related__subtopic-card">
+      <span>🔬</span> Procedure Details
+    </a>
+    <a *ngIf="subtopics.risks"
+       [routerLink]="['/', city || 'delhi', 'treatment', department, slug, 'risks']"
+       (click)="scrollToTop()"
+       class="related__subtopic-card">
+      <span>⚠️</span> Risks & Complications
+    </a>
+    <a *ngIf="subtopics.successRate"
+       [routerLink]="['/', city || 'delhi', 'treatment', department, slug, 'success-rate']"
+       (click)="scrollToTop()"
+       class="related__subtopic-card">
+      <span>📊</span> Success Rate
+    </a>
+  </div>
+</section>
+
+<!-- Related Treatments -->
+<section class="related" *ngIf="relatedTreatments?.length">
+  <h2 class="related__title">Related Treatments</h2>
+  <div class="related__grid">
+    <a *ngFor="let r of relatedTreatments"
+       [routerLink]="['/', city || 'delhi', 'treatment', r.departmentId?.slug || department, r.slug]"
+       (click)="scrollToTop()"
+       class="related__card">
+      <img [src]="r.imageUrl || 'assets/images/png/surgery-placeholder.png'"
+           [alt]="r.title" class="related__card-img" loading="lazy"
+           width="64" height="64" />
+      <span class="related__card-title">{{ r.title }}</span>
+    </a>
+  </div>
+</section>
+
+<!-- City Links -->
+<section class="related__cities" *ngIf="slug">
+  <h3 class="related__cities-title">{{ treatmentTitle || 'Treatment' }} in Top Cities</h3>
+  <div class="related__cities-grid">
+    <a *ngFor="let c of topCities"
+       [routerLink]="['/', c, 'treatment', department, slug]"
+       (click)="scrollToTop()"
+       class="related__city-link">
+      {{ treatmentTitle || 'Treatment' }} in {{ getCityLabel(c) }}
+    </a>
+  </div>
+</section>
+
+<!-- Explore Other Specialties -->
+<section class="related__depts" *ngIf="otherDepartments?.length">
+  <h3 class="related__depts-title">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Explore Other Specialties
+  </h3>
+  <div class="related__depts-grid">
+    <a *ngFor="let d of otherDepartments"
+       [routerLink]="['/', city || 'delhi', 'treatment', d.slug]"
+       (click)="scrollToTop()"
+       class="related__dept-chip">
+      <span class="related__dept-name">{{ d.name }}</span>
+      <span class="related__dept-count">{{ d.countOfSurgery }}</span>
+    </a>
+  </div>
+</section>

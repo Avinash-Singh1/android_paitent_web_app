@@ -1,0 +1,14 @@
+2026-04-18 14:54:40: Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/amritjames/amritjames/nectar-plus-web-fe/start-ssr.mjs' imported from /usr/local/lib/node_modules/pm2/lib/ProcessContainerFork.js
+2026-04-18 14:54:40:     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+2026-04-18 14:54:40:     at moduleResolve (node:internal/modules/esm/resolve:860:10)
+2026-04-18 14:54:40:     at defaultResolve (node:internal/modules/esm/resolve:984:11)
+2026-04-18 14:54:40:     at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:780:12)
+2026-04-18 14:54:40:     at #cachedDefaultResolve (node:internal/modules/esm/loader:704:25)
+2026-04-18 14:54:40:     at ModuleLoader.resolve (node:internal/modules/esm/loader:687:38)
+2026-04-18 14:54:40:     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:305:38)
+2026-04-18 14:54:40:     at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:643:36)
+2026-04-18 14:54:40:     at TracingChannel.tracePromise (node:diagnostics_channel:344:14)
+2026-04-18 14:54:40:     at ModuleLoader.import (node:internal/modules/esm/loader:642:21) {
+2026-04-18 14:54:40:   code: 'ERR_MODULE_NOT_FOUND',
+2026-04-18 14:54:40:   url: 'file:///Users/amritjames/amritjames/nectar-plus-web-fe/start-ssr.mjs'
+2026-04-18 14:54:40: }

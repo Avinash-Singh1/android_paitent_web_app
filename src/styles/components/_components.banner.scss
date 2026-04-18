@@ -1,0 +1,110 @@
+@use './src/styles/settings/settings.colors' as *;
+@use './src/styles/tools/tools.typography' as *;
+@use './src/styles/tools/tools.mediaquery' as *;
+@use '../settings/settings.layout' as *;
+
+/*banner-carousel-w-tabs*/
+
+$banner-text-font-sizes: 15,
+	20;
+$banner-header-text-font-sizes: 30,
+	40;
+$banner-height: 690px;
+
+@mixin banner-w-tabs-variables {
+	--banner-container-padding: 40px 0;
+	--banner-content-background-color: #{$color-brown-light-rgb};
+	--banner-content-background-opacity: 0.7;
+	--banner-transition: var(--transition-duration);
+	--banner-shownColor-color: #{$color-white};
+	--banner-shownColor-icon-size: 1rem;
+}
+
+
+/*inPagebanner Component*/
+
+$min-height: 580px;
+
+@mixin item-positions {
+
+	.left {
+		align-items: $left-align !important;
+	}
+
+	.center {
+		align-items: $center-align !important;
+	}
+
+	.right {
+		align-items: $right-align !important;
+	}
+
+	.vertical-top {
+		justify-content: $vertical-top-align !important;
+	}
+
+	.vertical-center {
+		justify-content: $vertical-middle-align !important;
+	}
+
+	.vertical-bottom {
+		justify-content: $vertical-bottom-align !important;
+	}
+}
+
+@mixin item-vertical-positions {
+
+	.vertical-top {
+		align-items: $center-align;
+		@include mq-breakpoint-md() {
+			align-items: $vertical-top-align !important;
+		}
+	}
+
+	.vertical-center {
+		align-items: $center-align;
+		@include mq-breakpoint-md() {
+			align-items: $vertical-middle-align !important;
+		}
+	}
+
+	.vertical-bottom {
+		align-items: $center-align;
+		@include mq-breakpoint-md() {
+			align-items: $vertical-bottom-align !important;
+		}
+	}
+}
+
+
+/*Single banner component & Three Column banner*/
+
+@mixin item-vertical-bottom-position {
+
+	.vertical-bottom {
+		align-items: $center-align;
+		@include mq-breakpoint-md() {
+			align-items: $vertical-bottom-align !important;
+		}
+	}
+}
+
+
+/*Single banner component*/
+
+$title-width: 1140px;
+$circle-description: 540px;
+
+@mixin circle-description-length {
+	width: $circle-description;
+	height: $circle-description;
+}
+
+@mixin curve_shape($position: true) {
+	@if $position {
+		justify-content: $left-align !important;
+	}
+	@else {
+		justify-content: $center-align !important;
+	}
+}

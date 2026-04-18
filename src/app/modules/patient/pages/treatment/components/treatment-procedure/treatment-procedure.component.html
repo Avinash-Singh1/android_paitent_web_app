@@ -1,0 +1,20 @@
+<section id="procedure" class="procedure" *ngIf="treatment?.procedureSteps">
+  <h2 class="procedure__title">{{ treatment.title }} Procedure</h2>
+
+  <!-- Step-by-Step Flow -->
+  <div class="procedure__steps" *ngIf="procedureSteps.length > 1">
+    <div class="procedure__step" *ngFor="let step of procedureSteps; let i = index; let last = last">
+      <div class="procedure__step-marker">
+        <span class="procedure__step-num">{{ i + 1 }}</span>
+        <div class="procedure__step-line" *ngIf="!last"></div>
+      </div>
+      <div class="procedure__step-content">
+        <p class="procedure__step-text">{{ step }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fallback: Rich HTML -->
+  <div class="procedure__body" *ngIf="procedureSteps.length <= 1"
+       [innerHTML]="sanitize(treatment.procedureSteps)"></div>
+</section>

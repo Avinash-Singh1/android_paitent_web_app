@@ -1,0 +1,401 @@
+<!-- New Filter Chips Component -->
+<nectar-medicine-filter-chips
+  *ngIf="currentFilters && currentUrl !== '/medicines'"
+  [filters]="currentFilters"
+  (filterRemoved)="onFilterRemoved($event)"
+  (clearAll)="onClearAllFilters()"
+></nectar-medicine-filter-chips>
+
+<div class="container-fluid g-0">
+    <div class="row">
+        <div class="main_conatiner_flexbox">
+            <!-- New Advanced Filter Sidebar (Desktop) -->
+            <nectar-medicine-filter-sidebar
+              *ngIf="currentUrl !== '/medicines'"
+              class="d-none d-lg-block"
+              [medicines]="data.length > 0 ? data : productData"
+              (filtersChanged)="onFiltersChanged($event)"
+            ></nectar-medicine-filter-sidebar>
+
+            <!-- Original Category Filter Sidebar (kept for backward compatibility) -->
+            <div class="aside d-none d-md-none d-lg-block shadow-sm" *ngIf="currentUrl !== '/medicines'" style="display: none !important;">
+                <div class="hedding py-1">
+                    <h3 class="filter_text">Filter by</h3>
+                    <button (click)="fetchData()" class="Show_product">Apply Filter</button>
+                </div>
+                <div class="filter_catragory">
+                    <ul>
+                        <ng-container *ngFor="let cat of categories">
+                            <li>
+                                <div class="item-container">
+                                    <input type="checkbox" id="desktop-cat-{{ cat.category_id }}"
+                                        [checked]="selectedCategoryIds.includes(cat.category_id)"
+                                        (change)="selectCategory(cat.category_id, cat.name_en)" class="checkbox">
+                                    <label for="desktop-cat-{{ cat.category_id }}">{{ cat.name_en | truncate:25
+                                        }}</label>
+
+                                    <!-- Toggle button: Display only if there are children categories -->
+                                    <button *ngIf="cat.children && cat.children.length > 0"
+                                        (click)="toggleChildrenVisibility(cat.category_id, 'desktop')"
+                                        class="Toogle_button"
+                                        [ngClass]="{'btn-toggle': true, 'btn-toggle-expanded': isCategoryExpanded(cat.category_id)}"
+                                        [attr.data-bs-toggle]="'collapse'"
+                                        [attr.data-bs-target]="'#desktop-collapse-' + cat.category_id"
+                                        aria-expanded="isCategoryExpanded(cat.category_id)">
+                                        {{ isCategoryExpanded(cat.category_id) ? '-' : '+' }}
+                                    </button>
+
+                                    <!-- Child categories -->
+                                    <div class="collapse" id="desktop-collapse-{{ cat.category_id }}">
+                                        <ul id="desktop-category-{{ cat.category_id }}"
+                                            class="hidden btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                            <ng-container *ngFor="let child of cat.children">
+                                                <ng-template [ngTemplateOutlet]="recursiveList"
+                                                    [ngTemplateOutletContext]="{ $implicit: child }"></ng-template>
+                                            </ng-container>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                        </ng-container>
+                    </ul>
+
+                    <!-- Recursive template for nested children -->
+                    <ng-template #recursiveList let-cat>
+                        <li>
+                            <input type="checkbox" id="desktop-cat-{{ cat.category_id }}"
+                                [checked]="selectedCategoryIds.includes(cat.category_id)"
+                                (change)="selectCategory(cat.category_id, cat.name_en)" class="checkbox">
+                            <label for="desktop-cat-{{ cat.category_id }}">{{ cat.name_en | truncate:20 }}</label>
+
+                            <!-- Show toggle button only if there are further child categories -->
+                            <button *ngIf="cat.children && cat.children.length > 0"
+                                (click)="toggleChildrenVisibility(cat.category_id, 'desktop')" class="Toogle_button"
+                                [ngClass]="{'btn-toggle': true, 'btn-toggle-expanded': isCategoryExpanded(cat.category_id)}">
+                                {{ isCategoryExpanded(cat.category_id) ? '-' : '+' }}
+                            </button>
+
+                            <!-- Nested child categories -->
+                            <ul id="desktop-category-{{ cat.category_id }}" class="hidden">
+                                <ng-container *ngFor="let child of cat.children">
+                                    <ng-template [ngTemplateOutlet]="recursiveList"
+                                        [ngTemplateOutletContext]="{ $implicit: child }"></ng-template>
+                                </ng-container>
+                            </ul>
+                        </li>
+                    </ng-template>
+                </div>
+
+            </div>
+            <div class="main_continer p-1">
+                <div class="container-fluid p-0">
+                    <div class="row Product_categroy p-2">
+                        <div class="col-md-4 " style="display: flex;justify-content: space-between;">
+                            <p class="text_hedding ms-1 m-auto" [routerLink]="['/medicines/all-medicines']">
+                                {{ categoryNameurl ? (categoryNameurl | capitalize) : 'All Medicines' }}
+                            </p>
+                            <button class="filter_button d-none" (click)="toggleFilterSidebar()" 
+                                role="button" aria-label="Open filters">
+                                <span class="fw-bold">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none">
+                                        <g clip-path="url(#clip0_527_2285)">
+                                            <path d="M10 18H14V16H10V18ZM3 6V8H21V6H3ZM6 13H18V11H6V13Z" fill="black" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_527_2285">
+                                                <rect width="24" height="24" fill="white" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                    Filter
+                                    <span class="filter-count-badge" *ngIf="getActiveFilterCount() > 0">
+                                        {{ getActiveFilterCount() }}
+                                    </span>
+                                </span>
+                            </button>
+                        </div>
+                        <div class="col-md-8 main_tab_conteiner" *ngIf="currentUrl !== '/medicines'">
+                            <div class="row p-2 " style="overflow: hidden;">
+                                <div class="tab-bar">
+                                    <div class=" g-0" style="display: contents;">
+                                        <a [ngClass]="{ 'active': selectedFilter === 'All' }"
+                                            (click)="selectFilter('All')" class="ms-1">All</a>
+                                        <a [ngClass]="{ 'active': selectedFilter === 'Ayurveda' }"
+                                            (click)="selectFilter('Ayurveda')">Ayurveda</a>
+                                        <a [ngClass]="{ 'active': selectedFilter === 'General' }"
+                                            (click)="selectFilter('General')">General</a>
+                                        <a [ngClass]="{ 'active': selectedFilter === 'Allopath' }"
+                                            (click)="selectFilter('Allopath')">Allopath</a>
+                                        <a [ngClass]="{ 'active': selectedFilter === 'Homeopath' }"
+                                            (click)="selectFilter('Homeopath')">Homeopath</a>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid p-0 g-0">
+                        <div class="row">
+                            <div *ngIf="productData.length == 0" class="row_class row-cols-1 row-cols-sm-2">
+                                <div class="col" *ngFor="let a of filteredData">
+                                    <a
+                                        class="card shadow-sm text-decoration-none text-dark"
+                                        [routerLink]="['/medicines/details', a.product_id, formatProductName(a.name)]"
+                                    >
+                                        <div class="product-image-wrapper">
+                                            <img
+                                                [src]="a.image || a.images_hsh?.array?.[0] || 'assets/images/medicine-placeholder.png'"
+                                                [alt]="a.name"
+                                                class="product-image"
+                                                loading="lazy"
+                                                (error)="onImageError($event)"
+                                            />
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="medicine-type" *ngIf="a.otc_type">{{ a.otc_type }}</p>
+                                            <h3 class="medicine-name">{{ a.name | truncate: 30 }}</h3>
+
+                                            <div class="review_card" *ngIf="a.rating && a.rating.average > 0">
+                                                <span class="rating-value">{{ a.rating.average | number:'1.1-1' }}</span>
+                                                <star-rating
+                                                    [rating]="a.rating.average"
+                                                    [step]="0.1"
+                                                    [showHalfStars]="true"
+                                                    [readOnly]="true"
+                                                    [size]="'small'"
+                                                ></star-rating>
+                                                <span class="rating-count" *ngIf="a.rating.count">({{ a.rating.count }})</span>
+                                            </div>
+
+                                            <p class="Product_company" *ngIf="a.manufacturer?.name">
+                                                by
+                                                <span class="manufacturer-name">
+                                                    <a
+                                                        [href]="a.manufacturer.url"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        *ngIf="a.manufacturer.url; else noLinkFiltered"
+                                                    >
+                                                        {{ a.manufacturer.name | truncate: 25 }}
+                                                    </a>
+                                                    <ng-template #noLinkFiltered>{{ a.manufacturer.name | truncate: 25 }}</ng-template>
+                                                </span>
+                                            </p>
+
+                                            <div class="button_section">
+                                                <div class="Ammount_section" *ngIf="a.price">
+                                                    <span class="current-price" *ngIf="a.price.final_price">
+                                                        {{ a.price.final_price | currency: 'INR': 'symbol':'1.0-0' }}
+                                                    </span>
+                                                    <span class="wrong_price" *ngIf="a.price.mrp && a.price.mrp !== a.price.final_price">
+                                                        {{ a.price.mrp | currency: 'INR': 'symbol':'1.0-0' }}
+                                                    </span>
+                                                    <span class="discount-badge" *ngIf="a.price.discount > 0">{{ a.price.discount }}% OFF</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div *ngIf="productData.length > 0" class="row_class row-cols-1 row-cols-sm-2">
+                                <div class="col" *ngFor="let a of productData">
+                                    <a
+                                        class="card shadow-sm text-decoration-none text-dark"
+                                        [routerLink]="['/medicines/details', a.product_id, formatProductName(a.name)]"
+                                    >
+                                        <div class="product-image-wrapper">
+                                            <img
+                                                [src]="a.image || a.images_hsh?.array?.[0] || 'assets/images/medicine-placeholder.png'"
+                                                [alt]="a.name"
+                                                class="product-image"
+                                                loading="lazy"
+                                                (error)="onImageError($event)"
+                                            />
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="medicine-type" *ngIf="a.otc_type">{{ a.otc_type }}</p>
+                                            <h3 class="medicine-name">{{ a.name | truncate: 30 }}</h3>
+
+                                            <div class="review_card" *ngIf="a.rating && a.rating.average > 0">
+                                                <span class="rating-value">{{ a.rating.average | number:'1.1-1' }}</span>
+                                                <star-rating
+                                                    [rating]="a.rating.average"
+                                                    [step]="0.1"
+                                                    [showHalfStars]="true"
+                                                    [readOnly]="true"
+                                                    [size]="'small'"
+                                                ></star-rating>
+                                                <span class="rating-count" *ngIf="a.rating.count">({{ a.rating.count }})</span>
+                                            </div>
+
+                                            <p class="Product_company" *ngIf="a.manufacturer?.name">
+                                                by
+                                                <span class="manufacturer-name">
+                                                    <a
+                                                        [href]="a.manufacturer.url"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        *ngIf="a.manufacturer.url; else noLinkProduct"
+                                                    >
+                                                        {{ a.manufacturer.name | truncate: 25 }}
+                                                    </a>
+                                                    <ng-template #noLinkProduct>{{ a.manufacturer.name | truncate: 25 }}</ng-template>
+                                                </span>
+                                            </p>
+
+                                            <div class="button_section">
+                                                <div class="Ammount_section" *ngIf="a.price">
+                                                    <span class="current-price" *ngIf="a.price.final_price">
+                                                        {{ a.price.final_price | currency: 'INR': 'symbol':'1.0-0' }}
+                                                    </span>
+                                                    <span class="wrong_price" *ngIf="a.price.mrp && a.price.mrp !== a.price.final_price">
+                                                        {{ a.price.mrp | currency: 'INR': 'symbol':'1.0-0' }}
+                                                    </span>
+                                                    <span class="discount-badge" *ngIf="a.price.discount > 0">{{ a.price.discount }}% OFF</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="button_section_load" *ngIf="filteredData && filteredData.length > 0">
+    <div class="row m-0">
+        <button class="view-more-btn" (click)="viewMore()">
+            <span>View More Products</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g id="Keyboard arrow down" clip-path="url(#clip0_72_201)">
+                    <path id="Vector"
+                        d="M7.41 8.59009L12 13.1701L16.59 8.59009L18 10.0001L12 16.0001L6 10.0001L7.41 8.59009Z"
+                        fill="white" />
+                </g>
+                <defs>
+                    <clipPath id="clip0_72_201">
+                        <rect width="24" height="24" fill="white" />
+                    </clipPath>
+                </defs>
+            </svg>
+        </button>
+    </div>
+</div>
+
+
+
+<!--=================offCavas===============-->
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel"
+    style="width: -webkit-fill-available;">
+    <div class="offcanvas-header">
+        <h2 class="offcanvas-title fw-bold m-0" id="offcanvasExampleLabel">Nectar Medicine Filter</h2>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="aside  shadow-sm " style="width: 100% !important; max-width: 100% !important;">
+            <div class="hedding py-1">
+                <h3 class="filter_text">Filter by</h3>
+                <button (click)="fetchData()" class="Show_product" data-bs-dismiss="offcanvas" aria-label="Close">Apply
+                    Filter</button>
+            </div>
+
+            <div class="filter_catragory">
+                <ul>
+                    <ng-container *ngFor="let cat of categories">
+                        <li>
+                            <div>
+                                <input type="checkbox" id="mobile-cat-{{ cat.category_id }}"
+                                    (change)="selectCategory(cat.category_id, cat.name_en)" class="checkbox"
+                                    [checked]="selectedCategoryIds.includes(cat.category_id)">
+                                <label for="mobile-cat-{{ cat.category_id }}">{{ cat.name_en | truncate:25 }}</label>
+
+                                <!-- Toggle button: Display only if there are children categories -->
+                                <button *ngIf="cat.children && cat.children.length > 0"
+                                    (click)="toggleChildrenVisibility(cat.category_id, 'mobile')"
+                                    class="btn btn-toggle align-items-center rounded collapsed Toogle_button"
+                                    [attr.data-bs-toggle]="'collapse'"
+                                    [attr.data-bs-target]="'#mobile-collapse-' + cat.category_id" aria-expanded="false">
+
+                                    {{ isCategoryExpanded(cat.category_id) ? '-' : '+' }}
+                                </button>
+
+
+                                <!-- Child categories -->
+                                <div class="collapse" id="mobile-collapse-{{ cat.category_id }}">
+                                    <ul id="mobile-category-{{ cat.category_id }}"
+                                        class="hidden btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                        <ng-container *ngFor="let child of cat.children">
+                                            <ng-template [ngTemplateOutlet]="recursiveList"
+                                                [ngTemplateOutletContext]="{ $implicit: child }"></ng-template>
+                                        </ng-container>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ng-container>
+                </ul>
+
+                <!-- Recursive template for nested children -->
+                <ng-template #recursiveList let-cat>
+                    <li>
+                        <input type="checkbox" id="mobile-cat-{{ cat.category_id }}"
+                            (change)="selectCategory(cat.category_id, cat.name_en)" class="checkbox">
+                        <label for="mobile-cat-{{ cat.category_id }}">{{ cat.name_en | truncate:25 }}</label>
+
+                        <!-- Show toggle button only if there are further child categories -->
+                        <button *ngIf="cat.children && cat.children.length > 0"
+                            (click)="toggleChildrenVisibility(cat.category_id, 'mobile')"
+                            class="btn btn-toggle align-items-center rounded collapsed Toogle_button"
+                            aria-expanded="false">
+
+                            <!-- <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 20 20" fill="none">
+                        <g clip-path="url(#clip0_516_1120)">
+                          <path
+                            d="M15.8333 10.8333H10.8333V15.8333H9.16663V10.8333H4.16663V9.16666H9.16663V4.16666H10.8333V9.16666H15.8333V10.8333Z"
+                            fill="black" />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_516_1120">
+                            <rect width="20" height="20" fill="white" />
+                          </clipPath>
+                        </defs>
+                      </svg> -->
+                            {{ isCategoryExpanded(cat.category_id) ? '-' : '+' }}
+                        </button>
+
+                        <!-- Nested child categories -->
+                        <ul id="mobile-category-{{ cat.category_id }}" class="hidden">
+                            <ng-container *ngFor="let child of cat.children">
+                                <ng-template [ngTemplateOutlet]="recursiveList"
+                                    [ngTemplateOutletContext]="{ $implicit: child }"></ng-template>
+                            </ng-container>
+                        </ul>
+                    </li>
+                </ng-template>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Mobile Filter Sidebar Overlay -->
+<div class="mobile-filter-overlay" *ngIf="filterSidebarOpen" (click)="toggleFilterSidebar()">
+  <div class="mobile-filter-sidebar" (click)="$event.stopPropagation()">
+    <nectar-medicine-filter-sidebar
+      [medicines]="data.length > 0 ? data : productData"
+      (filtersChanged)="onFiltersChanged($event)"
+      (closeFilter)="toggleFilterSidebar()"
+    ></nectar-medicine-filter-sidebar>
+  </div>
+</div>
+
+<!-- Other component content -->

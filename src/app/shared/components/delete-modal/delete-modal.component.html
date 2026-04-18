@@ -1,0 +1,30 @@
+<div class="d-flex flex-column text-18 delete-appointment">
+  <div class="heading px-24 py-3 border-bottom text-24 font-600">
+    {{ data.heading }}
+  </div>
+  <div class="content p-24 border-bottom">
+    {{ data.message }}
+  </div>
+  <div class="confirmation d-flex justify-content-end gap-6 px-24 py-3">
+    <button
+      *ngIf="data?.type !== 'patient'"
+      class="white-button"
+      (click)="no()"
+    >
+      {{ "CANCEL" | translate }}
+    </button>
+    <button
+      *ngIf="data?.type !== 'patient'"
+      class="gray-button"
+      (click)="deleteService()"
+    >
+      {{ "DELETE" | translate }}
+    </button>
+    <button *ngIf="data?.type == 'patient'" class="cancel" (click)="no()">
+      No
+    </button>
+    <button *ngIf="data?.type == 'patient'" class="cancel yes" (click)="yes()">
+      Yes
+    </button>
+  </div>
+</div>

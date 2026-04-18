@@ -1,0 +1,104 @@
+@use 'src/styles/settings/settings.colors' as *;
+
+@use 'src/styles/tools/tools.mediaquery' as *;
+
+$default-navigator-font-size-mobile: 30px;
+
+.swiper-container {
+	width: 100%;
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+	text-rendering: auto;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+	color: red;
+
+	&.dark {
+		color: unset;
+	}
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+	font-size: $default-navigator-font-size-mobile;
+
+	@include mq-breakpoint-md() {
+		font-size: var(--swiper-navigation-size);
+	}
+}
+
+@mixin pagination-fraction($component: '.') {
+	#{$component}fraction-total {
+		margin-left: 5px;
+		margin-bottom: 0;
+		color: $color-grey-medium;
+		@include font-proxima-regular($size: 20, $lineheight: 1);
+	}
+
+	#{$component}fraction-current {
+		margin-right: 5px;
+		color: $color-red-dark;
+		@include font-proxima-regular($size: 40, $lineheight: 1);
+	}
+}
+
+@mixin basic-pagination-bullet(
+	$shape: circle,
+	$size: 10px,
+	$spacing: 2px,
+	$active-color: $color-red-dark,
+	$inactive-color: $color-black,
+	$inactive-opacity: 0.2,
+	$hasOutline: false
+) {
+	width: $size;
+	height: $size;
+	border-radius: 0;
+	display: inline-block;
+	background-color: $inactive-color;
+	opacity: $inactive-opacity;
+	margin: 0 $spacing;
+	outline: 0;
+
+	@if($hasOutline) {
+		border: 1px solid $color-grey-medium;
+	}
+
+	@if ($shape == circle) {
+		border-radius: 50%;
+	}
+
+	@if ($shape == rectangle) {
+		height: $size / 5;
+	}
+
+	&-active {
+		background-color: $active-color;
+		opacity: 1;
+	}
+}
+
+@mixin rectangle-pagination-bullet(
+	$width: 25px,
+	$height: 5px,
+	$spacing: 3px,
+	$active-color: $color-red-dark
+) {
+	width: $width;
+	height: $height;
+	display: inline-block;
+	border-radius: 0;
+	background-color: $color-black;
+	opacity: 0.2;
+	margin: 0 $spacing;
+	outline: 0;
+
+	&-active {
+		background-color: $active-color;
+		opacity: 1;
+	}
+}

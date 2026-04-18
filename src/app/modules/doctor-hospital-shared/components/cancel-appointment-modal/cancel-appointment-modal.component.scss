@@ -1,0 +1,47 @@
+@use "variable.scss" as *;
+
+button {
+  padding: 12px 30px;
+  border-radius: 5px;
+  background: none;
+  border: none;
+
+  &.close-button {
+    border: 1px solid $border-color;
+  }
+
+  &.cancel-button {
+    background: $red;
+    color: $white;
+    font-weight: 600;
+  }
+}
+
+.cancel-appointment {
+  max-width: 600px !important;
+}
+
+.p-24 {
+  padding: 24px;
+}
+
+.error-div {
+  margin-top: -12px !important;
+}
+
+input[type="checkbox"] {
+  width: 22.4px;
+  height: 22.4px;
+}
+
+:host::ng-deep {
+  .ng-select .ng-select-container {
+    height: 48px !important;
+    padding: 0 10px !important;
+    border: 1px solid $border-color;
+
+    .ng-value-container .ng-input>input {
+      padding: 7px 10px !important;
+    }
+  }
+}

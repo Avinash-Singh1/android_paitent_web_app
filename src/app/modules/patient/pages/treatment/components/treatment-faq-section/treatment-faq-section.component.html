@@ -1,0 +1,34 @@
+<!-- Overview FAQ -->
+<section class="faq-section" *ngIf="faqOverviewArray?.length">
+  <h2 class="faq-section__title">{{ treatmentTitle }} Overview</h2>
+  <div class="faq-section__list">
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let item of faqOverviewArray" class="faq-section__panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ item?.question }}</mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="faq-section__answer" [innerHTML]="sanitize(item?.answer)"></div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</section>
+
+<!-- Main FAQ -->
+<section id="faq" class="faq-section" *ngIf="faqArray?.length"
+         itemscope itemtype="https://schema.org/FAQPage">
+  <h2 class="faq-section__title">Frequently Asked Questions about {{ treatmentTitle }}</h2>
+  <div class="faq-section__list">
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let item of faqArray; let i = index" class="faq-section__panel"
+                           itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <mat-expansion-panel-header>
+          <mat-panel-title itemprop="name">{{ item?.question }}</mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="faq-section__answer" itemscope itemprop="acceptedAnswer"
+             itemtype="https://schema.org/Answer">
+          <p itemprop="text" [innerHTML]="sanitize(item?.answer)"></p>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</section>

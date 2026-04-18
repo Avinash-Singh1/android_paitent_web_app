@@ -1,0 +1,108 @@
+<form class="col-12" [formGroup]="timingForm" (ngSubmit)="onSubmit()">
+  <div class="heading p-24 font-600 text-24 border-bottom-style">
+    {{ data.edit ? ("EDIT_TIMING" | translate) : ("ADD_TIMING" | translate) }}
+  </div>
+  <mat-dialog-content class="timing-wrapper">
+    <div class="w-100 border-style rounded-5px p-24 d-flex flex-column gap-4">
+      <div class="d-flex gap-3 flex-wrap">
+        <ng-container *ngFor="let day of weekArray; let i = index">
+          <div
+            class="day-wrapper cursor-pointer"
+            [ngClass]="{
+              selected: day.selected,
+              notSelected: !day.selected,
+              active: i == currentDay && selectedDay.size
+            }"
+            (click)="onSelectDay(day, i)"
+          >
+            {{ day.name }}
+          </div>
+        </ng-container>
+      </div>
+      <ng-container *ngFor="let day of weekArray; let j = index">
+        <form
+          class="d-flex gap-40 flex-wrap"
+          [formArrayName]="day.formControlName"
+          *ngIf="currentDay == j"
+        >
+          <div
+            class="d-flex flex-column gap-2"
+            *ngFor="
+              let slot of dayControl(day.formControlName).controls;
+              let i = index
+            "
+          >
+            <div class="d-flex gap-2 align-items-center" *ngIf="i == 0">
+              <div class="">{{ "MORNING" | translate }}</div>
+              <svg-icon src="assets/images/svg/sunrise.svg"></svg-icon>
+            </div>
+            <div class="d-flex gap-2 align-items-center" *ngIf="i == 1">
+              <div class="">{{ "AFTERNOON" | translate }}</div>
+              <img
+                loading="lazy"
+                src="assets/images/svg/afternoon.svg"
+                alt=""
+              />
+            </div>
+            <div class="d-flex gap-2 align-items-center" *ngIf="i == 2">
+              <div class="">{{ "EVENING" | translate }}</div>
+              <img
+                loading="lazy"
+                src="assets/images/svg/night-mode.svg"
+                alt=""
+              />
+            </div>
+            <div class="border-style rounded-5px d-flex" [formGroupName]="i">
+              <ng-select
+                #from
+                class="w-50 from"
+                placeholder="00:00 PM"
+                formControlName="from"
+                (focus)="from.open()"
+              >
+                <ng-option
+                  *ngFor="
+                    let time of timingArray[i]
+                      | timecompare : slot.get('to').value : true
+                  "
+                  [value]="time.name"
+                >
+                  {{ time.name }}
+                </ng-option>
+              </ng-select>
+              <div class="border-style"></div>
+              <ng-select
+                #to
+                class="w-50 to"
+                placeholder="00:00 PM"
+                formControlName="to"
+                (focus)="to.open()"
+              >
+                <ng-option
+                  *ngFor="
+                    let time of timingArray[i]
+                      | timecompare : slot.get('from').value
+                  "
+                  [value]="time.name"
+                >
+                  {{ time.name }}
+                </ng-option>
+              </ng-select>
+            </div>
+          </div>
+        </form>
+      </ng-container>
+    </div>
+    <div class="error-hint mt-1" *ngIf="timingForm.errors?.['atleastOneDay']">
+      Please Select at least one day
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <div
+      class="button-group w-100 d-flex gap-6 p-24 border-style justify-content-end"
+    >
+      <button class="cancel">{{ "CANCEL" | translate }}</button>
+      <button class="save">{{ "SAVE" | translate }}</button>
+    </div>
+  </mat-dialog-actions>
+</form>

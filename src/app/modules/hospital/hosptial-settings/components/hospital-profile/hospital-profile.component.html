@@ -1,0 +1,136 @@
+<section class="profile-section">
+  <header
+    class="w-100 heading d-flex justify-content-between gap-40 align-items-center border-bottom-style"
+  >
+    <div class="text- font-600">{{ "Profile" }}</div>
+  </header>
+
+  <form class="main-form" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+    <div class="d-flex flex-column gap-6">
+      <div class="d-flex gap-2 align-items-center">
+        <div class="center">
+          <div class="d-flex align-items-center justify-content-center">
+            <div
+              class="preview d-flex align-items-center justify-content-center"
+            >
+              <img
+                alt=""
+                class="image-container"
+                id="file-ip-1-preview"
+                *ngIf="control['profilePic'].value"
+                [src]="control['profilePic'].value"
+              />
+              <span
+                class="text-32 font-600"
+                *ngIf="!control['profilePic'].value"
+                >{{
+                  control["name"].value | nameInitial | uppercase
+                }}</span
+              >
+            </div>
+            <div class="ms-4">
+              <label
+                class="text-14"
+                for="file-ip-1"
+                class="cursor-pointer change-photo font-600"
+              >
+                Change Photo
+              </label>
+              <input
+                style="display: none"
+                type="file"
+                id="file-ip-1"
+                accept="image/png, image/jpeg,image/jpg"
+                (change)="onFileUpload($event)"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex gap-40 w-100">
+        <div class="break-flex d-flex gap-2 flex-column w-50">
+          <label class="text-14"
+            >{{ "FULL_NAME" | translate }}
+            <span class="required-hint">*</span></label
+          >
+          <nectar-form-field>
+            <input
+              nectarError
+              controlName="Establishment name"
+              type="text"
+              class="w-100 form-input"
+              placeholder="Enter name"
+              formControlName="name"
+              maxlength="500"
+            />
+          </nectar-form-field>
+        </div>
+
+        <div class="break-flex d-flex gap-2 flex-column w-50">
+          <label class="text-14"
+            >{{ "ESTABLISHMENT_TYPE" | translate }}
+            <span class="required-hint">*</span></label
+          >
+          <nectar-form-field>
+            <ng-select
+              nectarError
+              controlName="Establishment type"
+              class="establishment-type"
+              formControlName="hospitalType"
+              [items]="establishmentTypeList"
+              [items]=""
+              bindLabel="name"
+              bindValue="_id"
+              placeholder="Select establishment type"
+            ></ng-select>
+          </nectar-form-field>
+        </div>
+      </div>
+      <div class="d-flex gap-40 w-100">
+        <div class="d-flex gap-2 flex-column w-50">
+          <label class="text-14">{{ "BEDS" | translate }} </label>
+          <input
+            class="form-input w-100"
+            type="text"
+            formControlName="totalBed"
+            placeholder="Type How many beds"
+          />
+        </div>
+
+        <div class="d-flex gap-2 flex-column w-50">
+          <label class="text-14">{{ "AMBULANCE" | translate }} </label>
+          <input
+            class="form-input w-100"
+            type="text"
+            formControlName="ambulance"
+            placeholder="Type How many ambulances"
+          />
+        </div>
+      </div>
+      <div class="d-flex gap-2 flex-column">
+        <label class="text-14"
+          >{{ "ABOUT_ME" | translate }}
+          <span class="required-hint">*</span></label
+        >
+        <nectar-form-field>
+          <textarea
+            nectarError
+            controlName="About me"
+            class="about-area w-100"
+            formControlName="about"
+            rows="5"
+          ></textarea>
+        </nectar-form-field>
+      </div>
+      <div class="d-flex justify-content-center">
+        <button
+          type="submit"
+          class="save"
+          [ngClass]="{ disabled: !this.hasChanged }"
+        >
+          {{ "SAVE" | translate }}
+        </button>
+      </div>
+    </div>
+  </form>
+</section>

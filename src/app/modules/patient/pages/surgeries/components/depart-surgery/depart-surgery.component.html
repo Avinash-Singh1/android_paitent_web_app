@@ -1,0 +1,109 @@
+<!-- <div class="cotainer-fluid d-none d-md-none d-lg-block">
+  <div class="row  g-0 container_section_background">
+    <div class="main_top_container">
+      <div class="content_here_section">
+        <div class="text_content">
+          <div class="text_container_section">
+            <h1 class="tittle"> {{tittle}} in Delhi</h1>
+            <p class="subttile">
+              Discover the Latest in Surgical Procedures and Recovery. Discover the Latest in Surgical Procedures and
+              Recovery.
+            </p>
+          </div>
+          <div class="box_content">
+            <div class="container_box">
+              <div class="svg">
+                <svg-icon src="assets/images/surgrey-image/rating.svg"></svg-icon>
+              </div>
+              <div class="text">High Success <br>
+                Rate</div>
+            </div>
+            <div class="container_box">
+              <div class="svg">
+                <svg-icon src="assets/images/surgrey-image/medical-assistance.svg"></svg-icon>
+              </div>
+              <div class="text">Highly Experience Surgeon</div>
+            </div>
+            <div class="container_box">
+              <div class="svg">
+                <svg-icon src="assets/images/surgrey-image/healthcare.svg"></svg-icon>
+
+              </div>
+              <div class="text">Super Speciality Doctors</div>
+            </div>
+            <div class="container_box">
+              <div class="svg">
+                <svg-icon src="assets/images/surgrey-image/care-1.svg"></svg-icon>
+              </div>
+              <div class="text">Personal Care Assistants</div>
+            </div>
+          </div>
+        </div>
+        <div class="imag_conatner">
+          <img loading="lazy" src="../../../../../../../assets/images/surgrey-image/doctors.png" alt="">
+        </div>
+      </div>
+      <div class="form_section">
+        <nectar-enquiry></nectar-enquiry>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container-fluid moobile_secton">
+  <div class="row ">
+    <div class="mobile-container px-3 py-2">
+      <div class="department-tittle">
+        <h2 class="fw-bold m-0">Best {{tittle}} Treatment</h2>
+        <p>Best {{tittle}} Treatment Best Cosmetology Treatment Best Cosmetology Treatment Best Cosmetology Treatment
+        </p>
+      </div>
+    </div>
+    <div class="form_section">
+      <nectar-enquiry></nectar-enquiry>
+    </div>
+  </div>
+</div> -->
+
+<div class="container-fluid d-none mobile_view">
+  <div class="row">
+    <div class="d-flex gap-2 justify-content-between">
+      <div class="text-24 font-600">Select General Surgery Ailment</div>
+      <img
+        src="assets/images/svg/cross.svg"
+        alt=""
+        class="cursor-pointer"
+        (click)="close()"
+      />
+    </div>
+  
+  </div>
+</div>
+
+<section class="container_section_background py-5 mt-5">
+  <div>
+    <div class="d-flex gap-2 justify-content-center main_center_between">
+      <div class="text-24 font-600">Our Specialty</div>
+    </div>
+    <div class="d-flex justify-content-center flex-wrap gap-4 mt-2 main_center_between">
+      <div class="my-3 box-wrap cursor-pointer" *ngFor="let item of surgeryList" (click)="viewSurgery(item)">
+        <div class="surgery_box_section">
+          <div class="box d-flex flex-column">
+            <img loading="lazy" [src]="item?.imageUrl" alt="" />
+            <div class="text-18 mt-2 text-center cursor-pointer mx-1">
+              {{ item?.title | truncate:15 }}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+<!-- <div class="container-class">
+  <div class="row">
+    <doctor-surgerdetails-list [title]="tittle"></doctor-surgerdetails-list>
+  </div>
+</div>
+<nectar-benefits></nectar-benefits> -->

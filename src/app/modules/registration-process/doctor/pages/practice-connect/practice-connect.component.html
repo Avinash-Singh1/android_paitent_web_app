@@ -1,0 +1,44 @@
+<div class="containers">
+  <div class="percetDone"></div>
+  <form class="form d-flex flex-column justify-content-between">
+    <div class="content">
+      <div class="heading">Connect a Practice</div>
+      <div class="wrapper">
+        <p>Please select any one of the following</p>
+      </div>
+      <div class="field">
+        <div class="radios">
+          <input
+            type="radio"
+            id="I own a establishment"
+            name="isOwner"
+            [value]="true"
+            [formControl]="isOwner"
+          />
+          <label for="I own a establishment">I own a establishment</label><br />
+        </div>
+        <div class="radios">
+          <input
+            type="radio"
+            id="I visit a establishment"
+            name="isOwner"
+            [value]="false"
+            [formControl]="isOwner"
+          />
+          <label for="I visit a establishment">I visit a establishment</label
+          ><br />
+        </div>
+      </div>
+      <div
+        class="mt-2 error-hint"
+        *ngIf="isOwner.errors?.['required'] && isOwner.touched"
+      >
+        Select one
+      </div>
+    </div>
+    <div class="continue">
+      <button type="button" class="back" (click)="back()">Back</button>
+      <button type="button" (click)="next()">Next</button>
+    </div>
+  </form>
+</div>

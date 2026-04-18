@@ -1,0 +1,498 @@
+@use "tools.mediaquery" as *;
+@use "tools.typography" as *;
+@use "settings.containers" as *;
+@use "variable.scss" as *;
+
+$_purple: #45197c;
+$_purple-light: #6b3fa0;
+$_blue: #2563eb;
+$_blue-light: #eff6ff;
+$_red: #dc2626;
+$_red-light: #fef2f2;
+$_green: #059669;
+$_amber: #d97706;
+$_gray-50: #f9fafb;
+$_gray-100: #f3f4f6;
+$_gray-200: #e5e7eb;
+$_gray-400: #9ca3af;
+$_gray-500: #6b7280;
+$_gray-700: #374151;
+$_gray-900: #111827;
+
+// ── Main Wrapper ──
+.vmed {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  background: $_gray-50;
+
+  &__wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px;
+
+    @media screen and (max-width: 576px) {
+      padding: 16px 12px;
+    }
+  }
+
+  // ── Header ──
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    border-radius: 18px;
+    padding: 18px 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+
+    @media screen and (max-width: 576px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px;
+      border-radius: 14px;
+    }
+  }
+
+  &__header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  &__back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    border: 1px solid $_gray-200;
+    background: #fff;
+    color: $_gray-700;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+
+    &:hover {
+      background: $_gray-100;
+      border-color: $_gray-400;
+    }
+  }
+
+  &__header-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__header-date {
+    @include font-sans_pro-bold(18px);
+    color: $_gray-900;
+
+    @media screen and (max-width: 576px) {
+      @include font-sans_pro-bold(16px);
+    }
+  }
+
+  &__header-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  &__type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: $_blue-light;
+    color: $_blue;
+    @include font-sans_pro-semibold(12px);
+
+    &--report {
+      background: #f0fdf4;
+      color: $_green;
+    }
+
+    &--invoice {
+      background: #fffbeb;
+      color: $_amber;
+    }
+  }
+
+  &__record-count {
+    @include font-sans_pro-regular(13px);
+    color: $_gray-500;
+
+    strong {
+      color: $_gray-700;
+    }
+  }
+
+  &__add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 22px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, $_purple 0%, $_purple-light 100%);
+    color: #fff;
+    @include font-sans_pro-semibold(14px);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    &:hover {
+      box-shadow: 0 4px 14px rgba($_purple, 0.35);
+      transform: translateY(-1px);
+    }
+
+    @media screen and (max-width: 576px) {
+      width: 100%;
+      justify-content: center;
+      padding: 12px 20px;
+    }
+  }
+
+  // ── Grid ──
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+
+    @media screen and (max-width: 576px) {
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media screen and (max-width: 380px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // ── Card ──
+  &__card {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    border: 1px solid $_gray-200;
+    transition: all 0.25s;
+
+    &:hover {
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
+    }
+  }
+
+  &__card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid $_gray-100;
+  }
+
+  &__card-type {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: $_blue-light;
+    color: $_blue;
+    @include font-sans_pro-semibold(12px);
+
+    &--report {
+      background: #f0fdf4;
+      color: $_green;
+    }
+
+    &--invoice {
+      background: #fffbeb;
+      color: $_amber;
+    }
+  }
+
+  &__card-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: $_gray-400;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: $_gray-100;
+      color: $_gray-700;
+    }
+  }
+
+  &__card-preview {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+    background: $_gray-50;
+    cursor: pointer;
+    overflow: hidden;
+
+    @media screen and (max-width: 576px) {
+      min-height: 140px;
+    }
+
+    img {
+      width: 100%;
+      height: 180px;
+      object-fit: contain;
+      padding: 8px;
+
+      @media screen and (max-width: 576px) {
+        height: 140px;
+      }
+    }
+  }
+
+  &__card-pdf {
+    position: relative;
+    width: 100%;
+    height: 180px;
+
+    @media screen and (max-width: 576px) {
+      height: 140px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      pointer-events: none;
+    }
+  }
+
+  &__card-overlay {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+  }
+
+  &__card-hover {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    @include font-sans_pro-semibold(13px);
+    opacity: 0;
+    transition: opacity 0.25s;
+
+    .vmed__card-preview:hover & {
+      opacity: 1;
+    }
+  }
+
+  // ── Empty State ──
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
+    text-align: center;
+  }
+
+  &__empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: $_gray-100;
+    color: $_gray-400;
+    margin-bottom: 16px;
+  }
+
+  &__empty-text {
+    @include font-sans_pro-semibold(18px);
+    color: $_gray-700;
+    margin-bottom: 6px;
+  }
+
+  &__empty-sub {
+    @include font-sans_pro-regular(14px);
+    color: $_gray-500;
+  }
+}
+
+// ── Card Menu Styles ──
+::ng-deep .vmed-menu {
+  &.mat-mdc-menu-panel {
+    min-width: 160px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+    border: 1px solid $_gray-200 !important;
+  }
+
+  .mat-mdc-menu-item {
+    @include font-sans_pro-regular(14px);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+.vmed-menu__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  flex-shrink: 0;
+
+  &--share {
+    background: $_blue-light;
+    color: $_blue;
+  }
+
+  &--delete {
+    background: $_red-light;
+    color: $_red;
+  }
+}
+
+// ── Lightbox ──
+.vmed-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+
+  &__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: rgba(0, 0, 0, 0.5);
+
+    @media screen and (max-width: 576px) {
+      padding: 12px 16px;
+    }
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  &__title {
+    @include font-sans_pro-semibold(16px);
+    color: #fff;
+  }
+
+  &__download {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    @include font-sans_pro-semibold(14px);
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    @media screen and (max-width: 576px) {
+      padding: 8px 14px;
+      @include font-sans_pro-semibold(13px);
+    }
+  }
+
+  &__content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow: auto;
+
+    @media screen and (max-width: 576px) {
+      padding: 12px;
+    }
+
+    img {
+      max-width: 90%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    iframe {
+      width: 70%;
+      height: 100%;
+      border: none;
+      border-radius: 8px;
+
+      @media screen and (max-width: 576px) {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// ── Share Panel ──
+::ng-deep {
+  .sharePanel {
+    width: 35vw;
+    min-height: 500px;
+
+    @media screen and (max-width: 767px) {
+      width: 60vw;
+    }
+
+    @media screen and (max-width: 576px) {
+      width: 90vw;
+      min-height: max-content;
+    }
+  }
+}

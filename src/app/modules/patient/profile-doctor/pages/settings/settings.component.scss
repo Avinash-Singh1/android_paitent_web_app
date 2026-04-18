@@ -1,0 +1,210 @@
+@use "tools/tools.mediaquery" as *;
+@use "settings/settings.colors" as *;
+@use "tools/tools.typography" as *;
+@use "settings/settings.containers" as *;
+@use "variable.scss" as *;
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1c4e9;
+  border-radius: 10px;
+
+  &:hover {
+    background: $purple;
+  }
+}
+
+.settings-layout {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+  height: 100%;
+
+  @media screen and (max-width: 767px) {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.settings-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: $white;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+
+  @media screen and (max-width: 767px) {
+    width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .sidebar-title {
+    margin: 0;
+    padding: 24px 24px 20px;
+    @include font-sans_pro-bold(20px);
+    color: #1a1a2e;
+    border-bottom: 1px solid #f0ecf5;
+  }
+
+  .sidebar-nav {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      @include font-sans_pro-regular(14px);
+      color: #555;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      background: none;
+      text-decoration: none;
+
+      svg {
+        flex-shrink: 0;
+        opacity: 0.6;
+        transition: opacity 0.2s;
+      }
+
+      &:hover {
+        background: rgba(69, 25, 124, 0.04);
+        color: #1a1a2e;
+
+        svg {
+          opacity: 0.9;
+        }
+      }
+
+      &.active {
+        background: rgba(69, 25, 124, 0.06);
+        color: $purple;
+        @include font-sans_pro-semibold(14px);
+        border-left: 3px solid $purple;
+        padding-left: 13px;
+
+        svg {
+          opacity: 1;
+          color: $purple;
+        }
+      }
+
+      &.logout-item {
+        color: #c62828;
+
+        svg {
+          color: #c62828;
+          opacity: 0.7;
+        }
+
+        &:hover {
+          background: #ffebee;
+          color: #c62828;
+
+          svg {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+}
+
+.settings-content {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+
+  .content-card {
+    background: $white;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+
+    @media screen and (max-width: 767px) {
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 28px 32px;
+      border-bottom: 1px solid #f0ecf5;
+
+      @media screen and (max-width: 767px) {
+        padding: 24px 20px;
+      }
+
+      .header-icon {
+        color: #c62828;
+        flex-shrink: 0;
+      }
+
+      h2 {
+        margin: 0;
+        @include font-sans_pro-bold(22px);
+        color: #1a1a2e;
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-bold(20px);
+        }
+      }
+    }
+
+    .card-body {
+      padding: 32px;
+
+      @media screen and (max-width: 767px) {
+        padding: 24px 20px;
+      }
+
+      .warning-text {
+        @include font-sans_pro-regular(15px);
+        color: #555;
+        line-height: 1.7;
+        max-width: 600px;
+        margin: 0 0 28px;
+      }
+
+      .confirm-btn {
+        color: $white;
+        background: linear-gradient(135deg, #c62828 0%, #e53935 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 12px 28px;
+        @include font-sans_pro-semibold(14px);
+        cursor: pointer;
+        box-shadow: 0 3px 10px rgba(198, 40, 40, 0.25);
+        transition: transform 0.15s, box-shadow 0.15s;
+
+        &:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 5px 16px rgba(198, 40, 40, 0.3);
+        }
+
+        @media screen and (max-width: 767px) {
+          width: 100%;
+          margin-bottom: 16px;
+        }
+      }
+    }
+  }
+}

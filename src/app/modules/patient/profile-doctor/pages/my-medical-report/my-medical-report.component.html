@@ -1,0 +1,189 @@
+<div class="main">
+  <div class="wrapper">
+    <div class="heading d-flex justify-content-between align-items-center">
+      <h2>My Medical Reports</h2>
+      <div
+        class="cursor-pointer d-flex gap-4 align-items-center"
+        [style.opacity]="totalCount ? '1' : '0.5'"
+      >
+        <svg-icon
+          src="assets/images/svg/filter.svg"
+          *ngIf="totalCount"
+          [mat-menu-trigger-for]="appointmentfilter"
+        ></svg-icon>
+        <svg-icon
+          src="assets/images/svg/filter.svg"
+          *ngIf="!totalCount"
+        ></svg-icon>
+        <button class="upload" *ngIf="totalCount" (click)="addMedical()">
+          Upload
+        </button>
+      </div>
+    </div>
+    <ng-container *ngIf="totalCount">
+      <div
+        class="content"
+        id="content"
+        #content
+        *ngFor="
+          let item of yearWiseData
+            | paginate
+              : {
+                  itemsPerPage: payload.size,
+                  currentPage: payload.page,
+                  totalItems: totalCount
+                }
+        "
+      >
+        <p>{{ item?._id }}</p>
+        <div class="tab" *ngFor="let i of item?.data">
+          <div
+            class="box d-flex flex-wrap gap-2 justify-content-between align-items-center"
+          >
+            <div class="first-section d-flex gap-2 col-md-4 col-12">
+              <div class="date">
+                <div class="num">{{ i?.date | date : "dd" }}</div>
+                <div>{{ i?.date | date : "MMM" }}</div>
+              </div>
+              <div class="details">
+                <div class="name">{{ i?.title || "N/A" }}</div>
+                <div class="time mt-3">
+                  Record for {{ i?.patientName | titlecase }}
+                </div>
+              </div>
+            </div>
+            <div class="title col-md-2" *ngIf="i?.type == 1">Prescription</div>
+            <div class="title col-md-2" *ngIf="i?.type == 2">Report</div>
+            <div class="title col-md-2" *ngIf="i?.type == 3">Invoice</div>
+            <div class="second-section col-md-2">
+              <button (click)="viewMedicalRecord(i)">View</button>
+            </div>
+            <div class="action cursor-pointer col-md-1">
+              <button
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
+                aria-label="Example icon-button with a menu"
+              >
+                <img loading="lazy" src="assets/images/svg/3dots.svg" alt="" />
+              </button>
+              <mat-menu #menu="matMenu" class="pop-up">
+                <button mat-menu-item (click)="deleteRecord(i)">
+                  <mat-icon>delete</mat-icon>
+                  <span>Delete</span>
+                </button>
+                <button mat-menu-item (click)="openShareDialog(i)">
+                  <mat-icon>share</mat-icon>
+                  <span>Share</span>
+                </button>
+              </mat-menu>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <div
+      *ngIf="totalCount == 0"
+      style="min-height: calc(100vh - 355px)"
+      class="d-flex justify-content-center align-items-center"
+    >
+      <div class="noData text-center">
+        <img
+          loading="lazy"
+          src="assets/images/svg/services.svg"
+          alt=""
+          height="47"
+          width="47"
+        />
+        <p class="mt-3">No Medical records shared yet</p>
+        <button class="mt-3" (click)="addMedical()">Upload Records</button>
+      </div>
+    </div>
+
+    <div
+      class="pagination-section"
+      *ngIf="totalCount && totalCount > payload.size"
+    >
+      <pagination-controls
+        class="text-center"
+        [previousLabel]="' '"
+        [nextLabel]="' '"
+        (pageChange)="changingPage($event)"
+      ></pagination-controls>
+    </div>
+  </div>
+</div>
+
+<mat-menu #appointmentfilter class="appointment-filter">
+  <div
+    class="d-flex justify-content-between align-items-center w-100 px-24 py-2 text-14 border-bottom-style"
+  >
+    <span class="opacity-50 cursor-pointer" (click)="onResetForm()">{{
+      "CLEAR_FILTER" | translate
+    }}</span>
+    <button class="save-button" (click)="onFiltering()">
+      {{ "SAVE" | translate }}
+    </button>
+  </div>
+  <form [formGroup]="filterForm" class="">
+    <mat-accordion>
+      <mat-expansion-panel (click)="$event.stopPropagation()" *ngIf="upcoming">
+        <mat-expansion-panel-header class="border-bottom-style">
+          <mat-panel-title>
+            <div class="d-flex align-items-center gap-3">
+              <svg-icon src="assets/images/svg/calendar-filter.svg"></svg-icon>
+              <span class="text-14 font-400">
+                {{ "FILTER_BY_DATE" | translate }}</span
+              >
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="d-flex gap-2 w-100">
+          <div class="d-flex flex-column gap-2 w-50">
+            <label class="text-14">{{ "FROM" | translate }}</label>
+
+            <div class="matdate-input d-flex">
+              <input
+                matInput
+                class="w-90"
+                type="text"
+                [matDatepicker]="pickerfrom"
+                placeholder="DD/MM/YYYY"
+                formControlName="from"
+                [max]="filterForm.get('to').value"
+              />
+
+              <mat-datepicker-toggle
+                class="toggle"
+                matIconSuffix
+                [for]="pickerfrom"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #pickerfrom></mat-datepicker>
+            </div>
+          </div>
+          <div class="d-flex flex-column gap-2 w-50">
+            <label class="text-14">{{ "TO" | translate }}</label>
+            <div class="matdate-input d-flex">
+              <input
+                matInput
+                class="w-90"
+                type="text"
+                [matDatepicker]="pickerto"
+                placeholder="DD/MM/YYYY"
+                formControlName="to"
+                [min]="filterForm.get('from').value"
+              />
+
+              <mat-datepicker-toggle
+                class="toggle"
+                matIconSuffix
+                [for]="pickerto"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #pickerto></mat-datepicker>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </form>
+</mat-menu>

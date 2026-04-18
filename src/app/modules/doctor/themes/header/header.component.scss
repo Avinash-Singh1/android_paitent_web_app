@@ -1,0 +1,232 @@
+@use "variable.scss" as *;
+
+
+@use "tools.typography" as *;
+
+.header-logo {
+  // border: 1px solid lightgray;
+  width: auto;
+  height: 35px;
+}
+
+
+
+/* Default styles for desktop view */
+.alert-wrapper .alert .container-fluid {
+  white-space: normal;
+}
+
+/* Mobile view for screens less than 550px */
+@media (max-width: 550px) {
+  .alert-wrapper .alert .container-fluid {
+    white-space: nowrap;
+    overflow: hidden;  /* Prevents the text from overflowing out of the container */
+    position: relative; /* Allows absolute positioning of the animated content */
+  }
+
+  .alert-wrapper .alert .container-fluid .marquee-text {
+    display: inline-block;
+    white-space: nowrap; /* Prevents text wrapping */
+    animation: marquee 7s linear infinite;
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(100%); /* Start from right */
+    }
+    100% {
+      transform: translateX(-100%); /* Move to the left */
+    }
+  }
+}
+
+
+
+.search-input {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  gap: 8px;
+  width: 30%;
+  max-width: 400px;
+  min-width: 300px;
+  border-radius: 4px;
+  padding: 0 20px;
+  border: 1px solid $border-color;
+
+  input {
+    font-size: 14px;
+    width: 100%;
+    border: none;
+    outline: none;
+  }
+}
+
+.doctor-heading {
+  height: 72px !important;
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: $white;
+  z-index: 10;
+
+  .profile-wrapper {
+    width: 36px;
+    height: 36px;
+    border-radius: 18px;
+    border: 1px solid $border-color;
+    background: $bright-gray;
+
+    img {
+      width: 36px;
+      height: 36px;
+      border-radius: 18px;
+    }
+  }
+}
+
+:host::ng-deep {
+  .dropdown-menu {
+    padding: 0 !important;
+    z-index: 11;
+
+    .dropdown-item {
+      padding: 12px 24px !important;
+      font-size: 14px;
+      border-bottom: 1px solid $border-color;
+
+      &:first-child {
+        border-radius: 4px 4px 0 0;
+      }
+
+      &:last-child {
+        border-radius: 0 0 4px 4px;
+      }
+    }
+
+    --bs-dropdown-link-active-bg: #eee !important;
+    --bs-dropdown-link-active-color: #000 !important;
+  }
+
+  .notification.dropdown-menu {
+    width: 360px !important;
+    min-height: 200px !important;
+    max-height: 552px !important;
+    overflow-y: scroll;
+  }
+}
+
+.search {
+  text-overflow: ellipsis;
+}
+
+.notification-header {
+  background: $purple;
+  color: $white;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.request-number {
+  position: absolute;
+  top: 1px;
+  left: 12px;
+  z-index: 2;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  background: #f00;
+  color: $white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @include font-sans_pro-semibold($size: 12px);
+}
+
+.box {
+  border-top: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
+}
+
+.decline-button {
+  padding: 8px 34px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  background: $white;
+  color: $red;
+  @include font-sans_pro-semibold($size: 16px);
+}
+
+.accept-button {
+  padding: 8px 34px;
+  border-radius: 5px;
+  background: $purple;
+  color: $white;
+  @include font-sans_pro-semibold($size: 16px);
+}
+
+.profile-icon {
+  height: 36px;
+  width: 36px;
+  border-radius: 500px;
+  @include font-sans_pro-semibold($size: 18px);
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+// under header alerts;
+
+.alert-wrapper {
+  line-height: 1;
+
+  .alert {
+    position: relative;
+    -webkit-appearance: none;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    border-radius: 0 !important;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    margin-bottom: 0 !important;
+
+    button.close {
+      border: none;
+      padding: 0;
+      background-color: transparent;
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.75rem 1.25rem;
+      color: inherit;
+
+      span {
+        // float: right;
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1;
+        color: #000;
+        text-shadow: 0 1px 0 #fff;
+        opacity: 0.5;
+      }
+    }
+
+    &.alert-warning {
+      background-color: #ffcc00;
+    }
+    .alert-icon {
+      width: 24px;
+      height: 24px;
+      display: inline-block;
+      path {
+        fill: #000;
+      }
+    }
+  }
+}

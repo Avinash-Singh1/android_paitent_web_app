@@ -1,0 +1,37 @@
+<section>
+  <div class="first-section">
+    <div class="wrap">
+      <h2>Leadership at Nectar</h2>
+      <p class="col-md-8">
+        Nectar is a company driven by passion. Passion of some seriously
+        talented, resilient, creative individuals who believe in building a
+        future that everyone needs.
+      </p>
+    </div>
+  </div>
+  <div class="second-section">
+    <div class="heading text-center">Core leadership values at Nectar</div>
+    <div
+      class="data d-flex flex-wrap gap-5 justify-content-center align-items-center"
+    >
+      <div *ngFor="let i of items" class="text-center">
+        <img loading="lazy" [src]="i?.image" alt="" />
+        <p>{{ i?.name }}</p>
+      </div>
+    </div>
+    <div
+      class="leaders d-flex gap-5 align-items-center flex-wrap justify-content-center"
+    >
+      <div *ngFor="let data of leaders">
+        <div class="picture">
+          <img loading="lazy" [src]="data?.image" alt="" />
+        </div>
+
+        <div class="lower-data">
+          <div class="name">{{ data?.name }}</div>
+          <div class="post">{{ data?.post }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

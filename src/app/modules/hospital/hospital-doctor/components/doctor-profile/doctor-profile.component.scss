@@ -1,0 +1,82 @@
+@use "variable.scss" as *;
+@use "src/styles/elements/_elements.svg.scss" as *;
+
+.image-wrapper {
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+  border: 1px solid $border-color;
+
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep {
+  .mdc-dialog__content.doctor-details {
+    padding: 0 !important;
+    color: $black !important;
+    font-size: 14px !important;
+    font-family: "Source Sans Pro", sans-serif !important;
+  }
+
+  .mdc-dialog__title.doctor-title-cross {
+    padding: 4px 24px 0 4px !important;
+  }
+
+  .px-12 {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .gy-8 {
+    gap: 8px 0;
+  }
+}
+
+.doctor-content {
+  .documents {
+    img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border: 1px solid $border-color;
+      border-radius: 5px;
+    }
+
+    iframe {
+      width: 80px;
+      height: 80px;
+      border: 1px solid $border-color;
+      border-radius: 5px;
+    }
+  }
+}
+
+.overlay1 {
+  width: 80px;
+  height: 80px;
+  position: absolute;
+}
+
+.overlay2 {
+  width: 80px;
+  height: 80px;
+  position: absolute;
+
+  left: 112px;
+}
+
+.overlay3 {
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  left: 200px;
+}

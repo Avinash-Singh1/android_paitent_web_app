@@ -1,0 +1,121 @@
+<div class="main border-bottom-style">
+  <div class="wrapper">
+    <h2>About {{ data?.name }}</h2>
+
+    <!-- <p>
+       <span [class.collapsed]="!isExpanded">
+         {{ data?.about }}
+        </span>
+      
+      <span *ngIf="data?.about?.length > 120">
+        <a class="text-primary text-decoration-none cursor-pointer" (click)="toggleReadMore()">
+          {{ isExpanded ? 'Read Less' : 'Read More' }}
+        </a>
+      </span>
+    </p> -->
+    <p *ngIf="isvideo !== 'Video Consultation Only'" class="about-text">
+  <span [class.collapsed]="!isExpanded" style="white-space: pre-line;">
+    {{ data?.about }}
+  </span>
+  
+  <span *ngIf="data?.about?.length > 120">
+    <a class="text-primary text-decoration-none cursor-pointer" (click)="toggleReadMore()">
+      {{ isExpanded ? 'Read Less' : 'Read More' }}
+    </a>
+  </span>
+</p>
+
+
+  
+    <div class="sections d-flex gap-3">
+      <!-- <div class="map-image">
+        <nectar-google-maps
+          class="map d-flex"
+          [lat]="data?.location?.coordinates[1]"
+          [lng]="data?.location?.coordinates[0]"
+        ></nectar-google-maps>
+      </div> -->
+      <div class="address">
+        <div class="heading d-flex gap-2">
+          <img loading="lazy" src="assets/images/svg/location.svg" alt="" />
+          <span>Address</span>
+        </div>
+        <p style="white-space: pre-line;">
+          {{ data?.address | titlecase }}
+        </p>
+
+        <div
+          class="direction cursor-pointer"
+          (click)="
+            gService.redirectToGoogleMaps(
+              data?.location?.coordinates?.[1] ,
+              data?.location?.coordinates?.[0] 
+            )
+          "
+        >
+          Get Direction
+        </div>
+      </div>
+
+      <div class="time-image">
+        <div class="time-section">
+          <div class="head d-flex gap-1">
+            <img
+              loading="lazy"
+              src="assets/images/svg/Access time.svg"
+              alt=""
+            />
+            <span>Time</span>
+          </div>
+          <div class="slots" *ngFor="let i of data?.establishmentTiming">
+            <div
+              *ngIf="i?.day && (i?.morning || i?.afternoon || i?.evening)"
+              class="head"
+            >
+              {{ i?.day | titlecase }}
+            </div>
+            <div class="times" *ngIf="i?.morning">{{ i?.morning }}</div>
+            <div class="times" *ngIf="i?.afternoon">{{ i?.afternoon }}</div>
+            <div class="times" *ngIf="i?.evening">{{ i?.evening }}</div>
+          </div>
+        </div>
+
+        <div class="image-gallery" *ngIf="data?.images?.length">
+          <div class="gallery-heading d-flex align-items-center gap-2 mb-2">
+            <img loading="lazy" src="assets/images/svg/gallery.svg" alt="" width="14" height="14" onerror="this.style.display='none'" />
+            <span>Photos</span>
+          </div>
+          <div class="gallery-carousel">
+            <button class="gallery-arrow gallery-arrow--left" *ngIf="galleryOffset > 0" (click)="galleryPrev()">&#8249;</button>
+            <div class="gallery-grid">
+              <div class="gallery-item" *ngFor="let i of visibleImages; let j = index">
+                <img
+                  [src]="i?.url"
+                  class="cursor-pointer gallery-img"
+                  alt="hospital-image"
+                  (click)="viewImage(galleryOffset + j)"
+                />
+              </div>
+            </div>
+            <button class="gallery-arrow gallery-arrow--right" *ngIf="galleryOffset + galleryPageSize < data?.images?.length" (click)="galleryNext()">&#8250;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .collapsed {
+  display: inline-block;
+  overflow: hidden;
+  /* white-space: nowrap; */
+  text-overflow: ellipsis;
+  max-width: 100%;
+  max-height: 6em; /* adjust based on how much you want to show */
+  white-space: pre-line;
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+}
+
+</style>

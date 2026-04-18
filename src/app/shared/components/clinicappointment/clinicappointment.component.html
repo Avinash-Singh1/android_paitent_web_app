@@ -1,0 +1,292 @@
+<div class="booking-dialog" style="position: relative">
+  <!-- ===== HEADER ===== -->
+  <div class="booking-header">
+    <h2 class="booking-header__title">Book Appointment</h2>
+    <button *ngIf="dialogRef" class="booking-header__close" (click)="dialogRef.close()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 1L1 13M1 1l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+  </div>
+
+  <!-- ===== LOADING SKELETON (initial load only) ===== -->
+  <div class="booking-skeleton" *ngIf="loading">
+    <div class="booking-skeleton__tabs"></div>
+    <div class="booking-skeleton__info">
+      <div class="booking-skeleton__line booking-skeleton__line--name"></div>
+      <div class="booking-skeleton__line booking-skeleton__line--tag"></div>
+      <div class="booking-skeleton__line booking-skeleton__line--stars"></div>
+      <div class="booking-skeleton__line booking-skeleton__line--addr"></div>
+      <div class="booking-skeleton__row">
+        <div class="booking-skeleton__line booking-skeleton__line--dir"></div>
+        <div class="booking-skeleton__line booking-skeleton__line--fee"></div>
+      </div>
+    </div>
+    <div class="booking-skeleton__dates"></div>
+    <div class="booking-skeleton__slots">
+      <div class="booking-skeleton__line booking-skeleton__line--label"></div>
+      <div class="booking-skeleton__grid">
+        <div class="booking-skeleton__slot" *ngFor="let s of [1,2,3,4,5,6,7,8]"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TAB TOGGLE (In Clinic / Video) ===== -->
+  <div class="booking-tabs" *ngIf="!loading">
+    <button class="booking-tab" [class.booking-tab--active]="selectedTab === 1" [class.booking-tab--disabled]="hideFlagTab === 1" (click)="selectTab(1)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM12 6C13.93 6 15.5 7.57 15.5 9.5S13.93 13 12 13S8.5 11.43 8.5 9.5S10.07 6 12 6ZM19 19H5V18.22C5 17.07 5.53 15.98 6.44 15.28C8.05 14.03 9.98 13.34 12 13.34C14.02 13.34 15.95 14.03 17.56 15.28C18.47 15.98 19 17.07 19 18.22V19Z" fill="currentColor"/></svg>
+      In Clinic
+    </button>
+    <button class="booking-tab booking-tab--video" [class.booking-tab--active]="selectedTab === 2" [class.booking-tab--disabled]="hideFlagTab === 2" (click)="selectTab(2)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 10.5V7C17 6.45 16.55 6 16 6H4C3.45 6 3 6.45 3 7V17C3 17.55 3.45 18 4 18H16C16.55 18 17 17.55 17 17V13.5L21 17.5V6.5L17 10.5Z" fill="currentColor"/></svg>
+      Video
+    </button>
+  </div>
+
+  <!-- ===== IN CLINIC TAB ===== -->
+  <div *ngIf="!loading && selectedTab === 1">
+    <!-- Doctor & Hospital Info -->
+    <div class="booking-info">
+      <div class="booking-info__top">
+        <div class="booking-info__name">
+          <span>{{ doctoar_name }}</span>
+          <span class="booking-info__hospital-tag">{{ establishmentDetail[0]?.establishmentName }}</span>
+        </div>
+        <svg *ngIf="establishmentDetail.length > 1" class="booking-info__switch cursor-pointer" (click)="toggle = !toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5" stroke="#45197c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="booking-info__rating">
+        <star-rating [rating]="establishmentDetail[0]?.rating || 0" [step]="0.1" [showHalfStars]="true" [readOnly]="true"></star-rating>
+        <span class="booking-info__star">{{ (establishmentDetail[0]?.rating | number : "1.1-1") || "0" }}/5</span>
+        <span class="booking-info__reviews">({{ establishmentDetail[0]?.totalReview || "0" }} reviews)</span>
+      </div>
+      <div class="booking-info__meta">
+        <div class="booking-info__address" *ngIf="establishmentDetail[0]?.address?.locality || establishmentDetail[0]?.address?.city">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22S19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="#45197C"/></svg>
+          <span>
+            {{ establishmentDetail[0]?.address?.locality ? establishmentDetail[0]?.address?.locality + ", " : "" }}{{ establishmentDetail[0]?.address?.city || "" }} {{ establishmentDetail[0]?.address?.pincode || "" }}
+          </span>
+        </div>
+        <div class="booking-info__row">
+          <span class="booking-info__direction cursor-pointer" (click)="openGoogleMaps(establishmentDetail[0])">
+            <svg width="14" height="14" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_dir)"><path d="M16.2827 8.46742L9.53273 1.71742C9.24023 1.42492 8.76773 1.42492 8.47523 1.71742L1.72523 8.46742C1.43273 8.75992 1.43273 9.23242 1.72523 9.52492L8.47523 16.2749C8.76773 16.5674 9.24023 16.5674 9.53273 16.2749L16.2827 9.52492C16.5752 9.23992 16.5752 8.76742 16.2827 8.46742ZM10.5002 10.8749V8.99992H7.50023V11.2499H6.00023V8.24992C6.00023 7.83742 6.33773 7.49992 6.75023 7.49992H10.5002V5.62492L13.1252 8.24992L10.5002 10.8749Z" fill="#45197C"/></g><defs><clipPath id="clip0_dir"><rect width="18" height="18" fill="white"/></clipPath></defs></svg>
+            Directions
+          </span>
+          <span class="booking-info__fee" *ngIf="selectedTab==1 && (establishmentDetail[0]?.consultationFees | validFee)">
+            ₹ {{ establishmentDetail[0]?.consultationFees }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Date Carousel -->
+    <div class="booking-dates">
+      <owl-carousel-o [options]="customOptions" class="caraousel" (translated)="carouselChange($event)" #carousel>
+        <ng-container *ngFor="let name of dates; let i = index; trackBy: trackByDate">
+          <ng-template carouselSlide [id]="name" [width]="120">
+            <p (click)="getClickedDate(name)" class="cursor-pointer">
+              {{ name }}
+            </p>
+          </ng-template>
+        </ng-container>
+      </owl-carousel-o>
+    </div>
+
+    <!-- Time Slots -->
+    <div class="booking-slots" [class.booking-slots--loading]="slotsLoading">
+      <!-- Inline loading overlay for date/hospital changes -->
+      <div class="booking-slots__overlay" *ngIf="slotsLoading">
+        <div class="booking-slots__spinner"></div>
+      </div>
+
+      <div class="booking-slots__header" *ngIf="availableSlots">
+        <span class="booking-slots__badge">{{ availableSlots }} slots available</span>
+      </div>
+
+      <p *ngIf="!availableSlots && !(morningSlots.length || noonSlots.length || eveSlots.length)" class="booking-slots__empty">No Slots Available</p>
+
+      <!-- Morning -->
+      <div class="booking-slots__group" *ngIf="morningSlots.length">
+        <div class="booking-slots__label">
+          <img loading="lazy" src="assets/images/sunrise 1.png" alt="morning" width="20" height="20" />
+          <span>Morning</span>
+        </div>
+        <div class="booking-slots__grid">
+          <button *ngFor="let timings of morningSlots; trackBy: trackBySlot"
+            [class.booking-slot--active]="timings?.status == 1"
+            [class.booking-slot--inactive]="timings?.status !== 1"
+            class="booking-slot booking-slot--clinic"
+            [disabled]="timings?.status !== 1"
+            (click)="timings?.status == 1 && selectTime(timings, 'morning')">
+            {{ timings?.time }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Afternoon -->
+      <div class="booking-slots__group" *ngIf="noonSlots.length">
+        <div class="booking-slots__label">
+          <img loading="lazy" src="assets/images/sunset 1.png" alt="afternoon" width="20" height="20" />
+          <span>Afternoon</span>
+        </div>
+        <div class="booking-slots__grid">
+          <button *ngFor="let timings of noonSlots; trackBy: trackBySlot"
+            [class.booking-slot--active]="timings?.status == 1"
+            [class.booking-slot--inactive]="timings?.status !== 1"
+            class="booking-slot booking-slot--clinic"
+            [disabled]="timings?.status !== 1"
+            (click)="timings?.status == 1 && selectTime(timings, 'afternoon')">
+            {{ timings?.time }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Evening -->
+      <div class="booking-slots__group" *ngIf="eveSlots.length">
+        <div class="booking-slots__label">
+          <img loading="lazy" src="assets/images/night-mode 1.svg" alt="evening" width="20" height="20" />
+          <span>Evening</span>
+        </div>
+        <div class="booking-slots__grid">
+          <button *ngFor="let timings of eveSlots; trackBy: trackBySlot"
+            [class.booking-slot--active]="timings?.status == 1"
+            [class.booking-slot--inactive]="timings?.status !== 1"
+            class="booking-slot booking-slot--clinic"
+            [disabled]="timings?.status !== 1"
+            (click)="timings?.status == 1 && selectTime(timings, 'evening')">
+            {{ timings?.time }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== VIDEO TAB ===== -->
+  <div *ngIf="!loading && selectedTab === 2">
+    <!-- Doctor & Hospital Info -->
+    <div class="booking-info">
+      <div class="booking-info__top">
+        <div class="booking-info__name">
+          <span>{{ doctoar_name }}</span>
+          <span class="booking-info__hospital-tag">{{ establishmentDetail[0]?.establishmentName }}</span>
+        </div>
+        <svg *ngIf="establishmentDetail.length > 1" class="booking-info__switch cursor-pointer" (click)="toggle = !toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5" stroke="#45197c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="booking-info__rating">
+        <star-rating [rating]="establishmentDetail[0]?.rating || 0" [step]="0.1" [showHalfStars]="true" [readOnly]="true"></star-rating>
+        <span class="booking-info__star">{{ (establishmentDetail[0]?.rating | number : "1.1-1") || "0" }}/5</span>
+        <span class="booking-info__reviews">({{ establishmentDetail[0]?.totalReview || "0" }} reviews)</span>
+      </div>
+      <div class="booking-info__meta">
+        <div class="booking-info__row">
+          <span class="booking-info__fee" *ngIf="selectedTab==2 && (establishmentDetail[0]?.videoConsultationFees | validFee)">
+            <img loading="lazy" src="assets/images/videogrey.png" alt="video" class="me-1" width="16" height="16" />
+            ₹ {{ establishmentDetail[0]?.videoConsultationFees }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Date Carousel -->
+    <div class="booking-dates">
+      <owl-carousel-o [options]="customOptions" class="caraousel" (translated)="carouselChange($event)" #carousel>
+        <ng-container *ngFor="let name of dates; let i = index; trackBy: trackByDate">
+          <ng-template carouselSlide [id]="name" [width]="120">
+            <p (click)="getClickedDate(name)" class="cursor-pointer">
+              {{ name }}
+            </p>
+          </ng-template>
+        </ng-container>
+      </owl-carousel-o>
+    </div>
+
+    <!-- Time Slots -->
+    <div class="booking-slots" [class.booking-slots--loading]="slotsLoading">
+      <!-- Inline loading overlay for date/hospital changes -->
+      <div class="booking-slots__overlay" *ngIf="slotsLoading">
+        <div class="booking-slots__spinner"></div>
+      </div>
+
+      <div class="booking-slots__header" *ngIf="availableSlots">
+        <span class="booking-slots__badge">{{ availableSlots }} slots available</span>
+      </div>
+
+      <p *ngIf="!availableSlots && !(morningSlots.length || noonSlots.length || eveSlots.length)" class="booking-slots__empty">No Slots Available</p>
+
+      <!-- Morning -->
+      <div class="booking-slots__group" *ngIf="morningSlots.length">
+        <div class="booking-slots__label">
+          <img loading="lazy" src="assets/images/sunrise 1.png" alt="morning" width="20" height="20" />
+          <span>Morning</span>
+        </div>
+        <div class="booking-slots__grid">
+          <button *ngFor="let timings of morningSlots; trackBy: trackBySlot"
+            [class.booking-slot--active]="timings?.status == 1"
+            [class.booking-slot--inactive]="timings?.status !== 1"
+            class="booking-slot booking-slot--video"
+            [disabled]="timings?.status !== 1"
+            (click)="timings?.status == 1 && selectTime(timings, 'morning')">
+            {{ timings?.time }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Afternoon -->
+      <div class="booking-slots__group" *ngIf="noonSlots.length">
+        <div class="booking-slots__label">
+          <img loading="lazy" src="assets/images/sunset 1.png" alt="afternoon" width="20" height="20" />
+          <span>Afternoon</span>
+        </div>
+        <div class="booking-slots__grid">
+          <button *ngFor="let timings of noonSlots; trackBy: trackBySlot"
+            [class.booking-slot--active]="timings?.status == 1"
+            [class.booking-slot--inactive]="timings?.status !== 1"
+            class="booking-slot booking-slot--video"
+            [disabled]="timings?.status !== 1"
+            (click)="timings?.status == 1 && selectTime(timings, 'afternoon')">
+            {{ timings?.time }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Evening -->
+      <div class="booking-slots__group" *ngIf="eveSlots.length">
+        <div class="booking-slots__label">
+          <img loading="lazy" src="assets/images/night-mode 1.svg" alt="evening" width="20" height="20" />
+          <span>Evening</span>
+        </div>
+        <div class="booking-slots__grid">
+          <button *ngFor="let timings of eveSlots; trackBy: trackBySlot"
+            [class.booking-slot--active]="timings?.status == 1"
+            [class.booking-slot--inactive]="timings?.status !== 1"
+            class="booking-slot booking-slot--video"
+            [disabled]="timings?.status !== 1"
+            (click)="timings?.status == 1 && selectTime(timings, 'evening')">
+            {{ timings?.time }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div></div>
+</div>
+
+<!-- Hospital Switcher Dropdown -->
+<div class="hospital-dropdown w-100" *ngIf="toggle" nectarClickOutside style="position: absolute; top: 180px" (clickOutside)="toggle = !toggle">
+  <div *ngFor="let item of establishmentDetail; let i = index" class="hospital-dropdown__item cursor-pointer" (click)="selectHospital(item)">
+    <ng-container *ngIf="i != 0">
+      <p class="hospital-dropdown__name">{{ doctoar_name }} &mdash; {{ item?.establishmentName }}</p>
+      <div class="booking-info__rating">
+        <star-rating [rating]="item?.rating || 0" [step]="0.1" [showHalfStars]="true" [readOnly]="true"></star-rating>
+        <span class="booking-info__star">{{ (item?.rating | number : "1.1-1") || "0" }}/5</span>
+        <span class="booking-info__reviews">({{ item?.totalReview || "0" }} reviews)</span>
+      </div>
+      <div class="hospital-dropdown__meta">
+        <span class="hospital-dropdown__address">
+          {{ item?.address?.locality ? item?.address?.locality + ", " : "" }}{{ item?.address?.city || "" }} {{ item?.address?.pincode || "" }}
+        </span>
+        <span class="booking-info__direction cursor-pointer" (click)="openGoogleMaps(item)">
+          <svg width="14" height="14" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_dd)"><path d="M16.2827 8.46742L9.53273 1.71742C9.24023 1.42492 8.76773 1.42492 8.47523 1.71742L1.72523 8.46742C1.43273 8.75992 1.43273 9.23242 1.72523 9.52492L8.47523 16.2749C8.76773 16.5674 9.24023 16.5674 9.53273 16.2749L16.2827 9.52492C16.5752 9.23992 16.5752 8.76742 16.2827 8.46742ZM10.5002 10.8749V8.99992H7.50023V11.2499H6.00023V8.24992C6.00023 7.83742 6.33773 7.49992 6.75023 7.49992H10.5002V5.62492L13.1252 8.24992L10.5002 10.8749Z" fill="#45197C"/></g><defs><clipPath id="clip0_dd"><rect width="18" height="18" fill="white"/></clipPath></defs></svg>
+          Directions
+        </span>
+        <span class="hospital-dropdown__fee" *ngIf="item?.consultationFees | validFee">₹ {{ item?.consultationFees }}</span>
+      </div>
+    </ng-container>
+  </div>
+</div>

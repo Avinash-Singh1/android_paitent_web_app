@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>NectarPlus Health - Find Best Doctors, Hospitals & Clinics in India</title>
+
+  <base href="/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- robots tag -->
+  <meta name="robots" content="index, follow" />
+
+  <!-- facebook verification tag -->
+  <meta name="facebook-domain-verification" content="h8pi4r5lgbj5nq54skm2uvckz0gkp9" />
+  <meta name="cf-2fa-verify" content="209390af0e185dc">
+<meta name='dmca-site-verification' content='d3lNRVFUTnFWVlNIQTlocjlBaHhJTFVzTXRaSUFmSURCLzhRUEVkTW1BZz01' />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://d2vcw1dhwod4x6.cloudfront.net" crossorigin>
+  <link rel="dns-prefetch" href="https://d2vcw1dhwod4x6.cloudfront.net">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link href="https://fonts.googleapis.com/icon?family=Material+Icons&display=swap" rel="stylesheet" /></noscript>
+  <!-- Add this in your index.html or your main HTML file -->
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"  media="print" onload="this.media='all'" crossorigin="anonymous" > -->
+
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/sans_pro2/SourceSansPro-Regular.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/sans_pro2/SourceSansPro-SemiBold.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/sans_pro2/SourceSansPro-Bold.woff2" crossorigin>
+
+
+
+<link rel="preconnect" href="https://maps.googleapis.com">
+<link rel="dns-prefetch" href="https://maps.googleapis.com">
+
+
+<!-- analytic -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
+
+<!-- swiper  -->
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"></noscript>
+<meta name="msvalidate.01" content="8BC76E56D6122046B25363A23206E33B" />
+
+
+</head>
+
+<body class="mat-typography">
+  <app-root></app-root>
+  <script>
+  // Prevent "Blocked aria-hidden on a focused element" warnings.
+  // CDK overlays (autocomplete, dialogs) set aria-hidden="true" on <app-root>,
+  // which conflicts with focused descendants. We strip it immediately.
+  (function(){
+    var r=document.querySelector('app-root');
+    if(!r)return;
+    new MutationObserver(function(m){
+      m.forEach(function(mu){
+        if(mu.attributeName==='aria-hidden'&&r.getAttribute('aria-hidden')==='true'){
+          r.removeAttribute('aria-hidden');
+        }
+      });
+    }).observe(r,{attributes:true,attributeFilter:['aria-hidden']});
+  })();
+  </script>
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W5KG5NRJ" height="0" title="Google Tag Manager" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js" defer></script>
+
+  <!-- Defer analytics & GTM until after page is interactive -->
+  <!-- Use __zone_symbol__setTimeout to avoid blocking Angular hydration (NG0506) -->
+  <script>
+    window.addEventListener('load', function() {
+      var _setTimeout = window.__zone_symbol__setTimeout || window.setTimeout;
+      // GTM
+      _setTimeout(function() {
+        var dl = 'dataLayer';
+        window[dl] = window[dl] || [];
+        window[dl].push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+        var f = document.getElementsByTagName('script')[0];
+        var j = document.createElement('script'); j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-W5KG5NRJ';
+        f.parentNode.insertBefore(j, f);
+      }, 3500);
+      // Google Ads gtag
+      _setTimeout(function() {
+        var g = document.createElement('script'); g.async = true;
+        g.src = 'https://www.googletagmanager.com/gtag/js?id=AW-11399196295';
+        document.head.appendChild(g);
+        g.onload = function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){ window.dataLayer.push(arguments); }
+          gtag('js', new Date());
+          gtag('config', 'AW-11399196295');
+        };
+      }, 4000);
+      // Ahrefs
+      _setTimeout(function() {
+        var a = document.createElement('script'); a.async = true;
+        a.src = 'https://analytics.ahrefs.com/analytics.js';
+        a.setAttribute('data-key', '/vdWL5PDUnnHnvHZ2FoXuw');
+        document.body.appendChild(a);
+      }, 5000);
+    });
+  </script>
+
+</body>
+<!-- 
+<noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=359168740010365&ev=PageView&noscript=1" /></noscript> -->
+
+</html>

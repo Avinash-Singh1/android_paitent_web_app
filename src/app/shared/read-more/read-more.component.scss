@@ -1,0 +1,64 @@
+@use "tools.typography" as *;
+
+.read-more-container {
+  position: relative;
+
+  pre {
+    color: #525252;
+    @include font-sans_pro-regular(14px);
+    white-space: break-spaces;
+    max-height: 5em; // Adjust for visible lines
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; // Number of visible lines
+    -webkit-box-orient: vertical;
+    transition: max-height 0.3s ease;
+
+    @media screen and (max-width: 767px) {
+      @include font-sans_pro-regular(16px);
+    }
+  }
+
+  a {
+    color: #0000ff !important;
+    cursor: pointer;
+    text-decoration: none;
+    @include font-sans_pro-semibold(14px);
+
+    @media screen and (max-width: 767px) {
+      @include font-sans_pro-regular(16px);
+    }
+  }
+
+  .toggle-checkbox {
+    display: none;
+
+    &:checked ~ pre {
+      max-height: none; // Show full content when checked
+      -webkit-line-clamp: unset; // Remove truncation
+    }
+
+    &:checked ~ .toggle-label .read-more-text {
+      display: none;
+    }
+
+    &:checked ~ .toggle-label .read-less-text {
+      display: inline;
+    }
+  }
+
+  .toggle-label {
+    cursor: pointer;
+    color: #0000ff !important;
+    text-decoration: none;
+
+    .read-more-text {
+      display: inline;
+    }
+
+    .read-less-text {
+      display: none;
+    }
+  }
+}

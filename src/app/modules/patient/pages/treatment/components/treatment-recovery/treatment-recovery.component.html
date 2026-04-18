@@ -1,0 +1,39 @@
+<section id="recovery" class="recovery" *ngIf="treatment?.recoveryTimeline">
+  <h2 class="recovery__title">Recovery After {{ treatment.title }}</h2>
+
+  <!-- Milestone Table -->
+  <div class="recovery__table-wrap" *ngIf="timelineItems.length > 1">
+    <table class="recovery__table">
+      <thead>
+        <tr>
+          <th>Timeline</th>
+          <th>Recovery Milestone</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of timelineItems; let i = index">
+          <td class="recovery__table-phase">
+            <span class="recovery__table-icon">{{ phaseIcons[i % phaseIcons.length] }}</span>
+            <span *ngIf="item.phase">{{ item.phase }}</span>
+          </td>
+          <td class="recovery__table-detail">{{ item.detail }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Fallback Rich HTML -->
+  <div class="recovery__body" *ngIf="timelineItems.length <= 1"
+       [innerHTML]="sanitize(treatment.recoveryTimeline)"></div>
+
+  <!-- Success Rate -->
+  <div class="recovery__success" *ngIf="successRateNum">
+    <div class="recovery__success-bar">
+      <div class="recovery__success-fill" [style.width.%]="successRateNum"></div>
+    </div>
+    <p class="recovery__success-label">
+      <strong>{{ successRateNum }}%</strong> success rate for {{ treatment.title }}
+    </p>
+    <p class="recovery__success-desc" *ngIf="successRateText">{{ successRateText }}</p>
+  </div>
+</section>

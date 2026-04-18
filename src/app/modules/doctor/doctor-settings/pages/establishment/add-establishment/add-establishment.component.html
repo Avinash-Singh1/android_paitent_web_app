@@ -1,0 +1,521 @@
+<div class="add-establishment-main">
+  <div class="border-bottom-style px-24 py-3">
+    <span class="text-24 font-600" style="margin-bottom: 15px">
+      {{ heading }}</span
+    >
+  </div>
+  <form
+    class="content d-flex flex-column"
+    [formGroup]="establishmentForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <mat-dialog-content class="add-establishment d-flex flex-column gap-2">
+      <div class="d-flex flex-column gap-2">
+        <div class="profile d-flex gap-2 align-items-center">
+          <div
+            class="profile-pic border-style rounded-5px d-flex align-items-center justify-content-center"
+          >
+            <img
+              [src]="control['profilePic'].value"
+              *ngIf="control['profilePic'].value"
+              alt=""
+            />
+            <span
+              class="text-32 font-600"
+              *ngIf="!control['profilePic'].value"
+              >{{
+                control["name"].value | nameInitial | uppercase
+              }}</span
+            >
+          </div>
+          <div
+            class="cursor-pointer"
+            (click)="changePhoto ? profilePic.click() : false"
+            [ngClass]="{
+              'ng-invalid': !control['profilePic'].value && submitted
+            }"
+          >
+            {{ "CHANGE_PHOTO" | translate }}
+          </div>
+          <input
+            type="file"
+            accept="image/png,image/jpg,image/jpeg"
+            style="display: none"
+            #profilePic
+            (change)="onUploadFile($event)"
+          />
+        </div>
+      </div>
+      <div class="establishment-basic row gy-3">
+        <div class="col-12 col-md-12 col-lg-4 d-flex flex-column gap-2">
+          <label
+            >{{ "ESTABLISHMENT_NAME" | translate
+            }}<span class="required-hint">*</span></label
+          >
+          <input
+            class="form-input border-style rounded-1 w-100"
+            placeholder="Establishment name"
+            formControlName="name"
+            oninput="this.value=this.value.replace(/^ $/,'')"
+            (input)="search($event)"
+            [matAutocomplete]="auto"
+            maxlength="100"
+          />
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option
+              *ngFor="let hospital of hospitalList"
+              [value]="hospital.hospitalName"
+              (click)="onSelectHospital(hospital)"
+            >
+              {{ hospital.hospitalName + " - " + hospital.address.cityName }}
+            </mat-option>
+          </mat-autocomplete>
+          <div
+            class="error-div error-hint"
+            *ngIf="control['name'].errors?.['required'] && (submitted || control['name'].touched)"
+          >
+            Establishment Name is required.
+          </div>
+          <div
+            class="error-div error-hint"
+            *ngIf="(control['name'].errors?.['minlength'] ||control['name'].errors?.['maxlength']) && (submitted || control['name'].touched)"
+          >
+            Establishment Name must be between 3 to 100 characters.
+          </div>
+        </div>
+        <div class="col-12 col-md-12 col-lg-4 d-flex flex-column gap-2">
+          <label
+            >{{ "ESTABLISHMENT_TYPE" | translate
+            }}<span class="required-hint">*</span></label
+          >
+          <ng-select
+            #establishmentType
+            class="establishment-type"
+            [items]="hospitalTypeList"
+            bindLabel="name"
+            bindValue="_id"
+            placeholder="Establishment type"
+            formControlName="hospitalTypeId"
+            oninput="this.value = this.value.replace(/^ $/,'')"
+            (focus)="establishmentType.open()"
+          ></ng-select>
+          <div
+            class="error-div error-hint"
+            *ngIf="control['hospitalTypeId'].errors?.['required'] && (submitted || control['hospitalTypeId'].touched)"
+          >
+            Establishment Type is required.
+          </div>
+        </div>
+        <div class="col-12 col-md-12 col-lg-4 d-flex flex-column gap-2">
+          <label
+            >{{ "CONSULTATION_FEES" | translate
+            }}<span class="required-hint">*</span></label
+          >
+          <input
+            type="text"
+            class="form-input border-style rounded-1 w-100"
+            placeholder="Consultation fees"
+            maxlength="5"
+            oninput="this.value = this.value.replace(/\D/,'').replace(/^0/,'')"
+            formControlName="consultationFees"
+          />
+          <div
+            class="error-div error-hint"
+            *ngIf="control['consultationFees'].errors?.['required'] && (submitted || control['consultationFees'].touched)"
+          >
+            Consultation fees is required.
+          </div>
+        </div>
+      </div>
+      <div class="establishment-address row gy-3">
+        <div class="col-12 font-600">{{ "ADDRESS" | translate }}</div>
+        <div class="col-12 col-lg-8 d-flex gap-3 flex-column mt-0">
+          <form class="row gy-3" formGroupName="address">
+            <div class="col-12 col-md-6 d-flex flex-column gap-2">
+              <label
+                >{{ "STREET_ADDRESS" | translate
+                }}<span class="required-hint">*</span></label
+              >
+              <nectar-form-field>
+                <input
+                  nectarError
+                  controlName="Street address"
+                  type="text"
+                  class="form-input border-style rounded-1 w-100"
+                  placeholder="Street address"
+                  formControlName="landmark"
+                  oninput="this.value = this.value.replace(/^ $/,'')"
+                  [matAutocomplete]="landmark"
+                  (input)="onSearch($event, 'predicationList')"
+                />
+              </nectar-form-field>
+              <mat-autocomplete #landmark="matAutocomplete">
+                <mat-option
+                  *ngFor="let place of predicationList"
+                  (click)="onSelectPlace(place)"
+                >
+                  {{ place.description }}
+                </mat-option>
+              </mat-autocomplete>
+            </div>
+            <div class="col-12 col-md-6 d-flex flex-column gap-2">
+              <label>{{ "LOCALITY" | translate }}</label>
+              <nectar-form-field>
+                <input
+                  nectarError
+                  controlName="Locality"
+                  type="text"
+                  class="form-input border-style rounded-1 w-100"
+                  placeholder="Locality"
+                  formControlName="locality"
+                  oninput="this.value = this.value.replace(/^ $/,'')"
+                />
+              </nectar-form-field>
+            </div>
+            <div class="col-12 col-md-6 d-flex flex-column gap-2">
+              <label
+                >{{ "CITY" | translate
+                }}<span class="required-hint">*</span></label
+              >
+              <nectar-form-field>
+                <input
+                  nectarError
+                  controlName="City"
+                  class="form-input border-style rounded-1 w-100"
+                  placeholder="City"
+                  formControlName="city"
+                  oninput="this.value = this.value.replace(/^ $/,'')"
+                  [matAutocomplete]="city"
+                  (input)="onSearch($event, 'predicationCityList')"
+                />
+              </nectar-form-field>
+              <mat-autocomplete #city="matAutocomplete">
+                <mat-option
+                  *ngFor="let place of predicationCityList"
+                  (click)="onSelectPlace(place)"
+                >
+                  {{ place.description }}
+                </mat-option>
+              </mat-autocomplete>
+            </div>
+            <div class="col-12 col-md-6 d-flex flex-column gap-2">
+              <label
+                >{{ "STATE" | translate
+                }}<span class="required-hint">*</span></label
+              >
+              <nectar-form-field>
+                <ng-select
+                  nectarError
+                  contorlName="State"
+                  #state
+                  class="establishment-type"
+                  [items]="stateList"
+                  bindLabel="name"
+                  bindValue="_id"
+                  placeholder="State"
+                  formControlName="state"
+                  oninput="this.value = this.value.replace(/^ $/,'')"
+                  (focus)="state.open()"
+                ></ng-select>
+                
+              </nectar-form-field>
+            </div>
+            <div class="col-12 col-md-6 d-flex flex-column gap-2">
+              <label
+                >{{ "PINCODE" | translate
+                }}<span class="required-hint">*</span></label
+              >
+              <nectar-form-field>
+                <input
+                  nectarError
+                  contorlName="Pincode"
+                  type="text"
+                  maxlength="6"
+                  class="form-input border-style rounded-1 w-100"
+                  placeholder="Pincode"
+                  formControlName="pincode"
+                  oninput="this.value = this.value.replace(/\D/,'').replace(/^ $/,'')"
+                />
+              </nectar-form-field>
+            </div>
+            <div class="col-12 col-md-6 d-flex flex-column gap-2">
+              <label
+                >{{ "COUNTRY" | translate
+                }}<span class="required-hint">*</span></label
+              >
+              <ng-select
+                #country
+                class="establishment-type"
+                [items]="countryList"
+                bindLabel="name"
+                bindValue="_id"
+                placeholder="Country"
+                formControlName="country"
+                oninput="this.value = this.value.replace(/^ $/,'')"
+                (focus)="country.open()"
+              ></ng-select>
+              <div
+                class="error-div error-hint"
+                *ngIf="addressControl.controls['country'].errors?.['required'] && (submitted || addressControl.controls['country'].touched)"
+              >
+                Country is required.
+              </div>
+            </div>
+          </form>
+          <div class="row gy-3">
+            <div class="col-12 col-md-6 d-flex flex-column gap-2">
+              <label
+                >{{ "ESTABLISHMENT_MOBILE_NUMBER" | translate
+                }}<span class="required-hint">*</span></label
+              >
+              <input
+                type="text"
+                maxlength="10"
+                class="form-input border-style rounded-1 w-100"
+                placeholder="Establishment number"
+                formControlName="establishmentMobile"
+                oninput="this.value = this.value.replace(/\D/,'').replace(/^ $/,'')"
+              />
+              <div
+                class="error-div error-hint"
+                *ngIf="control['establishmentMobile'].errors?.['required'] && (submitted || control['establishmentMobile'].touched)"
+              >
+                Establishment number is required.
+              </div>
+              <div
+                class="error-div error-hint"
+                *ngIf="control['establishmentMobile'].errors?.['minlenght'] && (submitted || control['establishmentMobile'].touched)"
+              >
+                Establishment number must be 10 digits.
+              </div>
+              <div
+                class="error-div error-hint"
+                *ngIf="control['establishmentMobile'].errors?.['maxlength'] && (submitted || control['establishmentMobile'].touched)"
+              >
+                Establishment number must be 10 digits.
+              </div>
+            </div>
+            <div class="col-12 col-md-6 d-flex flex-column gap-2">
+              <label>{{ "ESTABLISHMENT_EMAIL_ID" | translate }}</label>
+              <input
+                class="form-input border-style rounded-1 w-100"
+                placeholder="Establishment email"
+                formControlName="establishmentEmail"
+                oninput="this.value = this.value.replace(/^ $/,'')"
+              />
+              <div
+                class="error-div error-hint"
+                *ngIf="control['establishmentEmail'].errors?.['pattern'] && (submitted || control['establishmentEmail'].touched)"
+              >
+                Please enter valid email address.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-4 mt-0">
+          <div class="d-flex flex-column gap-2">
+            <span class="font-600">{{ "MAP_VIEW" | translate }}</span>
+            <div class="">
+              <nectar-google-maps
+                class="google-maps"
+                [markerDragable]="markerDragable"
+                [zoom]="zoom"
+                [lng]="control['location'].get('coordinates').value[0]"
+                [lat]="control['location'].get('coordinates').value[1]"
+                (mapClicked)="onMapClicked($event)"
+                (markerDrag)="onMarkerDrag($event)"
+              ></nectar-google-maps>
+            </div>
+            <div
+              class=""
+              *ngIf="!this.data.edit || this.data?.establishmentDetail?.isOwner"
+            >
+              <strong> Note: </strong> Add your Google business address by
+              typing your profile name in the Street address box or you may put
+              address manually. Watch Video
+              <a
+                href="https://www.youtube.com/@nectarplushealth/playlists"
+                target="_blank"
+                rel="noopener noreferrer"
+                >https://www.youtube.com/&#64;nectarplushealth/playlists</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <span>Timing <span class="required-hint">*</span></span>
+      <div
+        class="establishment-timing d-flex flex-column border-style rounded-2"
+      >
+        <div class="d-flex gap-6 border-bottom-style p-24 flex-wrap">
+          <div
+            class="weekname cursor-pointer"
+            *ngFor="let day of openAndClosing; let i = index"
+            [ngClass]="{ selected: day.opened }"
+            (click)="onToggle(i)"
+          >
+            {{ day.dayname }}
+          </div>
+        </div>
+        <div class="week-timing d-flex flex-column gap-6">
+          <div
+            class="week-day-timing"
+            *ngFor="let week of openAndClosing; let i = index"
+          >
+            <div class="d-flex flex-column gap-2">
+              <div
+                class="d-flex gap-4 justify-content-between align-items-center w-100"
+              >
+                <div class="text-24 font-600 w-10">
+                  {{ week.dayname }}
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                  <div
+                    class="toggle-back"
+                    (click)="onToggle(i)"
+                    [ngClass]="{ 'bg-black': week.opened }"
+                  >
+                    <div
+                      class="rounde-div"
+                      [ngClass]="{ opened: week.opened }"
+                    ></div>
+                  </div>
+                  <span class="font-600 text-green" *ngIf="week.opened"
+                    >{{ "OPEN" | translate }}&nbsp;&nbsp;&nbsp;</span
+                  >
+                  <span class="font-600 text-red" *ngIf="!week.opened">{{
+                    "CLOSED" | translate
+                  }}</span>
+                </div>
+                <div class="shift-timing d-flex gap-2">
+                  <div
+                    class="d-flex gap-2 flex-wrap"
+                    [ngClass]="{ 'visibility-hidden': !week.opened }"
+                    [formArrayName]="week.formControlName"
+                  >
+                    <div
+                      class="d-flex flex-column gap-2"
+                      *ngFor="
+                        let slot of dayControl(week.formControlName).controls;
+                        let i = index
+                      "
+                    >
+                      <div
+                        class="d-flex gap-2 align-items-center"
+                        *ngIf="i == 0"
+                      >
+                        <div class="">{{ "MORNING" | translate }}</div>
+                        <svg-icon
+                          src="assets/images/svg/sunrise.svg"
+                        ></svg-icon>
+                      </div>
+                      <div
+                        class="d-flex gap-2 align-items-center"
+                        *ngIf="i == 1"
+                      >
+                        <div class="">{{ "AFTERNOON" | translate }}</div>
+                        <img
+                          loading="lazy"
+                          src="assets/images/svg/afternoon.svg"
+                          alt=""
+                        />
+                      </div>
+                      <div
+                        class="d-flex gap-2 align-items-center"
+                        *ngIf="i == 2"
+                      >
+                        <div class="">{{ "EVENING" | translate }}</div>
+                        <img
+                          loading="lazy"
+                          src="assets/images/svg/night-mode.svg"
+                          alt=""
+                        />
+                      </div>
+                      <div
+                        class="border-style rounded-5px d-flex w-100"
+                        [formGroupName]="i"
+                      >
+                        <ng-select
+                          #from
+                          class="w-50 from"
+                          placeholder="00:00 PM"
+                          formControlName="from"
+                          (focus)="from.open()"
+                        >
+                          <ng-option
+                            *ngFor="
+                              let time of timingArray[i]
+                                | timecompare : slot.get('to').value : true
+                            "
+                            [value]="time.name"
+                          >
+                            {{ time.name }}
+                          </ng-option>
+                        </ng-select>
+                        <div class="border-style"></div>
+                        <ng-select
+                          #to
+                          class="w-50 to"
+                          placeholder="00:00 PM"
+                          formControlName="to"
+                          (focus)="to.open()"
+                        >
+                          <ng-option
+                            *ngFor="
+                              let time of timingArray[i]
+                                | timecompare : slot.get('from').value
+                            "
+                            [value]="time.name"
+                          >
+                            {{ time.name }}
+                          </ng-option>
+                        </ng-select>
+                      </div>
+                      <div
+                        class="error-hint"
+                        *ngIf="dayControl(week.formControlName).controls[i].get('from').errors?.['mustHaveValue'] && (dayControl(week.formControlName).controls[i].get('from').touched || submitted)"
+                      >
+                        Please select start time
+                      </div>
+                      <div
+                        class="error-hint"
+                        *ngIf="dayControl(week.formControlName).controls[i].get('to').errors?.['mustHaveValue'] && (dayControl(week.formControlName).controls[i].get('to').touched || submitted)"
+                      >
+                        Please select end time
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="error-hint"
+              *ngIf="control[week.formControlName].errors?.['atleatOnetiming'] && submitted"
+            >
+              Please select at least one timing
+            </div>
+          </div>
+          <div
+            class="error-div error-hint"
+            *ngIf="establishmentForm.errors?.['atleastOneDay']"
+          >
+            Please select at least one day
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions class="">
+      <div
+        class="w-100 px-24 py-3 border-top-style d-flex justify-content-end gap-6"
+      >
+        <button class="white-button" type="button" (click)="matdiaRef.close()">
+          {{ "CANCEL" | translate }}
+        </button>
+        <button class="gray-button" type="submit">
+          {{ "SUBMIT" | translate }}
+        </button>
+      </div>
+    </mat-dialog-actions>
+  </form>
+</div>

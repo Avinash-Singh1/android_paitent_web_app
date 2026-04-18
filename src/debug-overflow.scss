@@ -1,0 +1,60 @@
+/**
+ * OVERFLOW DEBUG STYLES
+ * 
+ * Add this import to styles.scss to debug horizontal overflow:
+ * @use "debug-overflow.scss" as *;
+ * 
+ * REMOVE THIS IMPORT AFTER FIXING THE ISSUES!
+ */
+
+/* Highlight all elements with red outline */
+* {
+  outline: 1px solid rgba(255, 0, 0, 0.3) !important;
+}
+
+/* Highlight hovered elements with blue outline */
+*:hover {
+  outline: 2px solid rgba(0, 0, 255, 0.6) !important;
+}
+
+/* Show exact dimensions on hover */
+*:hover::after {
+  content: attr(class) " | W:" attr(data-width);
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: monospace;
+  z-index: 999999;
+  pointer-events: none;
+}
+
+/* Highlight elements wider than viewport */
+*[style*="width"] {
+  outline: 3px solid orange !important;
+}
+
+/* Force scroll to see exact overflow amount */
+body, html {
+  overflow-x: scroll !important;
+}
+
+/* Log element widths in console (requires JS) */
+body::before {
+  content: "🔍 OVERFLOW DEBUG MODE ACTIVE - Check console for element widths";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #ff0000;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+  z-index: 999999;
+  font-size: 14px;
+}

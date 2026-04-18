@@ -1,0 +1,173 @@
+$purple: #45197c;
+$lavender: #f2e8ff;
+
+// Medical Reviewer
+.eeat__reviewer {
+  margin-bottom: 28px;
+  background: #fff;
+  border: 1.5px solid #e8e0f3;
+  border-radius: 14px;
+  padding: 24px;
+}
+
+.eeat__reviewer-header {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.eeat__reviewer-avatar {
+  flex-shrink: 0;
+}
+
+.eeat__reviewer-img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid $lavender;
+}
+
+.eeat__reviewer-initials {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: $lavender;
+  color: $purple;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.eeat__reviewer-badge {
+  display: inline-block;
+  background: #e6f9e6;
+  color: #2a7a2a;
+  padding: 3px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.eeat__reviewer-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 2px;
+}
+
+.eeat__reviewer-qual {
+  font-size: 14px;
+  color: $purple;
+  margin: 0 0 4px;
+}
+
+.eeat__reviewer-meta {
+  font-size: 13px;
+  color: #888;
+}
+
+// Author
+.eeat__author {
+  margin-bottom: 24px;
+  padding: 16px 20px;
+  background: #faf8fd;
+  border-radius: 10px;
+}
+
+.eeat__author-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.eeat__author-label {
+  font-size: 12px;
+  color: #888;
+}
+
+.eeat__author-name {
+  font-size: 15px;
+  color: #1a1a2e;
+}
+
+.eeat__author-role {
+  font-size: 13px;
+  color: #666;
+}
+
+.eeat__date {
+  font-size: 12px;
+  color: #888;
+  margin-top: 6px;
+}
+
+// References
+.eeat__references {
+  margin-bottom: 24px;
+}
+
+.eeat__section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0 0 12px;
+}
+
+.eeat__ref-list {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.eeat__ref-item {
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 6px;
+}
+
+.eeat__ref-link {
+  color: $purple;
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
+
+.eeat__ref-source {
+  color: #888;
+}
+
+// Disclaimer
+.eeat__disclaimer {
+  margin-bottom: 32px;
+}
+
+.eeat__disclaimer-inner {
+  display: flex;
+  gap: 12px;
+  background: #fff9e6;
+  border: 1px solid #f0e0a0;
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+
+.eeat__disclaimer-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.eeat__disclaimer-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #8a6d00;
+  margin: 0 0 4px;
+}
+
+.eeat__disclaimer-text {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+  line-height: 1.6;
+}

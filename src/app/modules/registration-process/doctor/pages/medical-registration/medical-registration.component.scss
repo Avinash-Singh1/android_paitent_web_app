@@ -1,0 +1,151 @@
+@use "tools.mediaquery" as *;
+
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+
+@use "variable.scss" as *;
+
+
+.percetDone {
+  height: 4px;
+  background: $purple;
+  width: 40%;
+}
+
+.containers {
+  max-width: 720px;
+  width: 720px;
+  min-height: calc(100vh - 120px);
+  background: $white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @media screen and (max-width: 767px) {
+    width: 100%;
+  }
+
+  .form {
+    min-height: calc(100vh - 124px);
+    padding: 32px;
+    gap: 40px;
+  }
+
+  .content {
+    .heading {
+      padding-top: 2rem;
+      font-style: normal;
+      color: $black;
+      @include font-sans_pro-bold($size: 32px, $lineheight: 40px);
+
+      @media screen and (max-width: 767px) {
+        @include font-sans_pro-bold($size: 24px, $lineheight: 23px);
+      }
+    }
+
+    .wrapper {
+      margin: 4rem 0px 0px;
+
+      .fields {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 24px;
+
+        label {
+          color: $black;
+          opacity: 0.7;
+          @include font-sans_pro-regular($size: 18px, $lineheight: 23px);
+
+          @media screen and (max-width: 767px) {
+            @include font-sans_pro-regular($size: 16px, $lineheight: 23px);
+          }
+
+          span {
+            font-size: 18px;
+            color: $red;
+          }
+        }
+
+        input,
+        select {
+          background: $white;
+          border: 1px solid $border-color;
+          border-radius: 4px;
+          height: 48px;
+          padding: 0px 24px;
+          outline: 0;
+          font-size: 18px;
+
+          &::placeholder {
+            @include font-sans_pro-regular($size: 18px, $lineheight: 18px);
+            color: rgba(0, 0, 0, 0.7);
+
+            @media screen and (max-width: 767px) {
+              @include font-sans_pro-regular($size: 16px, $lineheight: 23px);
+            }
+          }
+        }
+      }
+
+      .footerData {
+        margin-top: 24px;
+        @include font-sans_pro-regular($size: 18px, $lineheight: 23px);
+
+        span {
+          cursor: pointer;
+          color: $purple;
+          @include font-sans_pro-semibold($size: 18px, $lineheight: 23px);
+
+          @media screen and (max-width: 767px) {
+            @include font-sans_pro-semibold($size: 16px, $lineheight: 23px);
+          }
+        }
+      }
+    }
+  }
+
+  .continue {
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      // margin: 2rem;
+      width: 200px;
+      cursor: pointer;
+      padding: 10px 30px;
+      border: none;
+      color: $white;
+      background: $purple;
+      border-radius: 4px;
+      @include font-sans_pro-regular($size: 18px, $lineheight: 23px);
+
+      @media screen and (max-width: 767px) {
+        width: 100px;
+        @include font-sans_pro-regular($size: 16px, $lineheight: 23px);
+      }
+    }
+
+    .back {
+      background: $white;
+      color: $black;
+      border: 1px solid $border-color;
+      border-radius: 4px;
+    }
+  }
+}
+
+:host::ng-deep {
+  .ng-select .ng-select-container {
+    height: 48px !important;
+    padding: 0 10px !important;
+    border: 1px solid $border-color;
+
+    .ng-value-container .ng-input>input {
+      padding: 7px 10px !important;
+    }
+  }
+}

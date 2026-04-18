@@ -1,0 +1,87 @@
+@use "variable.scss" as *;
+
+.day-wrapper {
+  background: $bright-gray;
+  border-radius: 18px;
+  padding: 6px 15px;
+
+  &.selected {
+    background: $purple !important;
+    color: $white !important;
+  }
+
+  &.active {
+    outline: 1px solid $purple;
+    outline-offset: 2px;
+  }
+}
+
+button {
+  border: 1px solid $border-color;
+  padding: 12px 24px;
+  font-size: 18px;
+  border-radius: 5px;
+
+  &.cancel {
+    background: $white;
+  }
+
+  &.save {
+    color: $white;
+    background: $purple;
+  }
+}
+
+::ng-deep {
+  .mdc-dialog .mdc-dialog__content.timing-wrapper {
+    padding: 24px !important;
+    color: $black !important;
+    font-size: 18px !important;
+    font-family: "Source Sans Pro", sans-serif !important;
+    min-height: 60vh !important;
+  }
+
+  .mdc-dialog__title.doctor-title-cross {
+    padding: 12px 24px !important;
+  }
+
+  .px-12 {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .gy-8 {
+    gap: 8px 0;
+  }
+
+  .mdc-dialog__actions {
+    padding: 0 !important;
+  }
+
+  .from.ng-select .ng-select-container {
+    height: 48px;
+    min-width: 150px !important;
+    border: none !important;
+    border-radius: 5px 0 0 5px !important;
+
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+
+    .ng-value-container .ng-input>input {
+      padding: 7px 2px !important;
+    }
+  }
+
+  .to.ng-select .ng-select-container {
+    height: 48px;
+    min-width: 150px !important;
+    border: none !important;
+    border-radius: 0 5px 5px 0 !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+
+    .ng-value-container .ng-input>input {
+      padding: 7px 2px !important;
+    }
+  }
+}

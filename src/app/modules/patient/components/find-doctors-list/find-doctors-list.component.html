@@ -1,0 +1,83 @@
+<section class="find-doctors">
+  <div class="find-doctors__container">
+    <h2>Find Doctors by city</h2>
+    <div class="find-doctors__container__data row">
+      <div class="col-md-3">
+        <div *ngFor="let item of list1">
+          <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{ item._id }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <a
+                (click)="redirection(value.name, item._id)"
+                *ngFor="let value of item.specializations"
+              >
+                {{ item._id }} {{ value.name }}
+              </a>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div *ngFor="let item of list2">
+          <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{ item._id }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <a
+                (click)="redirection(value.name, item._id)"
+                *ngFor="let value of item.specializations"
+              >
+                {{ item._id }} {{ value.name }}
+              </a>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div *ngFor="let item of list3">
+          <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{ item._id }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <a
+                (click)="redirection(value.name, item._id)"
+                *ngFor="let value of item.specializations"
+              >
+                {{ item._id }} {{ value.name }}
+              </a>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div *ngFor="let item of list4">
+          <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{ item._id }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <a
+                (click)="redirection(value.name, item._id)"
+                *ngFor="let value of item.specializations"
+              >
+                {{ item._id }} {{ value.name }}
+              </a>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

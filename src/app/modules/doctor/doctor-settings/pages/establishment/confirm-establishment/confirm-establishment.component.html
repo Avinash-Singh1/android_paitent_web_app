@@ -1,0 +1,44 @@
+<div class="confirm-establishment">
+  <div class="">
+    <div class="px-24 py-3 text-16 font-600 border-bottom-style">
+      {{ heading }}
+    </div>
+    <div class="content p-24 d-flex flex-column gap-3">
+      <div class="font-600">
+        {{ "PLEASE_SELECT_ANY_ONE_OF_THE_FOLLOWING" | translate }}
+      </div>
+      <div class="confirm-radio-wrapper">
+        <div
+          class="d-flex confirm-item gap-3 border-bottom-style"
+          *ngIf="!this.matdata.ownerList"
+        >
+          <input type="radio" name="radio" [value]="1" (change)="isOwner = 1" />
+          <span>{{ "I_OWN_A_ESTABLISHMENT" | translate }}</span>
+        </div>
+        <div class="d-flex confirm-item gap-3">
+          <input
+            type="radio"
+            name="radio"
+            [value]="0"
+            (change)="isOwner = 0"
+            [checked]="isOwner == 0"
+          />
+          <span>{{ "I_VISIT_A_ESTABLISHMENT" | translate }}</span>
+        </div>
+      </div>
+      <div class="error-div error-hint" *ngIf="isOwner == 2 && sumbitted">
+        Required
+      </div>
+    </div>
+  </div>
+  <div
+    class="buttongroup border-top-style px-24 py-3 d-flex justify-content-end gap-6"
+  >
+    <button class="white-button" (click)="onCloseDialog()">
+      {{ "CANCEL" | translate }}
+    </button>
+    <button class="gray-button" (click)="onSave()">
+      {{ "NEXT" | translate }}
+    </button>
+  </div>
+</div>

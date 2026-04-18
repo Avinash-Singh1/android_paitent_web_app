@@ -1,0 +1,184 @@
+<div class="login-wrapper">
+  <div class="login-outer">
+    <div class="text-wrapper">
+      <h3>Join Our Network of Trusted Healthcare Facilities</h3>
+      <p>Join NectarPlus.Health to enhance your professional presence, streamline your practice, and provide exceptional care to your patients. Start your journey with us today.</p>
+    </div>
+    <div class="login-inner">
+      <div class="header">
+        <h3>Login</h3>
+        <p>
+          Don't have an Account ?
+          <a [routerLink]="['/auth/doctors/register']">Signup</a>
+        </p>
+      </div>
+      <div class="form">
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+          <div class="form-group">
+            <label class="main required">Mobile Number/Email</label>
+            <input type="text" class="form-control" placeholder="Enter Mobile Number or Email" formControlName="phoneOrEmail" autocomplete="off"/>
+            <div *ngIf="loginForm.controls['phoneOrEmail'].invalid && loginForm.controls['phoneOrEmail'].touched" class="text-danger">Please enter a valid phone number or email.</div>
+          </div>
+          <!-- <div class="form-group">
+            <label class="main required">Password</label>
+            <input formControlName="password" type="password" class="form-control" placeholder="Enter your password" />
+            <div *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched" class="text-danger">Please enter your password.</div>
+          </div> -->
+
+          <div class="form-group position-relative">
+            <label class="main required">Password</label>
+            <input formControlName="password" [type]="isPasswordVisible ? 'text' : 'password'" class="form-control" placeholder="Enter your password" autocomplete="off" />
+            <div class="toggle-password" (click)="togglePasswordVisibility()" [style]="loginForm.controls['password'].invalid && loginForm.controls['password'].touched ? 'position: absolute; right: 10px; top: 60%; transform: translateY(-50%); cursor: pointer;' : 'position: absolute; right: 10px; top: 71%; transform: translateY(-50%); cursor: pointer;'">
+              <img loading="lazy" [src]="isPasswordVisible ? 'assets/images/svg/eye-open.svg' : 'assets/images/svg/eye-closed.svg'" alt="Toggle Password Visibility" />
+            </div>
+            <div *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched" class="text-danger">Please enter your password.</div>
+          </div>
+
+          <div class="form-group two-cols">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" id="terms" value="terms" />
+              <label class="form-check-label" for="terms">Remember me</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <a (click)="openModal('edit_phone_email_modal')">Forgot Password?</a>
+            </div>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <img loading="lazy" src="./assets/images/doctor.png" class="doctor-fixed-b" />
+  <!-- <img loading="lazy" src="./assets/images/signup-img-fixed.png" class="fixed-rb" /> -->
+  <div class="fixed-rb">
+    <div class="circle-1"></div>
+    <div class="circle-2"></div>
+  </div>
+  <div class="clearfix"></div>
+</div>
+
+<div class="modal fade" id="edit_phone_email_modal" tabindex="-1" aria-labelledby="edit_phone_email_modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered forgot-passwor-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Forget Password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal('edit_phone_email_modal')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <p>Provide us the mobile of your nector account and we will send you an OTP with instructions to reset your password.</p>
+          <label class="required" for="updatedValue">Mobile Number</label>
+          <input maxlength="10" type="text" class="form-control" [(ngModel)]="updatedValue" />
+        </div>
+        <button type="button" class="btn btn-primary btn-block" (click)="sendOTP()">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- OTP Verification Modal -->
+<div class="modal fade" id="otp_verification_modal" tabindex="-1" aria-labelledby="otp_verification_modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Verify OTP</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal('otp_verification_modal')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body verify-otp-modal">
+        <div class="form-group">
+          <!-- <label>{{ fieldToEdit === "phone" ? "Phone" : "Email" }}: {{ updatedValue }}</label> -->
+          <p class="text-success">Enter the verification cdoe sent to your new mobile...</p>
+          <label class="updated-phone"
+            >{{ updatedValue }}
+            <button type="button" class="btn btn-edit" (click)="changePhoneOrEmail()">
+              <img loading="lazy" src="assets/images/svg/edit.svg" alt="" /></button
+          ></label>
+          <label>OTP</label>
+          <input type="text" class="form-control" [(ngModel)]="otp" placeholder="Please enter the 6 digit OTP here to verify" />
+          <p>Didn't receive OTP? <a href="#" class="text-primary">Resend OTP</a></p>
+        </div>
+        <!-- <button type="button" class="btn btn-link" (click)="changePhoneOrEmail()">Change {{ fieldToEdit === "phone" ? "Phone" : "Email" }}</button> -->
+
+        <button type="button" class="btn btn-primary btn-block" (click)="verifyOTP()">Verify</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div class="modal fade" id="otp_verification_modal" tabindex="-1" aria-labelledby="otp_verification_modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Verify OTP</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal('otp_verification_modal')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Phone: {{ updatedValue }}</label>
+          <input type="text" class="form-control" [(ngModel)]="otp" placeholder="Enter OTP" />
+        </div>
+        <button type="button" class="btn btn-link" (click)="changePhoneOrEmail()">Edit Phone</button>
+
+        <button type="button" class="btn btn-primary" (click)="verifyOTP()">Verify</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="modal fade" id="change_password_modal" tabindex="-1" aria-labelledby="change_password_modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Change Password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal('change_password_modal')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group position-relative">
+          <label for="New Password">New Password</label>
+          <input type="text" class="form-control" [type]="isPasswordVisibleconfirm1 ? 'text' : 'password'" placeholder="Enter new password" [(ngModel)]="ForgetNewPassword" />
+          <div class="toggle-password" (click)="togglePasswordVisibilityconfirm1()" style="position: absolute; right: 10px; top: 71%; transform: translateY(-50%); cursor: pointer">
+            <img loading="lazy" [src]="isPasswordVisibleconfirm1 ? 'assets/images/svg/eye-open.svg' : 'assets/images/svg/eye-closed.svg'" alt="Toggle Password Visibility" />
+          </div>
+        </div>
+
+        <div class="form-group position-relative">
+          <label class="mt-3" for="Confirm Password">Confirm Password</label>
+          <input type="text" [type]="isPasswordVisibleconfirm2 ? 'text' : 'password'" class="form-control" placeholder="Enter confirm password" [(ngModel)]="ForgetConfrimPassword" />
+          <div class="toggle-password" (click)="togglePasswordVisibilityconfirm2()" style="position: absolute; right: 10px; top: 78%; transform: translateY(-50%); cursor: pointer">
+            <img loading="lazy" [src]="isPasswordVisibleconfirm2 ? 'assets/images/svg/eye-open.svg' : 'assets/images/svg/eye-closed.svg'" alt="Toggle Password Visibility" />
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary btn-block" (click)="changePassword()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="change_password_confirmation_modal" index="-1" aria-labelledby="change_password_confirmation_modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Reset Password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal('change_password_confirmation_modal')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-body change_password_confirmation">
+          <img loading="lazy" src="assets/images/svg/green-check.svg" alt="Success" />
+          <h3>Password Changed Sucessfully</h3>
+        </div>
+        <button type="button" class="btn btn-primary btn-block" (click)="closeModal('change_password_confirmation_modal')">Countine to Login</button>
+      </div>
+    </div>
+  </div>
+</div>

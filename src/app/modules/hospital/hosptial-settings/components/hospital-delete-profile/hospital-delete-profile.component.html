@@ -1,0 +1,18 @@
+<section class="delete-profile w-100">
+  <header
+    class="w-100 heading d-flex justify-content-between gap-40 align-items-center border-bottom-style"
+  >
+    <div class="text-16 font-600">
+      {{ "DELETE_PROFILE" | translate }}
+    </div>
+  </header>
+  <main class="p-24 d-flex flex-column gap-3">
+    <div class="">
+      As a Nectar partner, you can request the permanent deletion of your
+      profile information. By confirming below, you acknowledge and agree that
+      your account and its data will be deleted. If you decide to open a new
+      account with Nectar, you will be unable to access your historical data.
+    </div>
+    <button class="confirm-button" (click)="submitForm()">Confirm</button>
+  </main>
+</section>

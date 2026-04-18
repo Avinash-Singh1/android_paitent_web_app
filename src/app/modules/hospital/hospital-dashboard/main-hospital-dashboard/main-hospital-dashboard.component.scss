@@ -1,0 +1,334 @@
+@use "variable.scss" as *;
+@use "_settings.colors.scss" as *;
+@use "src/styles/components/_components.ngx-pagination.scss" as *;
+
+.hospital-dashboard {
+  min-height: calc(100vh - 72px);
+
+  .subheader-wrapper {
+    position: sticky;
+    top: 72px;
+    left: 0;
+    height: 72px;
+    z-index: 9;
+    background: $white;
+
+    .hamber {
+      width: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .main-dashboard-content {
+    padding: 48px 72px;
+    background: $bright-gray;
+    min-height: calc(100vh - 146px);
+
+    .icon-wrapper {
+      padding: 16px;
+      background: rgba($color: $bright-gray, $alpha: 0.5);
+      border: 1px solid $border-color;
+      border-radius: 50%;
+    }
+  }
+
+  .row {
+    row-gap: 24px;
+  }
+
+  .px-12 {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .pending {
+    background: rgba($color: $pending, $alpha: 0.1);
+
+    .icon-wrapper {
+      background-color: $pending !important;
+      border-color: $pending;
+    }
+  }
+
+  .doctor-card {
+    background: rgba(60, 174, 163, 0.1);
+
+    .icon-wrapper {
+      background-color: rgba(60, 174, 163, 1) !important;
+      border-color: rgba(60, 174, 163, 1);
+    }
+  }
+
+  .doctor-appointment,
+  .speciality-appointment {
+    min-height: 300px;
+  }
+
+  .appointment-table {
+    background: white;
+    padding: 24px;
+
+    .heading {
+      margin-bottom: 24px;
+    }
+
+    .table-filter {
+      margin-bottom: 40px;
+
+      .toggle-button {
+        border: none;
+        outline: none;
+        font-size: 16px;
+        background: $white;
+        padding: 16px;
+        width: 200px;
+
+        &.active {
+          background: $purple;
+          color: $white;
+        }
+
+        &:first-child {
+          border-radius: 5px 0 0 5px;
+        }
+
+        &:last-child {
+          border-radius: 0 5px 5px 0;
+        }
+      }
+
+      .download-btn {
+        padding: 12px 40px;
+        border-radius: 5px;
+        background: $white;
+      }
+
+      .search-wrapper {
+        border: 1px solid rgba($color: $purple, $alpha: 0.5);
+
+        input {
+          border: none;
+          outline: none;
+          width: 140px;
+
+          // color: $purple;
+          &::placeholder {
+            color: $purple;
+          }
+        }
+      }
+
+      button {
+        border: 1px solid rgba($color: $purple, $alpha: 0.5);
+        color: $purple;
+      }
+    }
+
+    .table-content {
+      max-width: 100%;
+      width: 100%;
+      overflow: auto;
+
+      table {
+        width: 100%;
+        table-layout: auto;
+        border: 1px solid $border-color;
+        border-collapse: collapse;
+
+        th {
+          white-space: nowrap;
+          background: $purple;
+          color: $white;
+        }
+
+        th,
+        td {
+          border: 1px solid $border-color;
+          padding: 16px 24px;
+
+          &.completed {
+            padding: 8px 24px !important;
+            color: $green;
+          }
+
+          &.cancelled {
+            color: $red;
+          }
+        }
+      }
+    }
+
+    .pagination-section {
+      margin-top: 24px;
+    }
+  }
+
+  .all-filter {
+    display: flex;
+    gap: 12px;
+    background: $white;
+    border: none;
+    width: fit-content;
+    margin-top: -16px;
+  }
+
+  .specialisation-container {
+    width: 240px;
+    background: $white;
+    max-height: 240px;
+    border: 1px solid $border-color;
+    border-radius: 5px;
+    padding-bottom: 24px;
+    z-index: 6;
+
+    header {
+      padding: 12px 24px;
+      background: white;
+      z-index: 2;
+      position: sticky;
+      top: 0;
+
+      .search-wrapper {
+        border-radius: 24px;
+        padding: 0 24px;
+      }
+
+      input {
+        border-radius: 24px;
+        width: 100%;
+        height: 48px;
+        border: none;
+        outline: none;
+        font-size: 18px;
+
+        &::placeholder {
+          font-size: 18px;
+        }
+      }
+    }
+
+    overflow: auto;
+  }
+}
+
+::ng-deep {
+  .year-filter {
+    .save-button {
+      width: 120px;
+      padding: 10px 0;
+      background: $purple;
+      color: $white;
+      border: none;
+    }
+  }
+
+  .mat-mdc-menu-panel.year-filter {
+    max-width: 360px !important;
+    width: 300px !important;
+  }
+
+  .appointment-filter {
+    input[type="radio"] {
+      accent-color: $purple !important;
+    }
+
+    .save-button {
+      width: 120px;
+      padding: 10px 0;
+      background: $purple;
+      color: $white;
+      border: none;
+    }
+
+    .matdate-input {
+      border: 1px solid rgba(0, 0, 0, 0.3);
+      height: 48px;
+      border-radius: 5px;
+      position: relative;
+
+      .toggle {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+      }
+
+      input {
+        border: none;
+        border-radius: 5px;
+        width: 90%;
+        padding: 0 12px;
+        outline: none;
+        font-size: 16px;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .mat-expansion-panel {
+      width: 100% !important;
+      box-shadow: none !important;
+    }
+
+    .mat-expansion-panel-header.mat-expanded {
+      height: 48px !important;
+    }
+
+    .mat-expansion-panel-body {
+      padding: 12px 24px !important;
+    }
+
+    .mat-expansion-panel-header {
+      border-radius: 0 !important;
+    }
+
+    .mat-expansion-panel-spacing {
+      margin: 0 !important;
+    }
+
+    .mat-mdc-menu-content {
+      padding: 0 !important;
+    }
+  }
+
+  .mat-mdc-menu-panel.appointment-filter {
+    max-width: 360px !important;
+    width: 360px !important;
+    margin-top: 4px !important;
+  }
+
+  .request-dropdown {
+    .dropdown-menu {
+      padding: 0;
+    }
+
+    .dropdown-item {
+      font-size: 18px;
+
+      &:last-child {
+        border-radius: 0 0 4px 4px;
+        padding: 12px 24px;
+        color: $red;
+        background: rgba($color: $red, $alpha: 0.3);
+      }
+
+      &:first-child {
+        border-radius: 4px 4px 0 0;
+        padding: 12px 24px;
+        color: $green;
+        background: rgba($color: $green, $alpha: 0.3);
+      }
+    }
+  }
+}
+
+:host::ng-deep {
+  .pagination-section {
+    margin: 0 auto;
+
+    .ngx-pagination {
+      margin-bottom: 0 !important;
+      @include ngx-pagination($purple, $purple);
+    }
+  }
+}

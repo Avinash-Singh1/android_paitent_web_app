@@ -1,0 +1,52 @@
+<div class="dc">
+  <!-- Top row: avatar left, info right -->
+  <div class="dc__top">
+    <!-- Avatar -->
+    <div class="dc__avatar" (click)="viewDoctor()">
+      <div class="dc__avatar-fallback" *ngIf="!data?.doctorProfilePic">
+        {{ data?.doctorName | nameInitial | uppercase }}
+      </div>
+      <a *ngIf="data?.doctorProfilePic"
+         [routerLink]="['/', formatCity(data?.address?.city), 'doctor', data?.doctorProfileSlug]">
+        <img loading="lazy" [src]="data?.doctorProfilePic" [alt]="data?.doctorName" loading="lazy" width="48" height="48" />
+      </a>
+    </div>
+
+    <!-- Name + education -->
+    <div class="dc__header">
+      <a class="dc__name"
+         [routerLink]="['/', formatCity(data?.address?.city), 'doctor', data?.doctorProfileSlug]">
+        {{ data?.doctorName || "N/A" }}
+      </a>
+      <span class="dc__edu" *ngIf="data?.education?.length">{{ getEducation() }}</span>
+    </div>
+  </div>
+
+  <!-- Specialization pills -->
+  <div class="dc__specs" *ngIf="data?.specialization?.length">
+    <a class="dc__spec"
+       *ngFor="let spec of data.specialization"
+       [routerLink]="['/', formatCity(data?.address?.city), formatSpecialization(spec.name)]">
+      {{ spec.name }}
+    </a>
+  </div>
+
+  <!-- Experience -->
+  <span class="dc__exp">{{ data?.experience || 0 }} yr exp</span>
+
+  <!-- Bottom row: recommendation + fees -->
+  <div class="dc__meta">
+    <span class="dc__recommend">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2 20H4V10H2V20ZM22 10C22 8.9 21.1 8 20 8H13.69L14.64 3.43L14.67 3.11C14.67 2.7 14.5 2.32 14.23 2.05L13.17 1L7.59 6.59C7.22 6.95 7 7.45 7 8V18C7 19.1 7.9 20 9 20H17C17.83 20 18.54 19.5 18.84 18.78L21.86 11.73C21.95 11.5 22 11.26 22 11V10Z"/></svg>
+      {{ (data?.doctorRecommended | number : ".0-0") || 0 }}%
+    </span>
+    <span class="dc__fee" *ngIf="data?.consultationFees | consultationFee:data?.videoConsultationFees as fee">
+      {{ fee }}
+    </span>
+  </div>
+
+  <!-- CTA -->
+  <button class="dc__cta" (click)="bookAppointment()" [disabled]="!data?.isActive">
+    Book Appointment
+  </button>
+</div>

@@ -1,0 +1,313 @@
+<!-- ========== Modern Login Tabs ========== -->
+<div class="auth-tabs" *ngIf="login && !forgotMode">
+  <a class="auth-tabs__tab" [routerLink]="routes[userType].login" routerLinkActive="auth-tabs__tab--active"
+    *ngIf="!verifyNumber">Login</a>
+  <a class="auth-tabs__tab" [routerLink]="routes[userType].register" routerLinkActive="auth-tabs__tab--active"
+    *ngIf="!verifyNumber">Register</a>
+  <span class="auth-tabs__tab auth-tabs__tab--active" *ngIf="verifyNumber && !verifyEmail">Number Verification</span>
+  <span class="auth-tabs__tab auth-tabs__tab--active" *ngIf="verifyEmail">Email Verification</span>
+</div>
+
+<!-- ========== Modern Login Form ========== -->
+<section class="auth-form" *ngIf="login && !forgotMode">
+  <div class="auth-form__header">
+    <h2 class="auth-form__title">Welcome Back</h2>
+    <p class="auth-form__subtitle">Sign in to continue your health journey</p>
+  </div>
+
+  <form [formGroup]="verifyEmail ? emailVerifyForm : loginForm" (ngSubmit)="submit()" class="auth-form__body" autocomplete="off">
+
+    <!-- ── Mobile Number (default mode) ── -->
+    <div class="auth-form__field" *ngIf="!verifyEmail">
+      <label class="auth-form__label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        Mobile Number
+      </label>
+      <div class="auth-form__input-group">
+        <span class="auth-form__prefix">+91</span>
+        <input class="auth-form__input" maxlength="10" type="text" placeholder="Enter 10-digit mobile number"
+          formControlName="phone"
+          oninput="this.value = this.value.replace(/\D/g, '').replace(/^0/,'');" />
+      </div>
+      <div class="auth-form__error"
+        *ngIf="(control['phone'].touched || submitted) && control['phone'].errors?.['required']">
+        Please enter your mobile number
+      </div>
+      <div class="auth-form__error"
+        *ngIf="(control['phone'].touched || submitted) && control['phone'].errors?.['minlength']">
+        Please enter a valid 10-digit number
+      </div>
+    </div>
+
+    <!-- ── Email Address (verify mode) ── -->
+    <div class="auth-form__field" *ngIf="verifyEmail">
+      <label class="auth-form__label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email Address
+      </label>
+      <input class="auth-form__input" type="email" placeholder="name@example.com" formControlName="email" />
+      <div class="auth-form__error"
+        *ngIf="(control['email'].touched || submitted) && control['email'].errors?.['required']">
+        Please enter your email address
+      </div>
+      <div class="auth-form__error"
+        *ngIf="(control['email']?.errors?.['email'] || control['email']?.errors?.['pattern']) && (control['email'].touched || submitted)">
+        Please enter a valid email address
+      </div>
+    </div>
+
+    <!-- ── Password ── -->
+    <div class="auth-form__field" *ngIf="!verifyNumber && !verifyEmail && loginMode === 'password'">
+      <label class="auth-form__label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Password
+      </label>
+      <div class="auth-form__input-group auth-form__input-group--password">
+        <input class="auth-form__input" [type]="showPassword ? 'text' : 'password'" placeholder="Enter your password"
+          formControlName="password" />
+        <button type="button" class="auth-form__eye" (click)="showPassword = !showPassword" tabindex="-1">
+          <!-- eye open -->
+          <svg *ngIf="!showPassword" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <!-- eye closed -->
+          <svg *ngIf="showPassword" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
+      </div>
+      <div class="auth-form__error"
+        *ngIf="(loginForm.get('password')?.touched || submitted) && loginForm.get('password')?.errors?.['required']">
+        Please enter your password
+      </div>
+    </div>
+
+    <!-- ── Remember Me + Forgot Password ── -->
+    <div class="auth-form__options" *ngIf="!verifyNumber && !verifyEmail">
+      <label class="auth-form__checkbox">
+        <input type="checkbox" formControlName="checkbox" />
+        <span class="auth-form__checkbox-mark"></span>
+        <span>Remember me</span>
+      </label>
+      <a class="auth-form__forgot" *ngIf="loginMode === 'password'" (click)="showForgotPassword()">Forgot Password?</a>
+    </div>
+
+    <!-- ── Submit Button ── -->
+    <button type="submit" class="auth-form__submit">
+      <span *ngIf="loginMode === 'password'">Sign In</span>
+      <span *ngIf="loginMode === 'otp'">Send OTP</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+
+    <!-- ── Divider ── -->
+    <div class="auth-form__divider" *ngIf="!verifyNumber && !verifyEmail">
+      <span>or</span>
+    </div>
+
+    <!-- ── Toggle Login Mode ── -->
+    <button type="button" class="auth-form__alt-btn" *ngIf="!verifyNumber && !verifyEmail" (click)="toggleLoginMode()">
+      <svg *ngIf="loginMode === 'password'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <svg *ngIf="loginMode === 'otp'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      {{ loginMode === 'password' ? 'Login with OTP instead' : 'Login with Password instead' }}
+    </button>
+
+    <!-- ── SMS Note ── -->
+    <p class="auth-form__note" *ngIf="!verifyNumber && !verifyEmail">
+      <span class="auth-form__note-star">*</span>
+      You may receive SMS updates from Nectar
+    </p>
+  </form>
+</section>
+
+<!-- ========== Forgot Password Flow ========== -->
+<section class="auth-forgot" *ngIf="forgotMode">
+
+  <!-- Back to Login -->
+  <button type="button" class="auth-forgot__back" (click)="backToLogin()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to Login
+  </button>
+
+  <!-- Step Progress -->
+  <div class="auth-forgot__progress">
+    <div class="auth-forgot__step" [class.auth-forgot__step--active]="forgotStep >= 1" [class.auth-forgot__step--done]="forgotStep > 1">
+      <span class="auth-forgot__step-dot">
+        <svg *ngIf="forgotStep > 1" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <span *ngIf="forgotStep <= 1">1</span>
+      </span>
+      <span class="auth-forgot__step-label">Phone</span>
+    </div>
+    <div class="auth-forgot__step-line" [class.auth-forgot__step-line--active]="forgotStep >= 2"></div>
+    <div class="auth-forgot__step" [class.auth-forgot__step--active]="forgotStep >= 2" [class.auth-forgot__step--done]="forgotStep > 2">
+      <span class="auth-forgot__step-dot">
+        <svg *ngIf="forgotStep > 2" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <span *ngIf="forgotStep <= 2">2</span>
+      </span>
+      <span class="auth-forgot__step-label">Verify</span>
+    </div>
+    <div class="auth-forgot__step-line" [class.auth-forgot__step-line--active]="forgotStep >= 3"></div>
+    <div class="auth-forgot__step" [class.auth-forgot__step--active]="forgotStep >= 3">
+      <span class="auth-forgot__step-dot">3</span>
+      <span class="auth-forgot__step-label">Reset</span>
+    </div>
+  </div>
+
+  <!-- ── Step 1: Enter Phone ── -->
+  <div class="auth-forgot__panel" *ngIf="forgotStep === 1">
+    <div class="auth-form__header">
+      <div class="auth-forgot__icon-circle">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <h2 class="auth-form__title">Forgot Password?</h2>
+      <p class="auth-form__subtitle">No worries! Enter your registered mobile number and we'll send you a verification code.</p>
+    </div>
+
+    <form class="auth-form__body" [formGroup]="forgotPhoneForm" (ngSubmit)="sendForgotOtp()" autocomplete="off">
+      <div class="auth-form__field">
+        <label class="auth-form__label">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          Mobile Number
+        </label>
+        <div class="auth-form__input-group">
+          <span class="auth-form__prefix">+91</span>
+          <input class="auth-form__input" maxlength="10" type="text" placeholder="Enter 10-digit mobile number"
+            formControlName="phone"
+            oninput="this.value = this.value.replace(/\D/g, '').replace(/^0/,'');" />
+        </div>
+        <div class="auth-form__error"
+          *ngIf="(forgotPhoneForm.get('phone')?.touched || forgotSubmitted) && forgotPhoneForm.get('phone')?.errors?.['required']">
+          Please enter your mobile number
+        </div>
+        <div class="auth-form__error"
+          *ngIf="(forgotPhoneForm.get('phone')?.touched || forgotSubmitted) && forgotPhoneForm.get('phone')?.errors?.['minlength']">
+          Please enter a valid 10-digit number
+        </div>
+      </div>
+
+      <button type="submit" class="auth-form__submit">
+        Send Verification Code
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </form>
+  </div>
+
+  <!-- ── Step 2: Verify OTP ── -->
+  <div class="auth-forgot__panel" *ngIf="forgotStep === 2">
+    <div class="auth-form__header">
+      <div class="auth-forgot__icon-circle auth-forgot__icon-circle--verify">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <h2 class="auth-form__title">Verify OTP</h2>
+      <p class="auth-form__subtitle">We've sent a verification code to <strong>+91 {{ forgotPhone }}</strong></p>
+    </div>
+
+    <form class="auth-form__body" [formGroup]="forgotOtpForm" (ngSubmit)="verifyForgotOtp()" autocomplete="off">
+      <div class="auth-form__field">
+        <label class="auth-form__label">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Enter OTP
+        </label>
+        <input class="auth-form__input auth-form__input--otp" type="text" maxlength="6" placeholder="Enter verification code"
+          formControlName="otp"
+          oninput="this.value = this.value.replace(/\D/g, '');" />
+        <div class="auth-form__error"
+          *ngIf="(forgotOtpForm.get('otp')?.touched || forgotSubmitted) && forgotOtpForm.get('otp')?.errors?.['required']">
+          Please enter the OTP
+        </div>
+      </div>
+
+      <div class="auth-forgot__resend">
+        <span *ngIf="resendTimer > 0" class="auth-forgot__resend-text">Resend OTP in {{ resendTimer }}s</span>
+        <a *ngIf="resendTimer === 0" class="auth-forgot__resend-link" (click)="resendForgotOtp()">Resend OTP</a>
+      </div>
+
+      <button type="submit" class="auth-form__submit">
+        Verify Code
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </form>
+  </div>
+
+  <!-- ── Step 3: Reset Password ── -->
+  <div class="auth-forgot__panel" *ngIf="forgotStep === 3">
+    <div class="auth-form__header">
+      <div class="auth-forgot__icon-circle auth-forgot__icon-circle--reset">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+      </div>
+      <h2 class="auth-form__title">Set New Password</h2>
+      <p class="auth-form__subtitle">Create a strong password to secure your account</p>
+    </div>
+
+    <form class="auth-form__body" [formGroup]="forgotPasswordForm" (ngSubmit)="resetPassword()" autocomplete="off">
+      <!-- New Password -->
+      <div class="auth-form__field">
+        <label class="auth-form__label">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          New Password
+        </label>
+        <div class="auth-form__input-group auth-form__input-group--password">
+          <input class="auth-form__input" [type]="showNewPassword ? 'text' : 'password'" placeholder="Create a new password"
+            formControlName="newPassword" />
+          <button type="button" class="auth-form__eye" (click)="showNewPassword = !showNewPassword" tabindex="-1">
+            <svg *ngIf="!showNewPassword" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg *ngIf="showNewPassword" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+        <div class="auth-form__error"
+          *ngIf="(forgotPasswordForm.get('newPassword')?.touched || forgotSubmitted) && forgotPasswordForm.get('newPassword')?.errors?.['required']">
+          Please enter a new password
+        </div>
+        <div class="auth-form__error"
+          *ngIf="(forgotPasswordForm.get('newPassword')?.touched || forgotSubmitted) && forgotPasswordForm.get('newPassword')?.errors?.['minlength']">
+          Password must be at least 6 characters
+        </div>
+
+        <!-- Password Strength -->
+        <div class="auth-forgot__strength" *ngIf="forgotPasswordForm.value.newPassword">
+          <div class="auth-forgot__strength-bars">
+            <span class="auth-forgot__strength-bar" [class.auth-forgot__strength-bar--weak]="passwordStrength === 'weak'" [class.auth-forgot__strength-bar--good]="passwordStrength === 'good'" [class.auth-forgot__strength-bar--strong]="passwordStrength === 'strong'"></span>
+            <span class="auth-forgot__strength-bar" [class.auth-forgot__strength-bar--good]="passwordStrength === 'good'" [class.auth-forgot__strength-bar--strong]="passwordStrength === 'strong'"></span>
+            <span class="auth-forgot__strength-bar" [class.auth-forgot__strength-bar--strong]="passwordStrength === 'strong'"></span>
+          </div>
+          <span class="auth-forgot__strength-text"
+            [class.auth-forgot__strength-text--weak]="passwordStrength === 'weak'"
+            [class.auth-forgot__strength-text--good]="passwordStrength === 'good'"
+            [class.auth-forgot__strength-text--strong]="passwordStrength === 'strong'">
+            {{ passwordStrength === 'weak' ? 'Weak' : passwordStrength === 'good' ? 'Good' : 'Strong' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="auth-form__field">
+        <label class="auth-form__label">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Confirm Password
+        </label>
+        <div class="auth-form__input-group auth-form__input-group--password">
+          <input class="auth-form__input" [type]="showConfirmPassword ? 'text' : 'password'" placeholder="Confirm your new password"
+            formControlName="confirmPassword" />
+          <button type="button" class="auth-form__eye" (click)="showConfirmPassword = !showConfirmPassword" tabindex="-1">
+            <svg *ngIf="!showConfirmPassword" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg *ngIf="showConfirmPassword" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+        <div class="auth-form__error"
+          *ngIf="(forgotPasswordForm.get('confirmPassword')?.touched || forgotSubmitted) && forgotPasswordForm.get('confirmPassword')?.errors?.['required']">
+          Please confirm your password
+        </div>
+        <div class="auth-form__error"
+          *ngIf="forgotPasswordForm.get('confirmPassword')?.touched && forgotPasswordForm.value.confirmPassword && forgotPasswordForm.value.newPassword !== forgotPasswordForm.value.confirmPassword">
+          Passwords do not match
+        </div>
+      </div>
+
+      <button type="submit" class="auth-form__submit">
+        Reset Password
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </button>
+    </form>
+  </div>
+
+</section>
+
+<!-- ========== OTP Verification ========== -->
+<div *ngIf="!login">
+  <nectar-verify-otp [updateExistUser]="this.verifyNumber"></nectar-verify-otp>
+</div>

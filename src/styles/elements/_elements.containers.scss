@@ -1,0 +1,73 @@
+@use 'src/styles/settings/settings.containers' as *;
+@use 'src/styles/tools/tools.mediaquery' as *;
+
+/** Container Width mixin
+ > $inset: false: no inset | true: inset left + right |right: inset on the right | left: inset on the left
+ > $inset-width: (px, %, em, rem, etc) amount of inset (default is the content width)
+ > $mobile-inset: (px, %, em, rem, etc) inset amount in mobile window
+ > $vertical-padding: (px, %, em, rem, etc)  top + bottom padding
+ > $tablet-inset: (px, %, em, rem, etc) inset amount in tablet window
+ > $insetIsSmall: normal breakpoint is md(811px), this makes it use smaller breakpoint (576px)
+ */
+
+@mixin containerWidth(
+	$inset: false,
+	$inset-width: $content-max-width,
+	$mobile-inset: 0,
+	$vertical-padding: 0,
+	$tablet-inset: 20px,
+	$insetIsSmall: false
+) {
+	box-sizing: border-box;
+	width: 100%;
+	padding: $vertical-padding $mobile-inset;
+
+	@if ($inset != false) {
+		@if ($insetIsSmall) {
+			@include mq-breakpoint-sm() {
+				padding-left: $tablet-inset;
+				padding-right: $tablet-inset;
+			}
+		} @else {
+			@include mq-breakpoint-md() {
+				padding-left: $tablet-inset;
+				padding-right: $tablet-inset;
+			}
+		}
+
+		@include mq-content-width() {
+			@if ($inset == left) {
+				padding-left: calc((100% - #{$inset-width}) / 2 + 20px);
+				padding-right: 0;
+			} @else if($inset == right) {
+				padding-right: calc((100% - #{$inset-width}) / 2 + 20px);
+				padding-left: 0;
+			} @else {
+				padding-left: calc((100% - #{$inset-width}) / 2 + 20px);
+				padding-right: calc((100% - #{$inset-width}) / 2 + 20px);
+			}
+		}
+	}
+}
+
+@mixin componentMarginBottom() {
+
+	.margin {
+
+		&-none {
+			margin-bottom: 0;
+		}
+
+		&-small {
+			margin-bottom: 10px;
+		}
+
+		&-medium {
+			margin-bottom: 30px;
+		}
+
+		&-large {
+			margin-bottom: 50px;
+		}
+	}
+}

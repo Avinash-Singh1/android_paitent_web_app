@@ -1,0 +1,232 @@
+<div class="filter-sidebar">
+  <!-- Header -->
+  <div class="filter-header">
+    <div class="filter-title-section">
+      <h2 class="filter-title">
+        <mat-icon>filter_list</mat-icon>
+        Filters
+      </h2>
+      <span class="filter-count" *ngIf="getActiveFilterCount() > 0">
+        {{ getActiveFilterCount() }}
+      </span>
+    </div>
+    <button 
+      mat-icon-button 
+      class="close-button" 
+      (click)="close()"
+      aria-label="Close filters"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Filter Actions -->
+  <div class="filter-actions">
+    <button 
+      mat-button 
+      class="clear-all-button" 
+      (click)="clearAllFilters()"
+      [disabled]="getActiveFilterCount() === 0"
+    >
+      <mat-icon>clear_all</mat-icon>
+      Clear All
+    </button>
+  </div>
+
+  <!-- Filter Content -->
+  <div class="filter-content">
+    
+    <!-- Sort By -->
+    <mat-expansion-panel expanded class="filter-section">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>sort</mat-icon>
+          Sort By
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      
+      <mat-radio-group 
+        [(ngModel)]="selectedSort" 
+        (change)="changeSortOrder(selectedSort)"
+        class="sort-options"
+      >
+        <mat-radio-button 
+          *ngFor="let option of sortOptions" 
+          [value]="option.value"
+          class="filter-option"
+        >
+          {{ option.label }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </mat-expansion-panel>
+
+    <!-- Medicine Type Filter -->
+    <mat-expansion-panel expanded class="filter-section">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>category</mat-icon>
+          Medicine Type
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      
+      <div class="filter-options">
+        <mat-checkbox 
+          *ngFor="let type of medicineTypes"
+          [checked]="isTypeSelected(type.value)"
+          (change)="toggleMedicineType(type.value)"
+          class="filter-option"
+        >
+          <div class="filter-option-content">
+            <mat-icon class="type-icon">{{ type.icon }}</mat-icon>
+            <span class="filter-label">{{ type.label }}</span>
+            <span class="filter-count-badge" *ngIf="medicineTypeCounts.get(type.value)">
+              ({{ medicineTypeCounts.get(type.value) }})
+            </span>
+          </div>
+        </mat-checkbox>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Price Range Filter -->
+    <mat-expansion-panel class="filter-section">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>currency_rupee</mat-icon>
+          Price Range
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      
+      <div class="price-range-content">
+        <div class="price-inputs">
+          <mat-form-field appearance="outline" class="price-input">
+            <mat-label>Min</mat-label>
+            <input 
+              matInput 
+              type="number" 
+              [(ngModel)]="priceMin"
+              (ngModelChange)="onPriceRangeChange()"
+              min="0"
+              [max]="priceMax"
+            >
+            <span matPrefix>₹</span>
+          </mat-form-field>
+          
+          <span class="price-separator">-</span>
+          
+          <mat-form-field appearance="outline" class="price-input">
+            <mat-label>Max</mat-label>
+            <input 
+              matInput 
+              type="number" 
+              [(ngModel)]="priceMax"
+              (ngModelChange)="onPriceRangeChange()"
+              [min]="priceMin"
+              max="10000"
+            >
+            <span matPrefix>₹</span>
+          </mat-form-field>
+        </div>
+
+        <!-- Price Range Presets -->
+        <div class="price-presets">
+          <button 
+            *ngFor="let range of filterService.priceRanges"
+            mat-stroked-button
+            class="price-preset-btn"
+            (click)="priceMin = range.min; priceMax = range.max; onPriceRangeChange()"
+          >
+            {{ range.label }}
+          </button>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Brand Filter -->
+    <mat-expansion-panel class="filter-section">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>business</mat-icon>
+          Brand
+          <span class="selected-count" *ngIf="selectedBrands.length > 0">
+            ({{ selectedBrands.length }} selected)
+          </span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      
+      <div class="brand-filter-content">
+        <!-- Brand Search -->
+        <mat-form-field appearance="outline" class="brand-search">
+          <mat-label>Search brands</mat-label>
+          <input 
+            matInput 
+            [formControl]="searchBrandControl"
+            placeholder="Type to search..."
+          >
+          <mat-icon matPrefix>search</mat-icon>
+          <button 
+            mat-icon-button 
+            matSuffix 
+            *ngIf="searchBrandControl.value"
+            (click)="searchBrandControl.setValue('')"
+            aria-label="Clear search"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <!-- Brand List -->
+        <div class="brand-list">
+          <mat-checkbox 
+            *ngFor="let brand of filteredBrands.slice(0, 10)"
+            [checked]="isBrandSelected(brand)"
+            (change)="toggleBrand(brand)"
+            class="filter-option"
+          >
+            {{ brand }}
+          </mat-checkbox>
+          
+          <p *ngIf="filteredBrands.length === 0" class="no-results">
+            No brands found
+          </p>
+          
+          <p *ngIf="filteredBrands.length > 10" class="more-brands">
+            +{{ filteredBrands.length - 10 }} more (use search to filter)
+          </p>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Availability Filter -->
+    <mat-expansion-panel class="filter-section">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>inventory</mat-icon>
+          Availability
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      
+      <mat-radio-group 
+        [(ngModel)]="inStockOnly" 
+        (change)="setStockFilter(inStockOnly)"
+        class="stock-options"
+      >
+        <mat-radio-button [value]="null" class="filter-option">
+          All Products
+        </mat-radio-button>
+        <mat-radio-button [value]="true" class="filter-option">
+          <div class="stock-option-content">
+            <mat-icon class="stock-icon in-stock">check_circle</mat-icon>
+            In Stock Only
+          </div>
+        </mat-radio-button>
+        <mat-radio-button [value]="false" class="filter-option">
+          <div class="stock-option-content">
+            <mat-icon class="stock-icon out-of-stock">cancel</mat-icon>
+            Out of Stock
+          </div>
+        </mat-radio-button>
+      </mat-radio-group>
+    </mat-expansion-panel>
+
+  </div>
+</div>

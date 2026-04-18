@@ -1,0 +1,117 @@
+@use "src/styles/scss/variable.scss" as *;
+@use "src/styles/elements/_elements.svg.scss" as *;
+.week-table {
+  max-height: calc(100vh - 72px);
+  overflow: auto;
+  table {
+    border-top: 0;
+    table-layout: auto;
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid rgba($color: #000000, $alpha: 0.3);
+    border-left: 0 !important;
+    border-spacing: 0;
+  }
+
+  width: 100%;
+  height: 100%;
+  .week-data {
+    text-align: left;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    padding: 12px;
+    // background: #c3c3c3;
+    &.booked {
+      border-left: 10px solid $pending;
+      background: rgba($color: $pending, $alpha: 0.2);
+    }
+    &.cancelled {
+      border-left: 10px solid $red;
+      background: rgba($color: $red, $alpha: 0.2);
+    }
+    &.completed {
+      border-left: 10px solid $green;
+      background: rgba($color: $green, $alpha: 0.2);
+    }
+  }
+  td {
+    border: 1px solid rgba($color: #000000, $alpha: 0.3);
+    white-space: nowrap;
+    vertical-align: middle;
+    padding: 0;
+    min-width: 120px;
+    &.timing {
+    min-width: 100px;
+
+      .timepointer {
+        left: 4px;
+      }
+    }
+    .dotted-border {
+      border-top: 2px dotted $purple;
+    }
+    .week-data {
+      cursor: pointer;
+    }
+    
+  }
+  .timing {
+    padding: 8px 20px;
+    width: 100px !important;
+    max-width: 100px;
+    text-align: center;
+    font-size: 14px;
+  }
+  .timing.header {
+    color: rgba($color: #000000, $alpha: 0.7);
+  }
+  th {
+    font-size: 14px;
+    font-weight: 400;
+    padding: 8px 20px;
+    white-space: nowrap;
+    text-align: center;
+    vertical-align: middle;
+    background: white;
+    position: sticky;
+    z-index: 2;
+    top: 0px;
+    &.current-day {
+      background: $purple !important;
+      color: $white;
+    }
+  }
+  th::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid rgba($color: #000000, $alpha: 0.3);
+    border-top: 1px solid rgba($color: #000000, $alpha: 0.3);
+    display: block;
+    top: 0px;
+  }
+
+  th::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-bottom: 1px solid rgba($color: #000000, $alpha: 0.3);
+    display: block;
+    bottom: 0px;
+  }
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+.dropdown-item {
+  padding: 0 !important;
+}
+.dropdown-menu {
+  padding: 0 !important;
+}

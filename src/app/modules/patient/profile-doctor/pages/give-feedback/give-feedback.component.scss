@@ -1,0 +1,224 @@
+@use "tools.mediaquery" as *;
+
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+
+@use "variable.scss" as *;
+
+
+.main {
+  @include font-sans_pro-regular(14px);
+  background: $bright-gray;
+
+  @media screen and (max-width: 767px) {
+    @include font-sans_pro-regular(16px);
+  }
+
+  .wrapper {
+    max-width: 720px;
+    width: 720px;
+    min-height: calc(100vh - 150px);
+    height: 100%;
+    margin: 0 auto;
+    background: $white;
+
+    @media screen and (max-width: 767px) {
+      width: 100%;
+      max-width: 100%;
+      margin-top: 80px;
+      padding: 16px;
+    }
+
+    .content {
+      padding: 32px;
+
+      h2 {
+        @include font-sans_pro-semibold(28px);
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-semibold(24px);
+        }
+      }
+
+      p {
+        @include font-sans_pro-regular(14px);
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-regular(16px);
+        }
+      }
+
+      .field {
+        margin-top: 18px;
+
+        span {
+          @include font-sans_pro-regular(14px);
+          color: $purple;
+
+          @media screen and (max-width: 767px) {
+            @include font-sans_pro-regular(16px);
+          }
+        }
+
+        label {
+          @include font-sans_pro-semibold(14px);
+          opacity: 0.7;
+
+          span {
+            color: $red;
+          }
+
+          @media screen and (max-width: 767px) {
+            @include font-sans_pro-semibold(16px);
+          }
+        }
+
+        .ans {
+          margin-left: 30px;
+          margin-top: 18px;
+
+          label {
+            @include font-sans_pro-regular(14px);
+            opacity: 0.7;
+
+            @media screen and (max-width: 767px) {
+              @include font-sans_pro-regular(16px);
+            }
+          }
+
+          button {
+            height: 48px;
+            width: 149px;
+            border: 1px solid $border-color;
+            border-radius: 5px;
+            background: $white;
+            @include font-sans_pro-semibold(14px);
+
+            @media screen and (max-width: 767px) {
+              @include font-sans_pro-semibold(16px);
+            }
+          }
+        }
+      }
+
+      .info {
+        margin-top: 18px;
+        background: #f3f3f3;
+        padding: 14px 32px;
+
+        .contents {
+          @include font-sans_pro-regular(14px);
+
+          @media screen and (max-width: 767px) {
+            @include font-sans_pro-regular(16px);
+          }
+
+          span {
+            @include font-sans_pro-semibold(14px);
+
+            @media screen and (max-width: 767px) {
+              @include font-sans_pro-semibold(16px);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+  border: 1px solid $border-color;
+  border-radius: 2px;
+
+  @media screen and (max-width: 767px) {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+input[type="radio"] {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  height: 20px;
+  width: 20px;
+  accent-color: $black !important;
+}
+
+.submit {
+  margin-top: 24px;
+  padding: 13px 60px;
+  background: $purple;
+  color: $white;
+}
+
+.selected {
+  color: $white;
+  background: $purple !important;
+}
+
+:host::ng-deep {
+  .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+    background: #f1e6ff;
+    border: 1px solid rgba(69, 25, 124, 0.5);
+    color: $purple;
+  }
+
+  //   .ng-option.ng-option-selected {
+  //     color: $white;
+  //     background: rgba(69, 25, 124, 0.5) !important;
+  //   }
+}
+
+textarea {
+  resize: none;
+  border: 1px solid $border-color;
+  padding: 15px 30px;
+  max-height: 180px;
+}
+
+.ml-30 {
+  margin-left: 30px;
+}
+
+.custom-checkbox:checked::before {
+  font-size: 18px !important;
+}
+
+.submitFeedback {
+  h2 {
+    @include font-sans_pro-semibold(28px);
+    margin: 0;
+
+    @media screen and (max-width: 767px) {
+      @include font-sans_pro-semibold(24px);
+    }
+  }
+
+  p {
+    @include font-sans_pro-regular(14px);
+
+    @media screen and (max-width: 767px) {
+      @include font-sans_pro-regular(16px);
+    }
+  }
+
+  span {
+    color: $purple;
+    @include font-sans_pro-semibold(14px);
+    cursor: pointer;
+
+    @media screen and (max-width: 767px) {
+      @include font-sans_pro-semibold(16px);
+    }
+  }
+
+  button {
+    padding: 12px 28px;
+    background: $white;
+    border: 1px solid $border-color;
+    border-radius: 5px;
+  }
+}

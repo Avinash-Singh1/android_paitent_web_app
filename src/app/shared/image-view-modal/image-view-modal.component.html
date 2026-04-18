@@ -1,0 +1,35 @@
+<div class="lightbox" [class.error]="isPdf">
+  <div class="lightbox__header">
+    <span class="lightbox__counter" *ngIf="isGallery">{{ currentIndex + 1 }} / {{ images.length }}</span>
+    <img
+      class="cursor-pointer lightbox__close"
+      src="assets/images/svg/corss_black.svg"
+      alt="Close"
+      (click)="onNoClick()"
+      width="20"
+      height="20"
+    />
+  </div>
+  <div class="lightbox__body">
+    <button
+      class="lightbox__nav lightbox__nav--prev"
+      *ngIf="isGallery && currentIndex > 0"
+      (click)="prev()"
+      aria-label="Previous image"
+    >&#8249;</button>
+
+    <div class="lightbox__image" *ngIf="!isPdf">
+      <img [src]="currentUrl" alt="Image {{ currentIndex + 1 }}" />
+    </div>
+    <div class="lightbox__image lightbox__image--pdf" *ngIf="isPdf">
+      <iframe [src]="currentUrl | sanitize | async" alt="" title="document"></iframe>
+    </div>
+
+    <button
+      class="lightbox__nav lightbox__nav--next"
+      *ngIf="isGallery && currentIndex < images.length - 1"
+      (click)="next()"
+      aria-label="Next image"
+    >&#8250;</button>
+  </div>
+</div>

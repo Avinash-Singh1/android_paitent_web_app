@@ -1,0 +1,115 @@
+<div class="containers">
+  <div class="percetDone"></div>
+  <div class="content">
+    <p>Profile</p>
+    <div class="heading">
+      Hello {{ doctorname | titlecase }}! Let's build your dedicated Profile.
+    </div>
+    <span class="mt-2 data">Section A - Profile Details</span>
+    <form [formGroup]="basicDetailsForm">
+      <div class="fields">
+        <label for="">Full Name<span>*</span> </label>
+        <nectar-form-field>
+          <input
+            class="w-100"
+            nectarError
+            controlName="Full Name"
+            type="text"
+            placeholder="Full Name"
+            formControlName="fullName"
+            oninput="this.value = this.value.replace(/^\s/,'').replace(/(?<=\s|^)[a-z]/g, (match) => match.toUpperCase());"
+          />
+        </nectar-form-field>
+      </div>
+      <div class="fields">
+        <label for="">Specialization<span>*</span> </label>
+        <nectar-form-field>
+          <ng-select
+            nectarError
+            controlName="Specialisation"
+            placeholder="Select specialization"
+            formControlName="specialization"
+          >
+            <ng-option *ngFor="let i of specializationList" [value]="i._id">{{
+              i?.name | titlecase
+            }}</ng-option>
+          </ng-select>
+        </nectar-form-field>
+      </div>
+      <div class="fields">
+        <label for="">Email<span>*</span> </label>
+        <nectar-form-field>
+          <input
+            class="w-100"
+            nectarError
+            controlName="Email"
+            type="text"
+            placeholder="Email"
+            formControlName="email"
+            (input)="searchUniqueEmail($event)"
+            oninput="this.value = this.value.replace(/\s/,'');"
+          />
+        </nectar-form-field>
+
+        <div *ngIf="basicDetailsForm.get('email')?.errors">
+          <span
+            class="text-danger"
+            *ngIf="(control['email']?.errors?.['email'] || control['email']?.errors?.['pattern']) 
+              && (control['email'].touched) && (!control['email'].errors?.['required']) "
+            >Please enter a valid email address
+          </span>
+        </div>
+
+        <div
+          class="error-hint"
+          *ngIf="(
+          control['email'].errors?.['alreadyExist']
+        )"
+        >
+          Email address already taken
+        </div>
+      </div>
+      <div class="fields">
+        <label for="">Gender <span>*</span> </label>
+        <div class="values">
+          <div class="radios" *ngFor="let gender of genderList">
+            <input
+              type="radio"
+              id="Male"
+              [value]="gender.value"
+              formControlName="gender"
+            />
+            <label for="Male">{{ gender.label }}</label>
+          </div>
+        </div>
+        <div
+          class="error-hint"
+          *ngIf="control['gender'].touched && control['gender'].errors?.['required'] "
+        >
+          Gender is required
+        </div>
+      </div>
+      <div class="fields">
+        <label for="">City <span>*</span> </label>
+        <nectar-form-field>
+          <input
+            class="w-100"
+            nectarError
+            controlName="City"
+            type="text"
+            placeholder="Enter city"
+            formControlName="city"
+            oninput="this.value = this.value.replace(/^\s/,'').replace(/(?<=\s|^)[a-z]/g, (match) => match.toUpperCase());"
+          />
+        </nectar-form-field>
+      </div>
+      <div class="continue">
+        <button type="button" (click)="onSubmit()">Continue</button>
+      </div>
+      <div class="footerData">
+        If you are not a doctor and owns a establishment
+        <span (click)="notDoctor()">&nbsp;&nbsp;click here</span>
+      </div>
+    </form>
+  </div>
+</div>

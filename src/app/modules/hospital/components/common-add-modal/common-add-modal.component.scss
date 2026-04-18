@@ -1,0 +1,108 @@
+@use "variable.scss" as *;
+@use "src/styles/components/_components.form.scss" as *;
+
+.add-specilality {
+  .form-item {
+    input {
+      border: none;
+      outline: none;
+    }
+  }
+
+  .suggestion-item {
+    padding: 8px 12px;
+    border: 1px solid $border-color;
+    border-radius: 24px;
+
+    &.selected {
+      background: $purple;
+      color: $white;
+    }
+  }
+
+  .heading {
+    margin: 24px 0;
+  }
+
+  button {
+    width: 150px;
+    padding: 12px 24px;
+    border-radius: 5px;
+    font-size: 18px;
+
+    &.cancel {
+      background: $white;
+      border: 1px solid $border-color;
+    }
+
+    &.save {
+      background: $purple;
+      color: $white;
+      border: none;
+    }
+  }
+}
+
+::ng-deep {
+  .mdc-dialog__actions.add-speciality {
+    padding: 0 !important;
+  }
+
+  .mdc-dialog__content.add-speciality {
+    color: $black !important;
+    font-size: 18px !important;
+    font-family: "Source Sans Pro", sans-serif !important;
+    min-height: 400px !important;
+  }
+
+  .speciality-large-rounded {
+    .ng-select {
+      &::before {
+        content: url("/assets/images/svg/search.svg");
+        position: absolute;
+        top: 22px;
+        left: 24px;
+        z-index: 10000;
+      }
+
+      .ng-select-container {
+        min-height: 64px;
+        border-radius: 32px;
+        padding: 0 19px !important;
+      }
+    }
+
+    .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input {
+      top: 18px !important;
+    }
+
+    .ng-select .ng-select-container .ng-value-container .ng-input>input {
+      margin-left: 44px !important;
+    }
+
+    .ng-select.ng-select-opened.ng-select-bottom>.ng-select-container {
+      border-radius: unset !important;
+    }
+
+    .ng-select.ng-select-focused.ng-select-opened {
+      >.ng-select-container {
+        border: 2px solid $purple !important;
+        box-shadow: none !important;
+      }
+    }
+
+    .ng-dropdown-panel.ng-select-bottom {
+      margin-top: 0px !important;
+      border-bottom-right-radius: unset !important;
+      border-bottom-left-radius: unset !important;
+    }
+
+    .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+      padding: 20px !important;
+    }
+
+    .ng-select .ng-select-container .ng-value-container {
+      padding-left: 34px !important;
+    }
+  }
+}

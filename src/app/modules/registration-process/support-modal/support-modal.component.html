@@ -1,0 +1,27 @@
+<div class="p-32">
+  <header class="text-24 font-600">Need Help?</header>
+  <hr />
+  <section class="d-flex flex-column gap-6 text-18">
+    <div class="d-flex flex-column gap-2">
+      <span>Send an email to</span>
+      <div class="d-flex gap-2 align-items-center">
+        <span> info&#64;nectarplus.health </span>
+        <svg-icon
+          class="cursor-pointer"
+          src="assets/images/svg/copy.svg"
+          (click)="copyText('info@nectarplus.health')"
+        ></svg-icon>
+      </div>
+    </div>
+    <div class="d-flex flex-column gap-2">
+      <span>Call us between 9AM TO 7PM on all days at</span>
+      <span> +91 8810232143 </span>
+    </div>
+    <button
+      class="violet-button text-18 font-600"
+      (click)="matdialogRef.close()"
+    >
+      Okay, Got it
+    </button>
+  </section>
+</div>

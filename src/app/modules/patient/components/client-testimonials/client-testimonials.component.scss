@@ -1,0 +1,280 @@
+@use "variable.scss" as *;
+@use "tools.typography" as *;
+
+// ─── Section ────────────────────────────────────────────────
+.testimonials {
+  padding: 56px 20px;
+  background: linear-gradient(170deg, #faf7ff 0%, #fff 50%, #f0fdfa 100%);
+  position: relative;
+  overflow: hidden;
+
+  @media (min-width: 768px) {
+    padding: 72px 40px;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 88px 60px;
+  }
+}
+
+// ─── Header ─────────────────────────────────────────────────
+.testimonials__header {
+  text-align: center;
+  max-width: 560px;
+  margin: 0 auto 36px;
+
+  @media (min-width: 768px) {
+    margin-bottom: 48px;
+  }
+}
+
+.testimonials__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 100px;
+  background: rgba(69, 25, 124, 0.06);
+  color: $purple;
+  @include font-sans_pro-semibold($size: 11px);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 14px;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.testimonials__title {
+  @include font-sans_pro-bold($size: 26px);
+  color: $black;
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+
+  @media (min-width: 768px) {
+    font-size: 34px;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 38px;
+  }
+}
+
+.testimonials__subtitle {
+  @include font-sans_pro-regular($size: 14px);
+  color: rgba(0, 0, 0, 0.5);
+  line-height: 1.6;
+  margin: 0;
+
+  @media (min-width: 768px) {
+    font-size: 15px;
+  }
+}
+
+// ─── Card ───────────────────────────────────────────────────
+.testimonials__card {
+  background: $white;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 220px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+
+  @media (min-width: 768px) {
+    padding: 28px;
+    border-radius: 20px;
+    min-height: 240px;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(69, 25, 124, 0.08);
+  }
+}
+
+.testimonials__quote-icon {
+  color: rgba(69, 25, 124, 0.12);
+  margin-bottom: 12px;
+  line-height: 1;
+}
+
+.testimonials__feedback {
+  @include font-sans_pro-regular($size: 14px);
+  color: rgba(0, 0, 0, 0.7);
+  line-height: 1.65;
+  margin: 0 0 auto;
+  padding-bottom: 20px;
+  flex: 1;
+
+  @media (min-width: 768px) {
+    font-size: 14.5px;
+  }
+}
+
+// ─── Author row ─────────────────────────────────────────────
+.testimonials__author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.testimonials__avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(69, 25, 124, 0.08);
+  flex-shrink: 0;
+
+  @media (min-width: 768px) {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+.testimonials__author-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.testimonials__name {
+  @include font-sans_pro-semibold($size: 14px);
+  color: $black;
+  margin: 0 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.testimonials__location {
+  @include font-sans_pro-regular($size: 12px);
+  color: rgba(0, 0, 0, 0.45);
+  margin: 0;
+}
+
+.testimonials__verified {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+// ─── Desktop swiper ────────────────────────────────────────
+.testimonials__desktop {
+  display: none;
+
+  @media (min-width: 768px) {
+    display: block;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+::ng-deep {
+  .testimonials__desktop {
+    .swiper-container {
+      padding: 8px 4px 16px;
+    }
+
+    .swiper-wrapper {
+      align-items: stretch;
+    }
+
+    swiper-slide {
+      height: auto;
+
+      .testimonials__card {
+        margin: 4px;
+      }
+    }
+
+    .swiper-button-prev,
+    .swiper-button-next {
+      top: 50% !important;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: $white;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.25s ease, transform 0.2s ease;
+
+      &:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.14);
+        transform: scale(1.08);
+      }
+
+      svg {
+        color: $black;
+      }
+    }
+
+    .swiper-button-prev {
+      left: -4px !important;
+
+      @media (min-width: 1280px) {
+        left: -16px !important;
+      }
+    }
+
+    .swiper-button-next {
+      right: -4px !important;
+
+      @media (min-width: 1280px) {
+        right: -16px !important;
+      }
+    }
+  }
+}
+
+// ─── Mobile carousel ───────────────────────────────────────
+.testimonials__mobile {
+  display: block;
+  max-width: 480px;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+
+  .carousel-inner {
+    border-radius: 16px;
+    overflow: visible;
+  }
+
+  .carousel-item {
+    transition: transform 0.5s ease, opacity 0.4s ease;
+  }
+}
+
+.testimonials__dots {
+  display: none;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 24px;
+
+  @media (min-width: 768px) {
+    display: flex;
+  }
+}
+
+.testimonials__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 100px;
+  border: none;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.12);
+  transition: background 0.3s ease, width 0.3s ease;
+  cursor: pointer;
+
+  &.active {
+    width: 24px;
+    background: $purple;
+  }
+}

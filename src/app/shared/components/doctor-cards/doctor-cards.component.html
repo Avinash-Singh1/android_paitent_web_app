@@ -1,0 +1,92 @@
+<div class="cards d-flex flex-column">
+  <!-- <div class="cards__image">
+    <div class="profile-icon" (click)="viewDoctor()" *ngIf="!data?.doctorProfilePicture">
+      {{ data?.doctorName | nameInitial | uppercase }}
+    </div>
+    <img loading="lazy" [src]="data?.doctorProfilePicture" (click)="viewDoctor()" *ngIf="data?.doctorProfilePicture"
+      [alt]="data?.doctorName" />
+  </div> -->
+  <!-- <a
+  class="cards__image"
+  [routerLink]="['/delhi', commonService.replaceSpaceWithHyphen(data?.doctorName)]"
+  [title]="'View profile of ' + data?.doctorName"
+> -->
+
+<a
+  class="cards__image text-decoration-none text-black"
+  [routerLink]="['/', commonService.replaceSpaceWithHyphen(data?.address?.city), 'doctor', data?.doctorProfileSlug]"
+  [title]="(data?.doctorName || 'Doctor')"
+>
+
+  <div class="profile-icon" *ngIf="!data?.doctorProfilePicture">
+    {{ data?.doctorName | nameInitial | uppercase }}
+  </div>
+  <img [src]="data?.doctorProfilePicture"
+    *ngIf="data?.doctorProfilePicture"
+    [alt]="data?.doctorName"
+    width="80"
+    height="80"
+  />
+</a>
+
+  <div class="cards__details">
+    <!-- <h2 class="cursor-pointer line-clamp-1" (click)="viewDoctor()">
+      {{ data?.doctorName || "N/A" }}
+    </h2> -->
+    <a
+    class="cursor-pointer line-clamp-1"
+    [routerLink]="['/', commonService.replaceSpaceWithHyphen(data?.address?.city), 'doctor', data?.doctorProfileSlug]"
+    [title]="(data?.doctorName || 'Doctor')"
+  >
+    {{ data?.doctorName || "N/A" }}
+  </a>
+  
+    <h3 class="line-clamp-1">
+      {{ specailization || "N/A" }}
+    </h3>
+    <p *ngIf="data?.address?.locality && data?.address?.city">
+      {{ formatName(data?.address?.locality + "," + data?.address?.city, 60) }}
+    </p>
+    <p *ngIf="!data?.address?.locality && data?.address?.city">
+      {{ data?.address?.city || "N/A" }}
+    </p>
+    <p *ngIf="data?.address?.locality && !data?.address?.city">
+      {{ data?.address?.locality || "N/A" }}
+    </p>
+    <p *ngIf="!data?.address?.locality && !data?.address?.city">
+      {{ data?.address?.locality || "N/A" }}
+    </p>
+    <div class="ratings">
+      <img loading="lazy" src="assets/images/svg/stars.svg" alt="star rating" width="14" height="14" style="position: relative; top: 3px" />
+      &nbsp;&nbsp;
+      <span class="star">
+        {{ (data?.rating | number : "1.1-1") || "0.0" }}
+      </span>
+      <span class="total"> &nbsp;/5 </span>
+      <span class="review" *ngIf="data?.totalReview <= 1">({{ data?.totalReview || 0 }} review)</span>
+      <span class="review" *ngIf="data?.totalReview > 1">({{ data?.totalReview }} reviews)</span>
+    </div>
+
+    <div class="consltaion-fees d-flex">
+      <div class="price-box" *ngIf="data?.consultationFees | validFee">
+        <img loading="lazy" src="assets/images/inclinickblue.png" alt="consultation" class="me-1 w-auto" width="16" height="16">
+        ₹ {{ data?.consultationFees }}(In-clinic)
+      </div>
+      <div class="price-box " *ngIf="data?.videoConsultationFees | validFee">
+        <img loading="lazy" src="assets/images/videogrey.png" alt="video consultation" class="me-1 w-auto" width="16" height="16">
+        ₹{{ data?.videoConsultationFees }}(video)
+      </div>
+    </div>
+  </div>
+  <div class="cards__button">
+    <button class="" (click)="bookAppointment()">Book Appointment</button>
+  </div>
+  <div class="cards__wait-time" *ngIf="type == 1 && data?.timeTaken">
+    <img loading="lazy" src="assets/images/svg/clock.svg" alt="Wait time" width="16" height="16" />
+    <!-- <p>{{ data?.timeTaken || 0 }}</p> -->
+  </div>
+  <div class="cards__top-doctors" *ngIf="type == 0">
+    <img loading="lazy" src="assets/images/homepage/thumbs-up.svg" alt="Recommended" width="16" height="16" />
+    <p>{{ (data?.recommended | number : ".0-2") || 0 }}%</p>
+  </div>
+</div>

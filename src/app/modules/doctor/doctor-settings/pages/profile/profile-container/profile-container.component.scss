@@ -1,0 +1,49 @@
+@use "variable.scss" as *;
+
+.main {
+  min-height: calc(100vh - 144px);
+
+  .profile-sidebar {
+    max-height: calc(100vh - 144px);
+    height: calc(100vh - 144px);
+    overflow: auto;
+    width: 28%;
+    border-right: 18px solid #eeeeee;
+
+    .heading {
+      padding: 42px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      background: $white;
+    }
+
+    &::-webkit-scrollbar {
+      display: none !important;
+    }
+  }
+
+  .router-outlet {
+    width: 72%;
+  }
+}
+
+@media screen and (max-width: "1024px") {
+  .profile-sidebar {
+    width: 30% !important;
+  }
+
+  .router-outlet {
+    width: 70% !important;
+  }
+}
+
+.active-link {
+  background-color: $purple;
+  color: $white;
+
+  &.text-red {
+    background-color: $red !important;
+  }
+}

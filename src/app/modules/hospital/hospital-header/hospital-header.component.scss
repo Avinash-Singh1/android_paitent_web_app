@@ -1,0 +1,133 @@
+@use "variable.scss" as *;
+
+
+@use "tools.typography" as *;
+
+.search-input {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  gap: 8px;
+  width: 30%;
+  max-width: 400px;
+  min-width: 300px;
+  border-radius: 4px;
+  padding: 0 20px;
+  border: 1px solid $border-color;
+
+  input {
+    font-size: 14px;
+    width: 100%;
+    border: none;
+    outline: none;
+  }
+}
+
+.doctor-heading {
+  height: 72px !important;
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: $white;
+  z-index: 10;
+
+  .profile-wrapper {
+    width: 36px;
+    height: 36px;
+    border-radius: 14px;
+    border: 1px solid $border-color;
+
+    img {
+      width: 36px;
+      height: 36px;
+      border-radius: 14px;
+      object-fit: cover;
+    }
+  }
+}
+
+:host::ng-deep {
+  .dropdown-menu {
+    padding: 0 !important;
+    z-index: 11;
+
+    .dropdown-item {
+      padding: 12px 24px !important;
+      font-size: 14px;
+      border-bottom: 1px solid $border-color;
+
+      &:first-child {
+        border-radius: 4px 4px 0 0;
+      }
+
+      &:last-child {
+        border-radius: 0 0 4px 4px;
+      }
+    }
+
+    --bs-dropdown-link-active-bg: #eee !important;
+    --bs-dropdown-link-active-color: #000 !important;
+  }
+
+  .notification.dropdown-menu {
+    width: 360px !important;
+    min-height: 200px !important;
+    max-height: 552px !important;
+    overflow: auto;
+  }
+}
+
+.search {
+  text-overflow: ellipsis;
+}
+
+.notification-header {
+  background: $purple;
+  color: $white;
+  position: sticky;
+  top: 0;
+  left: 0;
+}
+
+.request-number {
+  position: absolute;
+  top: 3px;
+  left: 12px;
+  z-index: 2;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  background: #f00;
+  color: $white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @include font-sans_pro-semibold($size: 12px);
+}
+
+.box {
+  border-top: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
+}
+
+.decline-button {
+  padding: 8px 34px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  background: $white;
+  color: $red;
+  @include font-sans_pro-semibold($size: 16px);
+}
+
+.accept-button {
+  padding: 8px 34px;
+  border-radius: 5px;
+  background: $purple;
+  color: $white;
+  @include font-sans_pro-semibold($size: 16px);
+}
+
+::-webkit-scrollbar {
+  display: none;
+}

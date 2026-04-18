@@ -1,0 +1,30 @@
+
+    <!-- <div style="margin-top: 4px;"
+      data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <div class="list">
+          <p *ngFor="let i of doc_procedure" class="text-16 font-400 d-flex gap-2">
+            <img loading="lazy" src="assets/images/serviceCheck.svg" alt="" />
+            {{ i?.name || "N/A" }}
+          </p>
+        </div>
+      </div>
+    </div> -->
+
+    <div style="margin-top: 4px;" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <h2 >Procedures</h2>
+        <div class="list">
+          <p style="cursor: pointer;" *ngFor="let i of doc_procedure.slice(0, showAll ? doc_procedure.length : 3)" 
+             class="text-16 font-400 d-flex gap-2" (click)="navigateToSearch(i.name)">
+            <img loading="lazy" src="assets/images/serviceCheck.svg" alt="" />
+            {{ i?.name || "N/A" }}
+          </p>
+        </div>
+        <!-- Read More / Read Less Button -->
+        <button style="text-decoration: none; color: black;" *ngIf="doc_procedure.length > 3" class="btn btn-link p-0 mt-2" (click)="showAll = !showAll">
+          {{ showAll ? 'Read Less' : 'Read More' }}
+        </button>
+      </div>
+    </div>
+    

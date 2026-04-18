@@ -1,0 +1,156 @@
+<main class="hospital-address-wrapper">
+  <div class="text-24 font-600 px-24 py-3 border-bottom-style">
+    {{ "EDIT_ADDRESS" | translate }}
+  </div>
+  <form [formGroup]="addressForm" (ngSubmit)="onSubmit()">
+    <mat-dialog-content class="address-wrapper">
+      <div class="row">
+        <section class="col-12 col-lg-7">
+          <div
+            class="d-flex flex-column gap-6 address pr-2"
+            formGroupName="address"
+          >
+            <div class="w-100 form-item">
+              <label
+                >{{ "STREET_ADDRESS" | translate }}
+                <span class="required-hint">*</span></label
+              >
+              <nectar-form-field>
+                <input
+                  nectarError
+                  controlName="Street address"
+                  type="text"
+                  formControlName="landmark"
+                  class="form-input w-100"
+                  [matAutocomplete]="landmark"
+                  (input)="onSearch($event, 'placePredictions')"
+                />
+                <mat-autocomplete #landmark="matAutocomplete">
+                  <mat-option
+                    *ngFor="let place of placePredictions"
+                    (click)="onSelectPlace(place, 1)"
+                  >
+                    {{ place.description }}
+                  </mat-option>
+                </mat-autocomplete>
+              </nectar-form-field>
+            </div>
+            <div class="w-100 form-item">
+              <label>{{ "LOCALITY" | translate }} </label>
+              <nectar-form-field>
+                <input
+                  nectarError
+                  [controlName]="'Locality'"
+                  type="text"
+                  formControlName="locality"
+                  class="form-input w-100"
+                />
+              </nectar-form-field>
+            </div>
+            <div class="w-100 form-item">
+              <label
+                >{{ "CITY" | translate }}
+                <span class="required-hint">*</span></label
+              >
+              <nectar-form-field>
+                <input
+                  nectarError
+                  controlName="City"
+                  type="text"
+                  formControlName="city"
+                  class="form-input w-100"
+                  [matAutocomplete]="city"
+                  (input)="onSearch($event, 'cityPredications')"
+                />
+                <mat-autocomplete #city="matAutocomplete">
+                  <mat-option
+                    *ngFor="let place of cityPredications"
+                    (click)="onSelectPlace(place, 2)"
+                  >
+                    {{ place.description }}
+                  </mat-option>
+                </mat-autocomplete>
+              </nectar-form-field>
+            </div>
+            <div class="w-100 form-item">
+              <label
+                >{{ "STATE" | translate }}
+                <span class="required-hint">*</span></label
+              >
+              <nectar-form-field>
+                <ng-select
+                  formControlName="state"
+                  nectarError
+                  controlName="State"
+                  (change)="onSelectState()"
+                >
+                  <ng-option
+                    [value]="state._id"
+                    *ngFor="let state of stateList"
+                  >
+                    {{ state.name }}
+                  </ng-option>
+                </ng-select>
+              </nectar-form-field>
+            </div>
+            <div class="w-100 form-item">
+              <label
+                >{{ "PINCODE" | translate }}
+                <span class="required-hint">*</span></label
+              >
+              <nectar-form-field>
+                <input
+                  nectarError
+                  controlName="Pincode"
+                  type="text"
+                  formControlName="pincode"
+                  class="form-input w-100"
+                  maxlength="6"
+                  oninput="this.value = this.value.replace(/\D/,'')"
+                />
+              </nectar-form-field>
+            </div>
+            <div class="w-100 form-item">
+              <label
+                >{{ "COUNTRY" | translate }}
+                <span class="required-hint">*</span></label
+              >
+              <ng-select formControlName="country">
+                <ng-option
+                  [value]="country._id"
+                  *ngFor="let country of countryList"
+                >
+                  {{ country.name }}
+                </ng-option>
+              </ng-select>
+            </div>
+          </div>
+        </section>
+        <section class="col-12 col-lg-5">
+          <div class="pl-2 map">
+            <p class="text-24 font-600">{{ "MAP_VIEW" | translate }}</p>
+            <nectar-google-maps
+              id="google"
+              class="google-map"
+              [lat]="data.location?.coordinates?.[1]"
+              [lng]="data.location?.coordinates?.[0]"
+              [zoom]="zoom"
+              (mapClicked)="onPinLocation($event)"
+              (markerDrag)="onMarkerDrag($event)"
+            ></nectar-google-maps>
+          </div>
+        </section>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions class="address-wrapper">
+      <div
+        class="button-group w-100 d-flex gap-6 px-24 py-3 border-style justify-content-end"
+      >
+        <button class="cancel" type="button" (click)="matdialogRef.close()">
+          {{ "CANCEL" | translate }}
+        </button>
+        <button class="save" type="submit">{{ "SAVE" | translate }}</button>
+      </div>
+    </mat-dialog-actions>
+  </form>
+</main>

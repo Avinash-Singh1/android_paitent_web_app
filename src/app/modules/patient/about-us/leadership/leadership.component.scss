@@ -1,0 +1,110 @@
+@use "tools.mediaquery" as *;
+
+@use "settings.colors" as *;
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+
+.first-section {
+  margin-top: 50px;
+  background: $purple;
+  padding: 70px 0;
+  color: $white;
+
+  .wrap {
+    max-width: $content-max-width;
+    margin: auto;
+
+    @media screen and (max-width: 767px) {
+      max-width: $content-sm-max-width;
+    }
+
+    h1 {
+      margin: 0;
+      @include font-sans_pro-semibold($size: 24px);
+
+      @media screen and (max-width: 767px) {
+        @include font-sans_pro-semibold($size: 20px);
+      }
+    }
+
+    p {
+      @include font-sans_pro-regular($size: 14px);
+
+      @media screen and (max-width: 767px) {
+        @include font-sans_pro-regular($size: 16px);
+      }
+    }
+  }
+}
+
+.second-section {
+  padding: 100px 0;
+
+  .heading {
+    @include font-sans_pro-semibold($size: 24px);
+
+    @media screen and (max-width: 767px) {
+      @include font-sans_pro-semibold($size: 20px);
+    }
+  }
+
+  .data {
+    max-width: $content-max-width;
+    margin: auto;
+    padding-top: 40px;
+
+    img {
+      height: 56px;
+      width: 56px;
+    }
+
+    p {
+      @include font-sans_pro-regular($size: 14px);
+
+      @media screen and (max-width: 767px) {
+        @include font-sans_pro-regular($size: 16px);
+      }
+    }
+  }
+
+  .leaders {
+    margin-top: 100px;
+
+    .picture {
+      img {
+        height: 300px;
+        width: 300px;
+
+        @media screen and (max-width: 576px) {
+          width: 100%;
+        }
+      }
+    }
+
+    .lower-data {
+      margin-top: 15px;
+      background: $purple;
+      color: $white;
+      text-align: center;
+
+      .name {
+        @include font-sans_pro-semibold($size: 24px);
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-semibold($size: 20px);
+        }
+      }
+
+      .post {
+        @include font-sans_pro-regular($size: 14px);
+        padding-bottom: 10px;
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-regular($size: 16px);
+        }
+      }
+    }
+  }
+}

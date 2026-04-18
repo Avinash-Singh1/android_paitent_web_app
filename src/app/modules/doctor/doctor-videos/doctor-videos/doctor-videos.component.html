@@ -1,0 +1,375 @@
+<!-- <div class="inner-wrapper">
+    <nectar-subheader>
+        <span subheader-part1 class="text-24 font-600">Doctor videos </span>
+    </nectar-subheader>
+</div>
+<p>doctor-videos works!</p> -->
+
+<div class="inner-wrapper" id="clickToCloseArea">
+  <div class="side-menu" id="sideMenu">
+    <div class="mobile-menu-header">
+      <div class="header-logo">
+        <svg width="206" height="36" viewBox="0 0 206 36" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <rect x="0.25" width="205.5" height="36" fill="url(#pattern0_414_341)" />
+          <defs>
+            <pattern id="pattern0_414_341" patternContentUnits="objectBoundingBox" width="1" height="1">
+              <use xlink:href="#image0_414_341" transform="scale(0.00364964 0.0208333)" />
+            </pattern>
+            <image
+              id="image0_414_341"
+              width="274"
+              height="48"
+              xlink:href="data:image/png;base64,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"
+            />
+          </defs>
+        </svg>
+      </div>
+      <button type="button" id="close_menu_btn" (click)="onCloseMenuClick()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g clip-path="url(#clip0_720_6065)">
+            <path d="M21 11H6.83L10.41 7.41L9 6L3 12L9 18L10.41 16.59L6.83 13H21V11Z" fill="black" />
+          </g>
+          <defs>
+            <clipPath id="clip0_720_6065">
+              <rect width="24" height="24" fill="white" />
+            </clipPath>
+          </defs>
+        </svg>
+      </button>
+    </div>
+    <ul class="menu-list">
+      <li>
+        <a [routerLink]="['/doctor/dashboard']" [routerLinkActive]="'active'">
+          <img loading="lazy" src="assets/images/new-svg/sidemenu-svg/Dashboard.svg" alt="Dashboard" />
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/doctor/calendar']" [routerLinkActive]="'active'">
+          <img loading="lazy" src="assets/images/new-svg/sidemenu-svg/Calendar.svg" alt="Calendar" />
+          <span>Calendar</span>
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/doctor/my-patient']" [routerLinkActive]="'active'">
+          <img loading="lazy" src="assets/images/new-svg/sidemenu-svg/my-patient.svg" alt="my-patient" />
+          <span>My Patient</span>
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/doctor/medical-verification']" [routerLinkActive]="'active'">
+          <img loading="lazy" src="assets/images/new-svg/sidemenu-svg/medical-verification.svg" alt="medical-verification" />
+          <span>Medical Verification</span>
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/doctor/establishment']" [routerLinkActive]="'active'">
+          <img loading="lazy" src="assets/images/new-svg/sidemenu-svg/establishment.svg" alt="establishment" />
+          <span>Establishment</span>
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/doctor/services']" [routerLinkActive]="'active'">
+          <img loading="lazy" src="assets/images/new-svg/sidemenu-svg/services.svg" alt="services" />
+          <span>Services</span>
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/doctor/procedure']" [routerLinkActive]="'active'">
+          <img loading="lazy" src="assets/images/new-svg/sidemenu-svg/procedure.svg" alt="procedure" />
+          <span>Procedure</span>
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/doctor/videos']" [routerLinkActive]="'active'">
+          <img loading="lazy" src="assets/images/new-svg/sidemenu-svg/videos.svg" alt="videos" style="filter: invert(100%);" />
+          <span>Videos</span>
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/doctor/faqs']" [routerLinkActive]="'active'">
+          <img loading="lazy" src="assets/images/new-svg/sidemenu-svg/faq.svg" alt="faq" />
+          <span>FAQs</span>
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/doctor/profile']" [routerLinkActive]="'active'">
+          <img loading="lazy" src="assets/images/new-svg/sidemenu-svg/profile.svg" alt="profile" />
+          <span>Profile</span>
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/doctor/reviews']" [routerLinkActive]="'active'">
+          <img loading="lazy" src="assets/images/new-svg/sidemenu-svg/Reviews.svg" alt="Reviews" />
+          <span>Reviews</span>
+        </a>
+      </li>
+      <li class="exclude-menu">
+        <a href="#" class="hasSubmenu" (click)="settingtoggleSubmenu($event)">
+          <div style="display: flex; align-items:center;justify-content:space-between; width:100% ">
+            <div>
+              <img loading="lazy" src="assets/images/new-svg/sidemenu-svg/Settings.svg" alt="Settings" />
+              <span>Settings</span>
+             
+            </div>
+            
+                 <svg *ngIf="!isSubmenuOpen" fill="black" width="15" height="10" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+	 viewBox="0 0 330 330" xml:space="preserve">
+<path id="XMLID_222_" d="M250.606,154.389l-150-149.996c-5.857-5.858-15.355-5.858-21.213,0.001
+	c-5.857,5.858-5.857,15.355,0.001,21.213l139.393,139.39L79.393,304.394c-5.857,5.858-5.857,15.355,0.001,21.213
+	C82.322,328.536,86.161,330,90,330s7.678-1.464,10.607-4.394l149.999-150.004c2.814-2.813,4.394-6.628,4.394-10.606
+	C255,161.018,253.42,157.202,250.606,154.389z"/>
+</svg>
+
+<svg *ngIf="isSubmenuOpen" width="12" height="8" viewBox="0 0 12 8"  xmlns="http://www.w3.org/2000/svg">
+  <path d="M1.41 0.589844L6 5.16984L10.59 0.589844L12 1.99984L6 7.99984L0 1.99984L1.41 0.589844Z" fill="white"/>
+  </svg>
+          </div>
+        </a>
+        <div class="submenu" id="settingsSubmenu" [style.display]="isSubmenuOpen ? 'block' : 'none'">
+          <a [routerLink]="['/doctor/change-password']">
+            <img loading="lazy" src="assets/images/new-svg/change-password.svg" alt="change-password" />
+            <span>Change Password</span>
+          </a>
+          <a [routerLink]="['/doctor/delete-account']">
+            <img loading="lazy" src="assets/images/new-svg/delete.svg" alt="delete" />
+            <span>Delete Account</span>
+          </a>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="main-content" >
+    <div class="page-title">
+      <h2>
+        <div class="hamber">
+          <button class="svg-icon-button" id="showMenu" (click)="onMenuClick()">
+            <img loading="lazy" src="assets/images/svg/hamber.svg" alt="" />
+          </button>
+        </div>
+        Videos
+      </h2>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addFaqModal" (click)="openModal('addFaqModal')">Add Videos</button>
+    </div>
+    <form (click)="closeSideBar()"
+    >
+      <div class="page-form videos-screen">
+        <div class="video-grid-item" *ngFor="let video of faqsList">
+          <div class="grid-item-col">
+            <div class="video">
+              <svg width="75" height="70" viewBox="0 0 75 70" fill="none" class="play_icon" xmlns="http://www.w3.org/2000/svg">
+                <g filter="url(#filter0_d_953_5562)">
+                  <path d="M41.1787 20.7163C40.9103 19.713 40.1193 18.922 39.116 18.6537C37.296 18.166 29.9997 18.166 29.9997 18.166C29.9997 18.166 22.7033 18.166 20.8833 18.6537C19.88 18.922 19.089 19.713 18.8207 20.7163C18.333 22.5363 18.333 27.4993 18.333 27.4993C18.333 27.4993 18.333 32.4623 18.8207 34.2823C19.089 35.2857 19.88 36.0767 20.8833 36.345C22.7033 36.8327 29.9997 36.8327 29.9997 36.8327C29.9997 36.8327 37.296 36.8327 39.116 36.345C40.1205 36.0767 40.9103 35.2857 41.1787 34.2823C41.6663 32.4623 41.6663 27.4993 41.6663 27.4993C41.6663 27.4993 41.6663 22.5363 41.1787 20.7163ZM27.6663 31.5407V23.458L34.6663 27.4993L27.6663 31.5407Z" fill="#FF0000" />
+                </g>
+                <defs>
+                  <filter id="filter0_d_953_5562" x="-1.5" y="-4" width="78" height="78" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                    <feOffset dx="7.5" dy="7.5" />
+                    <feGaussianBlur stdDeviation="12.5" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0" />
+                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_953_5562" />
+                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_953_5562" result="shape" />
+                  </filter>
+                </defs>
+              </svg>
+
+              <p>{{ video.title }}</p>
+              <!-- <img loading="lazy" src="assets/images/dummy-video.png" alt="" /> -->
+
+              <iframe [title]="video?.title" [src]="sanitizeUrl(video.url)" width="100%" height="100%" allow="fullscreen"></iframe>
+            </div>
+            <div class="duration">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_953_5573)">
+                  <path d="M11.99 2C6.47 2 2 6.48 2 12C2 17.52 6.47 22 11.99 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 11.99 2ZM12 20C7.58 20 4 16.42 4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12C20 16.42 16.42 20 12 20Z" fill="black" />
+                  <path d="M12.5 7H11V13L16.25 16.15L17 14.92L12.5 12.25V7Z" fill="black" />
+                </g>
+                <defs>
+                  <clipPath id="clip0_953_5573">
+                    <rect width="24" height="24" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
+              <!-- <span>21 Dec, 2022</span> -->
+              <span>{{ formatDate(video.createdAt) }}</span>
+            </div>
+          </div>
+          <button class="btn btn-outline-primary video-edit" type="button" (click)="onEditFaqs(video)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_953_5567)">
+                <path d="M3 17.2496V20.9996H6.75L17.81 9.93957L14.06 6.18957L3 17.2496ZM20.71 7.03957C21.1 6.64957 21.1 6.01957 20.71 5.62957L18.37 3.28957C17.98 2.89957 17.35 2.89957 16.96 3.28957L15.13 5.11957L18.88 8.86957L20.71 7.03957Z" fill="black" />
+              </g>
+              <defs>
+                <clipPath id="clip0_953_5567">
+                  <rect width="24" height="24" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+            <span>Edit</span>
+          </button>
+        </div>
+      </div>
+      <div class="page-footer">
+        <a [routerLink]="['/doctor/procedure']" class="btn btn-outline-primary mx-3">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_511_1537)">
+              <path d="M15.4102 16.59L10.8302 12L15.4102 7.41L14.0002 6L8.00016 12L14.0002 18L15.4102 16.59Z" fill="black" />
+            </g>
+            <defs>
+              <clipPath id="clip0_511_1537">
+                <rect width="24" height="24" fill="white" transform="matrix(-1 0 0 1 24 0)" />
+              </clipPath>
+            </defs>
+          </svg>
+          Back
+        </a>
+        <a [routerLink]="['/doctor/faqs']" class="btn btn-primary">
+          Next
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_414_309)">
+              <path d="M8.58984 16.59L13.1698 12L8.58984 7.41L9.99984 6L15.9998 12L9.99984 18L8.58984 16.59Z" fill="white" />
+            </g>
+            <defs>
+              <clipPath id="clip0_414_309">
+                <rect width="24" height="24" fill="white" />
+              </clipPath>
+            </defs>
+          </svg>
+        </a>
+      </div>
+    </form>
+
+    <!-- add_video_modal -->
+    <!-- <div
+      class="modal fade"
+      id="add_video_modal"
+      tabindex="-1"
+      aria-labelledby="add_video_modalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="add_video_modalLabel">Videos</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+              (click)="closeModal('add_video_modal')"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-inline">
+              <div class="col-md-4 mb-2 colz">
+                <input type="text" class="form-control" value="Video Title" />
+              </div>
+              <div class="col-md-6 mb-2 colz">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Video URL"
+                />
+              </div>
+              <div class="col-md-2 mb-2 colz_2">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g clip-path="url(#clip0_221_1770)">
+                    <path
+                      d="M6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19ZM19 4H15.5L14.5 3H9.5L8.5 4H5V6H19V4Z"
+                      fill="black"
+                    />
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_221_1770">
+                      <rect width="24" height="24" fill="white" />
+                    </clipPath>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+            <button type="button" class="btn btn-link">+ Add More</button>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              data-dismiss="modal"
+              (click)="closeModal('add_video_modal')"
+            >
+              Cancel
+            </button>
+            <button type="button" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- Add video Modal -->
+    <div id="addFaqModal" class="modal fade">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add Video</h5>
+            <button type="button" class="close" data-dismiss="modal" (click)="closeModal('addFaqModal')">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="addTitle">Title</label>
+                <input type="text" id="addTitle" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="addUrl">Link</label>
+                <textarea id="addUrl" class="form-control"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closeModal('addFaqModal')">Close</button>
+            <button type="button" class="btn btn-primary" (click)="handleAddFaq()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit video Modal -->
+    <div id="editFaqModal" class="modal fade">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit Video</h5>
+            <button type="button" class="close" data-dismiss="modal" (click)="closeModal('editFaqModal')">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="editTitle">Title</label>
+                <input type="text" id="editTitle" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="editUrl">Link</label>
+                <textarea id="editUrl" class="form-control"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer" style="display: flex; align-items: center; justify-content: space-around">
+            <button type="button" class="btn btn-secondary" (click)="onDeleteFaqs()">Delete</button>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 8px">
+              <button type="button" class="btn btn-secondary" (click)="closeModal('editFaqModal')">Close</button>
+              <button type="button" class="btn btn-primary" (click)="handleEditFaq()">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

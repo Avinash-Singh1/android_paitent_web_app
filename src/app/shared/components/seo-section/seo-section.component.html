@@ -1,0 +1,580 @@
+<section>
+
+  
+  <!-- ------------------------------------------------------------------------- -->
+  <!-- ------------------------------------------------------------------------- -->
+  <!-- DoctorDetails to Doctor in Locality -->
+  <!-- 15-05-2025 -->
+  <div class="wrap" *ngIf="localityWiseData?.length">
+    <!-- Desktop View -->
+    <div class="section-box desktop-only" *ngIf="!isMobileView">
+      <div>
+        <h2>Dentist in Top localities</h2>
+      </div>
+      <ul class="Listing-Item">
+        <li *ngFor="let item of localityWiseData; trackBy: trackBySlug">
+          <a
+            *ngIf="city && doctorDetail?.specialization?.[0]?.name && item.locality"
+            [routerLink]="[
+              '/',
+              formatdata(city),
+              formatdata(doctorDetail.specialization[0].name),
+              formatdata(item.locality)
+            ]"
+            (click)="triggerScrollToTop()"
+            style="text-decoration: none; color: #212529"
+          >
+            {{doctorDetail.specialization[0].name | capitalizeFirst}} in {{ item.locality | capitalizeFirst }}
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!-- Mobile View -->
+    <div class="accordion mobile-only" *ngIf="isMobileView">
+      <div class="accordion-item">
+        <h2 class="accordion-header m-0">
+          <button
+            class="accordion-button"
+            [class.collapsed]="openSeoPanel !== 'localityDoctors'"
+            type="button"
+            (click)="toggleSeoPanel('localityDoctors')"
+            [attr.aria-expanded]="openSeoPanel === 'localityDoctors'"
+          >
+            <img loading="lazy" src="assets/images/doctor-details/purple-service.svg" alt="" />
+            Dentist in top localities
+          </button>
+        </h2>
+        <div
+          class="accordion-collapse"
+          [class.collapse]="openSeoPanel !== 'localityDoctors'"
+          [class.show]="openSeoPanel === 'localityDoctors'"
+        >
+          <div class="accordion-body">
+            <ul>
+              <li *ngFor="let item of localityWiseData; trackBy: trackBySlug">
+                <a
+                  *ngIf="city && doctorDetail?.specialization?.[0]?.name && item.locality"
+                  [routerLink]="[
+                    '/',
+                    formatdata(city),
+                    formatdata(doctorDetail.specialization[0].name),
+                    formatdata(item.locality)
+                  ]"
+                  style="text-decoration: none; color: #212529"
+                >
+                  {{doctorDetail.specialization[0].name | capitalizeFirst}} in {{ item.locality | capitalizeFirst }}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 15-05-2025 -->
+  <!-- ------------------------------------------------------------------------- -->
+  <!-- ------------------------------------------------------------------------- -->
+
+
+    <!-- ------------------------------------------------------------------------- -->
+  <!-- ------------------------------------------------------------------------- -->
+  <!-- city specialization -->
+  <div class="wrap" *ngIf="citySpecialization">
+    <!-- Desktop View -->
+    <div class="section-box desktop-only" *ngIf="citySpecialization?.length && !isMobileView">
+      <div>
+        <h2>Best Doctor Specialities in {{city | capitalizeFirst}}</h2>
+        <!-- <h2>Top-Rated Doctors by Specialization</h2> -->
+      </div>
+      <ul class="Listing-Item">
+        <li *ngFor="let item of citySpecialization">
+          <a
+            [routerLink]="['/', formatdata(city), formatdata(item.name)]"
+            (click)="triggerScrollToTop()"
+            style="text-decoration: none; color: #212529"
+          >
+            {{ item.name }} in {{city | capitalizeFirst}}
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Mobile View -->
+    <div class="accordion mobile-only" *ngIf="isMobileView">
+      <div class="accordion-item" *ngIf="DummyData?.length">
+        <h2 class="accordion-header m-0">
+          <button
+            class="accordion-button"
+            [class.collapsed]="openSeoPanel !== 'citySpecialization'"
+            type="button"
+            (click)="toggleSeoPanel('citySpecialization')"
+            [attr.aria-expanded]="openSeoPanel === 'citySpecialization'"
+          >
+            <img loading="lazy" src="assets/images/doctor-details/purple-service.svg" alt="" />
+            Best Doctor Specialities in {{city | capitalizeFirst}}
+          </button>
+        </h2>
+        <div
+          class="accordion-collapse"
+          [class.collapse]="openSeoPanel !== 'citySpecialization'"
+          [class.show]="openSeoPanel === 'citySpecialization'"
+        >
+          <div class="accordion-body">
+            <ul>
+              <li *ngFor="let item of citySpecialization">
+                <a
+                  [routerLink]="['/', formatdata(city), formatdata(item.name)]"
+                  (click)="triggerScrollToTop()"
+                  style="text-decoration: none; color: #212529"
+                >
+                  {{ item.name }} in {{city | capitalizeFirst}}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- city specialization -->
+  <!-- ------------------------------------------------------------------------- -->
+  <!-- ------------------------------------------------------------------------- -->
+
+
+
+
+
+  <!-- description start -->
+  <ng-container *ngFor="let item of data?.slice(0, 1)">
+    <div class="wrap" *ngIf="item">
+      <!-- <h2
+        *ngIf="seo_citys?.length && doctorDetail?.specialization?.[0]?.name"
+        class="related-links-heading"
+        style="padding-top: 24px; font-weight: 600; font-size: 19px"
+      >
+        Best Healthcare, Right at Your Fingertips
+      </h2> -->
+
+      <!-- Description -->
+      <div class="description" *ngIf="allowDescription && item?.description  && !isDoctorDetailsPage()">
+        <div
+          class="content"
+          [class.collapsed]="!isExpanded"
+          [innerHTML]="item?.description | safeHtml"
+        ></div>
+        <button (click)="toggleDescription()">
+          {{ isExpanded ? "Read Less" : "Read More" }}
+        </button>
+      </div>
+
+      <!-- Desktop Sections -->
+      <div class="sections desktop-only" *ngIf="item?.sections?.length && !isMobileView && !isDoctorDetailsPage()">
+        <div class="section-container">
+          <div *ngFor="let section of item.sections" class="section-box">
+            <div class="link-heading" style="font-size: 22px">
+              {{ section.title }}
+            </div>
+            <ul>
+              <li
+                #linksList
+                class="Listing-Item"
+                *ngFor="let link of section.content.split('<br>')"
+                [innerHTML]="link | safeHtml"
+              ></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Sections Accordion -->
+      <div class="accordion mobile-only" *ngIf="isMobileView" id="accordionMobileInfo">
+        <!-- Static Rating -->
+        <!-- <div class="accordion-item">
+          <h2 class="accordion-header m-0" id="headingRating">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseRating"
+              aria-expanded="false"
+              aria-controls="collapseRating"
+              style="display: flex; gap: 4px"
+            >
+              <img
+                src="assets/images/doctor-details/purple-service.svg"
+                alt=""
+              />
+              <span>Rating</span>
+            </button>
+          </h2>
+          <div
+            id="collapseRating"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingRating"
+            data-bs-parent="#accordionMobileInfo"
+          >
+            <div class="accordion-body">
+              <div class="d-flex">
+                Average Rating
+                <span class="font-600">&nbsp; 4.2</span>
+                <div class="rating">
+                  <star-rating
+                    [rating]="4"
+                    [step]="0.1"
+                    [showHalfStars]="true"
+                    [readOnly]="true"
+                  ></star-rating>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+
+        <!-- Dynamic Section Accordions -->
+        <div *ngIf="item?.sections?.length && !isDoctorDetailsPage()">
+          <div
+            *ngFor="let section of item.sections; let i = index"
+            class="accordion-item"
+          >
+            <h2 class="accordion-header m-0">
+              <button
+                class="accordion-button"
+                [class.collapsed]="openSeoPanel !== 'section' + i"
+                type="button"
+                (click)="toggleSeoPanel('section' + i)"
+                [attr.aria-expanded]="openSeoPanel === 'section' + i"
+              >
+                <img
+                  src="assets/images/doctor-details/purple-service.svg"
+                  alt=""
+                />
+                {{ section.title }}
+              </button>
+            </h2>
+            <div
+              class="accordion-collapse"
+              [class.collapse]="openSeoPanel !== 'section' + i"
+              [class.show]="openSeoPanel === 'section' + i"
+            >
+              <div class="accordion-body">
+                <ul>
+                  <li
+                    #linksList
+                    *ngFor="let link of section.content.split('<br>')"
+                    [innerHTML]="link | safeHtml"
+                  ></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Cities -->
+      <div
+        class="section-box desktop-only"
+        *ngIf="seo_citys?.length && doctorDetail?.specialization?.[0]?.name && !isMobileView"
+      >
+        <h2 style="margin: 0px">
+          
+          Best {{ doctorDetail?.specialization?.[0]?.name | capitalizeFirst }} in Top Cities
+        </h2>
+        <ul class="Listing-Item">
+          <li *ngFor="let item of seo_citys.slice(0,16)">
+            <a
+              [routerLink]="['/', formatdata(item.city), formatdata(doctorDetail?.specialization?.[0]?.name)]"
+              (click)="triggerScrollToTop()"
+              style="text-decoration: none; color: #212529"
+            >
+              Best {{ doctorDetail?.specialization?.[0]?.name | capitalizeFirst }} in {{ item.city | capitalizeFirst }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Mobile Cities Accordion -->
+      <div class="accordion mobile-only" *ngIf="isMobileView">
+        <div
+          class="accordion-item"
+          *ngIf="seo_citys?.length && doctorDetail?.specialization[0]?.name"
+        >
+          <h2 class="accordion-header m-0">
+            <button
+              class="accordion-button"
+              [class.collapsed]="openSeoPanel !== 'cities'"
+              type="button"
+              (click)="toggleSeoPanel('cities')"
+              [attr.aria-expanded]="openSeoPanel === 'cities'"
+            >
+              <img
+                src="assets/images/doctor-details/purple-service.svg"
+                alt=""
+              />
+              Best {{ doctorDetail?.specialization?.[0]?.name | capitalizeFirst }} in Top Cities
+            </button>
+          </h2>
+          <div
+            class="accordion-collapse"
+            [class.collapse]="openSeoPanel !== 'cities'"
+            [class.show]="openSeoPanel === 'cities'"
+          >
+            <div class="accordion-body">
+              <ul>
+                <li *ngFor="let item of seo_citys.slice(0,16)">
+                  <a
+                    [routerLink]="[
+                      '/',
+                      formatdata(item.city),
+                      formatdata(doctorDetail?.specialization[0]?.name)
+                    ]"
+                    (click)="triggerScrollToTop()"
+                    style="text-decoration: none; color: #212529"
+                  >
+                    {{ doctorDetail?.specialization?.[0]?.name | capitalizeFirst }} in
+                    {{ item.city | capitalizeFirst }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <!-- description end-->
+
+
+
+
+
+
+
+
+  <!-- ------------------------------------------------------------------------- -->
+  <!-- ------------------------------------------------------------------------- -->
+  <!-- All city doctors -->
+  <div class="wrap" *ngIf="cityDoctors?.length">
+    <!-- Desktop View -->
+    <div class="section-box desktop-only"  *ngIf="!isMobileView">
+      <div>
+        <h2>Best Doctors in Top Cities</h2>
+      </div>
+      <ul class="Listing-Item">
+        <li *ngFor="let city of cityDoctors.slice(0, 15)">
+          <a
+            [routerLink]="['/', formatdata(city), 'doctors']"
+            (click)="triggerScrollToTop()"
+            style="text-decoration: none; color: #212529"
+          >
+            Best Doctors in {{ city | capitalizeFirst }}
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!-- Mobile View -->
+    <div class="accordion mobile-only" *ngIf="isMobileView">
+      <div class="accordion-item">
+        <h2 class="accordion-header m-0">
+          <button
+            class="accordion-button"
+            [class.collapsed]="openSeoPanel !== 'cityDoctors'"
+            type="button"
+            (click)="toggleSeoPanel('cityDoctors')"
+            [attr.aria-expanded]="openSeoPanel === 'cityDoctors'"
+          >
+            <img
+              src="assets/images/doctor-details/purple-service.svg"
+              alt=""
+            /> Best Doctors in Top Cities
+          </button>
+        </h2>
+        <div
+          class="accordion-collapse"
+          [class.collapse]="openSeoPanel !== 'cityDoctors'"
+          [class.show]="openSeoPanel === 'cityDoctors'"
+        >
+          <div class="accordion-body">
+            <ul>
+              <li *ngFor="let city of cityDoctors.slice(0, 15)">
+                <a
+                  [routerLink]="['/', formatdata(city), 'doctors']"
+                  (click)="triggerScrollToTop()"
+                  style="text-decoration: none; color: #212529"
+                >
+                  Best Doctors in {{ city | capitalizeFirst }}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- All city doctors Ends   -->
+  <!-- ------------------------------------------------------------------------- -->
+  <!-- ------------------------------------------------------------------------- -->
+
+
+
+  <!-- ------------------------------------------------------------------------- -->
+  <!-- ------------------------------------------------------------------------- -->
+  <!-- DoctorDetails DocHospitalURLS -->
+  <!-- 15-05-2025 -->
+  <div class="wrap" *ngIf="DocHospitalURLS?.length">
+    <!-- Desktop View -->
+    <div class="section-box desktop-only"  *ngIf="!isMobileView">
+      <div>
+        <h2>Best Hospitals Near You</h2>
+      </div>
+      <ul class="Listing-Item">
+        <li *ngFor="let item of DocHospitalURLS; trackBy: trackBySlug">
+          <a
+            [routerLink]="[
+              '/',
+              formatdata(item.address.city),
+              'hospital',
+              formatdata(item?.profileSlug)
+            ]"
+            (click)="triggerScrollToTop()"
+            style="text-decoration: none; color: #212529"
+          >
+            {{ item?.name | capitalizeFirst }} in {{ item.address.city | capitalizeFirst }}
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!-- Mobile View -->
+    <div class="accordion mobile-only" *ngIf="isMobileView">
+      <div class="accordion-item">
+        <h2 class="accordion-header m-0">
+          <button
+            class="accordion-button"
+            [class.collapsed]="openSeoPanel !== 'docHospitals'"
+            type="button"
+            (click)="toggleSeoPanel('docHospitals')"
+            [attr.aria-expanded]="openSeoPanel === 'docHospitals'"
+          >
+            <img
+              src="assets/images/doctor-details/purple-service.svg"
+              alt=""
+            /> Best Hospitals Near You
+          </button>
+        </h2>
+        <div
+          class="accordion-collapse"
+          [class.collapse]="openSeoPanel !== 'docHospitals'"
+          [class.show]="openSeoPanel === 'docHospitals'"
+        >
+          <div class="accordion-body">
+            <ul>
+              <li *ngFor="let item of DocHospitalURLS; trackBy: trackBySlug">
+                <a
+                  [routerLink]="[
+                    '/',
+                    formatdata(item.address.city),
+                    'hospital',
+                    formatdata(item?.profileSlug)
+                  ]"
+                  (click)="triggerScrollToTop()"
+                  style="text-decoration: none; color: #212529"
+                >
+                  {{ item?.name | capitalizeFirst }} in {{ item.address.city | capitalizeFirst }}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 15-05-2025 -->
+  <!-- ------------------------------------------------------------------------- -->
+  <!-- ------------------------------------------------------------------------- -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- ------------------------------------------------------------------------- -->
+  <!-- ------------------------------------------------------------------------- -->
+  <!-- 12-05-2025 -->
+  <!-- Hospital Details Top Hospital in Near you  -->
+
+  <div class="wrap" *ngIf="HospitalURLS?.length">
+    <!-- Desktop View -->
+    <div class="section-box desktop-only"  *ngIf="!isMobileView">
+      <div>
+        <h2>Top-Rated Hospitals | Find & Book Doctors</h2>
+      </div>
+
+      <ul class="Listing-Item">
+        <li *ngFor="let item of HospitalURLS; trackBy: trackBySlug">
+          <a
+            [routerLink]="[
+              '/',
+              formatdata(item.address.city),
+              'hospital',
+              formatdata(item?.profileSlug)
+            ]"
+            (click)="triggerScrollToTop()"
+            style="text-decoration: none; color: #212529"
+          >
+            {{ item?.name }} in {{ item.address.city }}
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!-- Mobile View -->
+    <div class="accordion mobile-only" *ngIf="isMobileView">
+      <div class="accordion-item">
+        <h2 class="accordion-header m-0">
+          <button
+            class="accordion-button"
+            [class.collapsed]="openSeoPanel !== 'hospitalUrls'"
+            type="button"
+            (click)="toggleSeoPanel('hospitalUrls')"
+            [attr.aria-expanded]="openSeoPanel === 'hospitalUrls'"
+          >
+            <img loading="lazy" src="assets/images/doctor-details/purple-service.svg" alt="" />
+            Top-Rated Hospitals | Find & Book Doctors
+          </button>
+        </h2>
+        <div
+          class="accordion-collapse"
+          [class.collapse]="openSeoPanel !== 'hospitalUrls'"
+          [class.show]="openSeoPanel === 'hospitalUrls'"
+        >
+          <div class="accordion-body">
+            <ul>
+              <li *ngFor="let item of HospitalURLS; trackBy: trackBySlug">
+                <a
+                  [routerLink]="[
+                    '/',
+                    formatdata(item.address.city),
+                    'hospital',
+                    formatdata(item?.profileSlug)
+                  ]"
+                  (click)="triggerScrollToTop()"
+                  style="text-decoration: none; color: #212529"
+                >
+                  {{ item?.name }} in {{ item.address.city }}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 15-05-2025 -->
+  <!-- ------------------------------------------------------------------------- -->
+  <!-- ------------------------------------------------------------------------- -->
+</section>

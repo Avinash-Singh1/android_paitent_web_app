@@ -1,0 +1,246 @@
+<main>
+  <div
+    class="d-flex doctor-title-cross border-bottom-style font-600 px-24 py-3 text-24"
+  >
+    {{ "Edit Profile" }}
+  </div>
+  <mat-dialog-content class="edit-doctor">
+    <form [formGroup]="doctorDetailForm">
+      <main class="row gy-4 gx-4">
+        <div class="col-12 d-flex flex-column gap-2">
+          <div class="font-600">Profile Photo</div>
+          <div class="d-flex gap-40 align-items-center">
+            <div class="image-wrapper">
+              <img
+                alt=""
+                class="profile-image"
+                [src]="control['profilePic'].value"
+                *ngIf="control['profilePic'].value"
+              />
+              <span
+                class="text-32 font-600"
+                *ngIf="!control['profilePic'].value"
+                >{{
+                  control["fullName"].value | nameInitial | uppercase
+                }}</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-4 col-md-6">
+          <div class="form-item non-editable">
+            <label>Full Name <span class="required-hint">*</span></label>
+            <input
+              class="form-input"
+              type="text"
+              placeholder="Full name"
+              formControlName="fullName"
+            />
+          </div>
+        </div>
+        <div class="col-12 col-lg-4 col-md-6">
+          <div class="form-item non-editable">
+            <label>Mobile <span class="required-hint">*</span></label>
+            <input
+              class="form-input"
+              type="text"
+              placeholder="Mobile"
+              formControlName="phone"
+            />
+          </div>
+        </div>
+        <div class="col-12 col-lg-4 col-md-6">
+          <div class="form-item non-editable">
+            <label>Email<span class="required-hint">*</span></label>
+            <input
+              class="form-input"
+              type="text"
+              placeholder="Email"
+              formControlName="email"
+            />
+          </div>
+        </div>
+        <div class="col-12 col-lg-4 col-md-6">
+          <div class="form-item">
+            <label>Speciality<span class="required-hint">*</span></label>
+
+            <ng-select
+              formControlName="specility"
+              class="specialisation"
+              [items]="specializationList"
+              bindLabel="name"
+              bindValue="_id"
+              [multiple]="true"
+              [closeOnSelect]="false"
+              [searchable]="true"
+              placeholder="Select specialisation"
+            ></ng-select>
+            <div
+              class="error-hint"
+              *ngIf="(control['specility'].touched) && control['specility'].errors?.['required']"
+            >
+              Specialization is required.
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-4 col-md-6">
+          <div class="form-item">
+            <label>Procedure</label>
+            <ng-select
+              class="specialisation"
+              [items]="procedureList"
+              bindLabel="name"
+              bindValue="_id"
+              [multiple]="true"
+              [closeOnSelect]="false"
+              [searchable]="true"
+              placeholder="Select procedure"
+              formControlName="procedure"
+            ></ng-select>
+            <div
+              class="error-hint"
+              *ngIf="(control['procedure'].touched) && (control['procedure'].errors?.['required'])"
+            >
+              Procedure is required
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-4 col-md-6">
+          <div class="form-item">
+            <label>Consultation Fees<span class="required-hint">*</span></label>
+            <input
+              class="form-input"
+              type="text"
+              placeholder="Consultation fees"
+              formControlName="consultationFees"
+              oninput="this.value = this.value.replace(/\D/,'')"
+              maxlength="10"
+            />
+            <div
+              class="error-hint"
+              *ngIf="(control['consultationFees'].touched) && (control['consultationFees'].errors?.['required'])"
+            >
+              Consultation fees is required
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="d-flex flex-column gap-2">
+            <span>Timing</span>
+            <div
+              class="w-100 border-style rounded-5px p-24 d-flex flex-column gap-3"
+            >
+              <div class="d-flex gap-3 flex-wrap">
+                <ng-container *ngFor="let day of weekArray; let i = index">
+                  <div
+                    class="day-wrapper cursor-pointer"
+                    [ngClass]="{
+                      selected: day.selected,
+                      notSelected: !day.selected,
+                      active: i == currentDay && selectedDay.size
+                    }"
+                    (click)="onSelectDay(day, i)"
+                  >
+                    {{ day.name }}
+                  </div>
+                </ng-container>
+              </div>
+              <ng-container *ngFor="let day of weekArray; let j = index">
+                <form
+                  class="d-flex gap-4 flex-wrap"
+                  [formArrayName]="day.formControlName"
+                  *ngIf="currentDay == j"
+                >
+                  <div
+                    class="d-flex flex-column gap-2"
+                    *ngFor="
+                      let slot of dayControl(day.formControlName).controls;
+                      let i = index
+                    "
+                  >
+                    <div class="d-flex gap-2 align-items-center" *ngIf="i == 0">
+                      <div class="">{{ "MORNING" | translate }}</div>
+                      <svg-icon src="assets/images/svg/sunrise.svg"></svg-icon>
+                    </div>
+                    <div class="d-flex gap-2 align-items-center" *ngIf="i == 1">
+                      <div class="">{{ "AFTERNOON" | translate }}</div>
+                      <img
+                        loading="lazy"
+                        src="assets/images/svg/afternoon.svg"
+                        alt=""
+                      />
+                    </div>
+                    <div class="d-flex gap-2 align-items-center" *ngIf="i == 2">
+                      <div class="">{{ "EVENING" | translate }}</div>
+                      <img
+                        loading="lazy"
+                        src="assets/images/svg/night-mode.svg"
+                        alt=""
+                      />
+                    </div>
+                    <div
+                      class="border-style rounded-5px d-flex"
+                      [formGroupName]="i"
+                    >
+                      <ng-select
+                        #from
+                        class="w-50 from"
+                        placeholder="00:00 PM"
+                        formControlName="from"
+                        (focus)="from.open()"
+                      >
+                        <ng-option
+                          *ngFor="
+                            let time of timingArray[i]
+                              | timecompare : slot.get('to').value : true
+                          "
+                          [value]="time.name"
+                        >
+                          {{ time.name }}
+                        </ng-option>
+                      </ng-select>
+                      <div class="border-style"></div>
+                      <ng-select
+                        #to
+                        class="w-50 to"
+                        placeholder="00:00 PM"
+                        formControlName="to"
+                        (focus)="to.open()"
+                      >
+                        <ng-option
+                          *ngFor="
+                            let time of timingArray[i]
+                              | timecompare : slot.get('from').value
+                          "
+                          [value]="time.name"
+                        >
+                          {{ time.name }}
+                        </ng-option>
+                      </ng-select>
+                    </div>
+                  </div>
+                </form>
+              </ng-container>
+            </div>
+          </div>
+          <div
+            class="error-hint mt-1"
+            *ngIf="doctorDetailForm.errors?.['atleastOneDay']"
+          >
+            Please Select at least one day
+          </div>
+        </div>
+      </main>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions class="">
+    <div
+      class="border-top-style w-100 d-flex gap-4 justify-content-end px-24 py-3"
+    >
+      <button class="cancel" type="button" (click)="matdialogRef.close()">
+        Cancel
+      </button>
+      <button class="save" type="button" (click)="onSubmit()">Save</button>
+    </div>
+  </mat-dialog-actions>
+</main>

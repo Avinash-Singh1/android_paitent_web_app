@@ -1,0 +1,181 @@
+<main>
+  <div
+    mat-dialog-title
+    class="d-flex justify-content-end doctor-title-cross border-bottom-style"
+  >
+    <button class="svg-icon-button" (click)="matdialogRef.close()">
+      <svg-icon src="assets/images/svg/cross.svg"></svg-icon>
+    </button>
+  </div>
+  <mat-dialog-content class="doctor-details">
+    <header
+      class="border-bottom-style d-flex align-items-center gap-4 py-12 px-24"
+    >
+      <div class="image-wrapper">
+        <img
+          alt=""
+          class="profile-image"
+          [src]="doctorDetail?.profilePic"
+          *ngIf="doctorDetail?.profilePic"
+        />
+        <span class="text-32 font-600" *ngIf="!doctorDetail?.profilePic">{{
+          doctorDetail?.doctorDetails?.fullName
+            | nameInitial
+            | uppercase
+        }}</span>
+      </div>
+      <div class="">
+        <p class="font-600">
+          {{ doctorDetail?.doctorDetails?.fullName | titlecase }}
+          <svg-icon
+            class="ms-2 mb-2"
+            src="assets/images/svg/Verified.svg"
+          ></svg-icon>
+        </p>
+        <p class="m-0">
+          {{ doctorDetail?.specializationDetails | formatarray : "name" }}
+        </p>
+      </div>
+    </header>
+    <main
+      class="doctor-content d-flex gap-40 justify-content-between w-100 py-12 px-24"
+    >
+      <div class="d-flex flex-column gap-4 w-50">
+        <div class="d-flex flex-column gap-2">
+          <div class="font-600">
+            <svg-icon src="assets/images/svg/star.svg"></svg-icon>
+            {{ "Specialisations" }}
+          </div>
+
+          <ng-container
+            *ngFor="let specailization of doctorDetail?.specializationDetails"
+          >
+            <div class="d-flex gap-2 align-items-center px-12">
+              <svg-icon src="assets/images/svg/forwardarrow.svg"></svg-icon>
+              {{ specailization.name }}
+            </div>
+          </ng-container>
+        </div>
+        <div class="d-flex flex-column gap-2">
+          <div class="font-600">
+            <svg-icon src="assets/images/svg/education.svg"></svg-icon>
+            {{ "Education" }}
+          </div>
+          <ng-container *ngFor="let education of doctorDetail?.education">
+            <div class="d-flex gap-2 align-items-center px-12">
+              <svg-icon src="assets/images/svg/forwardarrow.svg"></svg-icon>
+              {{ education.degree }} - {{ education.college }},
+              {{ education.year }}
+            </div>
+          </ng-container>
+        </div>
+        <div class="d-flex flex-column gap-3">
+          <div class="font-600">
+            <svg-icon src="assets/images/svg/googledocs.svg"></svg-icon>
+            {{ "Documents" }}
+          </div>
+          <div class="d-flex flex-wrap documents gap-2">
+            <ng-container *ngFor="let document of doctorDetail?.identityProof">
+              <img
+                alt=""
+                *ngIf="
+                  document && document.fileType == 'image' && !!_document.URL
+                "
+                [src]="_document.URL"
+                class="cursor-pointer"
+                (click)="viewImage(_document.URL)"
+              />
+              <iframe
+                title=""
+                [src]="_document.URL | sanitize | async"
+                class="cursor-pointer position-relative"
+                *ngIf="
+                  document && document.fileType == 'pdf' && !!_document.URL
+                "
+              ></iframe>
+
+              <div
+                *ngIf="document && document.fileType == 'pdf'"
+                class="overlay1 cursor-pointer"
+                (click)="openIframe($event, _document.URL)"
+              ></div>
+            </ng-container>
+            <ng-container
+              *ngFor="let document of doctorDetail?.medicalProof"
+              class="cursor-pointer"
+              (click)="viewImage(_document.URL)"
+            >
+              <img
+                alt=""
+                *ngIf="
+                  document && document.fileType == 'image' && !!_document.URL
+                "
+                [src]="_document.URL"
+                class="cursor-pointer"
+                (click)="viewImage(_document.URL)"
+              />
+
+              <iframe
+                title=""
+                [src]="_document.URL | sanitize | async"
+                class="cursor-pointer position-relative"
+                *ngIf="
+                  document && document.fileType == 'pdf' && !!_document.URL
+                "
+              ></iframe>
+              <div
+                *ngIf="document && document.fileType == 'pdf'"
+                class="overlay2 cursor-pointer"
+                (click)="openIframe($event, _document.URL)"
+              ></div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex flex-column gap-4 w-50">
+        <div class="d-flex flex-column gap-2">
+          <div class="font-600">
+            <img loading="lazy" src="assets/images/svg/trophy.png" alt="" />
+            {{ "Awards and Recognitions" }}
+          </div>
+          <ng-container *ngFor="let award of doctorDetail?.award">
+            <div class="d-flex gap-2 align-items-center px-12">
+              <svg-icon src="assets/images/svg/forwardarrow.svg"></svg-icon>
+              {{ award.name }}
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="d-flex flex-column gap-2">
+          <div class="font-600">
+            <svg-icon src="assets/images/svg/googledocs.svg"></svg-icon>
+            {{ "Registrations" }}
+          </div>
+          <ng-container
+            *ngFor="let registration of doctorDetail?.medicalRegistration"
+          >
+            <div class="d-flex gap-2 align-items-center px-12">
+              <svg-icon src="assets/images/svg/forwardarrow.svg"></svg-icon>
+              {{ registration.registrationNumber }} -
+              {{ registration.council }},
+              {{ registration.year }}
+            </div>
+          </ng-container>
+        </div>
+        <div class="d-flex flex-column gap-2">
+          <div class="font-600">
+            <svg-icon src="assets/images/svg/education.svg"></svg-icon>
+            {{ "Membership" }}
+          </div>
+          <ng-container *ngFor="let membership of doctorDetail?.membership">
+            <div class="d-flex gap-2 align-items-center px-12">
+              <svg-icon src="assets/images/svg/forwardarrow.svg"></svg-icon>
+              {{ membership.name }}
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </main>
+  </mat-dialog-content>
+</main>

@@ -1,0 +1,335 @@
+@use "tools.mediaquery" as *;
+@use "tools.typography" as *;
+@use "settings.containers" as *;
+@use "variable.scss" as *;
+
+// ── Design Tokens ──────────────────────────────
+$_purple: #45197c;
+$_purple-light: rgba(69, 25, 124, 0.06);
+$_purple-soft: rgba(69, 25, 124, 0.10);
+$_radius-lg: 16px;
+$_radius-pill: 28px;
+$_shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+$_shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+$_transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+$_border: rgba(0, 0, 0, 0.06);
+$_text-primary: #1a1a2e;
+$_text-secondary: #6b7280;
+$_bg-surface: #ffffff;
+$_bg-hover: #f8f7fc;
+$_gps-blue: #2563eb;
+
+// ── Root Container ─────────────────────────────
+.search-mobile {
+  background: $_bg-surface;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-overflow-scrolling: touch;
+
+  // ── Header ─────────────────────────────────
+  &__header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    padding: 10px 12px 4px 16px;
+    background: $_bg-surface;
+  }
+
+  &__handle {
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(0, 0, 0, 0.12);
+    margin: 0 auto;
+  }
+
+  &__close {
+    flex-shrink: 0;
+    margin-left: auto;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: #f3f4f6;
+    color: $_text-secondary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+    transition: all $_transition;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    &:active {
+      background: #e5e7eb;
+      transform: scale(0.92);
+    }
+  }
+
+  // ── Search Inputs ──────────────────────────
+  &__inputs {
+    padding: 12px 16px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px;
+    height: 50px;
+    border-radius: $_radius-pill;
+    background: #f5f5f7;
+    border: 1.5px solid transparent;
+    transition: all $_transition;
+
+    &--focused {
+      background: $_bg-surface;
+      border-color: $_purple;
+      box-shadow: 0 0 0 3px rgba(69, 25, 124, 0.10);
+    }
+  }
+
+  &__input-icon {
+    flex-shrink: 0;
+    color: $_text-secondary;
+    display: flex;
+    align-items: center;
+    transition: color $_transition;
+
+    .search-mobile__input-group--focused & {
+      color: $_purple;
+    }
+  }
+
+  &__input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    @include font-sans_pro-regular(15px);
+    color: $_text-primary;
+    text-overflow: ellipsis;
+    height: 100%;
+
+    &::placeholder {
+      color: #9ca3af;
+      @include font-sans_pro-regular(14px);
+    }
+  }
+
+  // ── Results Scroll Area ────────────────────
+  &__results {
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    padding-bottom: env(safe-area-inset-bottom, 16px);
+    margin-top: 4px;
+  }
+
+  // ── Category Group ─────────────────────────
+  &__category {
+    margin-top: 4px;
+  }
+
+  &__category-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 20px;
+    @include font-sans_pro-semibold(12px);
+    color: $_text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: #f9fafb;
+    border-top: 1px solid $_border;
+
+    svg {
+      opacity: 0.55;
+    }
+  }
+
+  // ── Result Item ────────────────────────────
+  &__result-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: background $_transition;
+    border-bottom: 1px solid $_border;
+
+    &:active {
+      background: $_bg-hover;
+    }
+
+    &--entity {
+      padding: 10px 20px;
+    }
+
+    &--current-loc {
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    &--location {
+      padding: 11px 20px;
+    }
+  }
+
+  // ── Result Icon ────────────────────────────
+  &__result-icon {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &--search {
+      background: $_purple-light;
+      color: $_purple;
+    }
+
+    &--gps {
+      background: rgba(69, 25, 124, 0.08);
+      color: $_purple;
+    }
+
+    &--pin {
+      background: transparent;
+      color: $_text-secondary;
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  // ── Result Text ────────────────────────────
+  &__result-name {
+    flex: 1;
+    @include font-sans_pro-regular(15px);
+    color: $_text-primary;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &--gps {
+      @include font-sans_pro-semibold(14px);
+      color: $_purple;
+    }
+  }
+
+  &__result-sub {
+    @include font-sans_pro-regular(12px);
+    color: $_text-secondary;
+    margin-top: 1px;
+  }
+
+  &__result-info {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+
+    .search-mobile__result-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &__result-badge {
+    flex-shrink: 0;
+    padding: 3px 10px;
+    border-radius: 20px;
+    @include font-sans_pro-semibold(11px);
+    background: $_purple-light;
+    color: $_purple;
+    letter-spacing: 0.2px;
+
+    &--service {
+      background: rgba(16, 185, 129, 0.08);
+      color: #059669;
+    }
+  }
+
+  &__result-arrow {
+    flex-shrink: 0;
+    color: #d1d5db;
+    transition: transform $_transition;
+
+    .search-mobile__result-item:active & {
+      transform: translateX(2px);
+      color: $_purple;
+    }
+  }
+
+  // ── Avatar ─────────────────────────────────
+  &__avatar {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    object-fit: cover;
+    background: $_purple-light;
+    border: 1px solid $_border;
+
+    &--initials {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @include font-sans_pro-semibold(13px);
+      color: $_purple;
+    }
+  }
+
+  // ── Quick Links ────────────────────────────
+  &__quick-links {
+    padding: 8px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__quick-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background $_transition;
+    color: $_text-secondary;
+
+    &:active {
+      background: $_bg-hover;
+    }
+
+    svg {
+      flex-shrink: 0;
+      opacity: 0.5;
+    }
+
+    span {
+      @include font-sans_pro-regular(14px);
+      color: $_text-secondary;
+
+      strong {
+        @include font-sans_pro-semibold(14px);
+        color: $_text-primary;
+      }
+    }
+  }
+}

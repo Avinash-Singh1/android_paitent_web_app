@@ -1,0 +1,79 @@
+@use "tools.mediaquery" as *;
+
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+
+@use "variable.scss" as *;
+
+
+section {
+  padding: 48px;
+
+  @media screen and (max-width: 576px) {
+    padding: 24px;
+  }
+
+  .heading {
+    @include font-sans_pro-semibold($size: 24px, $lineheight: 30px);
+    color: $black;
+
+    @media screen and (max-width: 767px) {
+      @include font-sans_pro-semibold($size: 20px);
+    }
+  }
+
+  .link {
+    margin-top: 40px;
+
+    p {
+      @include font-sans_pro-semibold($size: 18px, $lineheight: 30px);
+
+      @media screen and (max-width: 767px) {
+        @include font-sans_pro-semibold($size: 16px);
+      }
+    }
+
+    .link-wrapper {
+      padding: 24px 0;
+      border: 1px solid rgba(69, 25, 124, 0.3);
+      border-radius: 5px;
+
+      span {
+        margin-left: 24px;
+        word-break: break-all;
+        @include font-sans_pro-regular($size: 18px, $lineheight: 30px);
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-regular($size: 16px);
+        }
+      }
+
+      .copy {
+        margin: 0 24px;
+        @include font-sans_pro-semibold($size: 18px, $lineheight: 30px);
+        color: $purple;
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-semibold($size: 16px);
+        }
+      }
+    }
+  }
+}
+
+.medical {
+  .title {
+    padding: 24px;
+    border-bottom: 1px solid $border-color;
+
+    h2 {
+      @include font-sans_pro-semibold($size: 24px, $lineheight: 30px);
+
+      @media screen and (max-width: 767px) {
+        @include font-sans_pro-semibold($size: 20px);
+      }
+    }
+  }
+}

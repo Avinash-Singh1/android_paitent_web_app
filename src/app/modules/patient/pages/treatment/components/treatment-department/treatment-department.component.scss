@@ -1,0 +1,772 @@
+/* ── Department Listing — Modern Healthcare UI ── */
+$purple: #45197c;
+$purple-light: #5e2d9e;
+$lavender: #f2e8ff;
+$lavender-soft: #faf7ff;
+$green: #0f9d58;
+$green-bg: #e8f5e9;
+$text-dark: #1a1a2e;
+$text-mid: #555;
+$text-light: #888;
+$border: #eee;
+$radius: 16px;
+$radius-sm: 10px;
+$shadow-card: 0 2px 12px rgba(69, 25, 124, 0.06);
+$shadow-hover: 0 12px 40px rgba(69, 25, 124, 0.12);
+$transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+$max-w: 1200px;
+
+/* ── Breadcrumb (matches hospital-details pattern) ── */
+.breadcrumb-nav {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid $border;
+  padding: 12px 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  &__inner {
+    max-width: $max-w;
+    margin: 0 auto;
+    padding: 0 24px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar { display: none; }
+
+    @media (max-width: 768px) { padding: 0 16px; }
+  }
+}
+
+.breadcrumb-list {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: nowrap;
+  gap: 0;
+}
+
+.breadcrumb-item {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+
+  &::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  &:not(:last-child)::after {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-top: 1.5px solid rgba(0, 0, 0, 0.3);
+    border-right: 1.5px solid rgba(0, 0, 0, 0.3);
+    transform: rotate(45deg);
+    margin: 0 10px;
+    flex-shrink: 0;
+  }
+
+  &.active .breadcrumb-current {
+    color: $purple;
+    font-weight: 600;
+  }
+}
+
+.breadcrumb-link {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.55);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: color 0.15s ease;
+  line-height: 1;
+
+  svg { flex-shrink: 0; }
+  &:hover { color: $purple; }
+}
+
+.breadcrumb-current {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.85);
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1;
+
+  @media screen and (min-width: 768px) { max-width: 350px; }
+}
+
+@media screen and (max-width: 767px) {
+  .breadcrumb-link { font-size: 12px; }
+  .breadcrumb-current { font-size: 12px; max-width: 180px; }
+  .breadcrumb-item:not(:last-child)::after { margin: 0 6px; width: 5px; height: 5px; }
+}
+
+/* ── Hero ── */
+.dp-hero {
+  position: relative;
+  background: linear-gradient(135deg, $lavender-soft 0%, $lavender 50%, #e8dbff 100%);
+  overflow: hidden;
+  padding: 56px 0 48px;
+
+  &__bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 80%, rgba($purple, 0.04) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba($purple, 0.06) 0%, transparent 50%);
+  }
+
+  &__inner {
+    max-width: $max-w;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    position: relative;
+  }
+
+  &__content { flex: 1; }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba($purple, 0.1);
+    color: $purple;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+
+    svg { opacity: 0.7; }
+  }
+
+  &__title {
+    font-size: 36px;
+    font-weight: 800;
+    color: $text-dark;
+    line-height: 1.15;
+    margin: 0 0 16px;
+    letter-spacing: -0.5px;
+  }
+
+  &__city {
+    font-weight: 500;
+    color: $purple;
+  }
+
+  &__subtitle {
+    font-size: 16px;
+    line-height: 1.65;
+    color: $text-mid;
+    max-width: 580px;
+    margin: 0 0 28px;
+  }
+
+  &__stats {
+    display: flex;
+    gap: 32px;
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    &-num {
+      font-size: 28px;
+      font-weight: 800;
+      color: $purple;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      svg { stroke: $purple; }
+    }
+
+    &-label {
+      font-size: 12px;
+      color: $text-light;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      margin-top: 4px;
+    }
+  }
+
+  &__visual {
+    flex-shrink: 0;
+  }
+
+  &__icon-ring {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    border: 2px solid rgba($purple, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -12px;
+      border-radius: 50%;
+      border: 1.5px dashed rgba($purple, 0.1);
+    }
+
+    svg {
+      stroke: $purple;
+      opacity: 0.7;
+    }
+  }
+}
+
+/* ── Filter Pills (hidden on desktop) ── */
+.dp-filter {
+  display: none;
+  background: #fff;
+  border-bottom: 1px solid $border;
+  padding: 16px 0;
+  position: sticky;
+  top: 44px;
+  z-index: 9;
+
+  &__inner {
+    max-width: $max-w;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  &__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1.5px solid #e0d5ee;
+    background: #fff;
+    color: $text-mid;
+    cursor: pointer;
+    transition: all $transition;
+
+    svg { opacity: 0.6; }
+
+    &:hover {
+      border-color: $purple;
+      color: $purple;
+      background: $lavender-soft;
+    }
+
+    &--active {
+      background: $purple;
+      color: #fff;
+      border-color: $purple;
+
+      svg { opacity: 1; stroke: #fff; }
+
+      &:hover {
+        background: $purple-light;
+        color: #fff;
+        border-color: $purple-light;
+      }
+    }
+  }
+}
+
+/* ── Treatment Cards ── */
+.dp-treatments {
+  padding: 40px 0 60px;
+  background: #fafafa;
+
+  &__wrapper {
+    max-width: $max-w;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+}
+
+.dp-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid $border;
+  border-radius: $radius;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: $shadow-card;
+  transition: all $transition;
+  position: relative;
+
+  &:hover {
+    box-shadow: $shadow-hover;
+    transform: translateY(-4px);
+    border-color: rgba($purple, 0.15);
+
+    .dp-card__overlay { opacity: 1; }
+    .dp-card__img img { transform: scale(1.04); }
+    .dp-card__cta svg { transform: translateX(4px); }
+  }
+
+  &--featured {
+    border-color: rgba($purple, 0.12);
+
+    .dp-card__title::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: $purple;
+      border-radius: 0 4px 4px 0;
+      opacity: 0;
+    }
+  }
+
+  &__img {
+    position: relative;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    background: linear-gradient(135deg, $lavender 0%, #e8e0f3 100%);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba($purple, 0.08) 100%);
+    opacity: 0;
+    transition: opacity $transition;
+  }
+
+  &__badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    color: $green;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+
+    svg { stroke: $green; }
+  }
+
+  &__body {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  &__title {
+    font-size: 17px;
+    font-weight: 700;
+    color: $text-dark;
+    line-height: 1.3;
+    margin: 0 0 8px;
+  }
+
+  &__desc {
+    font-size: 13.5px;
+    color: $text-light;
+    line-height: 1.55;
+    margin: 0 0 14px;
+    flex: 1;
+  }
+
+  &__cost {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: $green-bg;
+    color: $green;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    width: fit-content;
+
+    svg { stroke: $green; flex-shrink: 0; }
+  }
+
+  &__footer {
+    border-top: 1px solid #f0f0f0;
+    padding-top: 14px;
+    margin-top: auto;
+  }
+
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: $purple;
+
+    svg {
+      stroke: $purple;
+      transition: transform $transition;
+    }
+  }
+}
+
+/* ── Empty State ── */
+.dp-empty {
+  padding: 100px 0;
+  text-align: center;
+  background: #fafafa;
+
+  &__inner {
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  &__icon {
+    margin-bottom: 20px;
+    opacity: 0.6;
+  }
+
+  &__title {
+    font-size: 22px;
+    font-weight: 700;
+    color: $text-dark;
+    margin: 0 0 8px;
+  }
+
+  &__text {
+    font-size: 15px;
+    color: $text-light;
+    line-height: 1.6;
+    margin: 0 0 24px;
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 10px;
+    background: $purple;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background $transition;
+
+    svg { stroke: #fff; }
+
+    &:hover { background: $purple-light; }
+  }
+}
+
+/* ── CTA Section ── */
+.dp-cta {
+  background: linear-gradient(135deg, $text-dark 0%, #2a1650 100%);
+  padding: 48px 0;
+
+  &__inner {
+    max-width: $max-w;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+  }
+
+  &__content { flex: 1; }
+
+  &__title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 8px;
+    line-height: 1.3;
+  }
+
+  &__text {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 12px;
+    background: #25D366;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    flex-shrink: 0;
+    transition: all $transition;
+    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.3);
+
+    &:hover {
+      background: #20bd5a;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(37, 211, 102, 0.4);
+    }
+  }
+}
+
+/* ── Related Specialties ── */
+.dp-related {
+  padding: 56px 0 64px;
+  background: $lavender-soft;
+
+  &__inner {
+    max-width: $max-w;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 22px;
+    font-weight: 700;
+    color: $text-dark;
+    margin: 0 0 6px;
+
+    svg { stroke: $purple; flex-shrink: 0; }
+  }
+
+  &__subtitle {
+    font-size: 14.5px;
+    color: $text-mid;
+    margin: 0 0 28px;
+    line-height: 1.5;
+  }
+
+  &__grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  &__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid $border;
+    text-decoration: none;
+    transition: all $transition;
+    box-shadow: 0 1px 4px rgba(69, 25, 124, 0.04);
+
+    &:hover {
+      border-color: $purple;
+      background: $lavender;
+      box-shadow: $shadow-card;
+      transform: translateY(-2px);
+
+      .dp-related__chip-arrow {
+        stroke: $purple;
+        transform: translateX(3px);
+      }
+    }
+  }
+
+  &__chip-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: $text-dark;
+  }
+
+  &__chip-count {
+    font-size: 12px;
+    color: $text-light;
+    background: #f5f5f5;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+
+  &__chip-arrow {
+    stroke: #ccc;
+    flex-shrink: 0;
+    transition: all $transition;
+  }
+}
+
+/* ══════ Responsive ══════ */
+@media (max-width: 1024px) {
+  .dp-treatments__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .dp-breadcrumb {
+    position: static;
+    &__inner { padding: 0 16px; }
+  }
+
+  .dp-hero {
+    padding: 36px 0 32px;
+
+    &__inner {
+      flex-direction: column;
+      gap: 24px;
+      padding: 0 16px;
+    }
+
+    &__title { font-size: 26px; }
+    &__subtitle { font-size: 14px; margin-bottom: 20px; }
+    &__stats { gap: 24px; }
+
+    &__stat-num { font-size: 22px; }
+
+    &__visual { display: none; }
+  }
+
+  .dp-filter {
+    display: block;
+    position: static;
+    padding: 12px 0;
+
+    &__inner { padding: 0 16px; }
+    &__pill { padding: 7px 14px; font-size: 12px; }
+  }
+
+  .dp-treatments {
+    padding: 24px 0 40px;
+
+    &__wrapper { padding: 0 16px; }
+
+    &__grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+
+  .dp-card {
+    flex-direction: row;
+    border-radius: $radius-sm;
+
+    &__img {
+      width: 130px;
+      min-height: 130px;
+      aspect-ratio: auto;
+      flex-shrink: 0;
+    }
+
+    &__badge {
+      top: 8px;
+      left: 8px;
+      font-size: 9px;
+      padding: 3px 8px;
+
+      svg { display: none; }
+    }
+
+    &__body { padding: 14px; }
+    &__title { font-size: 15px; margin-bottom: 4px; }
+    &__desc { font-size: 12.5px; margin-bottom: 8px; -webkit-line-clamp: 2; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+    &__cost { font-size: 11.5px; padding: 4px 8px; margin-bottom: 8px; }
+    &__footer { padding-top: 8px; }
+    &__cta { font-size: 12.5px; }
+  }
+
+  .dp-cta {
+    padding: 32px 0;
+
+    &__inner {
+      flex-direction: column;
+      text-align: center;
+      padding: 0 16px;
+    }
+
+    &__title { font-size: 18px; }
+    &__text { font-size: 13.5px; }
+    &__btn { width: 100%; justify-content: center; }
+  }
+
+  .dp-empty {
+    padding: 60px 0;
+    &__title { font-size: 18px; }
+    &__text { font-size: 13.5px; }
+  }
+
+  .dp-related {
+    padding: 36px 0 44px;
+
+    &__inner { padding: 0 16px; }
+    &__title { font-size: 18px; }
+    &__subtitle { font-size: 13px; margin-bottom: 20px; }
+
+    &__grid { gap: 8px; }
+
+    &__chip {
+      padding: 10px 14px;
+      border-radius: 10px;
+      gap: 6px;
+    }
+
+    &__chip-name { font-size: 13px; }
+    &__chip-count { font-size: 11px; padding: 2px 6px; }
+  }
+}

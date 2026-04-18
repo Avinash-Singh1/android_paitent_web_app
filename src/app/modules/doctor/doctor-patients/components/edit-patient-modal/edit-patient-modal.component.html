@@ -1,0 +1,266 @@
+<div class="edit-profile">
+  <div class="px-24 py-3 text-24 font-600 border-bottom-style">
+    {{ "EDIT_PROFILE" | translate }}
+  </div>
+  <form [formGroup]="editPatientForm" (ngSubmit)="onSubmit()">
+    <mat-dialog-content class="dialog-content">
+      <div class="content row">
+        <div class="form-item col-12 d-flex flex-column gap-2">
+          <label class="font-500 text-18">{{
+            "PROFILE_PHOTO" | translate
+          }}</label>
+          <div class="d-flex gap-3 align-items-center">
+            <div
+              class="image-wrapper"
+              [ngClass]="{ 'no-bg': control['profilePic'].value }"
+            >
+              <img
+                alt=""
+                class=""
+                [src]="control['profilePic'].value"
+                *ngIf="control['profilePic'].value"
+              />
+            </div>
+            <button
+              type="button"
+              class="change-photo font-500 text-18"
+              (click)="profilePhoto.click()"
+            >
+              {{ "CHANGE_PHOTO" | translate }}
+            </button>
+            <input
+              type="file"
+              style="display: none"
+              accept="image/png,image/jpg,image/jpeg,"
+              #profilePhoto
+              (change)="onUpdatePic($event)"
+            />
+          </div>
+        </div>
+        <div
+          class="form-item col-12 col-md-6 col-lg-4 d-flex flex-column gap-2 non-editable"
+        >
+          <label>{{ "PATIENT_NAME" | translate }}</label>
+          <input type="text" formControlName="patientName" />
+        </div>
+        <div
+          class="form-item col-12 col-md-6 col-lg-4 d-flex flex-column gap-2 non-editable"
+        >
+          <label>{{ "MOBILE_NUMBER" | translate }}</label>
+          <input type="text" formControlName="phone" />
+        </div>
+        <div
+          class="form-item col-12 col-md-6 col-lg-4 d-flex flex-column gap-2"
+        >
+          <label>{{ "EMAIL_ID" | translate }}</label>
+          <input
+            type="text"
+            formControlName="email"
+            placeholder="Enter email"
+          />
+          <div
+            class="error-hint error-div"
+            *ngIf="control['email'].errors?.['required'] && (submitted|| control['email'].touched)"
+          ></div>
+        </div>
+        <div
+          class="form-item col-12 col-md-6 col-lg-4 d-flex flex-column gap-2"
+        >
+          <label
+            >{{ "GENDER" | translate }}
+            <span class="required-hint">*</span></label
+          >
+          <div class="d-flex gap-3 align-items-center h-48 flex-wrap">
+            <div class="d-flex gap-3 align-items-center">
+              <input type="radio" formControlName="gender" [value]="1" />
+              <span class="text-18">{{ "MALE" | translate }}</span>
+            </div>
+            <div class="d-flex gap-3 align-items-center">
+              <input type="radio" formControlName="gender" [value]="2" />
+              <span class="text-18">{{ "FEMALE" | translate }}</span>
+            </div>
+            <div class="d-flex gap-3 align-items-center">
+              <input type="radio" formControlName="gender" [value]="3" />
+              <span class="text-18">Other</span>
+            </div>
+          </div>
+          <div
+            class="error-hint error-div"
+            *ngIf="control['gender'].errors?.['required'] && (submitted|| control['gender'].touched)"
+          >
+            Gender is required
+          </div>
+        </div>
+        <div class="form-item col-12 col-md-6 col-lg-4 d-flex gap-2">
+          <div class="w-50 d-flex flex-column gap-2">
+            <label
+              >{{ "DATE_OF_BIRTH" | translate
+              }}<span class="required-hint">*</span></label
+            >
+            <div class="matdate-input d-flex">
+              <input
+                matInput
+                class="w-90"
+                type="text"
+                [matDatepicker]="pickerfrom"
+                placeholder="DD/MM/YYYY"
+                [max]="today"
+                formControlName="dob"
+              />
+
+              <mat-datepicker-toggle
+                class="toggle"
+                matIconSuffix
+                [for]="pickerfrom"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #pickerfrom></mat-datepicker>
+            </div>
+            <div
+              class="error-hint error-div"
+              *ngIf="control['dob'].errors?.['required'] && (submitted|| control['dob'].touched)"
+            >
+              DOB is required
+            </div>
+          </div>
+          <div class="w-50 d-flex flex-column gap-2">
+            <label class=""
+              >{{ "BLOOD_GROUP" | translate
+              }}<span class="required-hint">*</span></label
+            >
+            <ng-select
+              [items]="bloodGroupList"
+              bindLabel="label"
+              bindValue="value"
+              placeholder="NONE"
+              formControlName="bloodGroup"
+            ></ng-select>
+            <div
+              class="error-hint error-div"
+              *ngIf="control['bloodGroup'].errors?.['required'] && (submitted|| control['bloodGroup'].touched)"
+            >
+              Blood group is required
+            </div>
+          </div>
+        </div>
+        <div
+          class="form-item col-12 col-md-6 col-lg-4 d-flex flex-column gap-2"
+        >
+          <label>{{ "LANGUAGE_PREFERENCE" | translate }}</label>
+          <ng-select
+            [items]="languagePreferencelist"
+            bindLabel="label"
+            bindValue="value"
+            formControlName="languagePreference"
+          ></ng-select>
+        </div>
+        <form formGroupName="address" class="">
+          <div class="row content">
+            <div
+              class="form-item col-12 col-md-6 col-lg-4 d-flex flex-column gap-2"
+            >
+              <label
+                >{{ "STREET_ADDRESS" | translate
+                }}<span class="required-hint">*</span></label
+              >
+              <input
+                type="text"
+                formControlName="street"
+                placeholder="Enter street address"
+                oninput="this.value = this.value.replace(/^ $/,'')"
+              />
+              <div
+                class="error-hint error-div"
+                *ngIf="control['address'].get('street').errors?.['required'] && (submitted|| control['address'].get('street').touched)"
+              >
+                Street is required
+              </div>
+            </div>
+            <div
+              class="form-item col-12 col-md-6 col-lg-4 d-flex flex-column gap-2"
+            >
+              <label
+                >{{ "PINCODE" | translate
+                }}<span class="required-hint">*</span></label
+              >
+              <input
+                type="text"
+                formControlName="pincode"
+                placeholder="Enter pincode"
+                maxlength="6"
+                oninput="this.value = this.value.replace(/\D/,'').replace(/^ $/,'')"
+              />
+              <div
+                class="error-hint error-div"
+                *ngIf="control['address'].get('pincode').errors?.['required'] && (submitted|| control['address'].get('pincode').touched)"
+              >
+                Pincode is required
+              </div>
+              <div
+                class="error-hint error-div"
+                *ngIf="control['address'].get('pincode').errors?.['minlength'] && (submitted|| control['address'].get('pincode').touched)"
+              >
+                Pincode must be of 6 digits
+              </div>
+            </div>
+            <div
+              class="form-item col-12 col-md-6 col-lg-4 d-flex flex-column gap-2"
+            >
+              <label
+                >{{ "CITY" | translate
+                }}<span class="required-hint">*</span></label
+              >
+              <input
+                type="text"
+                formControlName="city"
+                placeholder="Enter city"
+                oninput="this.value = this.value.replace(/^ $/,'')"
+              />
+              <div
+                class="error-hint error-div"
+                *ngIf="control['address'].get('city').errors?.['required'] && (submitted|| control['address'].get('city').touched)"
+              >
+                City is required
+              </div>
+            </div>
+            <div
+              class="form-item col-12 col-md-6 col-lg-4 d-flex flex-column gap-2"
+            >
+              <label
+                >{{ "STATE" | translate
+                }}<span class="required-hint">*</span></label
+              >
+              <ng-select
+                [items]="stateList"
+                bindLabel="name"
+                bindValue="_id"
+                formControlName="state"
+                placeholder="Select state"
+              ></ng-select>
+              <div
+                class="error-hint error-div"
+                *ngIf="control['state']?.errors?.['required'] && (submitted|| control['state'].touched)"
+              >
+                State is required
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="">
+      <div class="w-100 px-24 py-3 border-top-style d-flex justify-content-end gap-6">
+        <button
+          type="button"
+          class="white-button text-18"
+          (click)="matdialogRef.close()"
+        >
+          {{ "CANCEL" | translate }}
+        </button>
+        <button type="submit" class="gray-button text-18">
+          {{ "SAVE" | translate }}
+        </button>
+      </div>
+    </mat-dialog-actions>
+  </form>
+</div>

@@ -1,0 +1,118 @@
+@use "tools.mediaquery" as *;
+
+@use "settings.colors" as *;
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+
+.first-section {
+  max-width: $content-max-width;
+  margin: auto;
+  margin-bottom: 70px;
+  margin-top: 30px;
+
+  @media screen and (max-width: 767px) {
+    max-width: $content-sm-max-width;
+  }
+
+  h2 {
+    @include font-sans_pro-regular($size: 24px);
+
+    @media screen and (max-width: 767px) {
+      @include font-sans_pro-regular($size: 20px);
+    }
+  }
+
+  p {
+    word-break: break-word;
+    @include font-sans_pro-regular($size: 14px);
+
+    @media screen and (max-width: 767px) {
+      @include font-sans_pro-regular($size: 16px);
+    }
+  }
+}
+
+.second-section {
+  background-color: $purple;
+  color: $white;
+
+  .wrapper {
+    max-width: $content-max-width;
+    margin: auto;
+    padding: 70px 0;
+
+    @media screen and (max-width: 767px) {
+      max-width: $content-sm-max-width;
+    }
+
+    h2 {
+      margin: 0;
+      margin-top: 40px;
+      @include font-sans_pro-semibold($size: 24px);
+
+      @media screen and (max-width: 767px) {
+        @include font-sans_pro-semibold($size: 20px);
+      }
+    }
+
+    .box {
+      text-align: center;
+      margin-top: 50px;
+      width: 20%;
+
+      img {
+        height: 70px;
+        width: 70px;
+      }
+
+      p {
+        word-break: break-word;
+
+        @include font-sans_pro-regular($size: 14px);
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-regular($size: 16px);
+        }
+      }
+
+      @media screen and (max-width: 767px) {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.third-section {
+  max-width: $content-max-width;
+  margin: auto;
+  padding: 70px 0;
+
+  @media screen and (max-width: 767px) {
+    max-width: $content-sm-max-width;
+  }
+
+  span {
+    @include font-sans_pro-regular($size: 14px);
+
+    @media screen and (max-width: 767px) {
+      @include font-sans_pro-regular($size: 20px);
+    }
+  }
+
+  img {
+    height: 300px;
+    width: 300px;
+  }
+}
+
+.g-10 {
+  gap: 10%;
+}
+
+.sm-flex-col-rev {
+  @media screen and (max-width: 767px) {
+    flex-direction: column-reverse;
+  }
+}

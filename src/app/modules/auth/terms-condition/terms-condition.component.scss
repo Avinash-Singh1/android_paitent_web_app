@@ -1,0 +1,97 @@
+@use "variable.scss" as *;
+
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+
+.mdc-dialog__content.terms-conditons ::ng-deep {
+  @include font-sans_pro-regular($size: 14px);
+  color: $black !important;
+}
+
+.mdc-dialog__actions ::ng-deep {
+  padding: 0 !important;
+}
+
+.mat-action-button {
+  padding: 8px 24px;
+  border: 1px solid $border-color;
+  width: 160px;
+  font-size: 14px;
+
+  &.bg-blue-violet {
+    background: $blue-violet !important;
+    color: $white;
+  }
+
+  &.bg-white {
+    background: $white;
+  }
+}
+
+.word-break {
+  word-break: break-word;
+}
+
+.privacy-policy-section {
+  .content {
+    // max-width: $content-max-width;
+    // margin: auto;
+    // padding: 60px 0;
+
+    li,
+    p {
+      margin: 0;
+      word-break: break-word;
+      @include font-sans_pro-regular($size: 14px);
+    }
+
+    label {
+      color: $purple;
+      word-break: break-word;
+      @include font-sans_pro-semibold($size: 20px);
+    }
+
+    span {
+      word-break: break-word;
+      @include font-sans_pro-semibold($size: 14px);
+    }
+
+    li {
+      list-style-type: none;
+    }
+
+    li::before {
+      content: "\2022";
+      /* Add content: \2022 is the CSS Code/unicode for a bullet */
+      color: $purple;
+      /* Change the color */
+      font-weight: bold;
+      /* If you want it to be bold */
+      display: inline-block;
+      /* Needed to add space between the bullet and the text */
+      width: 15px;
+      /* Also needed for space (tweak if needed) */
+      margin-left: -1em;
+      /* Also needed for space (tweak if needed) */
+      font-size: 1.25em;
+    }
+  }
+}
+
+.text-purple {
+  @include font-sans_pro-semibold($size: 14px);
+  color: $purple;
+  word-break: break-word;
+}
+
+:host::ng-deep {
+  .mdc-dialog .mdc-dialog__content {
+    padding: 20px 48px;
+
+    @media screen and (max-width: 767px) {
+      padding: 20px 24px;
+    }
+  }
+}

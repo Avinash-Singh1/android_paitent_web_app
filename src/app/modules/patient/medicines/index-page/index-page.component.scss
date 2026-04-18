@@ -1,0 +1,485 @@
+
+$background-color: #45197c;
+$primary-color: #90E0EF;
+$text-color: #000;
+$font-family: "Source Sans Pro";
+$font-weight-normal: 400;
+$font-weight-semibold: 600;
+$font-weight-bold: 800;
+
+.main_banner {
+    display: flex;
+    justify-content: space-between;
+    height: auto;
+    flex-shrink: 0;
+    border-radius: 36px;
+    background: $primary-color;
+}
+
+.shop-now-wrapper {
+    background-color: $background-color;
+    padding: 12px 36px;
+    border-radius: 5px;
+    text-align: center;
+    color: #fff;
+}
+
+.Hedding-content {
+    width: 500px;
+    max-width: 100%;
+    line-height: normal;
+}
+
+.free-shipping-1-icon {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    opacity: 0.7;
+}
+
+:root {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+        display: none !important;
+    }
+}
+
+.tab-bar {
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 7px;
+    width: 100%;
+    scrollbar-width: 0px;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+        display: none !important;
+    }
+}
+
+.scrollable-container {
+    overflow: auto;
+}
+
+.tab-bar a {
+    text-decoration: none;
+    color: black;
+    border: none;
+    padding: 10px 30px 0px 0px;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-block;
+}
+
+a .container {
+    width: 132px;
+    height: 172px; // Added 'px' unit
+    padding: 18px 10px 37px 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 9px;
+
+    &:hover {
+        animation: animate__flip;
+        transition: 2s;
+    }
+}
+
+.image {
+    width: 90px;
+    height: 70px;
+}
+
+.text {
+    color: $text-color;
+    text-align: center;
+    font-family: $font-family;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: $font-weight-semibold;
+    line-height: normal;
+}
+
+.big-card {
+    padding: 22px clamp(16px, 5vw, 64px);
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.promotion-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 18px;
+}
+
+.promotion-details {
+    width: 100%;
+    height: 95px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.promotion-title,
+.promotion-subtitle {
+    color: $text-color;
+    font-family: $font-family;
+    word-wrap: break-word;
+}
+
+.promotion-title {
+    font-size: 14px;
+    font-weight: $font-weight-normal;
+}
+
+.promotion-subtitle {
+    font-size: 20px;
+    font-weight: $font-weight-semibold;
+}
+
+.promotion-description {
+    color: $text-color;
+    font-family: $font-family;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    text-align: start;
+}
+
+.shop-now {
+    padding: 5px 12px;
+    background: $background-color;
+    border-radius: 45px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+}
+
+.shop-now-button {
+    color: white;
+    font-size: 14px;
+    font-family: $font-family;
+    font-weight: $font-weight-semibold;
+    word-wrap: break-word;
+    border: none;
+}
+
+.arrow {
+    width: 18px;
+    height: 18px;
+    position: relative;
+
+    &:before {
+        content: "";
+        width: 18px;
+        height: 18px;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+    &:after {
+        content: "";
+        width: 5.56px;
+        height: 9px;
+        position: absolute;
+        left: 6.44px;
+        top: 4.5px;
+        background: white;
+    }
+}
+
+.Card_categraoy {
+    width: 132px;
+}
+
+.carousel-inner {
+    border-radius: 36px;
+}
+
+.Moblie_carsole {
+    display: none;
+}
+
+// Mobile Screen Banner
+.Banner_tittle {
+    color: $text-color;
+    font-family: $font-family;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: $font-weight-semibold;
+    line-height: normal;
+    align-self: stretch;
+}
+
+.Banner_subtittle {
+    color: $text-color;
+    font-family: $font-family;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: $font-weight-normal;
+    line-height: normal;
+}
+
+.Button_immage_section {
+    width: 100%;
+    display: flex;
+
+    .continer_section_banner {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.button_mobile {
+    display: inline-flex;
+    padding: 8px 12px;
+    justify-content: center;
+    color: white;
+    align-items: center;
+    border-radius: 5px;
+    background: $background-color;
+    border: none;
+    width: fit-content;
+}
+
+.Test_sub {
+    color: $text-color;
+    font-family: $font-family;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: $font-weight-normal;
+    line-height: normal;
+    margin-top: revert;
+}
+
+.image_servies_section {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.text_Container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 35px 10px;
+}
+
+@media (max-width: 375px) {
+    .col {
+        width: 165px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .Hedding-content {
+        max-width: 100% !important;
+    }
+
+    .my-carasol_dextop {
+        display: none;
+    }
+
+    .Banner_text {
+        font-weight: $font-weight-bold;
+        font-size: none !important;
+    }
+
+    .Moblie_carsole {
+        display: block !important;
+    }
+
+    .fw-semibold {
+        font-size: large;
+        color: white;
+        font-weight: $font-weight-bold;
+    }
+
+    .shop-now-wrapper {
+        padding: 10px 25px;
+    }
+
+    .col-md-8 {
+        width: -webkit-fill-available;
+    }
+
+    .promotion-description {
+        width: 200px;
+    }
+
+    .Image_banner {
+        max-width: 250px;
+        max-height: 300px;
+    }
+
+    .big-card {
+        padding: 10px 5px;
+    }
+
+    .search_container .serch_section {
+        margin: 0 !important;
+        width: 100%;
+    }
+
+    .card-1 {
+        background-image: url('/assets/images/my-upchar-image/Doctor-card-revercies.png') !important;
+        background-position: right 0 !important;
+        background-repeat:no-repeat !important;
+    }
+
+    .card-2 {
+        background-image: url('/assets/images/my-upchar-image/Card-2.png') !important;
+        background-position: right 0 !important;
+        background-repeat:no-repeat !important;
+    }
+
+    .card-3 {
+        background-image: url('/assets/images/my-upchar-image/Card-3.png') !important;
+        background-position: right 0 !important;
+        background-repeat:no-repeat !important;
+    }
+}
+
+.carousel-indicators button {
+    border-radius: 50% !important;
+    width: 10px !important;
+    height: 10px !important;
+}
+
+@media (max-width: 768px) {
+    .Image_banner {
+        max-width: 250px;
+        max-height: 300px;
+        margin: auto;
+        overflow: auto;
+    }
+
+    .big-card {
+        padding: 10px 5px;
+    }
+
+    .serchbar {
+        margin-top: 30px !important;
+    }
+
+    .container-text {
+        padding: 5px !important;
+    }
+
+    .serchbar .button_container {
+        display: none;
+    }
+}
+
+@media (max-width: 992px) {
+    .Hedding-content {
+        max-width: 100% !important;
+    }
+
+    .big-card {
+        padding: 10px 5px;
+    }
+
+    .banner_image_contaioner {
+        display: flex;
+        justify-content: end;
+        overflow: hidden;
+        margin: auto;
+    }
+
+    .container-text {
+        padding: 5px !important;
+    }
+
+    .banner_main_box {
+    }
+}
+
+.con-1 {
+    background-image: url('/assets/images/my-upchar-image/Featured-Categories/Background/Sexual-Health.png');
+    background-repeat: no-repeat;
+}
+
+.con-2 {
+    background-image: url('/assets/images/my-upchar-image/Featured-Categories/Background/Women-Care.png');
+    background-repeat: no-repeat;
+
+}
+
+.con-3 {
+    background-image: url('/assets/images/my-upchar-image/Featured-Categories/Background/Healt-and-Netrition.png');
+    background-repeat: no-repeat;
+
+}
+
+.con-4 {
+    background-image: url('/assets/images/my-upchar-image/Featured-Categories/Background/Oral-and-Dental-Care.png');
+    background-repeat: no-repeat;
+
+}
+
+.con-5 {
+    background-image: url('/assets/images/my-upchar-image/Featured-Categories/Background/Heart-Care.png');
+    background-repeat: no-repeat;
+
+}
+
+.con-6 {
+    background-image: url('/assets/images/my-upchar-image/Featured-Categories/Background/Mental-Health.png');
+    background-repeat: no-repeat;
+
+}
+
+.con-7 {
+    background-image: url('/assets/images/my-upchar-image/Featured-Categories/Background/Baby-Care.png');
+    background-repeat: no-repeat;
+
+}
+
+.con-8 {
+
+    background-image: url('/assets/images/my-upchar-image/Featured-Categories/Background/First-Aid.png');
+    background-repeat: no-repeat;
+
+}
+.medicines-category-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+.medicines-category {
+  display: flex;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  gap: 1rem;
+}
+
+.category-link {
+  flex: 0 0 auto;
+  text-decoration: none;
+  min-width: 120px; /* Adjust based on design */
+}
+
+/* Optional: prevent horizontal scroll outside this area */
+body {
+  overflow-x: hidden;
+}

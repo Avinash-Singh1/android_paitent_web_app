@@ -1,0 +1,91 @@
+<div class="establishment-request">
+  <div
+    class="d-flex justify-content-between px-24 py-12 border-bottom-style align-items-center"
+  >
+    <div class="search-wrapper">
+      <svg-icon src="assets/images/svg/search.svg"></svg-icon>
+      <input
+        type="text"
+        placeholder="Search by doctor's name"
+        (input)="onSearch($event)"
+      />
+    </div>
+    <button class="svg-icon-button" (click)="matdialogRef.close()">
+      <svg-icon src="assets/images/svg/cross.svg"></svg-icon>
+    </button>
+  </div>
+  <mat-dialog-content class="appointment-history">
+    <div class="appointment-list d-flex flex-column gap-4">
+      <ng-container
+        *ngFor="
+          let list of data.patientHistory
+            | paginate
+              : {
+                  itemsPerPage: payload.size,
+                  currentPage: payload.page,
+                  totalItems: data.totalItems
+                }
+        "
+      >
+        <div class="d-flex flex-column gap-6">
+          <span>{{ list._id }}</span>
+          <div class="d-flex flex-column gap-3 text-18">
+            <ng-container *ngFor="let appointment of list.data">
+              <div class="border-style rounded-5px d-flex">
+                <div class="border-right text-center px-24 py-3 w-15">
+                  <p class="text-32 font-600">
+                    {{ appointment.date | date : "dd" }}
+                  </p>
+
+                  <p class="m-0">
+                    {{ appointment.date | date : "EEE, yyyy" }}
+                  </p>
+                </div>
+                <div
+                  class="appointment-content w-85 d-flex align-items-center justify-content-between"
+                >
+                  <div class="">
+                    <p class="font-600">
+                      Appointment with {{ appointment.doctorName }}
+                    </p>
+
+                    <p class="m-0">
+                      {{ appointment.date | date : "h:mm a" : "+0530" }} For
+                      {{ appointment.slotTime }} mins
+                    </p>
+                  </div>
+                  <div
+                    class="d-flex align-items-center justify-content-center py-2 gap-2 px-4 rounded-5"
+                    [ngClass]="appointment?.status | appointmentStatus"
+                  >
+                    <svg-icon [src]="statusObj[appointment?.status]?.icon">
+                    </svg-icon>
+                    <span class="text-16 font-600">
+                      {{ statusObj[appointment?.status].label }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+      <div class="text-center text-18" *ngIf="!data.patientHistory.length">
+        No Appointment History
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <div
+      class="pagination-section border-top-style d-flex justify-content-center align-items-center w-100"
+      *ngIf="data.patientHistory.length && data.totalItems > payload.size"
+    >
+      <pagination-controls
+        class="text-center"
+        [previousLabel]="' '"
+        [nextLabel]="' '"
+        (pageChange)="onPageChange($event)"
+      ></pagination-controls>
+    </div>
+  </mat-dialog-actions>
+</div>

@@ -1,0 +1,130 @@
+<section class="appointment-booking">
+  <div class="appointment-booking__wrapper">
+    <div class="appointment-booking__wrapper__name">
+      <div>
+        <img loading="lazy" [src]="doctorDetail?.doctorPic" alt="" />
+      </div>
+      <div>
+        <h2>{{ doctorDetail?.fullname || "N/A" }}</h2>
+        <p>
+          {{ (doctorDetail?.specialization | formatarray : "name") || "N/A" }}
+        </p>
+        <p>{{ doctorDetail?.address || "N/A" }}</p>
+      </div>
+    </div>
+    <div class="appointment-booking__wrapper__timings">
+      <div class="appointment-booking__wrapper__timings__details">
+        <div class="date">
+          <img loading="lazy" src="assets/images/svg/calendar.svg" alt="" />
+          <span>On</span>
+          <p>{{ timing?.date }}</p>
+        </div>
+        <div class="time">
+          <img loading="lazy" src="assets/images/svg/Access time.svg" alt="" />
+          <span>At</span>
+          <p>{{ timing?.time?.time }}</p>
+        </div>
+      </div>
+    </div>
+    <hr class="light-line" />
+
+    <div class="appointment-booking__wrapper__patient-details">
+      <div
+        class="appointment-booking__wrapper__patient-details__data"
+        *ngIf="mode == 'login'"
+      >
+        <form [formGroup]="loginForm" style="position: relative">
+          <label for="">Mobile</label>
+          <input
+            type="text"
+            maxlength="10"
+            placeholder="Mobile Number"
+            formControlName="phone"
+            class="px-5"
+            oninput="this.value = this.value.replace(/\D/g, '').replace(/^0/,'');"
+          />
+          <span
+            class="text-18"
+            style="position: absolute; left: 14px; top: 41px"
+            >+91
+          </span>
+          <div *ngIf="loginForm.get('phone')?.errors">
+            <div
+              class="form-error"
+              *ngIf="(control['phone'].touched || submitted) && control['phone'].errors?.['required']"
+            >
+              This field is mandatory.
+            </div>
+
+            <div
+              class="form-error"
+              *ngIf="(control['phone'].touched || submitted) && control['phone'].errors?.['minlength']
+               &&(!control['phone'].errors?.['required'])"
+            >
+              Please enter valid phone number.
+            </div>
+          </div>
+        </form>
+
+        <p class="mt-3">You will receive an OTP shortly.</p>
+        <p>We will send appointment-related communications on this number.</p>
+      </div>
+      <div class="otp-section" *ngIf="mode != 'login'">
+        <h2>We have sent you an OTP on</h2>
+        <div class="phn-number d-flex gap-2">
+          <h2>+91{{ loginForm.value.phone }}</h2>
+          <svg-icon
+            (click)="edit()"
+            src="assets/images/svg/edit.svg"
+            class="cursor-pointer edit"
+          ></svg-icon>
+        </div>
+        <div class="d-flex flex-column">
+          <label for=""> OTP </label>
+          <form [formGroup]="otpForm">
+            <input
+              type="text"
+              placeholder="Please enter the 6 digit OTP here to verify"
+              maxlength="6"
+              formControlName="otp"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+            />
+            <hr />
+          </form>
+          <div
+            class="form-error"
+            *ngIf="(controls['otp'].touched || submitted) && controls['otp'].errors?.['required']"
+          >
+            Otp is required
+          </div>
+          <div
+            class="form-error"
+            *ngIf="(controls['otp'].touched || submitted) && controls['otp'].errors?.['minlength'] 
+            && (!controls['otp'].errors?.['required'])"
+          >
+            Otp Must be Valid.
+          </div>
+        </div>
+        <div
+          class="d-flex justify-content-between align-items-center flex-wrap"
+        >
+          <div class="d-flex gap-2 align-items-baseline">
+            <p class="not-received">Still not received OTP?</p>
+            <p class="get-call">Get via call</p>
+          </div>
+          <p *ngIf="resendOtpVlaue">{{ resendTime }}</p>
+          <p
+            class="get-call cursor-pointer"
+            *ngIf="!resendOtpVlaue"
+            (click)="resendOTP()"
+          >
+            Resend OTP
+          </p>
+        </div>
+      </div>
+      <div class="submit">
+        <button (click)="continue()">Continue</button>
+      </div>
+    </div>
+  </div>
+</section>

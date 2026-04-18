@@ -1,0 +1,1107 @@
+<div class="inner-wrapper" id="clickToCloseArea">
+  <div class="side-menu" id="sideMenu">
+    <div class="mobile-menu-header">
+      <div class="header-logo">
+        <svg-icon class="assets/images/new-svg/sidemenu-svg/Dashboard_logo.svg"></svg-icon>
+      </div>
+      <button type="button" id="close_menu_btn" (click)="onCloseMenuClick()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g clip-path="url(#clip0_720_6065)">
+            <path d="M21 11H6.83L10.41 7.41L9 6L3 12L9 18L10.41 16.59L6.83 13H21V11Z" fill="black" />
+          </g>
+          <defs>
+            <clipPath id="clip0_720_6065">
+              <rect width="24" height="24" fill="white" />
+            </clipPath>
+          </defs>
+        </svg>
+      </button>
+    </div>
+    <ul class="menu-list">
+      <li *ngFor="let item of menuItems" [class.exclude-menu]="item.hasSubmenu">
+        <a *ngIf="!item.hasSubmenu" [routerLink]="[item.routerLink]" [routerLinkActive]="'active'">
+          <img loading="lazy" [src]="item.icon" [alt]="item.alt" [ngStyle]="item.style || {}" />
+          <span>{{ item.label }}</span>
+        </a>
+        <a *ngIf="item.hasSubmenu" href="#" class="hasSubmenu" (click)="settingtoggleSubmenu($event)">
+          <div style="
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        ">
+            <div>
+              <img loading="lazy" [src]="item.icon" [alt]="item.alt" />
+              <span>{{ item.label }}</span>
+            </div>
+            <svg-icon *ngIf="!isSubmenuOpen" src="assets/images/right.svg"></svg-icon>
+            <svg *ngIf="isSubmenuOpen" width="12" height="8" viewBox="0 0 12 8" fill="white">
+              <path d="M1.41 0.589844L6 5.16984L10.59 0.589844L12 1.99984L6 7.99984L0 1.99984L1.41 0.589844Z"></path>
+            </svg>
+          </div>
+        </a>
+        <div *ngIf="item.hasSubmenu" class="submenu" [style.display]="isSubmenuOpen ? 'block' : 'none'">
+          <a *ngFor="let subitem of item.submenu" [routerLink]="[subitem.routerLink]">
+            <img loading="lazy" [src]="subitem.icon" [alt]="subitem.alt" />
+            <span>{{ subitem.label }}</span>
+          </a>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="main-content">
+    <div class="page-title">
+      <h2>
+        <div class="hamber">
+          <button class="svg-icon-button" id="showMenu" (click)="onMenuClick()">
+            <img loading="lazy" src="assets/images/svg/hamber.svg" alt="" />
+          </button>
+        </div>
+        {{isEditMode ? 'Edit' : 'Add'}} Establishment <span class="step_count">Step({{ count }}/2)</span>
+      </h2>
+
+    </div>
+    <div (click)="closeSideBar()">
+      <div class="page-form establishment-screen">
+        <!-- row steps Consultation Address start -->
+
+        <form class="content d-flex flex-column" [formGroup]="establishmentForm"
+          *ngIf="countable === undefined && !isEditMode">
+          <div class="row steps_pages">
+            <div id="slide_1_fix">
+              <div class="modal-body">
+                <h3 class="fw-bold m-0">Consultation & Practice Details</h3>
+                <p class="m-0">
+                  Please select your consultation type and practice details.
+                </p>
+                <div class="row g-0" *ngIf="
+                establishmentForm.get('showInClinic')?.value && currentSlide == 1
+                ||
+                (isOnlyVideoType && currentSlide == 2)
+                ">
+                  <div class="col-lg-12">
+                    <label class="main required">Consultation type</label>
+
+                    <div class="form-group pb-0 custom_box_Fix">
+                      <div class="form-check form-check-inline main ">
+                        <input class="form-check-input" name="consultationType" type="radio"
+                          [checked]="establishmentForm.get('showInClinic')?.value"
+                          (change)="onConsultationChange('In-clinic')" id="in_clinic_consultation" value="In-clinic" />
+                        <label class="form-check-label" for="in_clinic_consultation">In-clinic Consultation</label>
+                      </div>
+                      <div class="form-check form-check-inline main">
+                        <input class="form-check-input" name="consultationType" type="radio" id="video_consultation"
+                          value="video" (change)="onConsultationChange('video')"
+                          [checked]="establishmentForm.get('showVideo')?.value && !establishmentForm.get('showInClinic')?.value" />
+                        <label class="form-check-label" for="video_consultation">Video Consultation (Only)</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row g-0"
+                  *ngIf="shouldShowInClinicField() && establishmentForm.get('showInClinic')?.value && currentSlide == 1">
+                  <div class="col-lg-12">
+                    <div class="form-group pt-0">
+                      <div class="form-check p-0 form-check-inline main border-0">
+                        <div class="form-check pt-0 form-check-inline">
+                          <input class="form-check-input" id="in_clinic_consultation_check" type="checkbox"
+                            [checked]="establishmentForm.get('showInClinic')?.value" formControlName="showInClinic"
+                            (change)="onInClinicCheckboxChange()" />
+                          <label class="form-check-label" for="in_clinic">In-clinic</label>
+                        </div>
+                        <div class="form-check pt-0 form-check-inline">
+                          <input class="form-check-input" type="checkbox" id="video_consultation_check"
+                            [checked]="establishmentForm.get('showVideo')?.value" formControlName="showVideo"
+                            (change)="onVideoCheckboxChange()" />
+                          <label class="form-check-label" for="video">Video Consultation</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  *ngIf="shouldShowInClinicField() && establishmentForm.get('showInClinic')?.value && currentSlide == 1">
+                  <h4 class="fw-bold mt-2 mb-0"
+                    *ngIf="shouldShowInClinicField() && establishmentForm.get('showInClinic')?.value">Connect a Practice
+                  </h4>
+                  <p [className]="errorMessage && 'redColor'"
+                    *ngIf="shouldShowInClinicField() && establishmentForm.get('showInClinic')?.value">
+                    Please select any one of the following to continue
+                  </p>
+                  <div class="row" *ngIf="shouldShowInClinicField() && establishmentForm.get('showInClinic')?.value">
+                    <div class="col-lg-6 pb-3">
+                      <div class="form-group custom_box_Fix">
+                        <div class="form-check form-check-inline form-check-inline_fix main main1" style="
+                              border-right: 1px solid gray;
+                              border-radius: 10px;
+                            ">
+                          <input class="form-check-input" type="radio" name="Consultation_type"
+                            formControlName="Consultation_type" id="own_consultation" value="own"
+                            (click)="onOptionChange('own')" />
+                          <label class="form-check-label" for="own_consultation">I own a
+                            establishment</label>
+                        </div>
+                        <div class="form-check form-check-inline form-check-inline_fix main main2" style="
+                              border-right: 1px solid gray;
+                              border-radius: 10px;
+                            ">
+                          <input class="form-check-input" type="radio" name="Consultation_type" id="visit_consultation"
+                            formControlName="Consultation_type" value="visit" (click)="onOptionChange('visit')" />
+                          <label class="form-check-label" for="visit_consultation">I
+                            visit an establishment</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <h3 class="fw-bold" *ngIf="shouldShowInClinicField() && establishmentForm.get('showInClinic')?.value">
+                    Address Information</h3>
+                  <p *ngIf="shouldShowInClinicField() && establishmentForm.get('showInClinic')?.value">Please provide
+                    the details of your clinic or hospital.</p>
+                  <div class="row" *ngIf="shouldShowInClinicField() && establishmentForm.get('showInClinic')?.value">
+                    <div class="col-lg-6 pb-3">
+                      <div class="frm-group2">
+                        <input class="form-control" placeholder="Clinic/Hospital Name*" formControlName="name"
+                          height="45px" oninput="this.value=this.value.replace(/^ $/,'')" (input)="search($event)"
+                          [matAutocomplete]="auto" maxlength="100" />
+                      </div>
+                      <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let hospital of hospitalList" [value]="hospital.hospitalName"
+                          (click)="onSelectHospital(hospital)">
+                          {{
+                          hospital.hospitalName +
+                          " - " +
+                          hospital.address.cityName
+                          }}
+                        </mat-option>
+                      </mat-autocomplete>
+                      <div class="error-div error-hint"
+                        *ngIf="establishmentForm.get('name').errors?.['required'] && establishmentForm.get('name').touched">
+                        Establishment Name is required.
+                      </div>
+                      <div class="error-div error-hint"
+                        *ngIf="establishmentForm.get('name').errors?.['minlength'] && establishmentForm.get('name').touched">
+                        Establishment Name must be at least 3 characters long.
+                      </div>
+                      <div class="error-div error-hint"
+                        *ngIf="establishmentForm.get('name').errors?.['maxlength'] && establishmentForm.get('name').touched">
+                        Establishment Name must be less than 100 characters long.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="shouldShowInClinicField() && establishmentForm.get('showInClinic')?.value">
+                    <div class="col-lg-6 pb-3">
+                      <div class="form-group form-group2">
+                        <ng-select #establishmentType class="establishment-type" [items]="hospitalTypeList"
+                          bindLabel="name" bindValue="_id" placeholder="Clinic/Hospital Type"
+                          formControlName="hospitalTypeId" oninput="this.value = this.value.replace(/^ $/,'')"
+                          (focus)="establishmentType.open()"></ng-select>
+                      </div>
+                      <div class="error-div error-hint"
+                        *ngIf="establishmentForm.get('hospitalTypeId').errors?.['required'] && establishmentForm.get('hospitalTypeId').touched">
+                        Establishment Type is required.
+                      </div>
+                    </div>
+                  </div>
+                  <!-- here -->
+                  <div class="row gy-3" formGroupName="address">
+                    <div class="">
+                      <div class="col-lg-6 pb-3"
+                        *ngIf="shouldShowInClinicField() && establishmentForm.get('showInClinic')?.value">
+                        <div class="form-group form-group2 p-mobile" style="padding: 0px 10px 0px 0px !important">
+                          <nectar-form-field>
+                            <input style="height: 45px; text-indent: 10px" nectarError controlName="Street address"
+                              type="text" class="form-input border-style rounded-1 w-100" placeholder="Street address"
+                              formControlName="landmark" oninput="this.value = this.value.replace(/^ $/,'')"
+                              [matAutocomplete]="landmark" (input)="onSearch($event, 'predicationList')" />
+                          </nectar-form-field>
+                          <mat-autocomplete #landmark="matAutocomplete">
+                            <mat-option *ngFor="let place of predicationList" (click)="onSelectPlace(place)">
+                              {{ place.description }}
+                            </mat-option>
+                          </mat-autocomplete>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" style="padding-right: 0">
+                      <div class="col-lg-3 pb-3" style="padding-right: 0"
+                        *ngIf="shouldShowInClinicField() && establishmentForm.get('showInClinic')?.value">
+                        <div class="form-group form-group2">
+                          <nectar-form-field>
+                            <ng-select nectarError contorlName="State" #state class="establishment-type"
+                              [items]="stateList" bindLabel="name" bindValue="_id" placeholder="State"
+                              formControlName="state" oninput="this.value = this.value.replace(/^ $/,'')"
+                              (focus)="state.open()"></ng-select>
+                          </nectar-form-field>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 pb-3" style="padding-right: 0" *ngIf="
+                      shouldShowInClinicField() &&
+                      !establishmentForm.get('showInClinic')?.value
+                    ">
+                        <div class="form-group form-group2" style="margin-top: 10px">
+                          <nectar-form-field>
+                            <input nectarError style="height: 45px; padding-left: 10px" readonly
+                              controlName="sampleCityName" type="text" class="form-input border-style rounded-1 w-100"
+                              placeholder="State" formControlName="sampleCityName"
+                              oninput="this.value = this.value.replace(/^ $/,'')" />
+                          </nectar-form-field>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 pb-3 customCityClass" style="padding-right: 0"
+                        *ngIf="shouldShowInClinicField() && establishmentForm.get('showInClinic')?.value">
+                        <div class="form-group form-group2" style="height: 100%">
+                          <nectar-form-field style="height: 100%">
+                            <input style="height: 45px; text-indent: 10px" nectarError controlName="City"
+                              class="form-input border-style rounded-1 w-100" placeholder="City" formControlName="city"
+                              oninput="this.value = this.value.replace(/^ $/,'')" [matAutocomplete]="city"
+                              (input)="onSearch($event, 'predicationCityList')" />
+                          </nectar-form-field>
+                          <mat-autocomplete #city="matAutocomplete">
+                            <mat-option *ngFor="let place of predicationCityList" (click)="onSelectPlace(place)">
+                              {{ place.description }}
+                            </mat-option>
+                          </mat-autocomplete>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" style="padding-right: 0"
+                      *ngIf="shouldShowInClinicField() && establishmentForm.get('showInClinic')?.value">
+                      <div class="col-lg-3 pb-3 addMobileMargin" style="padding-right: 0">
+                        <div class="form-group form-group2">
+                          <nectar-form-field>
+                            <input style="height: 45px; text-indent: 10px" nectarError controlName="Locality"
+                              type="text" class="form-input border-style rounded-1 w-100" placeholder="Locality"
+                              formControlName="locality" oninput="this.value = this.value.replace(/^ $/,'')" />
+                          </nectar-form-field>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 pb-3" style="padding-right: 0">
+                        <div class="form-group form-group2">
+                          <nectar-form-field>
+                            <input style="height: 45px; text-indent: 10px" nectarError contorlName="Pincode" type="text"
+                              maxlength="6" class="form-input border-style rounded-1 w-100" placeholder="Pincode"
+                              formControlName="pincode"
+                              oninput="this.value = this.value.replace(/\D/,'').replace(/^ $/,'')" />
+                          </nectar-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row" *ngIf="shouldShowInClinicField() && establishmentForm.get('showInClinic')?.value">
+                    <div class="col-lg-10 col-md-12 pb-3" [ngClass]="{ 'border-danger': !establishmentProofUrl }">
+                      <div class="upload-docs">
+                        <div class="form-group pt-0 pb-0">
+                          <label class="required">Clinic/Hospital Proof</label>
+                        </div>
+                        <div class="upload-docs-inner d-flex gap-2">
+                          <select class="form-select" aria-label="Default select example" formControlName="proofType"
+                            (change)="onProofTypeChange($event)">
+                            <option value="" disabled selected>
+                              Select Clinic/Hospital Proof
+                            </option>
+                            <option *ngFor="let a of establishmentProofOptions">
+                              {{ a }}
+                            </option>
+                          </select>
+
+                          <div class="container_fluid d-flex gap-2">
+                            <div class="custom-file-upload-wrapper">
+                              <label for="file_upload_3" class="custom-file-upload" [ngClass]="{
+                                    error_border: !establishmentProofUrl
+                                  }">Choose File</label>
+                              <input id="file_upload_3" class="d-none" type="file" (change)="
+                                    onFileSelected($event, 'establishmentProof')
+                                  " />
+                            </div>
+                            <div class="file-preview-inline pb-0">
+                              <div class="previewBox" id="file_upload_preview_3">
+                                <img loading="lazy" *ngIf="establishmentProofUrl" [src]="establishmentProofUrl"
+                                  alt="Establishment Proof Preview" />
+                              </div>
+                              <p *ngIf="establishmentProofUrl" class="me-2">
+                                Establishment Proof.jpg
+                              </p>
+
+                              <!-- Remove Button -->
+                              <a *ngIf="establishmentProofUrl" (click)="removeFile('establishmentProof')">
+                                <svg-icon src="assets/images/delet.svg"></svg-icon>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="text-danger mt-2 error_massage"
+                        *ngIf="establishmentForm.get('proofType').errors?.['required'] && establishmentForm.get('proofType').touched">
+                        Proof Type is required.
+                      </div>
+                      <div
+                        *ngIf="establishmentForm.get('establishmentProof').errors?.['required'] && establishmentForm.get('establishmentProof').touched"
+                        class="text-danger mt-2 error_massage" style="text-align: center; margin-left: 46px">
+                        <svg-icon src="assets/images/error.svg"></svg-icon>
+                        <span>This Field is Mandatory</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- row steps2 Consultation Address start -->
+            <div id="slide_2" *ngIf="
+                  currentSlide === 2 ||
+                  establishmentForm.get('consultationType')?.value === 'video'
+                ">
+              <div class="modal-body">
+                <h2>Consultation Timing</h2>
+
+                <div class="row">
+                  <div *ngFor="let control of daysControls.controls; let i = index" [formGroup]="getDayControl(i)">
+                    <div>
+                      <label for="selectedDays fw-bold tittle_select_date">Days and Timing</label>
+                      <div class="day_and_timing col-lg-6 col-md-12">
+                        <select id="selectedDays" formControlName="day" style="
+                              width: 100%;
+                              padding: 10px;
+                              border-radius: 3px;
+                              border-color: gray;
+                              margin-top: 10px;
+                            " (change)="onDayChange(i)" required>
+                          <option value="">Select Days</option>
+                          <option *ngFor="let option of additionalOptions" [value]="option.value"
+                            [disabled]="isOptionDisabled(option.value, i)">
+                            {{ option.label }}
+                          </option>
+                        </select>
+
+                        <button *ngIf="i != 0" type="button" (click)="removeDay(i)" style="
+                              background-color: transparent;
+                              border: none;
+                              font-size: 31px;
+                              color: gray;
+                              margin-left: 15px;
+                            ">
+                          <span>&times;</span>
+                        </button>
+                      </div>
+
+                      <div *ngIf="control.get('day').errors?.['required'] && control.get('day').touched"
+                        class="error-div error-hint">
+                        Please select a day.
+                      </div>
+                      <div class="col-lg-6">
+                        <div formArrayName="timeSlots" style="
+                              display: flex;
+                              flex-direction: column;
+                              gap: 10px;
+                              margin-top: 20px;
+                              margin-bottom: 20px;
+                            ">
+                          <!-- <div *ngFor="
+                                let slot of getTimeSlots(i).controls;
+                                let j = index
+                              " [formGroupName]="j">
+                            Time {{ j + 1 }}
+                            <div style="
+                                  display: flex;
+                                  flex-direction: row;
+                                  align-items: center;
+                                  justify-content: center;
+                                ">
+                              <ng-select #from class="w-50 from" placeholder="Start Time" formControlName="from"
+                                [clearable]="false" (focus)="from.open()">
+                                <ng-option *ngFor="
+                                      let time of timingArray
+                                        | timecompare
+                                          : slot.get('to').value
+                                          : true
+                                    " [value]="time.name">
+                                  {{ time.name }}
+                                </ng-option>
+                              </ng-select>
+                              <ng-select #to class="w-50 to" placeholder="End Time" formControlName="to"
+                                [clearable]="false" (focus)="to.open()">
+                                <ng-option *ngFor="
+                                      let time of timingArray
+                                        | timecompare : slot.get('from').value
+                                    " [value]="time.name">
+                                  {{ time.name }}
+                                </ng-option>
+                              </ng-select>
+                              <button type="button" (click)="removeTimeSlot(i, j)" *ngIf="getTimeSlots(i).length > 1"
+                                style="
+                                    background-color: transparent;
+                                    border: none;
+                                    font-size: 31px;
+                                    color: gray;
+                                    margin-left: 15px;
+                                  ">
+                                <span>&times;</span>
+                              </button>
+                            </div>
+                          </div> -->
+                          
+                          <div *ngFor="let slot of getTimeSlots(i).controls; let j = index" [formGroupName]="j.toString()">
+                              Time {{ j + 1 }}
+                              <div style="
+                                    display: flex;
+                                    flex-direction: row;
+                                    align-items: center;
+                                    justify-content: center;
+                                  ">
+                                <ng-select #from class="w-50 from" [placeholder]="'Start Time'" formControlName="from"
+                                  [clearable]="false" (focus)="from?.open()">
+                                  <ng-option *ngFor="let time of timingArray | timecompare : slot.get('to').value : true" 
+                                            [value]="time.name">
+                                    {{ time.name }}
+                                  </ng-option>
+                                </ng-select>
+
+                                <ng-select #to class="w-50 to" [placeholder]="'End Time'" formControlName="to"
+                                  [clearable]="false" (focus)="to?.open()">
+                                  <ng-option *ngFor="let time of timingArray | timecompare : slot.get('from').value" 
+                                            [value]="time.name">
+                                    {{ time.name }}
+                                  </ng-option>
+                                </ng-select>
+
+                                <button type="button" (click)="removeTimeSlot(i, j)" *ngIf="getTimeSlots(i).length > 1"
+                                  style="
+                                      background-color: transparent;
+                                      border: none;
+                                      font-size: 31px;
+                                      color: gray;
+                                      margin-left: 15px;
+                                    ">
+                                  <span>&times;</span>
+                                </button>
+                              </div>
+                            </div>
+
+                        </div>
+                        <button type="button" class="btn btn-link" style="margin-top: 0" (click)="addTimeSlot(i)">
+                          <svg width="20" height="21" viewBox="0 0 20 21" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M10.0003 2.16699C5.40033 2.16699 1.66699 5.90033 1.66699 10.5003C1.66699 15.1003 5.40033 18.8337 10.0003 18.8337C14.6003 18.8337 18.3337 15.1003 18.3337 10.5003C18.3337 5.90033 14.6003 2.16699 10.0003 2.16699ZM14.167 11.3337H10.8337V14.667H9.16699V11.3337H5.83366V9.66699H9.16699V6.33366H10.8337V9.66699H14.167V11.3337Z"
+                              fill="#45197C" />
+                          </svg>
+                          Add more time
+                        </button>
+                      </div>
+                      <!-- Hide the remove day button if there is only one day -->
+                    </div>
+                  </div>
+                  <div style="
+                        width: 100%;
+                        margin-top: 10px;
+                        border-top: 1px solid gray;
+                      ">
+                    <div style="
+                          width: 100%;
+                          display: flex;
+                          align-items: center;
+                          justify-content: start;
+                        ">
+                      <button type="button" class="btn btn-link" style="margin-top: 0" (click)="addDay()">
+                        <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M10.0003 2.16699C5.40033 2.16699 1.66699 5.90033 1.66699 10.5003C1.66699 15.1003 5.40033 18.8337 10.0003 18.8337C14.6003 18.8337 18.3337 15.1003 18.3337 10.5003C18.3337 5.90033 14.6003 2.16699 10.0003 2.16699ZM14.167 11.3337H10.8337V14.667H9.16699V11.3337H5.83366V9.66699H9.16699V6.33366H10.8337V9.66699H14.167V11.3337Z"
+                            fill="#45197C" />
+                        </svg>
+                        Add Day & Time day
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 pb-3">
+                    <!-- In-Clinic Consultation Fees -->
+                    <div class="form-group form-group2"
+                      *ngIf="shouldShowInClinicField() && establishmentForm.get('showInClinic')?.value">
+                      <label class="required">In-Clinic Consultation Fees*</label>
+                      <input formControlName="consultationFees" type="text" class="form-control"
+                        placeholder="Type In-clinic consultation fee" (input)="onInput($event)" />
+                    </div>
+
+                    <!-- Video Consultation Fees -->
+                    <div class="form-group form-group2"
+                      *ngIf="shouldShowVideoField() && establishmentForm.get('showVideo')?.value">
+                      <label class="required">Video Consultation Fees*</label>
+                      <input formControlName="videoConsultationFees" type="text" class="form-control"
+                        placeholder="Type video consultation fee" (input)="onInput($event)" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="page-footer">
+            <!-- Back Button: Reset count and disable Next button -->
+            <a class="btn btn-outline-primary mx-3" (click)="previousSlide()">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_511_1537)">
+                  <path d="M15.4102 16.59L10.8302 12L15.4102 7.41L14.0002 6L8.00016 12L14.0002 18L15.4102 16.59Z"
+                    fill="black" />
+                </g>
+                <defs>
+                  <clipPath id="clip0_511_1537">
+                    <rect width="24" height="24" fill="white" transform="matrix(-1 0 0 1 24 0)" />
+                  </clipPath>
+                </defs>
+              </svg>
+              Back
+            </a>
+            <!-- Next Button: Only enabled once the count is increased -->
+            <a class="btn btn-primary" *ngIf="count === 1" (click)="nextSlide()">
+              Save & Next
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_414_309)">
+                  <path d="M8.58984 16.59L13.1698 12L8.58984 7.41L9.99984 6L15.9998 12L9.99984 18L8.58984 16.59Z"
+                    fill="white" />
+                </g>
+                <defs>
+                  <clipPath id="clip0_414_309">
+                    <rect width="24" height="24" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
+            </a>
+
+            <a class="btn btn-primary" *ngIf="count === 2" (click)="onSubmit()">
+              Next
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_414_309)">
+                  <path d="M8.58984 16.59L13.1698 12L8.58984 7.41L9.99984 6L15.9998 12L9.99984 18L8.58984 16.59Z"
+                    fill="white" />
+                </g>
+                <defs>
+                  <clipPath id="clip0_414_309">
+                    <rect width="24" height="24" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
+            </a>
+          </div>
+        </form>
+
+        <!-- Edit Form  -->
+        <form class="content d-flex flex-column" [formGroup]="editEstablishmentForm" (ngSubmit)="onEditSubmit()"
+          *ngIf="isEditMode">
+          <div class="row steps_pages">
+            <div id="slide_1_fix">
+              <div class="modal-body">
+                <h3 class="fw-bold m-0">Consultation & Practice Details</h3>
+                <p class="m-0">
+                  Please select your consultation type and practice details.
+                </p>
+                <div class="row g-0" *ngIf="
+                editEstablishmentForm.get('showInClinic')?.value && currentSlide == 1
+                ||
+                (isOnlyVideoType && currentSlide == 2)
+                ">
+                  <div class="col-lg-12">
+                    <label class="main required">Consultation type</label>
+
+                    <div class="form-group pb-0 custom_box_Fix">
+                      <div class="form-check form-check-inline main ">
+                        <input class="form-check-input" name="editConsultationType" type="radio"
+                          [checked]="editEstablishmentForm.get('showInClinic')?.value"
+                          (change)="onConsultationChangeEdit('In-clinic')" [disabled]="true" id="in_clinic_consultation"
+                          value="In-clinic" />
+                        <label class="form-check-label" for="in_clinic_consultation">In-clinic Consultation</label>
+                      </div>
+                      <div class="form-check form-check-inline main">
+                        <input class="form-check-input" name="editConsultationType" type="radio" id="video_consultation"
+                          [checked]="editEstablishmentForm.get('showVideo')?.value && !editEstablishmentForm.get('showInClinic')?.value"
+                          value="video" (change)="onConsultationChangeEdit('video')" [disabled]="true" />
+                        <label class="form-check-label" for="video_consultation">Video Consultation (Only)</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row g-0"
+                  *ngIf="shouldShowInClinicField() && editEstablishmentForm.get('showInClinic')?.value  && currentSlide == 1">
+                  <div class=" col-lg-12">
+                    <div class="form-group pt-0">
+                      <div class="form-check p-0 form-check-inline main border-0">
+                        <div class="form-check pt-0 form-check-inline">
+                          <input class="form-check-input" id="in_clinic_consultation_check" type="checkbox"
+                            [checked]="editEstablishmentForm.get('showInClinic')?.value" formControlName="showInClinic"
+                            (change)="onInClinicCheckboxChangeEdit()" />
+                          <label class="form-check-label" for="in_clinic">In-clinic</label>
+                        </div>
+                        <div class="form-check pt-0 form-check-inline">
+                          <input class="form-check-input" type="checkbox" id="video_consultation_check"
+                            [checked]="editEstablishmentForm.get('showVideo')?.value" formControlName="showVideo"
+                            (change)="onVideoCheckboxChangeEdit()" />
+                          <label class="form-check-label" for="video">Video Consultation</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  *ngIf="shouldShowInClinicField() && editEstablishmentForm.get('showInClinic')?.value  && currentSlide == 1">
+                  <h4 class="fw-bold mt-2 mb-0"
+                    *ngIf="shouldShowInClinicField() && editEstablishmentForm.get('showInClinic')?.value">Connect a
+                    Practice
+                  </h4>
+                  <div class="row"
+                    *ngIf="shouldShowInClinicField() && editEstablishmentForm.get('showInClinic')?.value">
+                    <div class="col-lg-6 pb-3">
+                      <div class="form-group custom_box_Fix">
+                        <div class="form-check form-check-inline form-check-inline_fix main main1" style="
+                            border-right: 1px solid gray;
+                            border-radius: 10px;
+                          ">
+                          <input class="form-check-input" type="radio" name="Consultation_type"
+                            formControlName="Consultation_type" id="own_consultation" value="own"
+                            (click)="onOptionChange('own')" />
+                          <label class="form-check-label" for="own_consultation">I own a establishment</label>
+                        </div>
+                        <div class="form-check form-check-inline form-check-inline_fix main main2" style="
+                            border-right: 1px solid gray;
+                            border-radius: 10px;
+                          ">
+                          <input class="form-check-input" type="radio" name="Consultation_type" id="visit_consultation"
+                            formControlName="Consultation_type" value="visit" (click)="onOptionChange('visit')" />
+                          <label class="form-check-label" for="visit_consultation">I
+                            visit an establishment</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <p [className]="errorMessage && 'redColor'"
+                    *ngIf="shouldShowInClinicField() && editEstablishmentForm.get('showInClinic')?.value">
+                    Note: If you wish to change consultation type and practice please delete and create new.
+                  </p>
+
+                  <h3 class="fw-bold"
+                    *ngIf="shouldShowInClinicField() && editEstablishmentForm.get('showInClinic')?.value">
+                    Address Information</h3>
+                  <p *ngIf="shouldShowInClinicField() && editEstablishmentForm.get('showInClinic')?.value">Please
+                    provide
+                    the details of your clinic or hospital.</p>
+                  <div class="row"
+                    *ngIf="shouldShowInClinicField() && editEstablishmentForm.get('showInClinic')?.value">
+                    <div class="col-lg-6 pb-3">
+                      <div class="frm-group2">
+                        <input class="form-control" placeholder="Clinic/Hospital Name*" formControlName="name"
+                          height="45px" oninput="this.value=this.value.replace(/^ $/,'')" (input)="search($event)"
+                          [matAutocomplete]="auto" maxlength="100" />
+                      </div>
+                      <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let hospital of hospitalList" [value]="hospital.hospitalName"
+                          (click)="onSelectHospital(hospital)">
+                          {{ hospital.hospitalName + " - " + hospital.address.cityName }}
+                        </mat-option>
+                      </mat-autocomplete>
+                      <div class="error-div error-hint"
+                        *ngIf="editEstablishmentForm.get('name').errors?.['required'] && editEstablishmentForm.get('name').touched">
+                        Establishment Name is required.
+                      </div>
+                      <div class="error-div error-hint"
+                        *ngIf="editEstablishmentForm.get('name').errors?.['minlength'] && editEstablishmentForm.get('name').touched">
+                        Establishment Name must be at least 3 characters long.
+                      </div>
+                      <div class="error-div error-hint"
+                        *ngIf="editEstablishmentForm.get('name').errors?.['maxlength'] && editEstablishmentForm.get('name').touched">
+                        Establishment Name must be less than 100 characters long.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row"
+                    *ngIf="shouldShowInClinicField() && editEstablishmentForm.get('showInClinic')?.value">
+                    <div class="col-lg-6 pb-3">
+                      <div class="form-group form-group2">
+                        <ng-select #establishmentTypeEdit class="establishment-type" [items]="hospitalTypeList"
+                          bindLabel="name" bindValue="_id" placeholder="Clinic/Hospital Type"
+                          formControlName="hospitalTypeId" oninput="this.value = this.value.replace(/^ $/,'')"
+                          (focus)="establishmentTypeEdit.open()"></ng-select>
+                      </div>
+                      <div class="error-div error-hint"
+                        *ngIf="editEstablishmentForm.get('hospitalTypeId').errors?.['required'] && editEstablishmentForm.get('hospitalTypeId').touched">
+                        Establishment Type is required.
+                      </div>
+                    </div>
+                  </div>
+                  <!-- here -->
+                  <div class="row gy-3" formGroupName="address">
+                    <div class="">
+                      <div class="col-lg-6 pb-3"
+                        *ngIf="shouldShowInClinicField() && editEstablishmentForm.get('showInClinic')?.value">
+                        <div class="form-group form-group2 p-mobile" style="padding: 0px 10px 0px 0px !important">
+                          <nectar-form-field>
+                            <input style="height: 45px; text-indent: 10px" nectarError controlName="landmark"
+                              type="text" class="form-input border-style rounded-1 w-100" placeholder="Street address"
+                              formControlName="landmark" oninput="this.value = this.value.replace(/^ $/,'')"
+                              [matAutocomplete]="editLandmark" (input)="onSearch($event, 'predicationList')" />
+                          </nectar-form-field>
+                          <mat-autocomplete #editLandmark="matAutocomplete">
+                            <mat-option *ngFor="let place of predicationList" (click)="oneEditSelectPlace(place)">
+                              {{ place.description }}
+                            </mat-option>
+                          </mat-autocomplete>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" style="padding-right: 0">
+                      <div class="col-lg-3 pb-3" style="padding-right: 0"
+                        *ngIf="shouldShowInClinicField() && editEstablishmentForm.get('showInClinic')?.value">
+                        <div class="form-group form-group2">
+                          <nectar-form-field>
+                            <ng-select nectarError contorlName="State" #Editstate class="establishment-type"
+                              [items]="stateList" bindLabel="name" bindValue="_id" placeholder="State"
+                              formControlName="state" oninput="this.value = this.value.replace(/^ $/,'')"
+                              (focus)="Editstate.open()"></ng-select>
+                          </nectar-form-field>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 pb-3" style="padding-right: 0" *ngIf="
+                    shouldShowInClinicField() &&
+                    !editEstablishmentForm.get('showInClinic')?.value
+                  ">
+                        <div class="form-group form-group2" style="margin-top: 10px">
+                          <nectar-form-field>
+                            <input nectarError style="height: 45px; padding-left: 10px" readonly
+                              controlName="sampleCityName" type="text" class="form-input border-style rounded-1 w-100"
+                              placeholder="State" formControlName="sampleCityName"
+                              oninput="this.value = this.value.replace(/^ $/,'')" />
+                          </nectar-form-field>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 pb-3 customCityClass" style="padding-right: 0"
+                        *ngIf="shouldShowInClinicField() && editEstablishmentForm.get('showInClinic')?.value">
+                        <div class="form-group form-group2" style="height: 100%">
+                          <nectar-form-field style="height: 100%">
+                            <input style="height: 45px; text-indent: 10px" nectarError controlName="City"
+                              class="form-input border-style rounded-1 w-100" placeholder="City" formControlName="city"
+                              oninput="this.value = this.value.replace(/^ $/,'')" [matAutocomplete]="Editcity"
+                              (input)="onSearch($event, 'predicationCityList')" />
+                          </nectar-form-field>
+                          <mat-autocomplete #Editcity="matAutocomplete">
+                            <mat-option *ngFor="let place of predicationCityList" (click)="onSelectPlace(place)">
+                              {{ place.description }}
+                            </mat-option>
+                          </mat-autocomplete>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" style="padding-right: 0"
+                      *ngIf="shouldShowInClinicField() && editEstablishmentForm.get('showInClinic')?.value">
+                      <div class="col-lg-3 pb-3 addMobileMargin" style="padding-right: 0">
+                        <div class="form-group form-group2">
+                          <nectar-form-field>
+                            <input style="height: 45px; text-indent: 10px" nectarError controlName="Locality"
+                              type="text" class="form-input border-style rounded-1 w-100" placeholder="Locality"
+                              formControlName="locality" oninput="this.value = this.value.replace(/^ $/,'')" />
+                          </nectar-form-field>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 pb-3" style="padding-right: 0">
+                        <div class="form-group form-group2">
+                          <nectar-form-field>
+                            <input style="height: 45px; text-indent: 10px" nectarError contorlName="Pincode" type="text"
+                              maxlength="6" class="form-input border-style rounded-1 w-100" placeholder="Pincode"
+                              formControlName="pincode"
+                              oninput="this.value = this.value.replace(/\D/,'').replace(/^ $/,'')" />
+                          </nectar-form-field>
+                        </div>
+                        <div class="error-div error-hint"
+                          *ngIf="editEstablishmentForm.get('address.pincode').errors?.['pattern'] && (submitted || editEstablishmentForm.get('address.pincode').touched)">
+                          Please enter a valid 6-digit pincode.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row"
+                    *ngIf="shouldShowInClinicField() && editEstablishmentForm.get('showInClinic')?.value">
+                    <div class="col-lg-10 col-md-12 pb-3" [ngClass]="{ 'border-danger': !establishmentProofUrl }">
+                      <div class="upload-docs">
+                        <div class="form-group pt-0 pb-0">
+                          <label class="required">Clinic/Hospital Proof</label>
+                        </div>
+                        <div class="upload-docs-inner d-flex gap-2">
+                          <select class="form-select" aria-label="Default select example" formControlName="proofType"
+                            (change)="onProofTypeChange($event)">
+                            <option value="" disabled selected>
+                              Select Clinic/Hospital Proof
+                            </option>
+                            <option *ngFor="let a of establishmentProofOptions" [value]="a">
+                              {{ a }}
+                            </option>
+                          </select>
+
+                          <div class="container_fluid d-flex gap-2">
+                            <div class="custom-file-upload-wrapper">
+                              <label for="file_upload_3" class="custom-file-upload" [ngClass]="{
+                                  error_border: !establishmentProofUrl
+                                }">Choose File</label>
+                              <input id="file_upload_3" class="d-none" type="file" (change)="
+                                  onFileSelected($event, 'establishmentProof')
+                                " [disabled]="true" />
+                            </div>
+                            <div class="file-preview-inline pb-0">
+                              <div class="previewBox" id="file_upload_preview_3">
+                                <img loading="lazy" *ngIf="establishmentProofUrl" [src]="establishmentProofUrl"
+                                  alt="Establishment Proof Preview" />
+                              </div>
+                              <p *ngIf="establishmentProofUrl" class="me-2">
+                                Establishment Proof.jpg
+                              </p>
+
+                              <!-- Remove Button -->
+                              <!-- <a *ngIf="establishmentProofUrl" (click)="removeFile('establishmentProof')" >
+                                <svg-icon src="assets/images/delet.svg"></svg-icon>
+                              </a> -->
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="text-danger mt-2 error_massage"
+                        *ngIf="editEstablishmentForm.get('proofType').errors?.['required'] && editEstablishmentForm.get('proofType').touched">
+                        Proof Type is required.
+                      </div>
+                      <div
+                        *ngIf="editEstablishmentForm.get('establishmentProof').errors?.['required'] && editEstablishmentForm.get('establishmentProof').touched"
+                        class="text-danger mt-2 error_massage" style="text-align: center; margin-left: 46px">
+                        <svg-icon src="assets/images/error.svg"></svg-icon>
+                        <span>This Field is Mandatory</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- row steps2 Consultation Address start -->
+            <div id="slide_2" *ngIf="
+                  currentSlide === 2 ||
+                  editEstablishmentForm.get('consultationType')?.value === 'video'
+                ">
+              <div class="modal-body">
+                <h2>Consultation Timing</h2>
+                <div class="row">
+                  <div *ngFor="let control of editDaysControls.controls; let i = index"
+                    [formGroup]="editgetDayControl(i)">
+                    <div>
+                      <label for="selectedDays fw-bold tittle_select_date">Days and Timing</label>
+                      <div class="day_and_timing col-lg-6 col-md-12">
+                        <select id="selectedDays" formControlName="day" style="
+                              width: 100%;
+                              padding: 10px;
+                              border-radius: 3px;
+                              border-color: gray;
+                              margin-top: 10px;
+                            " (change)="editonDayChange(i)">
+                          <option value="">Select Days</option>
+                          <option *ngFor="let option of additionalOptions" [value]="option.value"
+                            [disabled]="editisOptionDisabled(option.value, i)">
+                            {{ option.label }}
+                          </option>
+                        </select>
+                        <button *ngIf="i != 0" type="button" (click)="editremoveDay(i)" style="
+                              background-color: transparent;
+                              border: none;
+                              font-size: 31px;
+                              color: gray;
+                              margin-left: 15px;
+                            ">
+                          <span>&times;</span>
+                        </button>
+                      </div>
+                      <div class="col-lg-6" *ngIf="editdayControl.get('day').value !== ''">
+                        <div formArrayName="timeSlots" style="
+                              display: flex;
+                              flex-direction: column;
+                              gap: 10px;
+                              margin-top: 20px;
+                              margin-bottom: 20px;
+                            ">
+                          <div *ngFor="
+                                let slot of editgetTimeSlots(i).controls;
+                                let j = index
+                              " [formGroupName]="j">
+                            Time {{ j + 1 }}
+                            <div style="
+                                  display: flex;
+                                  flex-direction: row;
+                                  align-items: center;
+                                  justify-content: center;
+                                ">
+                              <ng-select #editfrom class="w-50 from" placeholder="00:00 PM" formControlName="from"
+                                (focus)="editfrom.open()">
+                                <ng-option *ngFor="let time of timingArray | timecompare : slot.get('to').value : true"
+                                  [value]="time.name">
+                                  {{ time.name }}
+                                </ng-option>
+                              </ng-select>
+                              <ng-select #editto class="w-50 to" placeholder="00:00 PM" formControlName="to"
+                                (focus)="editto.open()">
+                                <ng-option *ngFor="
+                                      let time of timingArray
+                                        | timecompare : slot.get('from').value
+                                    " [value]="time.name">
+                                  {{ time.name }}
+                                </ng-option>
+                              </ng-select>
+                              <button type="button" (click)="editremoveTimeSlot(i, j)"
+                                style="background-color: transparent;border: none;font-size: 31px;color: gray; margin-left: 15px;">
+                                <span>&times;</span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <button type="button" class="btn btn-link" style="margin-top: 0" (click)="addEditTimeSlot(i)">
+                          <svg width="20" height="21" viewBox="0 0 20 21" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M10.0003 2.16699C5.40033 2.16699 1.66699 5.90033 1.66699 10.5003C1.66699 15.1003 5.40033 18.8337 10.0003 18.8337C14.6003 18.8337 18.3337 15.1003 18.3337 10.5003C18.3337 5.90033 14.6003 2.16699 10.0003 2.16699ZM14.167 11.3337H10.8337V14.667H9.16699V11.3337H5.83366V9.66699H9.16699V6.33366H10.8337V9.66699H14.167V11.3337Z"
+                              fill="#45197C" />
+                          </svg>
+                          Add more time
+                        </button>
+                      </div>
+                      <!-- Hide the remove day button if there is only one day -->
+                    </div>
+                  </div>
+                  <div style="
+                        width: 100%;
+                        margin-top: 10px;
+                        border-top: 1px solid gray;
+                      ">
+                    <div style="
+                          width: 100%;
+                          display: flex;
+                          align-items: center;
+                          justify-content: start;
+                        ">
+                      <button type="button" class="btn btn-link" style="margin-top: 0" (click)="editaddDay()">
+                        <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M10.0003 2.16699C5.40033 2.16699 1.66699 5.90033 1.66699 10.5003C1.66699 15.1003 5.40033 18.8337 10.0003 18.8337C14.6003 18.8337 18.3337 15.1003 18.3337 10.5003C18.3337 5.90033 14.6003 2.16699 10.0003 2.16699ZM14.167 11.3337H10.8337V14.667H9.16699V11.3337H5.83366V9.66699H9.16699V6.33366H10.8337V9.66699H14.167V11.3337Z"
+                            fill="#45197C" />
+                        </svg>
+                        Add Day & Time day
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 pb-3">
+                    <!-- In-Clinic Consultation Fees -->
+                    <div class="form-group form-group2"
+                      *ngIf="shouldShowInClinicField() && editEstablishmentForm.get('showInClinic')?.value">
+                      <label class="required">In-Clinic Consultation Fees*</label>
+                      <input formControlName="consultationFees" type="text" class="form-control"
+                        placeholder="Type In-clinic consultation fee" />
+                    </div>
+
+                    <!-- Video Consultation Fees -->
+                    <div class="form-group form-group2"
+                      *ngIf="shouldShowVideoField() && editEstablishmentForm.get('showVideo')?.value">
+                      <label class="required">Video Consultation Fees*</label>
+                      <input formControlName="videoConsultationFees" type="text" class="form-control"
+                        placeholder="Type video consultation fee" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="page-footer">
+            <!-- Back Button: Reset count and disable Next button -->
+            <a class="btn btn-outline-primary mx-3" (click)="previousSlide()">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_511_1537)">
+                  <path d="M15.4102 16.59L10.8302 12L15.4102 7.41L14.0002 6L8.00016 12L14.0002 18L15.4102 16.59Z"
+                    fill="black" />
+                </g>
+                <defs>
+                  <clipPath id="clip0_511_1537">
+                    <rect width="24" height="24" fill="white" transform="matrix(-1 0 0 1 24 0)" />
+                  </clipPath>
+                </defs>
+              </svg>
+              Back
+            </a>
+            <!-- Next Button: Only enabled once the count is increased -->
+            <a class="btn btn-primary" *ngIf="count === 1" (click)="nextSlide()">
+              Save & Next
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_414_309)">
+                  <path d="M8.58984 16.59L13.1698 12L8.58984 7.41L9.99984 6L15.9998 12L9.99984 18L8.58984 16.59Z"
+                    fill="white" />
+                </g>
+                <defs>
+                  <clipPath id="clip0_414_309">
+                    <rect width="24" height="24" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
+            </a>
+
+            <a class="btn btn-primary" *ngIf="count === 2" (click)="onEditSubmit()">
+              Next
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_414_309)">
+                  <path d="M8.58984 16.59L13.1698 12L8.58984 7.41L9.99984 6L15.9998 12L9.99984 18L8.58984 16.59Z"
+                    fill="white" />
+                </g>
+                <defs>
+                  <clipPath id="clip0_414_309">
+                    <rect width="24" height="24" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="establishment_validation" tabindex="-1"
+  aria-labelledby="establishment_validation_confirmLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="padding-bottom: 12px;">
+        <h5 class="modal-title">List of establishments</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          (click)="closeModal('delete_establishment_confirm')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>List of establishments having similar time slots.</p>
+        <p>Please change the time slots to avoid conflicts</p>
+
+        <!-- Table displaying establishment conflicts -->
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Establishment Name</th>
+              <th>Consultation Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let establishment of establishmentsList">
+              <td>{{ establishment?.name }}</td>
+              <td>{{ establishment?.consultationType }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary btn-block"
+            (click)="closeModal('establishment_validation')">Cancel</button>
+          <button type="button" class="btn btn-warning btn-block" (click)="closeModal('establishment_validation')">
+            <span style="padding-left: 5px;">Okay</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,69 @@
+<!-- Medical Reviewer -->
+<section class="eeat__reviewer" *ngIf="treatment?.medicalReviewer?.name"
+         itemscope itemtype="https://schema.org/Person">
+  <div class="eeat__reviewer-header">
+    <div class="eeat__reviewer-avatar">
+      <img *ngIf="treatment.medicalReviewer.doctorId?.userId?.profilePic"
+           [src]="treatment.medicalReviewer.doctorId.userId.profilePic"
+           [alt]="treatment.medicalReviewer.name" class="eeat__reviewer-img" loading="lazy"
+           width="64" height="64" />
+      <span *ngIf="!treatment.medicalReviewer.doctorId?.userId?.profilePic" class="eeat__reviewer-initials">
+        {{ treatment.medicalReviewer.name?.charAt(0) }}
+      </span>
+    </div>
+    <div class="eeat__reviewer-info">
+      <span class="eeat__reviewer-badge">✓ Medically Reviewed</span>
+      <h3 class="eeat__reviewer-name" itemprop="name">{{ treatment.medicalReviewer.name }}</h3>
+      <p class="eeat__reviewer-qual" *ngIf="treatment.medicalReviewer.qualification" itemprop="description">
+        {{ treatment.medicalReviewer.qualification }}
+      </p>
+      <div class="eeat__reviewer-meta">
+        <span *ngIf="treatment.medicalReviewer.experience">
+          {{ treatment.medicalReviewer.experience }}+ years experience
+        </span>
+        <span *ngIf="treatment.medicalReviewer.specialization">
+          · {{ treatment.medicalReviewer.specialization }}
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Author Info -->
+<section class="eeat__author" *ngIf="treatment?.author?.name">
+  <div class="eeat__author-box">
+    <span class="eeat__author-label">Written by</span>
+    <strong class="eeat__author-name">{{ treatment.author.name }}</strong>
+    <span *ngIf="treatment.author.role" class="eeat__author-role">{{ treatment.author.role }}</span>
+  </div>
+  <div class="eeat__date" *ngIf="treatment.publishedAt || treatment.updatedAt">
+    <span *ngIf="treatment.publishedAt">Published: {{ treatment.publishedAt | date:'mediumDate' }}</span>
+    <span *ngIf="treatment.updatedAt"> · Last updated: {{ treatment.updatedAt | date:'mediumDate' }}</span>
+  </div>
+</section>
+
+<!-- References -->
+<section class="eeat__references" *ngIf="treatment?.references?.length">
+  <h3 class="eeat__section-title">References & Sources</h3>
+  <ol class="eeat__ref-list">
+    <li *ngFor="let ref of treatment.references" class="eeat__ref-item">
+      <a *ngIf="ref.url" [href]="ref.url" target="_blank" rel="noopener noreferrer nofollow"
+         class="eeat__ref-link">
+        {{ ref.title || ref.source }}
+      </a>
+      <span *ngIf="!ref.url">{{ ref.title || ref.source }}</span>
+      <span *ngIf="ref.source && ref.title" class="eeat__ref-source"> — {{ ref.source }}</span>
+    </li>
+  </ol>
+</section>
+
+<!-- Medical Disclaimer -->
+<section class="eeat__disclaimer" *ngIf="treatment?.medicalDisclaimer">
+  <div class="eeat__disclaimer-inner">
+    <span class="eeat__disclaimer-icon">⚕️</span>
+    <div>
+      <h4 class="eeat__disclaimer-title">Medical Disclaimer</h4>
+      <p class="eeat__disclaimer-text">{{ treatment.medicalDisclaimer }}</p>
+    </div>
+  </div>
+</section>

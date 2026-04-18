@@ -1,0 +1,55 @@
+<section class="cancel-booking">
+  <div class="cancel-booking__wrapper">
+    <div class="cancel-booking__wrapper__name">
+      <div>
+        <img
+          [src]="doctorDetail?.doctorPic"
+          alt=""
+          class="cursor-pointer"
+          (click)="viewDoctor()"
+        />
+      </div>
+      <div>
+        <h2 class="cursor-pointer" (click)="viewDoctor()">
+          {{ doctorDetail?.fullname || "N/A" }}
+        </h2>
+        <p>
+          {{ (doctorDetail?.specialization | formatarray : "name") || "N/A" }}
+        </p>
+        <p>{{ doctorDetail?.address || "N/A" }}</p>
+      </div>
+    </div>
+    <div class="cancel-booking__wrapper__timings">
+      <div class="cancel-booking__wrapper__timings__details">
+        <div class="date">
+          <img loading="lazy" src="assets/images/svg/calendar.svg" alt="" />
+          <span>On</span>
+          <p>{{ timing?.date }}</p>
+        </div>
+        <div class="time">
+          <img loading="lazy" src="assets/images/svg/Access time.svg" alt="" />
+          <span>At</span>
+          <p>{{ timing?.time?.time }}</p>
+        </div>
+      </div>
+    </div>
+    <hr class="light-line" />
+    <div class="cancel-booking-box">
+      <h1>Appointment Cancelled!</h1>
+      <div class="details">
+        <h3>Patient Name</h3>
+        <h5>{{ userData?.fullName }}</h5>
+      </div>
+      <div class="details">
+        <h3>Mobile Number</h3>
+        <h5>+91{{ userData?.phone }}</h5>
+      </div>
+      <div class="button">
+        <button routerLink="/profile">
+          <img loading="lazy" src="assets/images/svg/back.svg" alt="" />
+          Back to Profile
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

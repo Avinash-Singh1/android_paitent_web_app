@@ -1,0 +1,146 @@
+<form [formGroup]="addMedicalForm" class="main">
+  <div class="wrapper">
+    <div class="box text-center" style="position: relative">
+      <input
+        type="file"
+        #upload
+        style="display: none"
+        (change)="selectFile($event)"
+        accept="image/png,image/jpeg,image/jpg, application/pdf"
+      />
+      <button (click)="upload.click()" *ngIf="!img.fileType">
+        + Add a file
+      </button>
+      <div class="form-error mx-4" *ngIf="this.submitted && !img.url">
+        Document is required.
+      </div>
+
+      <img
+        [src]="img?.url"
+        alt=""
+        height="150"
+        width="150"
+        *ngIf="img.url && img?.fileType == 'image'"
+      />
+      <iframe
+        [src]="img?.url | sanitize | async"
+        *ngIf="img.url && img?.fileType !== 'image'"
+        height="150"
+        width="150"
+        title="document"
+      ></iframe>
+      <img
+        src="assets/images/svg/corss_black.svg"
+        alt=""
+        *ngIf="img?.url"
+        class="cursor-pointer"
+        style="position: absolute; right: 30px"
+        (click)="removeFile()"
+      />
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="field">
+      <input
+        type="text"
+        class="w-100"
+        placeholder="Title"
+        formControlName="title"
+      />
+      <div
+        class="form-error"
+        *ngIf="(f['title'].touched || submitted) && f['title'].errors?.['required']"
+      >
+        This field is required.
+      </div>
+    </div>
+    <div class="d-flex gap-4 mt-4">
+      <div class="field">
+        <input
+          type="text"
+          class="w-100"
+          placeholder="Full name"
+          [value]="patientName"
+          disabled
+        />
+      </div>
+      <div>
+        <div class="matdate-input d-flex w-100 field">
+          <input
+            matInput
+            class="w-100"
+            type="text"
+            [matDatepicker]="pickerfrom"
+            placeholder="DD/MM/YYYY"
+            formControlName="date"
+          />
+
+          <mat-datepicker-toggle
+            class="toggle"
+            matIconSuffix
+            [for]="pickerfrom"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #pickerfrom></mat-datepicker>
+        </div>
+        <div
+          class="form-error"
+          *ngIf="(f['date'].touched || submitted) && f['date'].errors?.['required']"
+        >
+          This field is required.
+        </div>
+      </div>
+    </div>
+    <div class="record mt-4">
+      <p>Types of record</p>
+      <div class="d-flex align-items-center gap-3">
+        <div
+          class="d-flex align-items-center"
+          *ngIf="!data?.recordType || data?.recordType == 1"
+        >
+          <input
+            type="radio"
+            value="1"
+            name="recordType"
+            formControlName="recordType"
+          />&nbsp;
+          <label>Prescription</label>
+        </div>
+        <div
+          class="d-flex align-items-center"
+          *ngIf="!data?.recordType || data?.recordType == 2"
+        >
+          <input
+            type="radio"
+            value="2"
+            name="recordType"
+            formControlName="recordType"
+          />&nbsp;
+          <label>Report</label>
+        </div>
+        <div
+          class="d-flex align-items-center"
+          *ngIf="!data?.recordType || data?.recordType == 3"
+        >
+          <input
+            type="radio"
+            value="3"
+            name="recordType"
+            formControlName="recordType"
+          />&nbsp;
+          <label>Invoice</label>
+        </div>
+      </div>
+      <div
+        class="form-error"
+        *ngIf="(f['recordType'].touched || submitted) && f['recordType'].errors?.['required']"
+      >
+        This field is required.
+      </div>
+    </div>
+    <div class="d-flex justify-content-end gap-3 align-items-center mt-4">
+      <button type="button" (click)="cancel()" class="cancel">Cancel</button>
+      <button type="submit" (click)="done()" class="cancel submit">Done</button>
+    </div>
+  </div>
+</form>

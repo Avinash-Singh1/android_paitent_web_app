@@ -1,0 +1,279 @@
+@use "tools.mediaquery" as *;
+
+
+@use "tools.typography" as *;
+
+@use "settings.containers" as *;
+@use "variable.scss" as *;
+
+
+.critical-issues {
+  background: linear-gradient(160deg, #45197c 0%, #6b3fa0 50%, #8b5fc0 100%);
+  position: relative;
+  overflow: hidden;
+
+  // Subtle pattern overlay
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.06) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.04) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  &__wrapper {
+    max-width: $content-max-width;
+    margin: 0 auto;
+    margin-top: 0;
+    padding: 48px 0px 20px;
+    position: relative;
+
+    @media screen and (max-width: 767px) {
+      max-width: $content-sm-max-width;
+      padding: 28px 0px 12px;
+    }
+
+    h2 {
+      color: $white;
+      @include font-sans_pro-semibold(26px);
+      letter-spacing: -0.01em;
+
+      @media screen and (max-width: 767px) {
+        @include font-sans_pro-semibold(20px);
+      }
+    }
+  }
+
+  &__carousel {
+    padding-bottom: 48px;
+    min-height: 240px;
+    contain: layout style;
+    position: relative;
+
+    @media screen and (max-width: 767px) {
+      padding-bottom: 24px;
+      min-height: 320px;
+    }
+
+    &__items {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 16px;
+      width: 200px;
+      height: 200px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      padding: 20px 0;
+
+      &:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+      }
+
+      @media screen and (max-width: 767px) {
+        width: 135px !important;
+        height: 135px !important;
+        padding: 12px 0;
+        margin-left: 4px;
+        border-radius: 12px;
+      }
+
+      .center {
+        display: flex;
+        justify-content: center;
+      }
+
+      h2, h3 {
+        text-align: center;
+        @include font-sans_pro-semibold(14px);
+        padding: 0 8px;
+        margin-top: 14px;
+        color: $black;
+
+        @media screen and (max-width: 767px) {
+          @include font-sans_pro-semibold(13px);
+        }
+      }
+
+      a {
+        display: block;
+        @include font-sans_pro-semibold(14px);
+        padding: 0 8px;
+        margin-top: 14px;
+      }
+
+      &__image {
+        height: 100px;
+        width: 100px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #f3eaff 0%, #e8dcf5 100%);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+
+        @media screen and (max-width: 767px) {
+          height: 56px;
+          width: 56px;
+        }
+
+        img {
+          width: 100%;
+          max-width: 55px;
+          max-height: 55px;
+          height: 100%;
+          object-fit: cover;
+
+          @media screen and (max-width: 767px) {
+            max-width: 40px;
+            max-height: 40px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.profile-icon {
+  color: $purple;
+  @include font-sans_pro-bold(28px);
+  text-decoration: none;
+
+  @media screen and (max-width: 767px) {
+    @include font-sans_pro-bold(22px);
+  }
+}
+
+:host::ng-deep {
+
+  .owl-prev,
+  .owl-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-radius: 50%;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    width: 40px;
+    height: 40px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+
+    &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      transform: translateY(-50%) scale(1.05);
+    }
+  }
+
+  .owl-next {
+    right: 0rem;
+  }
+
+  .owl-prev {
+    left: -2rem;
+
+    @media screen and (max-width: 767px) {
+      left: -1.3rem;
+    }
+
+    img {
+      transform: rotate(180deg) !important;
+    }
+  }
+
+  .owl-theme .owl-nav .disabled {
+    visibility: hidden !important;
+  }
+
+  .owl-theme .owl-nav [class*="owl-"] {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+  }
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+    animation: shimmer 1.5s infinite;
+  }
+}
+
+@keyframes shimmer {
+  100% { left: 100%; }
+}
+
+// Skeleton cards matching actual card layout
+.skeleton-row {
+  overflow: hidden;
+}
+
+.skeleton-card {
+  min-width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 0;
+  gap: 16px;
+
+  @media screen and (max-width: 767px) {
+    min-width: 135px;
+    height: 135px;
+    padding: 12px 0;
+  }
+
+  &__circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+
+    @media screen and (max-width: 767px) {
+      width: 56px;
+      height: 56px;
+    }
+  }
+
+  &__text {
+    width: 80px;
+    height: 14px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+
+    @media screen and (max-width: 767px) {
+      width: 60px;
+      height: 12px;
+    }
+  }
+}
+
+// Fade-in for content after loading
+.fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

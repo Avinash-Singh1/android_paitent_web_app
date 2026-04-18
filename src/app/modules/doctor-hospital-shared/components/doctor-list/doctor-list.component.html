@@ -1,0 +1,28 @@
+<div class="d-flex flex-column text-18 doctor-list">
+  <div class="px-24 py-12 d-flex align-items-center justify-content-between">
+    <span class="font-600"> Doctors </span>
+    <button class="svg-icon-button" (click)="closeDrawer()">
+      <svg-icon
+        *ngIf="viewmode == 'month'"
+        src="assets/images/svg/previous.svg"
+        class="cursor-pointer"
+      ></svg-icon>
+    </button>
+  </div>
+  <div
+    class="px-24 py-12 gray-bg"
+    (click)="onSelectDoctor(false, 0)"
+    [ngClass]="{ selected: currentDoctor == 0 }"
+  >
+    All Doctors
+  </div>
+  <ng-container *ngFor="let doctor of doctorList; let i = index">
+    <div
+      class="px-24 py-12 gray-bg"
+      [ngClass]="{ selected: currentDoctor == i + 1 }"
+      (click)="onSelectDoctor(false, i + 1, doctor)"
+    >
+      {{ doctor.doctorDetails?.doctorName }}
+    </div>
+  </ng-container>
+</div>

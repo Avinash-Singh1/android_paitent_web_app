@@ -1,0 +1,387 @@
+@use "variable.scss" as *;
+@use "tools.typography" as *;
+
+// ─── Host ───────────────────────────────────────────────────
+:host {
+  width: 100%;
+  display: block;
+}
+
+// ─── Section ────────────────────────────────────────────────
+.top-rated {
+  padding: 40px 16px 0;
+  contain: layout style;
+
+  @media (min-width: 768px) {
+    padding: 56px 28px 0;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 64px 40px 0;
+  }
+}
+
+// ─── Container grid ─────────────────────────────────────────
+.top-rated__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  @media (min-width: 768px) {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 36px;
+    align-items: start;
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: 300px 1fr;
+    gap: 48px;
+  }
+}
+
+// ─── Info / text section ────────────────────────────────────
+.top-rated__info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  @media (min-width: 768px) {
+    gap: 14px;
+    position: sticky;
+    top: 80px;
+  }
+}
+
+.top-rated__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: fit-content;
+  padding: 4px 14px;
+  border-radius: 100px;
+  background: rgba(69, 25, 124, 0.07);
+  color: $purple;
+  @include font-sans_pro-semibold($size: 11px);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+
+  svg { flex-shrink: 0; }
+
+  &--teal {
+    background: rgba(8, 145, 178, 0.08);
+    color: #0891b2;
+  }
+}
+
+.top-rated__info h2 {
+  @include font-sans_pro-bold($size: 22px);
+  color: $black;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+
+  @media (min-width: 768px) {
+    font-size: 26px;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 28px;
+  }
+}
+
+.top-rated__info p {
+  @include font-sans_pro-regular($size: 14px);
+  color: rgba(0, 0, 0, 0.55);
+  margin: 0;
+  line-height: 1.6;
+
+  strong {
+    @include font-sans_pro-bold($size: 14px);
+    color: $purple;
+  }
+}
+
+.top-rated__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  @include font-sans_pro-semibold($size: 14px);
+  color: $purple;
+  text-decoration: none;
+  transition: gap 0.25s ease;
+
+  svg {
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    gap: 10px;
+
+    svg {
+      transform: translateX(2px);
+    }
+  }
+}
+
+// ─── Carousel area ──────────────────────────────────────────
+.top-rated__carousel {
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: 768px) {
+    min-height: 350px;
+  }
+}
+
+.top-rated__carousel-track {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  min-height: 320px;
+  will-change: transform;
+  transform: translateZ(0);
+
+  &::-webkit-scrollbar {
+    width: 0;
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    width: 0;
+  }
+}
+
+.slide {
+  scroll-snap-align: start;
+}
+
+// ─── Nav buttons ────────────────────────────────────────────
+.top-rated__nav {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.top-rated__nav-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: $white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: $black;
+  transition: all 0.2s ease;
+
+  &:hover:not(.disabled) {
+    background: $purple;
+    color: $white;
+    border-color: $purple;
+    box-shadow: 0 4px 16px rgba(69, 25, 124, 0.2);
+  }
+
+  &.disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+}
+
+// ─── Last card ("There's more!") ────────────────────────────
+.lastCard {
+  background: linear-gradient(145deg, #f8f4ff 0%, #f0fdfa 100%);
+  border: 1px solid rgba(69, 25, 124, 0.08);
+  border-radius: 16px;
+  width: 310px;
+  height: 343px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(69, 25, 124, 0.08);
+  }
+
+  @media (max-width: 767px) {
+    width: 265px;
+    height: 320px;
+    border-radius: 14px;
+  }
+
+  &__icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(69, 25, 124, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $purple;
+    margin-bottom: 4px;
+  }
+
+  &__heading {
+    @include font-sans_pro-bold($size: 20px);
+    color: $purple;
+  }
+
+  &__text {
+    @include font-sans_pro-regular($size: 14px);
+    color: rgba(0, 0, 0, 0.55);
+    margin: 0;
+    line-height: 1.5;
+
+    strong {
+      color: $black;
+    }
+  }
+
+  &__cta {
+    margin-top: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    @include font-sans_pro-semibold($size: 14px);
+    color: $white;
+    background: linear-gradient(135deg, $purple 0%, #6b3fa0 100%);
+    padding: 10px 24px;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    svg {
+      flex-shrink: 0;
+    }
+
+    &:hover {
+      transform: scale(1.04);
+      box-shadow: 0 6px 20px rgba(69, 25, 124, 0.25);
+      color: $white;
+    }
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+// ─── Skeleton loader ────────────────────────────────────────
+.shimmer {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    animation: shimmer 1.5s infinite;
+  }
+}
+
+@keyframes shimmer {
+  100% { left: 100%; }
+}
+
+.skeleton-doctor-card {
+  min-width: 260px;
+  width: 260px;
+  background: $white;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  height: 320px;
+
+  @media (min-width: 768px) {
+    min-width: 310px;
+    width: 310px;
+    height: 350px;
+  }
+
+  &__avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #f0edf5;
+
+    @media (min-width: 768px) {
+      width: 100px;
+      height: 100px;
+    }
+  }
+
+  &__name {
+    width: 70%;
+    height: 18px;
+    border-radius: 8px;
+    background: #f0edf5;
+    margin-top: 14px;
+  }
+
+  &__spec {
+    width: 50%;
+    height: 14px;
+    border-radius: 8px;
+    background: #f0edf5;
+    margin-top: 8px;
+  }
+
+  &__location {
+    width: 60%;
+    height: 12px;
+    border-radius: 8px;
+    background: #f0edf5;
+    margin-top: 8px;
+  }
+
+  &__rating {
+    width: 40%;
+    height: 14px;
+    border-radius: 8px;
+    background: #f0edf5;
+    margin-top: 10px;
+  }
+
+  &__fees {
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  &__button {
+    width: 100%;
+    height: 40px;
+    border-radius: 12px;
+    background: #f0edf5;
+    margin-top: auto;
+  }
+}
+
+// Fade-in for content after loading
+.fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

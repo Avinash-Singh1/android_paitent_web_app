@@ -1,0 +1,20 @@
+// ── Container Widths ──
+$content-max-width: 85%;
+$content-sm-max-width: 90%;
+$content-max-width-mobile: 1200px;
+$content-mobile-width-gap: 15px;
+
+// ── Responsive Container Map ──
+$container-padding-mobile: 16px;  // 320–479px
+$container-padding-phone: 20px;   // 480–767px
+$container-padding-tablet: 24px;  // 768–1023px
+$container-padding-desktop: 0;    // 1024+ (uses max-width %)
+
+
+// @mixin container(){
+//     max-width: $content-max-width-mobile;
+//     padding: 20px;
+//     @include mq-breakpoint-xl(){
+//         max-width: $content-max-width;    
+//     }
+// }

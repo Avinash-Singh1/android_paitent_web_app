@@ -1,0 +1,48 @@
+<section id="symptoms" class="symptoms" *ngIf="treatment?.symptoms">
+  <h2 class="symptoms__title">Symptoms of {{ treatment.title }}</h2>
+
+  <!-- Rich HTML overview -->
+  <div class="symptoms__body" [innerHTML]="sanitize(treatment.symptoms)"></div>
+
+  <!-- Interactive Symptom Checker -->
+  <div class="symptoms__checker" *ngIf="symptomLines.length > 2">
+    <h3 class="symptoms__checker-title">🩺 Symptom Self-Check</h3>
+    <p class="symptoms__checker-desc">Select the symptoms you are experiencing:</p>
+    <div class="symptoms__checklist">
+      <label class="symptoms__check-item" *ngFor="let item of symptomLines; let i = index"
+             [class.symptoms__check-item--active]="checkedSymptoms.has(i)">
+        <input type="checkbox" [checked]="checkedSymptoms.has(i)"
+               (change)="toggleSymptom(i)" />
+        <span class="symptoms__check-box">
+          <span class="symptoms__check-tick" *ngIf="checkedSymptoms.has(i)">✓</span>
+        </span>
+        <span class="symptoms__check-text">{{ item }}</span>
+      </label>
+    </div>
+    <button class="symptoms__check-btn" (click)="checkSymptoms()"
+            [disabled]="checkedCount === 0">
+      Check My Symptoms
+    </button>
+    <div class="symptoms__result" *ngIf="showResult"
+         [class.symptoms__result--high]="resultLevel === 'high'"
+         [class.symptoms__result--moderate]="resultLevel === 'moderate'"
+         [class.symptoms__result--low]="resultLevel === 'low'">
+      <span class="symptoms__result-icon" *ngIf="resultLevel === 'high'">⚠️</span>
+      <span class="symptoms__result-icon" *ngIf="resultLevel === 'moderate'">🔶</span>
+      <span class="symptoms__result-icon" *ngIf="resultLevel === 'low'">✅</span>
+      <p class="symptoms__result-text">{{ resultMessage }}</p>
+    </div>
+  </div>
+
+  <!-- Causes sub-section -->
+  <div class="symptoms__causes" *ngIf="treatment.causes">
+    <h3 class="symptoms__subtitle">Causes</h3>
+    <div class="symptoms__body" [innerHTML]="sanitize(treatment.causes)"></div>
+  </div>
+
+  <!-- Diagnosis sub-section -->
+  <div class="symptoms__diagnosis" *ngIf="treatment.diagnosis">
+    <h3 class="symptoms__subtitle">Diagnosis</h3>
+    <div class="symptoms__body" [innerHTML]="sanitize(treatment.diagnosis)"></div>
+  </div>
+</section>

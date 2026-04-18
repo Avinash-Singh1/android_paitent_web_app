@@ -1,0 +1,65 @@
+<section id="cost" class="cost" *ngIf="treatment?.costRange?.min || treatment?.costRange?.max">
+  <h2 class="cost__title">
+    {{ treatment.title }} Cost
+    <span *ngIf="city"> in {{ cityLabel }}</span>
+  </h2>
+
+  <!-- Cost Summary Cards -->
+  <div class="cost__summary">
+    <div class="cost__card cost__card--min">
+      <span class="cost__card-label">Minimum</span>
+      <span class="cost__card-price">₹{{ treatment.costRange?.min | number }}</span>
+    </div>
+    <div class="cost__card cost__card--avg" *ngIf="avgCost">
+      <span class="cost__card-label">Average</span>
+      <span class="cost__card-price">₹{{ avgCost | number }}</span>
+    </div>
+    <div class="cost__card cost__card--max">
+      <span class="cost__card-label">Maximum</span>
+      <span class="cost__card-price">₹{{ treatment.costRange?.max | number }}</span>
+    </div>
+  </div>
+
+  <!-- Cost Range Bar -->
+  <div class="cost__range">
+    <div class="cost__range-bar">
+      <div class="cost__range-fill"></div>
+      <div class="cost__range-marker cost__range-marker--avg" *ngIf="avgCost">
+        <span>Avg ₹{{ avgCost | number }}</span>
+      </div>
+    </div>
+    <div class="cost__range-labels">
+      <span>₹{{ treatment.costRange?.min | number }}</span>
+      <span>₹{{ treatment.costRange?.max | number }}</span>
+    </div>
+  </div>
+
+  <!-- Cost Factors -->
+  <div class="cost__factors">
+    <h3 class="cost__factors-title">Factors Affecting Cost</h3>
+    <div class="cost__factors-grid">
+      <div class="cost__factor" *ngFor="let f of costFactors">
+        <span class="cost__factor-icon">{{ f.icon }}</span>
+        <div>
+          <strong class="cost__factor-label">{{ f.label }}</strong>
+          <p class="cost__factor-desc">{{ f.desc }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Insurance Note -->
+  <div class="cost__insurance">
+    <span class="cost__insurance-icon">🛡️</span>
+    <div>
+      <strong>Insurance Coverage</strong>
+      <p>Most health insurance plans cover {{ treatment.title }}. Contact us to check your eligibility.</p>
+    </div>
+  </div>
+
+  <!-- Subtopic Link -->
+  <a *ngIf="treatment.subtopics?.cost" class="cost__more"
+     [routerLink]="['/', city || 'delhi', 'treatment', department, slug, 'cost']">
+    View Detailed Cost Guide →
+  </a>
+</section>
