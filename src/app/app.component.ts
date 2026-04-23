@@ -46,6 +46,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
      // Set up scroll-to-top button AFTER hydration completes
      afterNextRender(() => {
+       // Disable browser's native scroll restoration so Angular's
+       // scrollPositionRestoration: 'top' has full control
+       if ('scrollRestoration' in history) {
+         history.scrollRestoration = 'manual';
+       }
+
        // Check initial scroll position immediately
        this.showScrollTop = window.scrollY > 300;
 
@@ -75,6 +81,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         if (event instanceof NavigationEnd) {
           this.seoService.setCanonicalUrl();
           this.seoService.indexAndFollowRobot();
+          // Ensure page scrolls to top on every navigation (reinforces scrollPositionRestoration)
+          if (this.isBrowser) {
+            window.scrollTo(0, 0);
+          }
         }
       });
 

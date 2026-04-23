@@ -240,6 +240,33 @@ function getFallbackTitle(url: string): string {
   return 'NectarPlus Health - Find Doctors, Hospitals & Clinics Near You';
 }
 
+function sendCsrFallback(res: express.Response, url: string, next: express.NextFunction): void {
+  const fallbackTitle = getFallbackTitle(url);
+  const csrPath = resolve(browserDistFolder, 'index.csr.html');
+  const htmlPath = resolve(browserDistFolder, 'index.html');
+
+  try {
+    let html = readFileSync(csrPath, 'utf-8');
+    if (fallbackTitle) {
+      html = html.replace(/<title>[^<]*<\/title>/, `<title>${fallbackTitle}</title>`);
+    }
+    res.send(html);
+    return;
+  } catch {
+    // fall through to index.html fallback
+  }
+
+  try {
+    let html = readFileSync(htmlPath, 'utf-8');
+    if (fallbackTitle) {
+      html = html.replace(/<title>[^<]*<\/title>/, `<title>${fallbackTitle}</title>`);
+    }
+    res.send(html);
+  } catch {
+    next();
+  }
+}
+
 /**
  * Handle all other requests by rendering the Angular application.
  * Uses in-memory LRU cache to avoid forking for repeated pages.
@@ -284,7 +311,7 @@ app.use('*', async (req, res, next) => {
     const result = await renderInWorker(fullUrl, headers);
 
     if (!result) {
-      next();
+      sendCsrFallback(res, req.originalUrl, next);
       return;
     }
 
@@ -324,27 +351,7 @@ app.use('*', async (req, res, next) => {
     res.send(result.html);
   } catch (err: any) {
     console.error(`[SSR] Error for ${req.originalUrl}:`, err.message);
-    // CSR fallback with route-aware title
-    const fallbackTitle = getFallbackTitle(req.originalUrl);
-    const csrPath = resolve(browserDistFolder, 'index.csr.html');
-    const htmlPath = resolve(browserDistFolder, 'index.html');
-    try {
-      let html = readFileSync(csrPath, 'utf-8');
-      if (fallbackTitle) {
-        html = html.replace(/<title>[^<]*<\/title>/, `<title>${fallbackTitle}</title>`);
-      }
-      res.send(html);
-    } catch {
-      try {
-        let html = readFileSync(htmlPath, 'utf-8');
-        if (fallbackTitle) {
-          html = html.replace(/<title>[^<]*<\/title>/, `<title>${fallbackTitle}</title>`);
-        }
-        res.send(html);
-      } catch {
-        next();
-      }
-    }
+    sendCsrFallback(res, req.originalUrl, next);
   }
 });
 

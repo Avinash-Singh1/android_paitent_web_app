@@ -1,4 +1,5 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject, PLATFORM_ID } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
@@ -11,6 +12,8 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
+  private isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
   constructor(
     private localStorage: LocalStorageService,
     private router: Router,
@@ -34,7 +37,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           this.localStorage.removeAllItem();
           this.router.navigate(["/"]);
         }
-        if (isOwnApi) {
+        if (isOwnApi && this.isBrowser) {
           this.toastr.error(error?.error?.message ?? "Something went wrong");
         }
         return throwError(() => error);
