@@ -83,6 +83,19 @@
                 routerLink="/profile/feedbacks">
                 View Feedback
               </button>
+              <!-- ── Join Meet (upcoming video appointments only) ── -->
+              <a *ngIf="i?.status == 0 && i?.consultationType === 'video' && i?.videoMeetingUrl"
+                 [href]="buildMeetUrl(i.videoMeetingUrl, i.email)"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 class="appt__btn appt__btn--meet"
+                 id="join-meet-appt-{{ i?._id }}"
+                 title="Join Google Meet as {{ i?.email || 'patient' }}">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z" fill="white"/>
+                </svg>
+                Join Meet
+              </a>
               <button class="appt__btn appt__btn--primary" (click)="viewDetails(i)">
                 View Details
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>

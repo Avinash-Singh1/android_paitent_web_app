@@ -122,6 +122,85 @@
     <nectar-footer></nectar-footer>
   </div>
 
+  <!-- ── Mobile Bottom Navigation Bar ── -->
+  <nav class="bottom-nav" *ngIf="isMobile" aria-label="Bottom navigation">
+    <!-- Find Doctors -->
+    <button class="bottom-nav__item"
+      [class.bottom-nav__item--active]="activeBottomTab === 'find-doctors'"
+      (click)="onBottomNavClick('find-doctors')"
+      type="button">
+      <span class="bottom-nav__icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </span>
+      <span class="bottom-nav__label">Find Doctors</span>
+    </button>
+
+    <!-- My Bookings -->
+    <button class="bottom-nav__item"
+      [class.bottom-nav__item--active]="activeBottomTab === 'bookings'"
+      (click)="onBottomNavClick('bookings')"
+      type="button">
+      <span class="bottom-nav__icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+      </span>
+      <span class="bottom-nav__label">My Bookings</span>
+    </button>
+
+    <!-- Profile -->
+    <button class="bottom-nav__item"
+      [class.bottom-nav__item--active]="activeBottomTab === 'profile'"
+      (click)="onBottomNavClick('profile')"
+      type="button">
+      <span class="bottom-nav__icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+      </span>
+      <span class="bottom-nav__label">Profile</span>
+    </button>
+
+    <!-- Menu -->
+    <button class="bottom-nav__item"
+      (click)="onBottomNavClick('menu')"
+      type="button">
+      <span class="bottom-nav__icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </span>
+      <span class="bottom-nav__label">Menu</span>
+    </button>
+  </nav>
+
+  <!-- ── Login Required Modal ── -->
+  <div class="login-modal-overlay" *ngIf="showLoginModal" (click)="closeLoginModal()">
+    <div class="login-modal" (click)="$event.stopPropagation()">
+      <button class="login-modal__close" (click)="closeLoginModal()" type="button" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+      <div class="login-modal__icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#45197c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+        </svg>
+      </div>
+      <h3 class="login-modal__title">Login Required</h3>
+      <p class="login-modal__text">Please login to access this feature</p>
+      <button class="login-modal__btn" (click)="goToLogin()" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>
+        </svg>
+        Login / Sign Up
+      </button>
+    </div>
+  </div>
+
   <mat-drawer-container [hasBackdrop]="true" class="mobile-drawer-container">
     <mat-drawer [autoFocus]="false" #matdrawer mode="over" class="w-60 mobile-sidebar">
       <div class="sidebar">

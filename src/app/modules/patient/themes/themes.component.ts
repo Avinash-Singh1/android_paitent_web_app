@@ -1,12 +1,14 @@
 import { Component, OnInit, ViewChild, OnDestroy, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { API_ENDPOINTS } from 'src/app/config/api.constant';
 import { ApiService } from 'src/app/services/api.service';
 import { CommonService } from 'src/app/services/common.service';
 import { EventService } from 'src/app/services/event.service';
 import { LocalStorageService } from 'src/app/services/storage.service';
+import { DeviceService } from 'src/app/services/device.service';
 
 @Component({
   standalone: false,
@@ -25,6 +27,12 @@ export class ThemesComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
+  // ── Bottom Nav Bar ──
+  isMobile = false;
+  isLoggedIn = false;
+  showLoginModal = false;
+  activeBottomTab: 'find-doctors' | 'bookings' | 'profile' | 'menu' | '' = '';
+
   menus = [
     { name: 'Find the doctors', route: 'hospital-list', icon: 'assets/images/svg/search.svg' },
     { name: 'Surgeries', route: 'treatment', icon: 'assets/images/svg/mat-surgeries.svg' },
@@ -40,15 +48,23 @@ export class ThemesComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private localStorage: LocalStorageService,
     private router: Router,
-    private commonService: CommonService) {}
+    private commonService: CommonService,
+    private deviceService: DeviceService) {}
 
   ngOnInit(): void {
     // No longer using deviceWidth from localStorage
 
-    // Initialize user data and event subscriptions — skip HTTP calls during SSR.
+    // Detect mobile for bottom nav
+    this.isMobile = this.deviceService.isMobile();
+
+    // Check login status
     if (this.isBrowser && this.localStorage.getItem('token')) {
+      this.isLoggedIn = true;
       this.getUserData();
     }
+
+    // Track active bottom tab based on current URL
+    this.updateActiveTab(this.router.url);
 
     if (this.isBrowser) {
       this.subscriptions.push(
@@ -79,6 +95,26 @@ export class ThemesComponent implements OnInit, OnDestroy {
         this.eventService.getEvent('showheader').subscribe((res: string) => {
           if (res) {
             this.mode = res;
+          }
+        })
+      );
+
+      // Listen to route changes to update active bottom tab
+      this.subscriptions.push(
+        this.router.events.pipe(
+          filter((e): e is NavigationEnd => e instanceof NavigationEnd)
+        ).subscribe((e) => {
+          this.updateActiveTab(e.urlAfterRedirects || e.url);
+        })
+      );
+
+      // Listen for resize to update mobile state
+      this.subscriptions.push(
+        this.eventService.getEvent('login').subscribe((res: any) => {
+          // Also update isLoggedIn when login event fires
+          // (already subscribed above for getUserData, this is a safety net)
+          if (res) {
+            this.isLoggedIn = true;
           }
         })
       );
@@ -121,6 +157,57 @@ export class ThemesComponent implements OnInit, OnDestroy {
     } else {
       this.matdrawer1?.toggle();
     }
+  }
+
+  // ── Bottom Nav Methods ──
+
+  private updateActiveTab(url: string): void {
+    const path = url.split('?')[0].split('#')[0];
+    if (path.startsWith('/hospital-list')) {
+      this.activeBottomTab = 'find-doctors';
+    } else if (path === '/profile' || path.startsWith('/profile/')) {
+      // Check if it's personal-info specifically
+      if (path.startsWith('/profile/personal-info')) {
+        this.activeBottomTab = 'profile';
+      } else {
+        this.activeBottomTab = 'bookings';
+      }
+    } else {
+      this.activeBottomTab = '';
+    }
+  }
+
+  onBottomNavClick(tab: 'find-doctors' | 'bookings' | 'profile' | 'menu'): void {
+    if (tab === 'find-doctors') {
+      this.router.navigate(['/hospital-list']);
+      return;
+    }
+
+    if (tab === 'menu') {
+      this.eventService.broadcastEvent('patient-sidenav', true);
+      return;
+    }
+
+    // Bookings and Profile require login
+    if (!this.isLoggedIn) {
+      this.showLoginModal = true;
+      return;
+    }
+
+    if (tab === 'bookings') {
+      this.router.navigate(['/profile']);
+    } else if (tab === 'profile') {
+      this.router.navigate(['/profile/personal-info']);
+    }
+  }
+
+  closeLoginModal(): void {
+    this.showLoginModal = false;
+  }
+
+  goToLogin(): void {
+    this.showLoginModal = false;
+    this.router.navigate(['/auth/patient/login']);
   }
 
   ngOnDestroy(): void {

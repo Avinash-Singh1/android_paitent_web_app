@@ -9,6 +9,7 @@ import { GoogleMapsService } from "src/app/services/google-maps.service";
 import { SeoService } from "src/app/services/seo.service";
 import { LocalStorageService } from "src/app/services/storage.service";
 import { hospitalTypeToSlug } from 'src/app/config/hospital-types.constant';
+import { buildMeetUrl as buildMeetUrlHelper } from 'src/app/utils/meet-url.helper';
 
 declare var qp: any; // Declare global function
 
@@ -33,6 +34,11 @@ export class ConfirmAppointmentComponent implements OnInit {
     private seoService: SeoService,
     private commonService: CommonService) {
     this.isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  }
+
+  /** Builds a Google Meet URL with ?authuser=<email> for the patient. */
+  buildMeetUrl(meetUrl: string | null | undefined, email: string | null | undefined): string {
+    return buildMeetUrlHelper(meetUrl, email);
   }
   appointmentId: any;
   ngOnInit(): void {

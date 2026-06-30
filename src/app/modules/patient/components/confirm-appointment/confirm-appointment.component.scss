@@ -315,6 +315,84 @@
         }
       }
 
+      // ── Google Meet section ──
+      .meet-section {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: linear-gradient(135deg, #e8f0fe 0%, #f0f7ff 100%);
+        padding: 16px 20px;
+        border-radius: 12px;
+        margin-top: 20px;
+        border: 1px solid #d2e3fc;
+
+        &__icon {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          box-shadow: 0 1px 4px rgba(26, 115, 232, 0.15);
+        }
+
+        &__content {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+          flex: 1;
+        }
+
+        &__label {
+          @include font-sans_pro-semibold($size: 13px);
+          color: #1a73e8;
+          text-transform: uppercase;
+          letter-spacing: 0.4px;
+        }
+
+        &__pending {
+          @include font-sans_pro-regular($size: 13px);
+          color: #5f6368;
+          font-style: italic;
+        }
+      }
+
+      .btn-meet {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 40px;
+        padding: 0 20px;
+        border-radius: 10px;
+        border: none;
+        background: #1a73e8;
+        color: white;
+        @include font-sans_pro-semibold($size: 14px);
+        cursor: pointer;
+        text-decoration: none;
+        transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+        box-shadow: 0 2px 8px rgba(26, 115, 232, 0.25);
+        width: fit-content;
+
+        svg {
+          flex-shrink: 0;
+        }
+
+        &:hover {
+          background: #1557b0;
+          box-shadow: 0 4px 14px rgba(26, 115, 232, 0.35);
+          transform: translateY(-1px);
+          color: white;
+        }
+
+        &:active {
+          transform: translateY(0);
+          box-shadow: 0 2px 8px rgba(26, 115, 232, 0.25);
+        }
+      }
+
       .btn-profile {
         display: inline-flex;
         align-items: center;

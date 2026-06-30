@@ -9,6 +9,7 @@ import { Subscription } from "rxjs";
 import { PatientDetialsComponent } from "src/app/modules/doctor-hospital-shared/components/patient-detials/patient-detials.component";
 import { APP_CONSTANTS } from "src/app/config/app.constant";
 import { LocalStorageService } from "src/app/services/storage.service";
+import { buildMeetUrl } from "src/app/utils/meet-url.helper";
 
 @Component({
   standalone: false,
@@ -19,6 +20,9 @@ import { LocalStorageService } from "src/app/services/storage.service";
 export class MainCalendarViewComponent implements OnInit, OnDestroy {
   hideView: boolean;
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
+  /** The logged-in doctor's email, used to append ?authuser= to Meet links. */
+  doctorEmail: string = '';
 
   constructor(
     private eventService: EventService,
@@ -70,6 +74,18 @@ export class MainCalendarViewComponent implements OnInit, OnDestroy {
       this.hideView=true
     }
 
+    // Load doctor's registered email for Meet authuser param.
+    try {
+      const userDetailRaw = this.localStorage.getItem('userDetail');
+      const userDetail = typeof userDetailRaw === 'string'
+        ? JSON.parse(userDetailRaw)
+        : userDetailRaw;
+      if (userDetail?.email) {
+        this.doctorEmail = userDetail.email;
+      }
+    } catch {
+      // doctorEmail stays '' — Meet link opens without authuser.
+    }
 
     this.getEvents();
     this.onChangeSchedule();
@@ -246,6 +262,12 @@ export class MainCalendarViewComponent implements OnInit, OnDestroy {
     }
   }
 
-
+  /**
+   * Builds a Google Meet URL with ?authuser=<doctorEmail>.
+   * Delegates to the standalone buildMeetUrl utility.
+   */
+  buildMeetUrl(meetUrl: string | null | undefined): string {
+    return buildMeetUrl(meetUrl, this.doctorEmail);
+  }
 
 }

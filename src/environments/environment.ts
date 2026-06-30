@@ -1,8 +1,8 @@
 export const environment = {
   production: false,
   ENC_KEY: "$$nectar-plus$$",
-  baseUrl: "http://localhost:8080/api/",
-  baseUrlHttp: "http://localhost:8080/api/",
+  baseUrl: "http://localhost:7000/api/",
+  baseUrlHttp: "http://localhost:7000/api/",
   API_KEY: "f68dd92ab05fa026457651a34b7ef4b18cf289a5",
   GOOGLE_API_KEY: "AIzaSyDb7zoRltrfSat3aq7o9EYF5VV4hEKwNUE",
   MYUPCHAR_API_KEY: "a0a0f66fac42dbc1a1c5604c682731ed",

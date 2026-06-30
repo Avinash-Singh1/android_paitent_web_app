@@ -312,6 +312,43 @@
                         <span>{{
                           item.doctorDetails.fullName ?? "N/A" | titlecase
                         }}</span>
+
+                        <!-- ── Join Meet (video appointments only) ───────── -->
+                        <ng-container *ngIf="item.consultationType === 'video'">
+                          <!-- Active: Meet link available -->
+                          <a
+                            *ngIf="item.videoMeetingUrl"
+                            [href]="buildMeetUrl(item.videoMeetingUrl)"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            id="join-meet-btn-{{ item._id }}"
+                            class="join-meet-link"
+                            title="Join Google Meet as {{ doctorEmail || 'doctor' }}"
+                          >
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                              xmlns="http://www.w3.org/2000/svg" style="margin-right:4px;">
+                              <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10
+                                c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"
+                                fill="#1A73E8"/>
+                            </svg>
+                            Join Meet
+                          </a>
+                          <!-- Disabled: Meet link not generated yet -->
+                          <span
+                            *ngIf="!item.videoMeetingUrl"
+                            class="join-meet-link join-meet-link--disabled"
+                            title="Meet link not available yet"
+                          >
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                              xmlns="http://www.w3.org/2000/svg" style="margin-right:4px;">
+                              <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10
+                                c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"
+                                fill="#b0b8c4"/>
+                            </svg>
+                            Meet link pending
+                          </span>
+                        </ng-container>
+
                       </div>
                     </div>
                     <div class="d-flex text-14 font-600">

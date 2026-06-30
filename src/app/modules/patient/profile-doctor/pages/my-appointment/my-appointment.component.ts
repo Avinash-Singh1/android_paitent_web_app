@@ -9,6 +9,7 @@ import { CommonService } from "src/app/services/common.service";
 import { EventService } from "src/app/services/event.service";
 import { FormValidationService } from "src/app/services/form-validation.service";
 import { LocalStorageService } from "src/app/services/storage.service";
+import { buildMeetUrl } from "src/app/utils/meet-url.helper";
 
 @Component({
   standalone: false,
@@ -18,6 +19,10 @@ import { LocalStorageService } from "src/app/services/storage.service";
 })
 export class MyAppointmentComponent implements OnInit {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
+  buildMeetUrl(meetUrl: string | null | undefined, email: string | null | undefined): string {
+    return buildMeetUrl(meetUrl, email);
+  }
   constructor(
     private apiService: ApiService,
     private datepipe: DatePipe,
