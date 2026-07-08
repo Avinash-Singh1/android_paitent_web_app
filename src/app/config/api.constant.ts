@@ -164,6 +164,10 @@ export const API_ENDPOINTS = {
     treatmentHospitals: `${environment.baseUrl}v1/surgery/treatment`,
     treatmentSitemap: `${environment.baseUrl}v1/surgery/treatment/sitemap`,
     treatmentDepartment: `${environment.baseUrl}v1/surgery/treatment/department`,
+
+    // Video consultation — mints a Twilio Video access token for the patient.
+    // Backend: GET /api/v1/appointment/video-link/:appointmentId
+    videoLink: `${environment.baseUrl}v1/appointment/video-link`,
   },
   hospital: {
     getProfile: `${environment.baseUrl}v1/hospital/admin`,

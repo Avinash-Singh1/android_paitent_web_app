@@ -1,0 +1,204 @@
+/* Twilio Video Dialog */
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tvd {
+  display: flex;
+  flex-direction: column;
+  width: min(920px, 96vw);
+  height: min(680px, 92vh);
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: rgba(15, 23, 42, 0.92);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    color: #f8fafc;
+
+    svg { color: #38bdf8; }
+  }
+
+  &__count {
+    margin-left: 8px;
+    font-size: 11px;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 3px 8px;
+    border-radius: 999px;
+  }
+
+  &__close {
+    background: transparent;
+    border: none;
+    color: #cbd5e1;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    display: inline-flex;
+    &:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+  }
+
+  &__body {
+    flex: 1;
+    display: flex;
+    background: #000;
+    position: relative;
+    overflow: hidden;
+  }
+
+  &__stage {
+    position: relative;
+    flex: 1;
+    display: flex;
+  }
+
+  &__remote {
+    flex: 1;
+    background: #000;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    video, audio { width: 100%; height: 100%; object-fit: cover; }
+  }
+
+  &__self {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    width: 160px;
+    height: 220px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #1e293b;
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+    z-index: 5;
+    video { width: 100%; height: 100%; object-fit: cover; }
+  }
+
+  &__placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    color: #94a3b8;
+    text-align: center;
+    padding: 24px;
+    font-size: 15px;
+
+    &--error strong { color: #f87171; max-width: 480px; }
+  }
+
+  &__spinner {
+    width: 40px; height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.15);
+    border-top-color: #38bdf8;
+    border-radius: 50%;
+    animation: tvd-spin 0.9s linear infinite;
+  }
+
+  @keyframes tvd-spin { to { transform: rotate(360deg); } }
+
+  &__fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+    padding: 40px;
+    text-align: center;
+
+    h3 { margin: 0; color: #f8fafc; font-size: 20px; }
+    p { margin: 0; color: #94a3b8; }
+    .tvd__hint { font-size: 13px; color: #fbbf24; }
+  }
+
+  &__btn {
+    padding: 12px 22px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+
+    &--primary {
+      background: #38bdf8;
+      color: #0f172a;
+      &:hover { background: #0ea5e9; }
+      &:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
+    }
+    &--secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #f8fafc;
+      &:hover { background: rgba(255, 255, 255, 0.18); }
+    }
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 16px;
+    background: rgba(15, 23, 42, 0.95);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  &__ctrl {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.12);
+    color: #f8fafc;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+
+    &:hover { background: rgba(255, 255, 255, 0.22); }
+    &--off { background: #ef4444; color: #fff; &:hover { background: #dc2626; } }
+    &--leave { background: #ef4444; color: #fff; &:hover { background: #dc2626; } }
+  }
+}
+
+@media (max-width: 640px) {
+  .tvd {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+
+    &__self {
+      width: 100px;
+      height: 140px;
+      right: 12px;
+      top: 12px;
+    }
+  }
+}

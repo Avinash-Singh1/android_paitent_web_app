@@ -73,6 +73,7 @@ import { ValidFeePipe } from "./pipes/valid-fee.pipe";
 import { ConsultationFeePipe } from "./pipes/consultation-fee.pipe";
 import { HighlightSearchPipe } from "./pipes/highlight-search.pipe";
 import { HasHighlightPathPipe } from "./pipes/has-highlight-path.pipe";
+import { TwilioVideoDialogComponent } from "./components/twilio-video-dialog/twilio-video-dialog.component";
 
 const component = [
   GlobalSearchComponent,
@@ -129,6 +130,7 @@ const component = [
   ConsultationFeePipe,
   HighlightSearchPipe,
   HasHighlightPathPipe,
+  TwilioVideoDialogComponent,
 ];
 
 @NgModule({

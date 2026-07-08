@@ -149,23 +149,38 @@
               </svg>
             </div>
             <div class="meet-section__content">
-              <span class="meet-section__label">Google Meet</span>
-              <ng-container *ngIf="details?.videoMeetingUrl; else meetPending">
+              <span class="meet-section__label">Video Consultation</span>
+
+              <!-- Primary action — in-app Twilio Video call -->
+              <button type="button"
+                      class="btn-meet"
+                      id="join-video-inapp"
+                      (click)="joinVideoConsultation()"
+                      [disabled]="joiningVideo">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+                  <polygon points="23 7 16 12 23 17 23 7" fill="white"/>
+                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2" fill="white"/>
+                </svg>
+                {{ joiningVideo ? 'Connecting…' : 'Join Video Call' }}
+              </button>
+
+              <!-- Inline error / hint if the video-link fetch fails -->
+              <span class="meet-section__pending" *ngIf="videoJoinError">
+                {{ videoJoinError }}
+              </span>
+
+              <!-- Legacy Meet fallback shown when the appointment doc still
+                   has a Google Meet URL (older appointments before Twilio). -->
+              <ng-container *ngIf="details?.videoMeetingUrl">
                 <a [href]="buildMeetUrl(details.videoMeetingUrl, details.email)"
                    target="_blank"
                    rel="noopener noreferrer"
                    class="btn-meet"
                    id="join-meet-confirm"
-                   title="Join as {{ details?.email || 'patient' }}">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-                    <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z" fill="white"/>
-                  </svg>
-                  Join Google Meet
+                   title="Open Google Meet fallback">
+                  Open Google Meet (fallback)
                 </a>
               </ng-container>
-              <ng-template #meetPending>
-                <span class="meet-section__pending">Meet link will be available shortly</span>
-              </ng-template>
             </div>
             </div>
         </ng-container>

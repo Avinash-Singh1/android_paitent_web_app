@@ -1,6 +1,7 @@
 import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { Component, OnInit, Renderer2, inject, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
+import { MatDialog } from '@angular/material/dialog';
 import { API_ENDPOINTS } from "src/app/config/api.constant";
 import { ApiService } from "src/app/services/api.service";
 import { CommonService } from "src/app/services/common.service";
@@ -10,6 +11,11 @@ import { SeoService } from "src/app/services/seo.service";
 import { LocalStorageService } from "src/app/services/storage.service";
 import { hospitalTypeToSlug } from 'src/app/config/hospital-types.constant';
 import { buildMeetUrl as buildMeetUrlHelper } from 'src/app/utils/meet-url.helper';
+import {
+  TwilioVideoService,
+  VideoLinkPayload,
+} from 'src/app/services/twilio-video.service';
+import { TwilioVideoDialogComponent } from 'src/app/shared/components/twilio-video-dialog/twilio-video-dialog.component';
 
 declare var qp: any; // Declare global function
 
@@ -32,13 +38,76 @@ export class ConfirmAppointmentComponent implements OnInit {
     public gService: GoogleMapsService,
     private renderer: Renderer2,
     private seoService: SeoService,
-    private commonService: CommonService) {
+    private commonService: CommonService,
+    private dialog: MatDialog,
+    private twilio: TwilioVideoService) {
     this.isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   }
 
   /** Builds a Google Meet URL with ?authuser=<email> for the patient. */
   buildMeetUrl(meetUrl: string | null | undefined, email: string | null | undefined): string {
     return buildMeetUrlHelper(meetUrl, email);
+  }
+
+  /** True while a video-link fetch is in flight. Disables the Join button. */
+  joiningVideo = false;
+  videoJoinError: string | null = null;
+
+  /**
+   * Fetches the Twilio join info from the Patient Backend and opens the
+   * in-app Twilio Video dialog. Falls back to opening the Google Meet URL
+   * in a new tab if the backend still returns provider === 'google_meet'.
+   */
+  joinVideoConsultation(): void {
+    if (this.joiningVideo || !this.appointmentId) return;
+    this.joiningVideo = true;
+    this.videoJoinError = null;
+
+    this.twilio.getVideoLink(this.appointmentId).subscribe({
+      next: (res: any) => {
+        this.joiningVideo = false;
+        const payload: VideoLinkPayload =
+          (res?.result as VideoLinkPayload) || res || {};
+        // Fallback to Google Meet URL when Twilio isn't configured for this
+        // appointment (e.g. legacy row with videoMeetingUrl only).
+        if (payload.provider === 'twilio' && payload.token && payload.roomName) {
+          this.openTwilioDialog(payload);
+        } else if (payload.meetingUrl || this.details?.videoMeetingUrl) {
+          const url = payload.meetingUrl || this.details?.videoMeetingUrl;
+          const built = this.buildMeetUrl(url, this.details?.email);
+          if (this.isBrowser) window.open(built, '_blank', 'noopener,noreferrer');
+        } else {
+          this.videoJoinError =
+            'Video room is not available yet — please try again shortly.';
+        }
+      },
+      error: (err: any) => {
+        this.joiningVideo = false;
+        this.videoJoinError =
+          err?.error?.message ||
+          err?.message ||
+          'Could not fetch the video link.';
+      },
+    });
+  }
+
+  private openTwilioDialog(videoLink: VideoLinkPayload): void {
+    const patientName =
+      (this.details?.fullName as string) ||
+      (this.details?.email as string) ||
+      'Patient';
+    this.dialog.open(TwilioVideoDialogComponent, {
+      panelClass: ['tvd-panel'],
+      hasBackdrop: true,
+      disableClose: false,
+      maxWidth: '96vw',
+      maxHeight: '96vh',
+      data: {
+        videoLink,
+        displayName: patientName,
+        isDoctor: false,
+      },
+    });
   }
   appointmentId: any;
   ngOnInit(): void {
