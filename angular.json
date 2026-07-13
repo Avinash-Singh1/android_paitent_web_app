@@ -21,7 +21,8 @@
               "moment",
               "ngx-csv",
               "slugify",
-              "crypto-js"
+              "crypto-js",
+              "twilio-video"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [

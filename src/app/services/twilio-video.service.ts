@@ -79,7 +79,9 @@ export class TwilioVideoService {
       throw new Error('Twilio Video can only be used in the browser.');
     }
     // Dynamic import so this ~150KB chunk is code-split.
-    const twilioVideo: any = await import('twilio-video');
+    const twilioModule: any = await import('twilio-video');
+    // Handle CommonJS default export wrapped by ES module dynamic import
+    const twilioVideo = twilioModule.default || twilioModule;
     const { connect, createLocalTracks } = twilioVideo;
 
     this.localTracks = await createLocalTracks({
