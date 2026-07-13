@@ -57,6 +57,7 @@ Thumbs.db
 
 # SSL certificates (dev only)
 /ssl/
+.ssl/
 *.pem
 *.key
 *.cert

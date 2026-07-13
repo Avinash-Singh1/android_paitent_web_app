@@ -78,16 +78,43 @@ export class TwilioVideoService {
     if (!this.isBrowser) {
       throw new Error('Twilio Video can only be used in the browser.');
     }
+
+    // Check if getUserMedia is supported
+    if (!this.isGetUserMediaSupported()) {
+      throw new Error(
+        'Camera and microphone access is not available. Please ensure:\n' +
+        '1. You are using HTTPS (or localhost)\n' +
+        '2. Your browser supports WebRTC\n' +
+        '3. Camera/microphone permissions are granted'
+      );
+    }
+
     // Dynamic import so this ~150KB chunk is code-split.
     const twilioModule: any = await import('twilio-video');
     // Handle CommonJS default export wrapped by ES module dynamic import
     const twilioVideo = twilioModule.default || twilioModule;
     const { connect, createLocalTracks } = twilioVideo;
 
-    this.localTracks = await createLocalTracks({
-      audio: true,
-      video: { width: 640, height: 480 },
-    });
+    try {
+      this.localTracks = await createLocalTracks({
+        audio: true,
+        video: { width: 640, height: 480 },
+      });
+    } catch (error: any) {
+      // Handle specific getUserMedia errors
+      if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+        throw new Error('Camera/microphone permission denied. Please allow access and try again.');
+      } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+        throw new Error('No camera or microphone found. Please connect a device and try again.');
+      } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
+        throw new Error('Camera or microphone is already in use by another application.');
+      } else if (error.message?.includes('getUserMedia is not supported')) {
+        throw new Error(
+          'Video calls require HTTPS. Please access the application using https:// instead of http://'
+        );
+      }
+      throw error;
+    }
 
     this.room = await connect(opts.token, {
       name: opts.roomName,
@@ -96,6 +123,20 @@ export class TwilioVideoService {
     });
 
     this.wireEventListeners();
+  }
+
+  /**
+   * Check if getUserMedia is supported in the current browser context.
+   */
+  private isGetUserMediaSupported(): boolean {
+    if (!this.isBrowser) return false;
+    
+    const nav = navigator as any;
+    return !!(
+      nav.mediaDevices &&
+      nav.mediaDevices.getUserMedia &&
+      (window.isSecureContext || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    );
   }
 
   private wireEventListeners(): void {
