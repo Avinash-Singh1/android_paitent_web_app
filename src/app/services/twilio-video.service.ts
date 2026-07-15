@@ -67,59 +67,8 @@ export class TwilioVideoService {
 
   // ── SDK lifecycle ──────────────────────────────────────────────────────
   /**
-   * Check and request camera/microphone permissions before joining.
-   * Returns true if permissions are granted, false otherwise.
-   */
-  async checkPermissions(): Promise<{ granted: boolean; error?: string }> {
-    if (!this.isBrowser) {
-      return { granted: false, error: 'Not running in a browser' };
-    }
-
-    if (!this.isGetUserMediaSupported()) {
-      return {
-        granted: false,
-        error:
-          'Camera and microphone access is not available. Please ensure you are using HTTPS.',
-      };
-    }
-
-    try {
-      // Request permissions by trying to get media stream
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: true,
-      });
-      // Stop tracks immediately - we'll create them again when joining
-      stream.getTracks().forEach((track) => track.stop());
-      return { granted: true };
-    } catch (error: any) {
-      let errorMessage = 'Permission check failed';
-
-      if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
-        errorMessage =
-          'Camera/microphone permission denied. Click the camera icon in your browser address bar to allow access.';
-      } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
-        errorMessage = 'No camera or microphone found. Please connect a device and try again.';
-      } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
-        errorMessage = 'Camera or microphone is already in use by another application.';
-      } else if (
-        error.name === 'NotSupportedError' ||
-        error.message?.includes('getUserMedia is not supported')
-      ) {
-        errorMessage =
-          'Video calls require HTTPS. Current URL: ' +
-          window.location.protocol +
-          '//' +
-          window.location.host;
-      }
-
-      return { granted: false, error: errorMessage };
-    }
-  }
-
-  /**
-   * Connect to a Twilio Video room. Throws on failure so the caller can
-   * decide the fallback (e.g. open Meet URL, retry, show error).
+   * Connect to a Twilio Video room with existing media tracks.
+   * Caller should have already obtained user permission via getUserMedia.
    */
   async join(opts: {
     token: string;
@@ -130,68 +79,17 @@ export class TwilioVideoService {
       throw new Error('Twilio Video can only be used in the browser.');
     }
 
-    // Check if getUserMedia is supported
-    if (!this.isGetUserMediaSupported()) {
-      throw new Error(
-        'Camera and microphone access requires HTTPS.\n' +
-          'Current URL: ' +
-          window.location.protocol +
-          '//' +
-          window.location.host +
-          '\n\nPlease use https:// instead of http://'
-      );
-    }
-
     // Dynamic import so this ~150KB chunk is code-split.
     const twilioModule: any = await import('twilio-video');
     // Handle CommonJS default export wrapped by ES module dynamic import
     const twilioVideo = twilioModule.default || twilioModule;
     const { connect, createLocalTracks } = twilioVideo;
 
-    try {
-      this.localTracks = await createLocalTracks({
-        audio: true,
-        video: { width: 640, height: 480 },
-      });
-    } catch (error: any) {
-      // Handle specific getUserMedia errors with actionable messages
-      if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
-        throw new Error(
-          'Camera/microphone permission denied.\n\n' +
-            'To fix this:\n' +
-            '1. Click the camera icon in your browser address bar\n' +
-            '2. Select "Always allow" for camera and microphone\n' +
-            '3. Try joining the video call again\n\n' +
-            'Or refresh the page and click "Allow" when prompted.'
-        );
-      } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
-        throw new Error(
-          'No camera or microphone found.\n\n' +
-            'Please check:\n' +
-            '1. Camera/microphone is connected\n' +
-            '2. Device drivers are installed\n' +
-            '3. Try a different browser'
-        );
-      } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
-        throw new Error(
-          'Camera or microphone is already in use.\n\n' +
-            'Please close other applications using your camera/microphone:\n' +
-            '- Zoom, Teams, Skype\n' +
-            '- Other browser tabs with video calls\n' +
-            '- Camera apps'
-        );
-      } else if (error.message?.includes('getUserMedia is not supported')) {
-        throw new Error(
-          'Video calls require HTTPS.\n\n' +
-            'Current URL: ' +
-            window.location.protocol +
-            '//' +
-            window.location.host +
-            '\n\nPlease use https:// instead of http://'
-        );
-      }
-      throw error;
-    }
+    // Create fresh tracks for the call
+    this.localTracks = await createLocalTracks({
+      audio: true,
+      video: { width: 640, height: 480 },
+    });
 
     this.room = await connect(opts.token, {
       name: opts.roomName,
@@ -209,11 +107,7 @@ export class TwilioVideoService {
     if (!this.isBrowser) return false;
     
     const nav = navigator as any;
-    return !!(
-      nav.mediaDevices &&
-      nav.mediaDevices.getUserMedia &&
-      (window.isSecureContext || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-    );
+    return !!(nav.mediaDevices && nav.mediaDevices.getUserMedia);
   }
 
   private wireEventListeners(): void {

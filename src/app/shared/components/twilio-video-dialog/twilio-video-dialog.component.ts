@@ -54,6 +54,11 @@ export class TwilioVideoDialogComponent implements AfterViewInit, OnDestroy {
   cameraOff = false;
   participantsCount = 0;
 
+  // Permission flow states
+  permissionStage: 'requesting' | 'preview' | 'connecting' | 'connected' | 'error' = 'requesting';
+  previewStream: MediaStream | null = null;
+  permissionError: string | null = null;
+
   private readonly subs: Subscription[] = [];
   /** userId → attached elements, so we can detach cleanly on trackUnsubscribed. */
   private readonly attached = new Map<string, HTMLMediaElement[]>();
@@ -83,17 +88,101 @@ export class TwilioVideoDialogComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
+    // Don't auto-join. Instead, request permissions first and show preview.
+    await this.requestPermissionsAndPreview();
+  }
+
+  /**
+   * Industry standard: Request permissions first, show preview, then let user join.
+   * This follows the pattern used by Zoom, Google Meet, Microsoft Teams.
+   */
+  async requestPermissionsAndPreview(): Promise<void> {
+    this.permissionStage = 'requesting';
+    this.permissionError = null;
+
+    try {
+      // Request camera and microphone access
+      this.previewStream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: { width: 640, height: 480 },
+      });
+
+      // Show preview in the self-view container
+      this.permissionStage = 'preview';
+      
+      // Wait for view to update then attach preview
+      setTimeout(() => {
+        if (this.previewStream && this.selfContainer) {
+          const videoTrack = this.previewStream.getVideoTracks()[0];
+          if (videoTrack) {
+            const video = document.createElement('video');
+            video.srcObject = new MediaStream([videoTrack]);
+            video.autoplay = true;
+            video.muted = true;
+            video.style.width = '100%';
+            video.style.height = '100%';
+            video.style.objectFit = 'cover';
+            video.style.transform = 'scaleX(-1)';
+            this.selfContainer.nativeElement.innerHTML = '';
+            this.selfContainer.nativeElement.appendChild(video);
+          }
+        }
+      }, 100);
+      
+    } catch (err: any) {
+      this.permissionStage = 'error';
+      
+      // User-friendly error messages
+      if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+        this.permissionError =
+          'Camera and microphone access was denied. Please click the camera icon in your browser address bar and allow access.';
+      } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+        this.permissionError =
+          'No camera or microphone found. Please connect a device and try again.';
+      } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+        this.permissionError =
+          'Camera or microphone is already in use. Please close other applications (Zoom, Teams, etc.) and try again.';
+      } else if (
+        err.name === 'NotSupportedError' ||
+        err.message?.includes('getUserMedia is not supported')
+      ) {
+        this.permissionError =
+          'Video calls require a secure connection (HTTPS). Please contact support if this issue persists.';
+      } else {
+        this.permissionError = `Unable to access camera/microphone: ${err.message || 'Unknown error'}`;
+      }
+      
+      console.error('[TwilioVideoDialog] Permission request failed', err);
+    }
+  }
+
+  /**
+   * User clicks "Join Call" after preview - now connect to Twilio room
+   */
+  async joinVideoCall(): Promise<void> {
+    if (!this.previewStream) {
+      await this.requestPermissionsAndPreview();
+      return;
+    }
+
+    this.permissionStage = 'connecting';
     this.wireEvents();
 
     try {
+      // Stop preview stream tracks as Twilio will create new ones
+      this.previewStream.getTracks().forEach((track) => track.stop());
+      this.previewStream = null;
+
       await this.twilio.join({
         token: this.data.videoLink.token!,
         roomName: this.data.videoLink.roomName!,
         userName: this.data.displayName,
       });
+      
+      this.permissionStage = 'connected';
       this.connecting = false;
 
-      // Render local self-view.
+      // Render local self-view with actual call tracks
       const localVideo = this.twilio.getLocalVideoTrack();
       if (localVideo && this.selfContainer) {
         const el = localVideo.attach();
@@ -101,15 +190,29 @@ export class TwilioVideoDialogComponent implements AfterViewInit, OnDestroy {
         el.style.height = '100%';
         el.style.objectFit = 'cover';
         (el as HTMLVideoElement).style.transform = 'scaleX(-1)';
+        this.selfContainer.nativeElement.innerHTML = '';
         this.selfContainer.nativeElement.appendChild(el);
       }
       this.updateParticipantsCount();
     } catch (err: any) {
+      this.permissionStage = 'error';
       this.connecting = false;
       this.errorMessage =
         err?.message || 'Could not connect to the video session.';
       console.error('[TwilioVideoDialog] join error', err);
     }
+  }
+
+  /**
+   * Retry permission request
+   */
+  async retryPermissions(): Promise<void> {
+    this.permissionError = null;
+    if (this.previewStream) {
+      this.previewStream.getTracks().forEach((track) => track.stop());
+      this.previewStream = null;
+    }
+    await this.requestPermissionsAndPreview();
   }
 
   private wireEvents(): void {
@@ -181,6 +284,11 @@ export class TwilioVideoDialogComponent implements AfterViewInit, OnDestroy {
   }
 
   leave(): void {
+    // Clean up preview stream if still active
+    if (this.previewStream) {
+      this.previewStream.getTracks().forEach((track) => track.stop());
+      this.previewStream = null;
+    }
     this.twilio.leave();
     this.dialogRef.close();
   }
@@ -188,6 +296,11 @@ export class TwilioVideoDialogComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     for (const s of this.subs) {
       try { s.unsubscribe(); } catch { /* noop */ }
+    }
+    // Clean up preview stream
+    if (this.previewStream) {
+      this.previewStream.getTracks().forEach((track) => track.stop());
+      this.previewStream = null;
     }
     this.twilio.leave();
   }
