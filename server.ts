@@ -31,7 +31,8 @@ app.use((_req, res, next) => {
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
-  res.setHeader('Permissions-Policy', 'geolocation=(self), camera=(), microphone=()');
+  // Allow camera and microphone for video consultations
+  res.setHeader('Permissions-Policy', 'geolocation=(self), camera=(self), microphone=(self), display-capture=(self)');
   next();
 });
 
