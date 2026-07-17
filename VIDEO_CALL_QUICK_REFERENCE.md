@@ -1,0 +1,275 @@
+# Video Call Quick Reference Guide
+
+## 🚀 Quick Start
+
+### Start a Call
+```typescript
+import { PersistentVideoCallService } from 'src/app/services/persistent-video-call.service';
+
+constructor(private videoCall: PersistentVideoCallService) {}
+
+await this.videoCall.startCall({
+  appointmentId: 'appt-123',
+  roomName: 'nectar-consult-appt-123',
+  token: 'jwt-token-from-backend',
+  identity: 'patient-user-456',
+  displayName: 'John Doe',
+});
+```
+
+### End a Call
+```typescript
+await this.videoCall.endCall('User ended call');
+```
+
+### Check if Call Active
+```typescript
+if (this.videoCall.isCallActive) {
+  console.log('Call in progress');
+}
+```
+
+---
+
+## 📞 Media Controls
+
+```typescript
+// Mute/unmute
+const isUnmuted = this.videoCall.toggleMute();
+
+// Camera on/off
+const isCameraOn = this.videoCall.toggleCamera();
+
+// Start screen share
+await this.videoCall.startScreenShare();
+
+// Stop screen share
+await this.videoCall.stopScreenShare();
+```
+
+---
+
+## 📊 Observing Call State
+
+```typescript
+// Call state
+this.videoCall.callState$.subscribe(state => {
+  // 'idle' | 'connecting' | 'connected' | 'minimized' | 'reconnecting' | 'error'
+});
+
+// Active call info
+this.videoCall.activeCall$.subscribe(call => {
+  if (call) {
+    console.log('Appointment:', call.appointmentId);
+    console.log('Participants:', call.participantsCount);
+  }
+});
+
+// Media state
+this.videoCall.muted$.subscribe(muted => { });
+this.videoCall.cameraOff$.subscribe(off => { });
+this.videoCall.screenSharing$.subscribe(sharing => { });
+```
+
+---
+
+## 🎬 Events
+
+```typescript
+// Participant events
+this.videoCall.participantJoined$.subscribe(participant => {
+  console.log('Participant joined:', participant.identity);
+});
+
+this.videoCall.participantLeft$.subscribe(participant => {
+  console.log('Participant left:', participant.identity);
+});
+
+// Track events
+this.videoCall.remoteTrackAdded$.subscribe(({ participant, track }) => {
+  console.log('Track added:', track.kind);
+});
+
+// Call ended
+this.videoCall.callEnded$.subscribe(({ reason }) => {
+  console.log('Call ended:', reason);
+});
+
+// Errors
+this.videoCall.error$.subscribe(({ message, code }) => {
+  console.error('Error:', message, code);
+});
+```
+
+---
+
+## 🖼️ UI Integration
+
+### Minimize/Restore
+```typescript
+// Minimize call (UI hint only - call continues)
+this.videoCall.minimize();
+
+// Restore to full view
+this.videoCall.restore();
+
+// Check if minimized
+this.videoCall.isMinimized$.subscribe(minimized => { });
+```
+
+### Get Tracks for Rendering
+```typescript
+// Local video track
+const localVideo = this.videoCall.getLocalVideoTrack();
+if (localVideo) {
+  const element = localVideo.attach(); // Returns HTMLVideoElement
+  container.appendChild(element);
+}
+
+// Screen track
+const screenTrack = this.videoCall.getScreenTrack();
+
+// Remote participants
+const participants = this.videoCall.getRemoteParticipants();
+```
+
+---
+
+## 🛡️ Route Guard Usage
+
+```typescript
+import { activeCallGuard } from 'src/app/guards/active-call.guard';
+
+// In routing module
+{
+  path: 'some-route',
+  component: SomeComponent,
+  canDeactivate: [activeCallGuard]
+}
+```
+
+---
+
+## 🎨 Floating Component Integration
+
+Already integrated at app root! Just use the service.
+
+**Location**: `app.component.html`
+```html
+<router-outlet></router-outlet>
+<nectar-floating-video-call></nectar-floating-video-call>
+```
+
+The floating component automatically appears when call starts.
+
+---
+
+## 🐛 Debugging
+
+### Check Service State
+```typescript
+console.log('Call active:', this.videoCall.isCallActive);
+console.log('Current state:', this.videoCall.currentCallState);
+console.log('Current call:', this.videoCall.currentCall);
+console.log('Muted:', this.videoCall.isMuted);
+console.log('Camera off:', this.videoCall.isCameraOff);
+console.log('Screen sharing:', this.videoCall.isScreenSharing);
+```
+
+### Check Twilio Room
+```typescript
+const room = this.videoCall.getRoom();
+if (room) {
+  console.log('Room SID:', room.sid);
+  console.log('Room name:', room.name);
+  console.log('State:', room.state);
+  console.log('Participants:', room.participants.size);
+}
+```
+
+---
+
+## ⚠️ Common Pitfalls
+
+### ❌ Don't manually disconnect Room
+```typescript
+// DON'T DO THIS
+const room = this.videoCall.getRoom();
+room?.disconnect(); // Service manages this!
+```
+
+### ✅ Use service methods
+```typescript
+// DO THIS
+await this.videoCall.endCall();
+```
+
+### ❌ Don't stop tracks manually
+```typescript
+// DON'T DO THIS
+const track = this.videoCall.getLocalVideoTrack();
+track?.stop(); // Service manages this!
+```
+
+### ✅ Use service controls
+```typescript
+// DO THIS
+this.videoCall.toggleCamera();
+```
+
+---
+
+## 📱 Mobile Considerations
+
+- Auto quality adjustment based on network
+- Responsive UI (mobile breakpoints at 768px, 480px)
+- Bottom nav spacing on mobile (minimized window positioned above)
+- Touch-friendly button sizes
+
+---
+
+## 🔐 Security Checklist
+
+- ✅ Token generated by backend
+- ✅ Token includes appointment ID
+- ✅ Identity verified: `patient-<userId>`
+- ✅ Room name validated
+- ✅ No tokens logged
+- ✅ Permissions explicitly requested
+- ✅ HTTPS required for camera access
+
+---
+
+## 📚 Related Files
+
+- **Service**: `src/app/services/persistent-video-call.service.ts`
+- **Component**: `src/app/components/floating-video-call/`
+- **Dialog**: `src/app/shared/components/twilio-video-dialog/`
+- **Guard**: `src/app/guards/active-call.guard.ts`
+
+---
+
+## 🆘 Quick Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| Call doesn't start | Check token, permissions, console errors |
+| No local video | Check camera permissions, not in use |
+| No remote video | Verify other participant joined |
+| Screen share fails | Ensure HTTPS, grant permission |
+| Call disconnects | Check network, look for errors |
+| Memory leak | Ensure `endCall()` called on cleanup |
+
+---
+
+## 📞 Support
+
+- Check browser console for errors
+- Review full documentation: `PERSISTENT_VIDEO_CALL_IMPLEMENTATION.md`
+- Test with different browser
+- Verify HTTPS connection
+
+---
+
+**Quick Reference Version**: 1.0  
+**Last Updated**: January 2025

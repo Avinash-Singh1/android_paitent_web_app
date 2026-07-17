@@ -3,7 +3,7 @@
   "version": "3.0.1",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4400 --host localhost",
+    "start": "ng serve --port 4400 --host localhost --ssl=false --proxy-config proxy.conf.json",
     "build": "ng build && node scripts/postbuild-manifest.js",
     "build:ssr": "ng build && node scripts/postbuild-manifest.js",
     "serve:ssr": "NG_ALLOWED_HOSTS=localhost node dist/nectar/server/server.mjs",

@@ -13,13 +13,14 @@ import { fromEvent, Subject, Subscription } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { UrlNormalizerService } from "./services/url-normalizer.service";
 import { environment } from "src/environments/environment";
+import { FloatingVideoCallModule } from './components/floating-video-call/floating-video-call.module';
 
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, FloatingVideoCallModule],
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   title = "nectar";

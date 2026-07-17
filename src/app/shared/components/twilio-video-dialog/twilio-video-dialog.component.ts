@@ -13,6 +13,7 @@ import {
   TwilioVideoService,
   VideoLinkPayload,
 } from 'src/app/services/twilio-video.service';
+import { PersistentVideoCallService } from 'src/app/services/persistent-video-call.service';
 
 /**
  * Data injected via `MatDialog.open(TwilioVideoDialogComponent, { data: {...} })`.
@@ -43,16 +44,11 @@ export interface TwilioVideoDialogData {
   styleUrls: ['./twilio-video-dialog.component.scss'],
 })
 export class TwilioVideoDialogComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('remoteContainer', { static: false })
-  remoteContainer!: ElementRef<HTMLDivElement>;
   @ViewChild('selfContainer', { static: false })
   selfContainer!: ElementRef<HTMLDivElement>;
 
   connecting = true;
   errorMessage: string | null = null;
-  muted = false;
-  cameraOff = false;
-  participantsCount = 0;
 
   // Permission flow states
   permissionStage: 'requesting' | 'preview' | 'connecting' | 'connected' | 'error' = 'requesting';
@@ -60,13 +56,12 @@ export class TwilioVideoDialogComponent implements AfterViewInit, OnDestroy {
   permissionError: string | null = null;
 
   private readonly subs: Subscription[] = [];
-  /** userId → attached elements, so we can detach cleanly on trackUnsubscribed. */
-  private readonly attached = new Map<string, HTMLMediaElement[]>();
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: TwilioVideoDialogData,
     private dialogRef: MatDialogRef<TwilioVideoDialogComponent>,
-    private twilio: TwilioVideoService
+    private twilio: TwilioVideoService,
+    private persistentVideoCall: PersistentVideoCallService
   ) {}
 
   get isTwilioSession(): boolean {
@@ -157,7 +152,7 @@ export class TwilioVideoDialogComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
-   * User clicks "Join Call" after preview - now connect to Twilio room
+   * User clicks "Join Call" after preview - now connect to Twilio room via persistent service
    */
   async joinVideoCall(): Promise<void> {
     if (!this.previewStream) {
@@ -166,34 +161,30 @@ export class TwilioVideoDialogComponent implements AfterViewInit, OnDestroy {
     }
 
     this.permissionStage = 'connecting';
-    this.wireEvents();
 
     try {
-      // Stop preview stream tracks as Twilio will create new ones
+      // Stop preview stream tracks as persistent service will create new ones
       this.previewStream.getTracks().forEach((track) => track.stop());
       this.previewStream = null;
 
-      await this.twilio.join({
-        token: this.data.videoLink.token!,
+      // Start call via persistent service (survives dialog close)
+      await this.persistentVideoCall.startCall({
+        appointmentId: this.data.videoLink.appointmentId!,
         roomName: this.data.videoLink.roomName!,
-        userName: this.data.displayName,
+        token: this.data.videoLink.token!,
+        identity: this.data.videoLink.identity || 'patient',
+        displayName: this.data.displayName,
+        isDoctor: this.data.isDoctor || false,
+        fallbackMeetUrl: this.data.videoLink.fallbackMeetUrl,
       });
       
       this.permissionStage = 'connected';
       this.connecting = false;
 
-      // Render local self-view with actual call tracks
-      const localVideo = this.twilio.getLocalVideoTrack();
-      if (localVideo && this.selfContainer) {
-        const el = localVideo.attach();
-        el.style.width = '100%';
-        el.style.height = '100%';
-        el.style.objectFit = 'cover';
-        (el as HTMLVideoElement).style.transform = 'scaleX(-1)';
-        this.selfContainer.nativeElement.innerHTML = '';
-        this.selfContainer.nativeElement.appendChild(el);
-      }
-      this.updateParticipantsCount();
+      // Close dialog - call now lives in persistent service + floating component
+      this.dialogRef.close({ joined: true });
+      
+      console.log('[TwilioVideoDialog] Call started via persistent service');
     } catch (err: any) {
       this.permissionStage = 'error';
       this.connecting = false;
@@ -215,67 +206,6 @@ export class TwilioVideoDialogComponent implements AfterViewInit, OnDestroy {
     await this.requestPermissionsAndPreview();
   }
 
-  private wireEvents(): void {
-    this.subs.push(
-      this.twilio.participantConnected$.subscribe(() =>
-        this.updateParticipantsCount()
-      ),
-      this.twilio.participantDisconnected$.subscribe((p: any) => {
-        const key = String(p?.sid || p?.identity || '');
-        this.detach(key);
-        this.updateParticipantsCount();
-      }),
-      this.twilio.trackSubscribed$.subscribe(({ participant, track }) => {
-        if (!track || track.kind === 'data') return;
-        const key = String(participant?.sid || participant?.identity || '');
-        const el = track.attach();
-        if (track.kind === 'video') {
-          el.style.width = '100%';
-          el.style.height = '100%';
-          el.style.objectFit = 'cover';
-        }
-        this.remoteContainer?.nativeElement.appendChild(el);
-        const arr = this.attached.get(key) || [];
-        arr.push(el);
-        this.attached.set(key, arr);
-      }),
-      this.twilio.trackUnsubscribed$.subscribe(({ track }) => {
-        try { track.detach().forEach((el: HTMLElement) => el.remove()); } catch { /* noop */ }
-      }),
-      this.twilio.disconnected$.subscribe(({ reason }) => {
-        this.errorMessage = `The video session was disconnected${
-          reason ? ': ' + reason : ''
-        }.`;
-        console.warn('[TwilioVideoDialog] disconnected', reason);
-      })
-    );
-  }
-
-  private detach(participantKey: string): void {
-    const arr = this.attached.get(participantKey) || [];
-    for (const el of arr) {
-      try { el.remove(); } catch { /* noop */ }
-    }
-    this.attached.delete(participantKey);
-  }
-
-  private updateParticipantsCount(): void {
-    // Local + remote. Twilio's LocalParticipant is excluded from
-    // `room.participants`, so add 1 for self.
-    const remote = (this.twilio as any).room?.participants?.size ?? 0;
-    this.participantsCount = remote + 1;
-  }
-
-  toggleMute(): void {
-    const enabled = this.twilio.toggleAudio();
-    this.muted = !enabled;
-  }
-
-  toggleCamera(): void {
-    const enabled = this.twilio.toggleVideo();
-    this.cameraOff = !enabled;
-  }
-
   openMeetFallback(): void {
     const url = this.fallbackMeetUrl;
     if (!url) return;
@@ -289,7 +219,7 @@ export class TwilioVideoDialogComponent implements AfterViewInit, OnDestroy {
       this.previewStream.getTracks().forEach((track) => track.stop());
       this.previewStream = null;
     }
-    this.twilio.leave();
+    // Don't call twilio.leave() - persistent service owns the call now
     this.dialogRef.close();
   }
 
@@ -302,6 +232,6 @@ export class TwilioVideoDialogComponent implements AfterViewInit, OnDestroy {
       this.previewStream.getTracks().forEach((track) => track.stop());
       this.previewStream = null;
     }
-    this.twilio.leave();
+    // Don't disconnect the call - it's managed by persistent service now
   }
 }
