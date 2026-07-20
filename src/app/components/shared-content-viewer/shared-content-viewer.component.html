@@ -1,0 +1,199 @@
+<div class="scv" *ngIf="attachment" (click)="onClose()">
+  <!-- Modal backdrop -->
+  <div class="scv__backdrop"></div>
+
+  <!-- Content container -->
+  <div class="scv__container" (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <header class="scv__header">
+      <div class="scv__header-left">
+        <h3 class="scv__title">{{ attachment.fileName }}</h3>
+        <span class="scv__position" *ngIf="currentPosition">{{ currentPosition }}</span>
+      </div>
+      <div class="scv__header-right">
+        <button class="scv__btn" (click)="download()" title="Download">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+        </button>
+        <button class="scv__btn" (click)="onClose()" title="Close (ESC)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Image Viewer -->
+    <div class="scv__content" *ngIf="isImage">
+      <!-- Floating close button -->
+      <button class="scv__floating-close" (click)="onClose()" title="Close (ESC)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="scv__image-container" #imageContainer>
+        <img
+          #image
+          [src]="attachment.url"
+          [alt]="attachment.fileName"
+          [style.transform]="transformStyle"
+          (load)="onImageLoad()"
+          (error)="onImageError()"
+          (mousedown)="onMouseDown($event)"
+          (touchstart)="onTouchStart($event)"
+          (touchmove)="onTouchMove($event)"
+          (touchend)="onTouchEnd()"
+          class="scv__image"
+          [class.scv__image--panning]="isPanning"
+        />
+        
+        <!-- Loading state -->
+        <div class="scv__loading" *ngIf="loading">
+          <div class="scv__spinner"></div>
+          <span>Loading image...</span>
+        </div>
+
+        <!-- Error state -->
+        <div class="scv__error" *ngIf="error">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <span>Failed to load image</span>
+          <button class="scv__btn-retry" (click)="onImageLoad()">Retry</button>
+        </div>
+      </div>
+
+      <!-- Zoom controls -->
+      <div class="scv__zoom-controls">
+        <button 
+          class="scv__zoom-btn" 
+          (click)="zoomOut()" 
+          [disabled]="!canZoomOut"
+          title="Zoom out (-)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <line x1="8" y1="11" x2="14" y2="11"></line>
+          </svg>
+        </button>
+        
+        <span class="scv__zoom-level">{{ zoomPercentage }}%</span>
+        
+        <button 
+          class="scv__zoom-btn" 
+          (click)="zoomIn()" 
+          [disabled]="!canZoomIn"
+          title="Zoom in (+)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <line x1="11" y1="8" x2="11" y2="14"></line>
+            <line x1="8" y1="11" x2="14" y2="11"></line>
+          </svg>
+        </button>
+        
+        <button 
+          class="scv__zoom-btn" 
+          (click)="resetZoom()" 
+          title="Reset zoom (0)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 4v6h6"></path>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+        </button>
+
+        <button 
+          class="scv__zoom-btn" 
+          (click)="fitToScreen()" 
+          title="Fit to screen">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- PDF Viewer -->
+    <div class="scv__content" *ngIf="isPdf">
+      <!-- Floating close button -->
+      <button class="scv__floating-close" (click)="onClose()" title="Close (ESC)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <iframe 
+        [src]="attachment.url | safe: 'resourceUrl'"
+        class="scv__pdf-viewer"
+        frameborder="0">
+      </iframe>
+    </div>
+
+    <!-- Document Viewer (fallback) -->
+    <div class="scv__content scv__content--document" *ngIf="isDocument">
+      <!-- Floating close button -->
+      <button class="scv__floating-close" (click)="onClose()" title="Close (ESC)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="scv__document-preview">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor" opacity="0.5">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+        </svg>
+        <h3>{{ attachment.fileName }}</h3>
+        <p>{{ formatFileSize(attachment.fileSize) }}</p>
+        <p class="scv__document-note">Preview not available for this file type</p>
+        <button class="scv__btn-download-large" (click)="download()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Download File
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation buttons (if multiple attachments) -->
+    <button 
+      class="scv__nav scv__nav--prev" 
+      *ngIf="canNavigatePrevious"
+      (click)="navigatePrevious()"
+      title="Previous (← Arrow)">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    
+    <button 
+      class="scv__nav scv__nav--next" 
+      *ngIf="canNavigateNext"
+      (click)="navigateNext()"
+      title="Next (→ Arrow)">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+
+    <!-- Keyboard shortcuts hint -->
+    <div class="scv__shortcuts">
+      <span>ESC: Close</span>
+      <span *ngIf="isImage">+/-: Zoom</span>
+      <span *ngIf="isImage">0: Reset</span>
+      <span *ngIf="allAttachments.length > 1">←/→: Navigate</span>
+    </div>
+  </div>
+</div>

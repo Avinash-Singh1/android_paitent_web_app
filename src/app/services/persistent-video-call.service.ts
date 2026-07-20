@@ -222,6 +222,7 @@ export class PersistentVideoCallService {
 
       this._activeCall$.next(activeCall);
       this._callState$.next('connected');
+      void this.loadChatHistory(activeCall);
 
       console.log('[PersistentVideoCall] Call started:', activeCall);
     } catch (err: any) {
@@ -597,7 +598,7 @@ export class PersistentVideoCallService {
       };
 
       // Add to local messages
-      this._chatMessages$.next([...this._chatMessages$.value, chatMsg]);
+      this.appendChatMessage(chatMsg);
 
       // Send via data track to all participants
       const dataMessage = JSON.stringify({
@@ -610,6 +611,7 @@ export class PersistentVideoCallService {
       });
 
       this.dataTrack.send(dataMessage);
+      void this.persistChatMessage(chatMsg);
 
       console.log('[PersistentVideoCall] Chat message sent:', chatMsg.message);
     } catch (err) {
@@ -649,10 +651,10 @@ export class PersistentVideoCallService {
       };
 
       // Add to messages
-      this._chatMessages$.next([...this._chatMessages$.value, chatMsg]);
+      const added = this.appendChatMessage(chatMsg);
 
       // Increment unread count if chat is not open
-      this._unreadChatCount$.next(this._unreadChatCount$.value + 1);
+      if (added) this._unreadChatCount$.next(this._unreadChatCount$.value + 1);
 
       console.log('[PersistentVideoCall] Chat message received:', chatMsg.message, chatMsg.attachments?.length || 0, 'attachments');
     } catch (err) {
@@ -672,6 +674,63 @@ export class PersistentVideoCallService {
    */
   getChatMessages(): ChatMessage[] {
     return this._chatMessages$.value;
+  }
+
+  private appendChatMessage(message: ChatMessage): boolean {
+    if (this._chatMessages$.value.some(item => item.id === message.id)) return false;
+    const messages = [...this._chatMessages$.value, message].sort(
+      (a, b) => a.timestamp.getTime() - b.timestamp.getTime()
+    );
+    this._chatMessages$.next(messages);
+    return true;
+  }
+
+  private async loadChatHistory(call: ActiveCall): Promise<void> {
+    try {
+      const response = await this.http.get<any>(
+        `${environment.baseUrl}v1/video-call/${encodeURIComponent(call.appointmentId)}/messages?limit=200`
+      ).toPromise();
+      const items = Array.isArray(response?.items) ? response.items : [];
+      for (const item of items) {
+        this.appendChatMessage({
+          id: item.messageId,
+          sender: item.senderIdentity,
+          senderName: item.senderName || item.senderIdentity,
+          message: item.body || '',
+          timestamp: item.createdAt ? new Date(item.createdAt) : new Date(),
+          isLocal: item.senderIdentity === call.identity,
+          attachments: item.attachments || [],
+        });
+      }
+    } catch (error) {
+      console.warn('[PersistentVideoCall] Chat history unavailable; live chat remains active', error);
+    }
+  }
+
+  private async persistChatMessage(message: ChatMessage): Promise<void> {
+    const call = this._activeCall$.value;
+    if (!call) return;
+    try {
+      await this.http.post(
+        `${environment.baseUrl}v1/video-call/${encodeURIComponent(call.appointmentId)}/messages`,
+        {
+          messageId: message.id,
+          senderName: message.senderName,
+          body: message.message,
+          attachments: (message.attachments || []).map(attachment => ({
+            id: attachment.id,
+            fileName: attachment.fileName,
+            fileSize: attachment.fileSize,
+            fileType: attachment.fileType,
+            mimeType: attachment.mimeType,
+            url: attachment.url,
+            thumbnailUrl: attachment.thumbnailUrl,
+          })),
+        }
+      ).toPromise();
+    } catch (error) {
+      console.warn('[PersistentVideoCall] Message delivered live but history persistence failed', error);
+    }
   }
 
   /**
@@ -783,7 +842,7 @@ export class PersistentVideoCallService {
       };
 
       // Add to local messages
-      this._chatMessages$.next([...this._chatMessages$.value, chatMsg]);
+      this.appendChatMessage(chatMsg);
 
       // Send via data track
       const dataMessage = JSON.stringify({
@@ -805,6 +864,7 @@ export class PersistentVideoCallService {
       });
 
       this.dataTrack.send(dataMessage);
+      void this.persistChatMessage(chatMsg);
 
       console.log('[PersistentVideoCall] Message with attachments sent');
     } catch (err) {

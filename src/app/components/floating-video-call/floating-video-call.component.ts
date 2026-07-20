@@ -62,6 +62,10 @@ export class FloatingVideoCallComponent implements OnInit, OnDestroy, AfterViewI
   chatInput = '';
   uploadingFiles: ChatAttachment[] = [];
 
+  // Shared content viewer
+  viewingAttachment: ChatAttachment | null = null;
+  allViewableAttachments: ChatAttachment[] = [];
+
   private readonly subs: Subscription[] = [];
   private readonly attachedElements = new Map<string, HTMLElement[]>();
 
@@ -355,13 +359,11 @@ export class FloatingVideoCallComponent implements OnInit, OnDestroy, AfterViewI
       return;
     }
 
-    // Send message with attachments
     if (this.uploadingFiles.length > 0) {
-      this.videoService.sendChatMessageWithAttachments(this.chatInput.trim(), this.uploadingFiles);
+      void this.videoService.sendChatMessageWithAttachments(this.chatInput.trim(), this.uploadingFiles);
     } else {
-      this.videoService.sendChatMessage(this.chatInput.trim());
+      void this.videoService.sendChatMessage(this.chatInput.trim());
     }
-
     this.chatInput = '';
     this.uploadingFiles = [];
   }
@@ -414,14 +416,12 @@ export class FloatingVideoCallComponent implements OnInit, OnDestroy, AfterViewI
         continue;
       }
 
-      // Upload file
       try {
         const attachment = await this.videoService.uploadChatFile(file);
         this.uploadingFiles.push(attachment);
         this.cdr.detectChanges();
       } catch (err) {
         console.error('File upload failed:', err);
-        // File is already added with error state
       }
     }
   }
@@ -442,9 +442,9 @@ export class FloatingVideoCallComponent implements OnInit, OnDestroy, AfterViewI
   downloadAttachment(attachment: ChatAttachment): void {
     if (!attachment.url) return;
 
-    // For images, open in new tab
+    // For images, open in content viewer
     if (attachment.fileType === 'image') {
-      window.open(attachment.url, '_blank');
+      this.openAttachmentViewer(attachment);
     } else {
       // For files, trigger download
       const link = document.createElement('a');
@@ -453,6 +453,26 @@ export class FloatingVideoCallComponent implements OnInit, OnDestroy, AfterViewI
       link.target = '_blank';
       link.click();
     }
+  }
+
+  /**
+   * Open attachment in shared content viewer
+   */
+  openAttachmentViewer(attachment: ChatAttachment): void {
+    // Collect all viewable attachments from current chat
+    this.allViewableAttachments = this.chatMessages
+      .flatMap(msg => msg.attachments || [])
+      .filter(a => a.url); // Only attachments with URLs
+
+    this.viewingAttachment = attachment;
+  }
+
+  /**
+   * Close shared content viewer
+   */
+  closeAttachmentViewer(): void {
+    this.viewingAttachment = null;
+    this.allViewableAttachments = [];
   }
 
   /**

@@ -317,4 +317,12 @@
       </div>
     </footer>
   </div>
+
+  <!-- Shared Content Viewer (Modal Overlay) -->
+  <app-shared-content-viewer
+    *ngIf="viewingAttachment"
+    [attachment]="viewingAttachment"
+    [allAttachments]="allViewableAttachments"
+    (close)="closeAttachmentViewer()">
+  </app-shared-content-viewer>
 </ng-container>
