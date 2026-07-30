@@ -20,6 +20,41 @@
         </button>
       </div>
     </div>
+    <section class="prescriptions-section" aria-labelledby="prescriptions-heading">
+      <div class="section-heading">
+        <div>
+          <h3 id="prescriptions-heading">Prescriptions from your doctors</h3>
+          <span>Securely uploaded prescription images and PDFs</span>
+        </div>
+        <span class="count-badge" *ngIf="prescriptions.length">{{ prescriptions.length }}</span>
+      </div>
+
+      <div class="prescription-loading" *ngIf="prescriptionsLoading">Loading prescriptions...</div>
+      <div class="prescription-empty" *ngIf="!prescriptionsLoading && !prescriptions.length">
+        No prescriptions have been shared by your doctors yet.
+      </div>
+
+      <article class="prescription-card" *ngFor="let prescription of prescriptions">
+        <div class="prescription-summary">
+          <div class="rx-mark">Rx</div>
+          <div class="prescription-copy">
+            <strong>{{ prescription?.diagnosis || 'Medical prescription' }}</strong>
+            <span>{{ doctorName(prescription) }} · {{ prescription?.prescriptionDate | date : 'dd MMM yyyy' }}</span>
+            <p *ngIf="prescription?.chiefComplaint">{{ prescription.chiefComplaint }}</p>
+          </div>
+        </div>
+        <div class="document-list" *ngIf="prescription?.documents?.length; else structuredPrescription">
+          <button type="button" *ngFor="let document of prescription.documents" (click)="openPrescriptionDocument(document)">
+            <mat-icon>{{ document?.mimeType === 'application/pdf' ? 'picture_as_pdf' : 'image' }}</mat-icon>
+            <span>{{ document?.fileName || 'View prescription' }}</span>
+            <mat-icon>open_in_new</mat-icon>
+          </button>
+        </div>
+        <ng-template #structuredPrescription>
+          <span class="structured-note">Digital prescription · {{ prescription?.medications?.length || 0 }} medicine(s)</span>
+        </ng-template>
+      </article>
+    </section>
     <ng-container *ngIf="totalCount">
       <div
         class="content"

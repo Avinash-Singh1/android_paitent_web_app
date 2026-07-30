@@ -1,0 +1,48 @@
+<div class="prescriptions-page">
+  <header>
+    <div>
+      <h2>My Prescriptions</h2>
+      <p>View prescription images and PDF documents shared by your doctors.</p>
+    </div>
+    <button type="button" (click)="loadPrescriptions()" [disabled]="loading">
+      <mat-icon>refresh</mat-icon> Refresh
+    </button>
+  </header>
+
+  <div class="loading" *ngIf="loading">
+    <mat-spinner diameter="38"></mat-spinner>
+    <span>Loading prescriptions...</span>
+  </div>
+
+  <div class="empty" *ngIf="!loading && !prescriptions.length">
+    <div class="rx">Rx</div>
+    <h3>No prescriptions yet</h3>
+    <p>Prescriptions uploaded by your doctors will appear here.</p>
+  </div>
+
+  <div class="prescription-grid" *ngIf="!loading && prescriptions.length">
+    <article *ngFor="let prescription of prescriptions">
+      <div class="card-heading">
+        <div class="rx">Rx</div>
+        <div>
+          <h3>{{ doctorName(prescription) }}</h3>
+          <span>{{ prescription?.prescriptionDate | date : 'dd MMM yyyy, hh:mm a' }}</span>
+        </div>
+      </div>
+
+      <div class="documents" *ngIf="prescription?.documents?.length; else unavailable">
+        <button type="button" *ngFor="let document of prescription.documents" (click)="openDocument(document)">
+          <mat-icon>{{ document?.mimeType === 'application/pdf' ? 'picture_as_pdf' : 'image' }}</mat-icon>
+          <span>
+            <strong>{{ document?.fileName || 'Prescription' }}</strong>
+            <small>{{ document?.mimeType === 'application/pdf' ? 'PDF document' : 'Prescription image' }}</small>
+          </span>
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+      </div>
+      <ng-template #unavailable>
+        <p class="unavailable">This older prescription does not contain an uploaded document.</p>
+      </ng-template>
+    </article>
+  </div>
+</div>

@@ -331,6 +331,36 @@
   }
 }
 
+.prescriptions-section {
+  margin: 24px 32px 8px;
+  padding: 22px;
+  border: 1px solid #e9e2f1;
+  border-radius: 14px;
+  background: #fcfaff;
+
+  @media screen and (max-width: 576px) { margin: 16px; padding: 16px; }
+}
+
+.section-heading, .prescription-summary, .document-list button {
+  display: flex;
+  align-items: center;
+}
+
+.section-heading {
+  justify-content: space-between;
+  h3 { margin: 0 0 4px; color: #241536; font-size: 18px; }
+  span { color: #71677c; font-size: 13px; }
+}
+
+.count-badge { background: #45197c; color: white !important; border-radius: 20px; padding: 4px 10px; }
+.prescription-loading, .prescription-empty { padding: 22px 0 4px; color: #71677c; }
+.prescription-card { margin-top: 16px; padding: 16px; border: 1px solid #ece5f3; border-radius: 12px; background: white; }
+.prescription-summary { gap: 12px; }
+.rx-mark { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 10px; background: #eee6f7; color: #45197c; font-weight: 700; }
+.prescription-copy { display: flex; flex-direction: column; min-width: 0; strong { color: #241536; } span, p { color: #71677c; font-size: 13px; } p { margin: 5px 0 0; } }
+.document-list { flex-wrap: wrap; gap: 8px; margin-top: 14px; button { gap: 7px; max-width: 100%; border: 1px solid #d9cbe8; background: #faf7fd; color: #45197c; border-radius: 9px; padding: 9px 12px; cursor: pointer; span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } mat-icon { font-size: 18px; width: 18px; height: 18px; } } }
+.structured-note { display: inline-block; margin-top: 12px; color: #71677c; font-size: 13px; }
+
 .title {
   @include font-sans_pro-semibold(13px);
   text-align: center;

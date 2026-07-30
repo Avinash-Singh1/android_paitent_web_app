@@ -27,6 +27,8 @@ export class MyMedicalReportComponent implements OnInit {
   ) {}
   upcoming: boolean = true;
   totalCount = 1;
+  prescriptions: any[] = [];
+  prescriptionsLoading = false;
   payload: any = {
     page: 1,
     size: 5,
@@ -34,6 +36,32 @@ export class MyMedicalReportComponent implements OnInit {
   ngOnInit(): void {
     this.validateForm();
     this.getListing();
+    this.getPrescriptions();
+  }
+
+  getPrescriptions() {
+    this.prescriptionsLoading = true;
+    this.apiService
+      .get(`${API_ENDPOINTS.patient.prescriptions}/list`, { page: 1, size: 50 })
+      .subscribe({
+        next: (res: any) => {
+          this.prescriptions = res?.result?.data || [];
+          this.prescriptionsLoading = false;
+        },
+        error: () => {
+          this.prescriptions = [];
+          this.prescriptionsLoading = false;
+        },
+      });
+  }
+
+  doctorName(prescription: any): string {
+    return prescription?.doctorId?.userId?.fullName || 'Your doctor';
+  }
+
+  openPrescriptionDocument(document: any) {
+    if (!document?.url) return;
+    window.open(document.url, '_blank', 'noopener,noreferrer');
   }
   filterForm: FormGroup;
   validateForm() {

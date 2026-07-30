@@ -108,6 +108,7 @@ export const API_ENDPOINTS = {
     myAppointments: `${environment.baseUrl}v1/appointment/appointment-history`,
     myMedicalRecords: `${environment.baseUrl}v1/medical-reports/all-medical-reports`,
     MedicalRecord: `${environment.baseUrl}v1/medical-reports`,
+    prescriptions: `${environment.baseUrl}v1/prescriptions`,
     viewMedicalRecord: `${environment.baseUrl}v1/medical-reports`,
     myFeedbacks: `${environment.baseUrl}v1/patient/feedback/list`,
     deleteFeedback: `${environment.baseUrl}v1/admin/feedbacks`,

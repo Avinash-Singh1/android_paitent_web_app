@@ -20,12 +20,12 @@
 
   &__container {
     position: relative;
-    width: 90%;
-    height: 90%;
-    max-width: 1400px;
-    max-height: 900px;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
     background: #1a1a1a;
-    border-radius: 12px;
+    border-radius: 0;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -93,6 +93,11 @@
 
     &:active {
       transform: scale(0.95);
+    }
+
+    &--close {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
     }
   }
 

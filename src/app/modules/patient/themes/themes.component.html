@@ -84,6 +84,10 @@
           <img loading="lazy" src="assets/images/svg/medical-report 1.svg" alt="" height="20" width="20" loading="lazy" />
           <div class="text-18">My Medical Reports</div>
         </div>
+        <div class="d-flex gap-2 py-2 cursor-pointer" routerLink="/profile/prescriptions" (click)="onClose(2)">
+          <mat-icon>description</mat-icon>
+          <div class="text-18">My Prescriptions</div>
+        </div>
         <div class="d-flex gap-2 py-2 cursor-pointer" routerLink="/profile/feedbacks" (click)="onClose(2)">
           <img loading="lazy" src="assets/images/svg/feedback 1.svg" alt="" height="20" width="20" loading="lazy" />
           <div class="text-18">My Feedback</div>
@@ -304,6 +308,11 @@
             </span>
             <span class="profile-sidebar__label">Medical Reports</span>
             <svg class="profile-sidebar__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+          <a class="profile-sidebar__item" (click)="onClose(2)" routerLink="/profile/prescriptions" routerLinkActive="profile-sidebar__item--active">
+            <span class="profile-sidebar__icon profile-sidebar__icon--reports"><mat-icon>description</mat-icon></span>
+            <span class="profile-sidebar__label">My Prescriptions</span>
+            <svg class="profile-sidebar__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
           </a>
 
           <a class="profile-sidebar__item" (click)="onClose(2)" routerLink="/profile/feedbacks" routerLinkActive="profile-sidebar__item--active">

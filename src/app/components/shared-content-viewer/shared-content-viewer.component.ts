@@ -299,7 +299,7 @@ export class SharedContentViewerComponent implements OnInit, OnDestroy {
   }
 
   get isDocument(): boolean {
-    return this.attachment?.fileType === 'document' && !this.isPdf;
+    return !!this.attachment && !this.isImage && !this.isPdf;
   }
 
   get transformStyle(): string {

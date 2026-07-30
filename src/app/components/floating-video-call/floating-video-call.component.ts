@@ -436,23 +436,10 @@ export class FloatingVideoCallComponent implements OnInit, OnDestroy, AfterViewI
     }
   }
 
-  /**
-   * Download or view attachment
-   */
+  /** Open every uploaded attachment in the in-call viewer. */
   downloadAttachment(attachment: ChatAttachment): void {
     if (!attachment.url) return;
-
-    // For images, open in content viewer
-    if (attachment.fileType === 'image') {
-      this.openAttachmentViewer(attachment);
-    } else {
-      // For files, trigger download
-      const link = document.createElement('a');
-      link.href = attachment.url;
-      link.download = attachment.fileName;
-      link.target = '_blank';
-      link.click();
-    }
+    this.openAttachmentViewer(attachment);
   }
 
   /**

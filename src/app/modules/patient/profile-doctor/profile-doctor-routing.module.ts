@@ -10,6 +10,7 @@ import { GiveFeedbackComponent } from "./pages/give-feedback/give-feedback.compo
 import { ViewMedicalComponent } from "./pages/view-medical/view-medical.component";
 import { LoginComponent } from "../../auth/login/login.component";
 import { AuthContainerComponent } from "../../auth/auth-container/auth-container.component";
+import { PrescriptionsComponent } from "./pages/prescriptions/prescriptions.component";
 
 const routes: Routes = [
   {
@@ -23,6 +24,10 @@ const routes: Routes = [
       {
         path: "medical-reports",
         component: MyMedicalReportComponent,
+      },
+      {
+        path: "prescriptions",
+        component: PrescriptionsComponent,
       },
       {
         path: "medical-reports/view-medical-reports",

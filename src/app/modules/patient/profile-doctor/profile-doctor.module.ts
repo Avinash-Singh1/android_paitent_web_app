@@ -21,6 +21,7 @@ import { StarRatingModule } from "angular-star-rating";
 import { SharedModule } from "src/app/shared/shared.module";
 import { svgLoaderFactory } from "src/app/shared/loader/svg-common.loader";
 import { HttpClient } from "@angular/common/http";
+import { PrescriptionsComponent } from "./pages/prescriptions/prescriptions.component";
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { HttpClient } from "@angular/common/http";
     GiveFeedbackComponent,
     AddMedicalComponent,
     ViewMedicalComponent,
+    PrescriptionsComponent,
   ],
   imports: [
     CommonModule,
