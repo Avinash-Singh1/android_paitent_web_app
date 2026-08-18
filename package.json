@@ -6,7 +6,7 @@
     "start": "ng serve --port 4400 --host localhost --ssl=false --proxy-config proxy.conf.json",
     "build": "ng build && node scripts/postbuild-manifest.js",
     "build:ssr": "ng build && node scripts/postbuild-manifest.js",
-    "serve:ssr": "NG_ALLOWED_HOSTS=localhost node dist/nectar/server/server.mjs",
+    "serve:ssr": "NG_ALLOWED_HOSTS=localhost,*.nectarplus.health,androidpatient.nectarplus.health node dist/nectar/server/server.mjs",
     "test": "ng test",
     "dev": "ng serve --port 4400 --host localhost",
     "postinstall": "node scripts/patch-angular-build.js",

@@ -21,8 +21,22 @@ const { AngularAppEngine } = serverModule;
 // Suppress uncaught exceptions from Angular platform teardown
 process.on('uncaughtException', () => {});
 
+const defaultHosts = [
+  'localhost',
+  '127.0.0.1',
+  '*.nectarplus.health',
+  'nectarplus.health',
+  'androidpatient.nectarplus.health',
+];
+
+const envHosts = process.env['NG_ALLOWED_HOSTS']
+  ? process.env['NG_ALLOWED_HOSTS'].split(',').map((h) => h.trim()).filter(Boolean)
+  : [];
+
+const allowedHosts = Array.from(new Set([...defaultHosts, ...envHosts]));
+
 const engine = new AngularAppEngine({
-  allowedHosts: ['localhost', '.nectarplus.health'],
+  allowedHosts,
 });
 
 process.on('message', async (msg) => {
